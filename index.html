@@ -3,145 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibing - Project Dashboard</title>
+    <title>vibing://terminal</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'JetBrains Mono', monospace;
+            background: #000;
+            color: #00ff00;
             min-height: 100vh;
-            color: white;
+            padding: 20px;
         }
         
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        .terminal {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(0, 20, 0, 0.95);
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
         }
         
-        h1 {
-            text-align: center;
-            font-size: 2.5em;
+        .header {
+            padding: 20px;
+            border-bottom: 1px solid #00ff00;
+            background: rgba(0, 255, 0, 0.05);
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffff00;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        .subtitle {
-            text-align: center;
-            font-size: 1.2em;
-            margin-bottom: 40px;
-            opacity: 0.9;
+        .status {
+            font-size: 14px;
+            opacity: 0.8;
         }
         
-        .projects {
-            display: grid;
-            gap: 30px;
-            margin-top: 40px;
+        .main {
+            padding: 20px;
         }
         
-        .project-card {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 15px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .project-title {
-            font-size: 1.8em;
-            margin-bottom: 15px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .project-description {
-            font-size: 1.1em;
+        .prompt {
             margin-bottom: 20px;
-            opacity: 0.9;
-            line-height: 1.5;
+            color: #00ff00;
+            font-weight: bold;
         }
         
-        .project-link {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-weight: 600;
+        .modules {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .module {
+            border: 1px solid #00ff00;
+            background: rgba(0, 0, 0, 0.7);
             transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
-        .project-link:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(5px);
+        .module:hover {
+            border-color: #ffff00;
+            box-shadow: 0 0 15px rgba(255, 255, 0, 0.3);
+        }
+        
+        .module-header {
+            padding: 15px;
+            background: rgba(0, 255, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .module-name {
+            color: #ffff00;
+            font-weight: bold;
+        }
+        
+        .module-status {
+            color: #00ff00;
+            font-size: 12px;
+        }
+        
+        .module-body {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .module-desc {
+            opacity: 0.8;
+            font-size: 14px;
+            flex: 1;
+        }
+        
+        .exec-btn {
+            background: transparent;
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 8px 15px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s ease;
             text-decoration: none;
-            color: white;
+            display: inline-block;
+            font-size: 12px;
+            text-transform: uppercase;
         }
         
-        .emoji {
-            font-size: 1.2em;
+        .exec-btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
         }
         
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
+        .footer {
+            padding: 15px 20px;
+            border-top: 1px solid #00ff00;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+        
+        .cursor {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        @media (max-width: 768px) {
+            .terminal {
+                margin: 10px;
             }
             
-            h1 {
-                font-size: 2em;
+            .header, .main, .footer {
+                padding: 15px;
             }
             
-            .project-title {
-                font-size: 1.5em;
+            .module-body {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎯 Vibing Dashboard</h1>
-        <p class="subtitle">Explore data visualizations and analysis results</p>
+    <div class="terminal">
+        <div class="header">
+            <div class="title">VIBING</div>
+            <div class="status">system: online | modules: 2 loaded | user: root</div>
+        </div>
         
-        <div class="projects">
-            <div class="project-card">
-                <h2 class="project-title">
-                    <span class="emoji">📊</span>
-                    AI Polls Analysis
-                </h2>
-                <p class="project-description">
-                    Interactive visualization of AI-related polling data with charts and insights.
-                </p>
-                <a href="ai_polls/poll_results_visualization.html" class="project-link">
-                    View Poll Results →
-                </a>
-            </div>
+        <div class="main">
+            <div class="prompt">root@vibing:~$ ls /modules</div>
             
-            <div class="project-card">
-                <h2 class="project-title">
-                    <span class="emoji">🎨</span>
-                    Wigglypaint Analysis
-                </h2>
-                <p class="project-description">
-                    Top-rated posts and GIFs from the Wigglypaint community with detailed analytics.
-                </p>
-                <a href="wigglypaint/wigglypaint_top10.html" class="project-link">
-                    View Wigglypaint Results →
-                </a>
+            <div class="modules">
+                <div class="module">
+                    <div class="module-header">
+                        <div class="module-name">📊 ai_polls_analyzer</div>
+                        <div class="module-status">[READY]</div>
+                    </div>
+                    <div class="module-body">
+                        <div class="module-desc">
+                            Interactive AI polling data visualization
+                        </div>
+                        <a href="ai_polls/poll_results_visualization.html" class="exec-btn">
+                            ./execute
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="module">
+                    <div class="module-header">
+                        <div class="module-name">🎨 wigglypaint_scraper</div>
+                        <div class="module-status">[READY]</div>
+                    </div>
+                    <div class="module-body">
+                        <div class="module-desc">
+                            Community GIF analysis and top posts aggregator
+                        </div>
+                        <a href="wigglypaint/wigglypaint_top10.html" class="exec-btn">
+                            ./execute
+                        </a>
+                    </div>
+                </div>
             </div>
+        </div>
+        
+        <div class="footer">
+            <span>mem: 1.2GB/8GB</span>
+            <span>cpu: 23%</span>
+            <span>uptime: 42:13:37</span>
+            <span>user: root<span class="cursor">_</span></span>
         </div>
     </div>
 </body>
