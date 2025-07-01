@@ -7,43 +7,61 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Courier New', 'Monaco', 'Menlo', monospace;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0d1117 0%, #1a1a1a 50%, #0f0f0f 100%);
             min-height: 100vh;
+            color: #00ff41;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: #1a1a1a;
             border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,255,65,0.1);
+            border: 1px solid #00ff41;
             overflow: hidden;
         }
         
         .header {
-            background: linear-gradient(45deg, #1e3c72, #2a5298);
-            color: white;
+            background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+            color: #00ff41;
             padding: 30px;
             text-align: center;
+            border-bottom: 2px solid #00ff41;
+            text-shadow: 0 0 10px #00ff41;
         }
         
         .header h1 {
             margin: 0;
             font-size: 2.5em;
-            font-weight: 300;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41;
+            }
+            to {
+                text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41, 0 0 40px #00ff41;
+            }
         }
         
         .header p {
             margin: 10px 0 0 0;
-            opacity: 0.9;
+            opacity: 0.8;
             font-size: 1.1em;
+            color: #66ff66;
         }
         
         .main-content {
             padding: 40px;
+            background: #1a1a1a;
         }
         
         .chart-container {
@@ -54,17 +72,21 @@
         }
         
         .chart-box {
-            background: #f8f9fa;
+            background: #0a0a0a;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,255,65,0.2);
+            border: 1px solid #00ff41;
             height: 400px;
         }
         
         .chart-box h3 {
             text-align: center;
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: #00ff41;
+            text-shadow: 0 0 5px #00ff41;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
         
         .platforms-grid {
@@ -75,18 +97,20 @@
         }
         
         .platform-card {
-            background: white;
+            background: #0a0a0a;
             border-radius: 10px;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 6px rgba(0,255,65,0.2);
+            border: 1px solid #00ff41;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
         }
         
         .platform-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0,255,65,0.4);
+            border-color: #66ff66;
         }
         
         .platform-logo {
@@ -110,25 +134,30 @@
         .platform-name {
             font-weight: bold;
             margin-bottom: 10px;
-            color: #2c3e50;
+            color: #00ff41;
+            text-shadow: 0 0 3px #00ff41;
         }
         
         .vote-count {
             font-size: 1.2em;
-            color: #7f8c8d;
+            color: #66ff66;
         }
         
         .poll-question {
-            background: #e8f4f8;
-            border-left: 4px solid #3498db;
+            background: #0a0a0a;
+            border-left: 4px solid #00ff41;
+            border: 1px solid #00ff41;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,255,65,0.1);
         }
         
         .poll-question h3 {
             margin: 0 0 10px 0;
-            color: #2c3e50;
+            color: #00ff41;
+            text-shadow: 0 0 5px #00ff41;
+            font-weight: bold;
         }
         
         .controls {
@@ -137,27 +166,37 @@
         }
         
         .toggle-btn, .poll-toggle-btn {
-            background: #3498db;
-            color: white;
-            border: none;
+            background: #0a0a0a;
+            color: #00ff41;
+            border: 2px solid #00ff41;
             padding: 12px 24px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
             margin: 0 10px;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 5px #00ff41;
+            box-shadow: 0 0 10px rgba(0,255,65,0.2);
         }
         
         .toggle-btn:hover, .poll-toggle-btn:hover {
-            background: #2980b9;
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 20px rgba(0,255,65,0.5);
         }
         
         .toggle-btn.active {
-            background: #e74c3c;
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(0,255,65,0.8);
         }
         
         .poll-toggle-btn.active {
-            background: #27ae60;
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px rgba(0,255,65,0.8);
         }
         
         @media (max-width: 768px) {
@@ -180,7 +219,7 @@
         
         <div class="main-content">
             <div style="text-align: center; margin-bottom: 20px;">
-                <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Select Poll:</h4>
+                <h4 style="margin: 0 0 10px 0; color: #00ff41; text-shadow: 0 0 5px #00ff41; font-weight: bold;">Select Poll:</h4>
                 <button class="poll-toggle-btn active" onclick="togglePoll('aiCategory')">AI Category Poll</button>
                 <button class="poll-toggle-btn" onclick="togglePoll('devTools')">Dev Tools Poll</button>
             </div>
@@ -189,16 +228,16 @@
                 <h3>Poll Question:</h3>
                 <p id="poll-question-text">Loading poll question...</p>
                 <div style="margin-top: 15px;">
-                    <h4 style="margin: 10px 0 5px 0; color: #2c3e50;">Answer Options:</h4>
+                    <h4 style="margin: 10px 0 5px 0; color: #00ff41; text-shadow: 0 0 5px #00ff41; font-weight: bold;">Answer Options:</h4>
                     <div id="poll-options" style="margin-left: 20px;">
                         <!-- Options will be populated by JavaScript -->
                     </div>
                 </div>
-                <p style="margin-top: 15px; font-size: 0.9em; color: #7f8c8d;"><strong>Note:</strong> Individual platform results show percentages of votes within each platform.</p>
+                <p style="margin-top: 15px; font-size: 0.9em; color: #66ff66;"><strong>Note:</strong> Individual platform results show percentages of votes within each platform.</p>
             </div>
             
             <div class="controls">
-                <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Chart Type:</h4>
+                <h4 style="margin: 0 0 10px 0; color: #00ff41; text-shadow: 0 0 5px #00ff41; font-weight: bold;">Chart Type:</h4>
                 <button class="toggle-btn" onclick="toggleChart('bar')">Bar Chart</button>
                 <button class="toggle-btn" onclick="toggleChart('pie')">Pie Chart</button>
                 <button class="toggle-btn" onclick="toggleChart('doughnut')">Doughnut Chart</button>
