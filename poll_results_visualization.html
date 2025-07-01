@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Platform Poll Results</title>
+    <title>AI / LLM Poll Results</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -136,7 +136,7 @@
             margin: 30px 0;
         }
         
-        .toggle-btn {
+        .toggle-btn, .poll-toggle-btn {
             background: #3498db;
             color: white;
             border: none;
@@ -148,12 +148,16 @@
             transition: background 0.3s ease;
         }
         
-        .toggle-btn:hover {
+        .toggle-btn:hover, .poll-toggle-btn:hover {
             background: #2980b9;
         }
         
         .toggle-btn.active {
             background: #e74c3c;
+        }
+        
+        .poll-toggle-btn.active {
+            background: #27ae60;
         }
         
         @media (max-width: 768px) {
@@ -175,6 +179,12 @@
         </div>
         
         <div class="main-content">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Select Poll:</h4>
+                <button class="poll-toggle-btn active" onclick="togglePoll('aiCategory')">AI Category Poll</button>
+                <button class="poll-toggle-btn" onclick="togglePoll('devTools')">Dev Tools Poll</button>
+            </div>
+            
             <div class="poll-question">
                 <h3>Poll Question:</h3>
                 <p id="poll-question-text">Loading poll question...</p>
@@ -188,6 +198,7 @@
             </div>
             
             <div class="controls">
+                <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Chart Type:</h4>
                 <button class="toggle-btn" onclick="toggleChart('bar')">Bar Chart</button>
                 <button class="toggle-btn" onclick="toggleChart('pie')">Pie Chart</button>
                 <button class="toggle-btn" onclick="toggleChart('doughnut')">Doughnut Chart</button>
@@ -211,65 +222,123 @@
     </div>
 
     <script>
-        // Poll data from data.csv
-        const pollData = {
-            question: "Poll for devs: How would you describe LLM coding tools like Cursor, Windsurf, GH Copilot, Claude Code, Codex & others having changed your dev workflow?",
-            options: ["🚀 It's rocket fuel", "👍 It's very helpful", "🤦‍♀️ It's mostly unhelpful", "⛔️ Don't use / avoid them"],
-            platforms: {
-                twitter: {
-                    name: "Twitter/X",
-                    logo: "𝕏",
-                    class: "twitter",
-                    results: [14.5, 25.5, 30.9, 29.1], // percentages
-                    totalVotes: 55,
-                    url: "https://x.com/adspthepodcast/status/1939649431416029240"
-                },
-                mastodon: {
-                    name: "Mastodon",
-                    logo: "🦣",
-                    class: "mastodon", 
-                    results: [0, 11, 11, 78], // percentages
-                    totalVotes: 9,
-                    url: "https://mastodon.social/@amatan/114774910841774834"
-                },
-                linkedin: {
-                    name: "LinkedIn",
-                    logo: "in",
-                    class: "linkedin",
-                    results: [10, 50, 22, 18], // percentages
-                    totalVotes: 78,
-                    url: "https://www.linkedin.com/feed/update/urn:li:activity:7345416110244057088/"
-                },
-                youtube: {
-                    name: "YouTube",
-                    logo: "▶",
-                    class: "youtube",
-                    results: [3, 26, 24, 47], // percentages
-                    totalVotes: 120,
-                    url: "https://www.youtube.com/channel/UC1kBxkk2bcG78YBX7LMl9pQ/posts"
+        // Poll datasets
+        const pollDatasets = {
+            devTools: {
+                name: "Dev Tools Poll",
+                question: "Poll for devs: How would you describe LLM coding tools like Cursor, Windsurf, GH Copilot, Claude Code, Codex & others having changed your dev workflow?",
+                options: ["🚀 It's rocket fuel", "👍 It's very helpful", "🤦‍♀️ It's mostly unhelpful", "⛔️ Don't use / avoid them"],
+                platforms: {
+                    twitter: {
+                        name: "Twitter/X",
+                        logo: "𝕏",
+                        class: "twitter",
+                        results: [14.5, 25.5, 30.9, 29.1], // percentages
+                        totalVotes: 55,
+                        url: "https://x.com/adspthepodcast/status/1939649431416029240"
+                    },
+                    mastodon: {
+                        name: "Mastodon",
+                        logo: "🦣",
+                        class: "mastodon", 
+                        results: [0, 11, 11, 78], // percentages
+                        totalVotes: 9,
+                        url: "https://mastodon.social/@amatan/114774910841774834"
+                    },
+                    linkedin: {
+                        name: "LinkedIn",
+                        logo: "in",
+                        class: "linkedin",
+                        results: [10, 50, 22, 18], // percentages
+                        totalVotes: 78,
+                        url: "https://www.linkedin.com/feed/update/urn:li:activity:7345416110244057088/"
+                    },
+                    youtube: {
+                        name: "YouTube",
+                        logo: "▶",
+                        class: "youtube",
+                        results: [3, 26, 24, 47], // percentages
+                        totalVotes: 120,
+                        url: "https://www.youtube.com/channel/UC1kBxkk2bcG78YBX7LMl9pQ/posts"
+                    }
+                }
+            },
+            aiCategory: {
+                name: "AI Category Poll",
+                question: "What category best describes you about AI?",
+                options: ["Maximalist – AI will transform everything rapidly & profoundly", "Pragmatist – AI is useful, but needs careful deployment", "Skeptic – AI is overhyped, limited, or socially harmful", "Doomer – AI poses catastrophic or existential risks"],
+                platforms: {
+                    twitter: {
+                        name: "Twitter/X",
+                        logo: "𝕏",
+                        class: "twitter",
+                        results: [9.6, 43.6, 41, 5.8], // percentages
+                        totalVotes: 156,
+                        url: "https://x.com/code_report/status/1939100510893617358"
+                    },
+                    mastodon: {
+                        name: "Mastodon",
+                        logo: "🦣",
+                        class: "mastodon", 
+                        results: [2, 26, 68, 4], // percentages
+                        totalVotes: 57,
+                        url: "https://mastodon.social/@code_report/114763528568970498"
+                    },
+                    linkedin: {
+                        name: "LinkedIn",
+                        logo: "in",
+                        class: "linkedin",
+                        results: [8, 63, 24, 5], // percentages
+                        totalVotes: 147,
+                        url: "https://www.linkedin.com/feed/update/urn:li:activity:7344892890445246465/"
+                    }
                 }
             }
         };
+
+        let currentPoll = 'aiCategory';
+        let pollData = pollDatasets[currentPoll];
 
         let platformChart, overallChart;
         let currentChartType = 'bar';
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
+            updatePollContent();
+            createPlatformCards();
+            initializeCharts();
+        });
+
+        function updatePollContent() {
             document.getElementById('poll-question-text').textContent = pollData.question;
             
             // Populate poll options
             const optionsDiv = document.getElementById('poll-options');
+            optionsDiv.innerHTML = ''; // Clear existing options
             pollData.options.forEach((option, index) => {
                 const optionP = document.createElement('p');
                 optionP.style.margin = '5px 0';
                 optionP.innerHTML = `<strong>${String.fromCharCode(65 + index)})</strong> ${option}`;
                 optionsDiv.appendChild(optionP);
             });
+        }
+
+        function togglePoll(pollType) {
+            currentPoll = pollType;
+            pollData = pollDatasets[currentPoll];
             
+            // Update button states
+            document.querySelectorAll('.poll-toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update content and charts
+            updatePollContent();
             createPlatformCards();
-            initializeCharts();
-        });
+            createPlatformChart();
+            createOverallChart();
+        }
 
         function createPlatformCards() {
             const grid = document.getElementById('platformsGrid');
@@ -303,14 +372,15 @@
             }
             
             const platformNames = Object.values(pollData.platforms).map(p => p.name);
-            const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12'];
+            const platformColors = ['#1DA1F2', '#6364FF', '#0077B5', '#FF0000']; // Twitter, Mastodon, LinkedIn, YouTube
+            const optionColors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12'];
             
             // Create datasets for each option
             const datasets = pollData.options.map((option, index) => ({
                 label: String.fromCharCode(65 + index), // A, B, C, D
                 data: Object.values(pollData.platforms).map(platform => platform.results[index]),
-                backgroundColor: colors[index],
-                borderColor: colors[index] + '80',
+                backgroundColor: optionColors[index],
+                borderColor: optionColors[index] + '80',
                 borderWidth: 2
             }));
             
