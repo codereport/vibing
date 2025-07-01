@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>htop - vibing</title>
+    <title>vibing</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
         
         * {
             margin: 0;
@@ -14,255 +14,205 @@
         }
         
         body {
-            font-family: 'Ubuntu Mono', monospace;
+            font-family: 'Share Tech Mono', monospace;
             background: #000;
-            color: #fff;
-            font-size: 18px;
-            line-height: 1.4;
-            overflow: hidden;
-        }
-        
-        .htop-container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .system-header {
-            background: #000;
-            padding: 16px 24px;
-            border-bottom: 1px solid #444;
-        }
-        
-        .sys-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 8px;
-        }
-        
-        .sys-left, .sys-right {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        
-        .stat-line {
-            display: flex;
-            align-items: center;
-            height: 24px;
-        }
-        
-        .stat-label {
-            color: #fff;
-            width: 60px;
-            flex-shrink: 0;
-        }
-        
-        .progress-bar {
-            flex: 1;
-            height: 18px;
-            background: #222;
-            border: 1px solid #444;
-            margin: 0 12px;
+            color: #00ff00;
+            min-height: 100vh;
+            padding: 20px;
             position: relative;
-            overflow: hidden;
         }
         
-        .progress-fill {
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, #0f0 0%, #ff0 70%, #f00 100%);
-            transition: width 0.3s ease;
+            z-index: -1;
+            opacity: 0.3;
         }
         
-        .stat-value {
-            color: #fff;
-            width: 120px;
-            text-align: right;
-            flex-shrink: 0;
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
         }
         
-        .load-uptime {
-            display: flex;
-            justify-content: space-between;
-            color: #aaa;
-            font-size: 12px;
-            margin-top: 4px;
+        .header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #00ff00;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            color: #00cc00;
+        }
+        
+
+        
+        .processes h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .process-item {
+            border: 1px solid #00ff00;
+            margin: 15px 0;
+            padding: 20px;
+            cursor: pointer;
+            background: rgba(0, 20, 0, 0.2);
+            transition: background 0.2s ease;
+        }
+        
+        .process-item:hover {
+            background: rgba(0, 50, 0, 0.4);
         }
         
         .process-header {
-            background: #444;
-            color: #fff;
-            padding: 8px 24px;
-            font-weight: bold;
-            display: grid;
-            grid-template-columns: 80px 120px 100px 100px 1fr 120px;
-            gap: 15px;
-            border-bottom: 1px solid #666;
-        }
-        
-        .process-list {
-            flex: 1;
-            overflow-y: auto;
-            background: #000;
-        }
-        
-        .process-row {
-            display: grid;
-            grid-template-columns: 80px 120px 100px 100px 1fr 120px;
-            gap: 15px;
-            padding: 12px 24px;
-            border-bottom: 1px solid #222;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        
-        .process-row:hover {
-            background: #333;
-        }
-        
-        .process-row.selected {
-            background: #0066cc;
-            color: #fff;
-        }
-        
-        .pid { color: #0ff; }
-        .user { color: #0f0; }
-        .cpu { color: #ff0; }
-        .mem { color: #f80; }
-        .command { color: #fff; }
-        .status { color: #0f0; }
-        
-        .function-keys {
-            background: #000;
-            border-top: 1px solid #444;
-            padding: 12px 24px;
             display: flex;
-            gap: 40px;
-            color: #aaa;
-            font-size: 16px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
         
-        .fkey {
-            color: #0ff;
+        .process-id {
+            color: #00ff00;
+            font-weight: bold;
         }
         
-        .fkey-desc {
-            color: #fff;
+        .process-status {
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 2px 6px;
+            font-size: 0.8em;
         }
         
-        .cpu-bar .progress-fill {
-            width: 28%;
+        .process-title {
+            font-size: 1.2em;
+            margin-bottom: 8px;
         }
         
-        .mem-bar .progress-fill {
-            width: 32%;
+        .process-desc {
+            color: #00cc00;
+            line-height: 1.4;
         }
         
-        .swp-bar .progress-fill {
-            width: 8%;
-        }
-        
-        .load-bar .progress-fill {
-            width: 18%;
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            border-top: 1px solid #00ff00;
+            margin-top: 30px;
+            color: #00cc00;
         }
         
         @media (max-width: 768px) {
-            .sys-info {
-                grid-template-columns: 1fr;
-                gap: 10px;
+            .header h1 {
+                font-size: 2em;
             }
             
-            .process-header,
-            .process-row {
-                grid-template-columns: 50px 80px 60px 1fr 80px;
-                font-size: 11px;
-            }
-            
-            .function-keys {
-                flex-wrap: wrap;
+            .process-header {
+                flex-direction: column;
                 gap: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="htop-container">
-        <div class="system-header">
-            <div class="sys-info">
-                <div class="sys-left">
-                    <div class="stat-line">
-                        <span class="stat-label">CPU</span>
-                        <div class="progress-bar cpu-bar">
-                            <div class="progress-fill"></div>
-                        </div>
-                        <span class="stat-value">28.3%</span>
-                    </div>
-                    <div class="stat-line">
-                        <span class="stat-label">Mem</span>
-                        <div class="progress-bar mem-bar">
-                            <div class="progress-fill"></div>
-                        </div>
-                        <span class="stat-value">1.2G/8.0G</span>
-                    </div>
-                </div>
-                <div class="sys-right">
-                    <div class="stat-line">
-                        <span class="stat-label">Tasks</span>
-                        <span style="color: #0f0; margin-left: 8px;">3 total</span>
-                        <span style="color: #ff0; margin-left: 8px;">3 running</span>
-                    </div>
-                    <div class="stat-line">
-                        <span class="stat-label">Uptime</span>
-                        <span style="color: #aaa; margin-left: 8px;">42:13:37</span>
-                    </div>
-                </div>
-            </div>
+    <canvas id="matrix-canvas"></canvas>
+    
+    <div class="container">
+        <div class="header">
+            <h1>VIBING PROJECTS</h1>
         </div>
         
-        <div class="process-header">
-            <div>PID</div>
-            <div>USER</div>
-            <div>%CPU</div>
-            <div>%MEM</div>
-            <div>COMMAND</div>
-            <div>STATUS</div>
-        </div>
-        
-        <div class="process-list">
-            <div class="process-row" onclick="window.location.href='ai_polls/poll_results_visualization.html'">
-                <div class="pid">1337</div>
-                <div class="user">vibing</div>
-                <div class="cpu">12.4</div>
-                <div class="mem">18.2</div>
-                <div class="command">📊 ai_polls_analyzer - Interactive AI polling data visualization</div>
-                <div class="status">R</div>
+        <div class="processes">
+            <h2>&gt; ACTIVE PROCESSES</h2>
+            
+            <div class="process-item" onclick="window.location.href='ai_polls/poll_results_visualization.html'">
+                <div class="process-header">
+                    <span class="process-id">PID: 1337</span>
+                    <span class="process-status">RUNNING</span>
+                </div>
+                <div class="process-title">📊 AI_POLLS_ANALYZER</div>
+                <div class="process-desc">Interactive AI polling data visualization</div>
             </div>
             
-            <div class="process-row" onclick="window.location.href='wigglypaint/wigglypaint_top10.html'">
-                <div class="pid">2048</div>
-                <div class="user">vibing</div>
-                <div class="cpu">8.7</div>
-                <div class="mem">14.8</div>
-                <div class="command">🎨 wigglypaint_scraper - Community GIF analysis and top posts aggregator</div>
-                <div class="status">R</div>
+            <div class="process-item" onclick="window.location.href='wigglypaint/wigglypaint_top10.html'">
+                <div class="process-header">
+                    <span class="process-id">PID: 2048</span>
+                    <span class="process-status">RUNNING</span>
+                </div>
+                <div class="process-title">🎨 WIGGLYPAINT_SCRAPER</div>
+                <div class="process-desc">Community GIF analysis and top posts aggregator</div>
             </div>
             
-            <div class="process-row" onclick="window.location.href='https://codereport.github.io/cuda-x-docs/'">
-                <div class="pid">4096</div>
-                <div class="user">vibing</div>
-                <div class="cpu">15.2</div>
-                <div class="mem">22.1</div>
-                <div class="command">⚡ cuda_ecosystem_docs - Interactive CUDA library grid and ecosystem documentation</div>
-                <div class="status">R</div>
+            <div class="process-item" onclick="window.location.href='https://codereport.github.io/cuda-x-docs/'">
+                <div class="process-header">
+                    <span class="process-id">PID: 4096</span>
+                    <span class="process-status">RUNNING</span>
+                </div>
+                <div class="process-title">⚡ CUDA_ECOSYSTEM_DOCS</div>
+                <div class="process-desc">Interactive CUDA library grid and ecosystem documentation</div>
             </div>
         </div>
         
-        <div class="function-keys">
-            <span><span class="fkey">F1</span><span class="fkey-desc">Help</span></span>
-            <span><span class="fkey">F3</span><span class="fkey-desc">Search</span></span>
-            <span><span class="fkey">F10</span><span class="fkey-desc">Quit</span></span>
+        <div class="footer">
+            <div>VIBING PROJECTS v2.1.0 | ACCESS GRANTED</div>
         </div>
     </div>
+    
+    <script>
+        // Matrix Digital Rain Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+        const matrixArray = matrix.split("");
+        
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        
+        const drops = [];
+        for(let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+        
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00FF00';
+            ctx.font = fontSize + 'px "MS Gothic", "Courier New", monospace';
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        
+        setInterval(draw, 50);
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
 </body>
 </html> 
