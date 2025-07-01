@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibing - Project Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .projects {
+            display: grid;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .project-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .project-title {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .project-description {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .project-link {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .project-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+            text-decoration: none;
+            color: white;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .project-title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Vibing Dashboard</h1>
+        <p class="subtitle">Explore data visualizations and analysis results</p>
+        
+        <div class="projects">
+            <div class="project-card">
+                <h2 class="project-title">
+                    <span class="emoji">📊</span>
+                    AI Polls Analysis
+                </h2>
+                <p class="project-description">
+                    Interactive visualization of AI-related polling data with charts and insights.
+                </p>
+                <a href="ai_polls/poll_results_visualization.html" class="project-link">
+                    View Poll Results →
+                </a>
+            </div>
+            
+            <div class="project-card">
+                <h2 class="project-title">
+                    <span class="emoji">🎨</span>
+                    Wigglypaint Analysis
+                </h2>
+                <p class="project-description">
+                    Top-rated posts and GIFs from the Wigglypaint community with detailed analytics.
+                </p>
+                <a href="wigglypaint/wigglypaint_top10.html" class="project-link">
+                    View Wigglypaint Results →
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
