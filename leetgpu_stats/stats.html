@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚀 LeetGPU Unified Dashboard</title>
+    <title>🚀 LeetGPU Dashboard</title>
     
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
@@ -26,7 +26,7 @@
         .header {
             background: rgba(15, 23, 42, 0.9);
             backdrop-filter: blur(20px);
-            padding: 3rem 2rem;
+            padding: 1.5rem 1rem;
             text-align: center;
             box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
             border-bottom: 2px solid #3b82f6;
@@ -46,8 +46,8 @@
 
         .header h1 {
             color: #3b82f6;
-            font-size: 2.8rem;
-            margin-bottom: 0.5rem;
+            font-size: 2.5rem;
+            margin-bottom: 0.3rem;
             font-weight: 700;
             letter-spacing: -0.025em;
             position: relative;
@@ -56,7 +56,7 @@
 
         .header p {
             color: #94a3b8;
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             font-weight: 500;
             position: relative;
             z-index: 1;
@@ -67,18 +67,18 @@
             justify-content: center;
             background: rgba(15, 23, 42, 0.9);
             border-bottom: 1px solid rgba(59, 130, 246, 0.3);
-            padding: 0 2rem;
+            padding: 0 1rem;
             backdrop-filter: blur(20px);
         }
 
         .tab {
-            padding: 1rem 2rem;
+            padding: 0.75rem 1.5rem;
             cursor: pointer;
             border-bottom: 3px solid transparent;
             transition: all 0.3s ease;
             color: #cbd5e1;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 0.9rem;
         }
 
         .tab:hover {
@@ -102,34 +102,42 @@
             display: block;
         }
 
+        .controls-stats-container {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+        }
+
         .chart-controls {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(59, 130, 246, 0.3);
             border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem auto;
+            padding: 1rem;
             display: flex;
             align-items: center;
             gap: 1rem;
-            max-width: 1200px;
             box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
+            flex-shrink: 0;
         }
 
         .chart-controls label {
             font-weight: 700;
             color: #3b82f6;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
 
         .chart-controls select {
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 0.75rem;
             border: 1px solid rgba(59, 130, 246, 0.5);
             border-radius: 8px;
             background: rgba(15, 23, 42, 0.9);
             color: #f8fafc;
-            font-size: 1rem;
-            min-width: 250px;
+            font-size: 0.85rem;
+            min-width: 200px;
             font-weight: 600;
         }
 
@@ -141,17 +149,15 @@
 
         .stats-overview {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            flex: 1;
         }
 
         .stat-card {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(20px);
-            padding: 2.5rem;
+            padding: 0.8rem;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
             text-align: center;
@@ -166,16 +172,16 @@
         }
 
         .stat-number {
-            font-size: 3.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
             color: #3b82f6;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.2rem;
             line-height: 1;
         }
 
         .stat-label {
             color: #cbd5e1;
-            font-size: 1.1rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -184,8 +190,8 @@
         .chart-container {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(20px);
-            margin: 2rem 0;
-            padding: 2.5rem;
+            margin: 1rem 0;
+            padding: 1.5rem;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
             border: 1px solid rgba(59, 130, 246, 0.3);
@@ -193,8 +199,8 @@
 
         .chart-title {
             color: #3b82f6;
-            font-size: 1.6rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
             text-align: center;
             font-weight: 700;
             letter-spacing: -0.025em;
@@ -202,14 +208,14 @@
 
         .chart-wrapper {
             position: relative;
-            height: 400px;
-            margin: 1rem 0;
+            height: 300px;
+            margin: 0.5rem 0;
         }
 
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1rem;
         }
 
         .heatmap-grid {
@@ -353,17 +359,18 @@
         @media (max-width: 768px) {
             .header h1 { font-size: 2rem; }
             .tabs { flex-direction: column; }
-            .stats-overview { grid-template-columns: 1fr; }
+            .controls-stats-container { flex-direction: column; gap: 1rem; }
+            .stats-overview { grid-template-columns: repeat(2, 1fr); }
             .charts-grid { grid-template-columns: 1fr; }
             .heatmap-grid { grid-template-columns: 120px repeat(5, 1fr); font-size: 0.8rem; }
             .tab-content { padding: 1rem; }
+            .stat-card { padding: 0.5rem; }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🚀 LeetGPU Unified Dashboard</h1>
-        <p>Single Challenge Analysis & Comprehensive Multi-Challenge Performance</p>
+        <h1>🚀 LeetGPU Dashboard</h1>
     </div>
 
     <div class="tabs">
@@ -373,29 +380,31 @@
 
     <!-- Single Challenge Tab -->
     <div id="single" class="tab-content active">
-        <div class="chart-controls">
-            <label for="challengeSelect">Select Challenge:</label>
-            <select id="challengeSelect" onchange="changeSingleChallenge()">
-                <option value="">Loading challenges...</option>
-            </select>
-        </div>
-        
-        <div class="stats-overview">
-            <div class="stat-card">
-                <div class="stat-number" id="totalCombinations">25</div>
-                <div class="stat-label">Total Combinations</div>
+        <div class="controls-stats-container">
+            <div class="chart-controls">
+                <label for="challengeSelect">Select Challenge:</label>
+                <select id="challengeSelect" onchange="changeSingleChallenge()">
+                    <option value="">Loading challenges...</option>
+                </select>
             </div>
-            <div class="stat-card">
-                <div class="stat-number" id="validResults">0</div>
-                <div class="stat-label">Valid Results</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number fastest-time" id="fastestTime">0</div>
-                <div class="stat-label">Fastest Runtime (ms)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="successRate">0%</div>
-                <div class="stat-label">Success Rate</div>
+            
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCombinations">25</div>
+                    <div class="stat-label">Total Combinations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="validResults">0</div>
+                    <div class="stat-label">Valid Results</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number fastest-time" id="fastestTime">0</div>
+                    <div class="stat-label">Fastest Runtime (ms)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="successRate">0%</div>
+                    <div class="stat-label">Completion Rate</div>
+                </div>
             </div>
         </div>
 
@@ -448,7 +457,7 @@
 
     <!-- Comprehensive Tab -->
     <div id="comprehensive" class="tab-content">
-        <div class="stats-overview">
+        <div class="stats-overview" style="margin-top: 2rem;">
             <div class="stat-card">
                 <div class="stat-number">36</div>
                 <div class="stat-label">Total Challenges</div>
@@ -459,11 +468,11 @@
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="successfulResults">-</div>
-                <div class="stat-label">Successful Results</div>
+                <div class="stat-label">Completed Results</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="overallSuccessRate">-</div>
-                <div class="stat-label">Success Rate</div>
+                <div class="stat-label">Completion Rate</div>
             </div>
         </div>
 
@@ -475,7 +484,7 @@
                 </div>
             </div>
             <div class="chart-container">
-                <div class="chart-title">✅ Success Rate by Framework</div>
+                <div class="chart-title">✅ Completion Rate by Framework</div>
                 <div class="chart-wrapper">
                     <canvas id="successChart"></canvas>
                 </div>
@@ -484,12 +493,6 @@
                 <div class="chart-title">⚡ Average Performance per GPU</div>
                 <div class="chart-wrapper">
                     <canvas id="avgPerformanceChart"></canvas>
-                </div>
-            </div>
-            <div class="chart-container">
-                <div class="chart-title">🎯 Overall Framework Ranking</div>
-                <div class="chart-wrapper">
-                    <canvas id="overallRankingChart"></canvas>
                 </div>
             </div>
         </div>
@@ -504,7 +507,7 @@
                             <th>GPU</th>
                             <th>Wins</th>
                             <th>Valid Results</th>
-                            <th>Success Rate</th>
+                            <th>Completion Rate</th>
                             <th>Avg Time (ms)</th>
                         </tr>
                     </thead>
@@ -638,13 +641,13 @@
         function updateSingleChallengeStats(challengeTitle) {
             const validResults = currentResults.filter(r => r.fastest_ms !== null);
             const totalCombinations = 25;
-            const successRate = ((validResults.length / totalCombinations) * 100).toFixed(0);
+            const completionRate = ((validResults.length / totalCombinations) * 100).toFixed(0);
             const fastestTime = validResults.length > 0 ? Math.min(...validResults.map(r => r.fastest_ms)) : 0;
             
             document.getElementById('totalCombinations').textContent = totalCombinations;
             document.getElementById('validResults').textContent = validResults.length;
             document.getElementById('fastestTime').textContent = fastestTime.toFixed(3);
-            document.getElementById('successRate').textContent = successRate + '%';
+            document.getElementById('successRate').textContent = completionRate + '%';
             
             const heatmapTitle = document.getElementById('heatmapTitle');
             if (heatmapTitle) {
@@ -998,10 +1001,10 @@
             
             const totalResults = comprehensiveData.length;
             const successfulResults = comprehensiveData.filter(r => r.fastest_ms !== null).length;
-            const successRate = ((successfulResults / totalResults) * 100).toFixed(1);
+            const completionRate = ((successfulResults / totalResults) * 100).toFixed(1);
 
             document.getElementById('successfulResults').textContent = successfulResults;
-            document.getElementById('overallSuccessRate').textContent = successRate + '%';
+            document.getElementById('overallSuccessRate').textContent = completionRate + '%';
         }
 
         function initComprehensiveCharts() {
@@ -1015,7 +1018,6 @@
             createWinsChart();
             createSuccessChart();
             createAvgPerformanceChart();
-            createOverallRankingChart();
             createPerformanceTable();
         }
 
@@ -1123,7 +1125,7 @@
                             x: { ticks: { color: '#ffffff' } },
                             y: { 
                                 ticks: { color: '#ffffff' },
-                                title: { display: true, text: 'Success Rate (%)', color: '#ffffff' },
+                                title: { display: true, text: 'Completion Rate (%)', color: '#ffffff' },
                                 max: 100
                             }
                         }
@@ -1149,14 +1151,14 @@
                 window.avgPerformanceChart.destroy();
             }
             
-            const datasets = processedData.frameworks.map(framework => ({
-                label: framework,
-                data: processedData.gpus.map(gpu => {
+            const datasets = processedData.gpus.map(gpu => ({
+                label: gpu.replace('NVIDIA ', ''),
+                data: processedData.frameworks.map(framework => {
                     const avgTime = processedData.avgTimes[framework][gpu];
                     return avgTime !== null ? avgTime.toFixed(3) : null;
                 }),
-                backgroundColor: frameworkColors[framework] + '80',
-                borderColor: frameworkColors[framework],
+                backgroundColor: gpuColors[gpu] + '80',
+                borderColor: gpuColors[gpu],
                 borderWidth: 2
             }));
 
@@ -1164,7 +1166,7 @@
                 const newChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: processedData.gpus.map(gpu => gpu.replace('NVIDIA ', '')),
+                        labels: processedData.frameworks,
                         datasets: datasets
                     },
                     options: {
@@ -1193,66 +1195,7 @@
             }
         }
 
-        function createOverallRankingChart() {
-            console.log('Creating overall ranking chart...');
-            const canvas = document.getElementById('overallRankingChart');
-            if (!canvas) {
-                console.log('Overall ranking chart canvas not found');
-                return;
-            }
-            
-            const ctx = canvas.getContext('2d');
-            if (window.overallRankingChart && typeof window.overallRankingChart.destroy === 'function') {
-                window.overallRankingChart.destroy();
-            }
-            
-            const frameworkScores = processedData.frameworks.map(framework => {
-                let totalWins = 0;
-                let totalSuccess = 0;
-                
-                processedData.gpus.forEach(gpu => {
-                    totalWins += processedData.wins[framework][gpu];
-                    totalSuccess += processedData.successCounts[framework][gpu];
-                });
-                
-                return {
-                    framework,
-                    wins: totalWins,
-                    successRate: (totalSuccess / (comprehensiveData.length / 5)) * 100
-                };
-            });
-            
-            frameworkScores.sort((a, b) => b.wins - a.wins);
 
-            try {
-                const newChart = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: frameworkScores.map(f => f.framework),
-                        datasets: [{
-                            data: frameworkScores.map(f => f.wins),
-                            backgroundColor: frameworkScores.map(f => frameworkColors[f.framework]),
-                            borderColor: '#1a2332',
-                            borderWidth: 3
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { color: '#ffffff', padding: 20 }
-                            }
-                        }
-                    }
-                });
-                window.overallRankingChart = newChart;
-                console.log('Overall ranking chart created successfully');
-            } catch (error) {
-                console.error('Error creating overall ranking chart:', error);
-            }
-        }
 
         function createPerformanceTable() {
             console.log('Creating performance table...');
@@ -1269,7 +1212,7 @@
                     const wins = processedData.wins[framework][gpu];
                     const successCount = processedData.successCounts[framework][gpu];
                     const uniqueChallenges = [...new Set(comprehensiveData.map(r => r.challenge_name))].length;
-                    const successRate = ((successCount / uniqueChallenges) * 100).toFixed(1);
+                    const completionRate = ((successCount / uniqueChallenges) * 100).toFixed(1);
                     const avgTime = processedData.avgTimes[framework][gpu];
                     
                     const row = tableBody.insertRow();
@@ -1278,7 +1221,7 @@
                         <td>${gpu.replace('NVIDIA ', '')}</td>
                         <td>${wins}</td>
                         <td>${successCount}/${uniqueChallenges}</td>
-                        <td>${successRate}%</td>
+                        <td>${completionRate}%</td>
                         <td>${avgTime !== null ? avgTime.toFixed(3) + ' ms' : 'No data'}</td>
                     `;
                 });
