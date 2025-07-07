@@ -57,50 +57,34 @@
         
 
         
-        .processes h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+        .projects-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
         }
         
-        .process-item {
-            border: 1px solid #00ff00;
-            margin: 15px 0;
-            padding: 20px;
+        .projects-table tr {
             cursor: pointer;
             background: rgba(0, 20, 0, 0.2);
             transition: background 0.2s ease;
         }
         
-        .process-item:hover {
+        .projects-table tr:hover {
             background: rgba(0, 50, 0, 0.4);
         }
         
-        .process-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+        .projects-table td {
+            padding: 15px 20px;
         }
         
-        .process-id {
+        .project-name {
+            font-size: 1.2em;
             color: #00ff00;
             font-weight: bold;
+            min-width: 250px;
         }
         
-        .process-status {
-            color: #00ff00;
-            border: 1px solid #00ff00;
-            padding: 2px 6px;
-            font-size: 0.8em;
-        }
-        
-        .process-title {
-            font-size: 1.2em;
-            margin-bottom: 8px;
-        }
-        
-        .process-desc {
+        .project-desc {
             color: #00cc00;
             line-height: 1.4;
         }
@@ -118,9 +102,17 @@
                 font-size: 2em;
             }
             
-            .process-header {
-                flex-direction: column;
-                gap: 10px;
+            .projects-table td {
+                padding: 10px 15px;
+            }
+            
+            .project-name {
+                font-size: 1.1em;
+                min-width: 200px;
+            }
+            
+            .project-desc {
+                font-size: 0.9em;
             }
         }
     </style>
@@ -133,54 +125,32 @@
             <h1>VIBING PROJECTS</h1>
         </div>
         
-        <div class="processes">
-            <h2>&gt; ACTIVE PROCESSES</h2>
+        <table class="projects-table">
+            <tr onclick="window.location.href='ai_polls/poll_results_visualization.html'">
+                <td class="project-name">📊 AI_POLLS_ANALYZER</td>
+                <td class="project-desc">Interactive AI polling data visualization</td>
+            </tr>
             
-            <div class="process-item" onclick="window.location.href='ai_polls/poll_results_visualization.html'">
-                <div class="process-header">
-                    <span class="process-id">PID: 1337</span>
-                    <span class="process-status">RUNNING</span>
-                </div>
-                <div class="process-title">📊 AI_POLLS_ANALYZER</div>
-                <div class="process-desc">Interactive AI polling data visualization</div>
-            </div>
+            <tr onclick="window.location.href='wigglypaint/wigglypaint_top10.html'">
+                <td class="project-name">🎨 WIGGLYPAINT_SCRAPER</td>
+                <td class="project-desc">Community GIF analysis and top posts aggregator</td>
+            </tr>
             
-            <div class="process-item" onclick="window.location.href='wigglypaint/wigglypaint_top10.html'">
-                <div class="process-header">
-                    <span class="process-id">PID: 2048</span>
-                    <span class="process-status">RUNNING</span>
-                </div>
-                <div class="process-title">🎨 WIGGLYPAINT_SCRAPER</div>
-                <div class="process-desc">Community GIF analysis and top posts aggregator</div>
-            </div>
+            <tr onclick="window.location.href='https://codereport.github.io/cuda-x-docs/'">
+                <td class="project-name">⚡ CUDA_ECOSYSTEM_DOCS</td>
+                <td class="project-desc">Interactive CUDA library grid and ecosystem documentation</td>
+            </tr>
             
-            <div class="process-item" onclick="window.location.href='https://codereport.github.io/cuda-x-docs/'">
-                <div class="process-header">
-                    <span class="process-id">PID: 4096</span>
-                    <span class="process-status">RUNNING</span>
-                </div>
-                <div class="process-title">⚡ CUDA_ECOSYSTEM_DOCS</div>
-                <div class="process-desc">Interactive CUDA library grid and ecosystem documentation</div>
-            </div>
+            <tr onclick="window.location.href='ohip_billing/ohip_lookup.html'">
+                <td class="project-name">🩺 OHIP_BILLING_LOOKUP</td>
+                <td class="project-desc">Medical billing code lookup</td>
+            </tr>
             
-            <div class="process-item" onclick="window.location.href='ohip_billing/ohip_lookup.html'">
-                <div class="process-header">
-                    <span class="process-id">PID: 8192</span>
-                    <span class="process-status">RUNNING</span>
-                </div>
-                <div class="process-title">🩺 OHIP_BILLING_LOOKUP</div>
-                <div class="process-desc">Medical billing code lookup for Family Medicine, Addiction Medicine, Hospitalist & Public Health</div>
-            </div>
-            
-            <div class="process-item" onclick="window.location.href='leetgpu_stats/stats.html'">
-                <div class="process-header">
-                    <span class="process-id">PID: 16384</span>
-                    <span class="process-status">RUNNING</span>
-                </div>
-                <div class="process-title">🚀 LEETGPU_STATS</div>
-                <div class="process-desc">GPU performance benchmarking and statistics analysis</div>
-            </div>
-        </div>
+            <tr onclick="window.location.href='leetgpu_stats/stats.html'">
+                <td class="project-name">🚀 LEETGPU_STATS</td>
+                <td class="project-desc">GPU performance benchmarking and statistics analysis</td>
+            </tr>
+        </table>
         
         <div class="footer">
             <div>VIBING PROJECTS v2.1.0 | ACCESS GRANTED</div>
