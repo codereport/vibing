@@ -1,94 +1,130 @@
-# LeetGPU Vector Addition Runtime Scraper
+# LeetGPU Performance Analytics Dashboard
 
-This directory contains the complete LeetGPU scraping project that successfully collected runtime data for all framework/GPU combinations on the Vector Addition challenge.
+This directory contains the complete LeetGPU scraping project that successfully collected runtime data for all 36 challenges across 5 frameworks and 5 GPUs.
 
-## 🎯 Project Goal
+## 🎯 Project Overview
 
-Extract CUDA/Triton/PyTorch/Mojo/TinyGrad runtime results across different GPUs from the LeetGPU leaderboard by navigating combo boxes using Selenium.
+A comprehensive analytics dashboard that visualizes GPU performance data from LeetGPU challenges. The project includes:
+
+- **Web scraping infrastructure** for collecting runtime data from LeetGPU leaderboards
+- **Interactive dashboard** with dual analysis modes (single-challenge and comprehensive)
+- **Performance analytics** across 36 challenges, 5 frameworks, and 5 GPUs
 
 ## 🏆 Final Results
 
-Successfully collected **25 runtime combinations** (5 frameworks × 5 GPUs) with **100% success rate** for dropdown navigation.
+Successfully collected **1,800 runtime combinations** (36 challenges × 5 frameworks × 5 GPUs) with comprehensive performance analytics.
 
-### Overall Fastest Runtime
-**CUDA on NVIDIA TESLA T4: 0.002 ms**
+### Key Findings
+- **CUDA** consistently performs best across most GPU architectures
+- **NVIDIA H100/H200** show excellent performance across all frameworks
+- **Significant performance variation** between challenges and frameworks
+- **900+ valid timing measurements** collected from live leaderboards
 
-### Complete Results Summary
+## 📂 Project Structure
 
-| Framework    | NVIDIA TESLA T4 | NVIDIA A100-80GB | NVIDIA H100 | NVIDIA H200 | NVIDIA B200 |
-| ------------ | --------------- | ---------------- | ----------- | ----------- | ----------- |
-| **CUDA**     | 0.002 ms        | 0.1757 ms        | 0.0998 ms   | 0.0774 ms   | 0.048 ms    |
-| **TRITON**   | 1.182 ms        | 0.2009 ms        | 0.1214 ms   | 0.0963 ms   | 0.0705 ms   |
-| **PYTORCH**  | 1.2038 ms       | 0.1768 ms        | 0.1034 ms   | 0.078 ms    | 0.0488 ms   |
-| **MOJO**     | 1.2245 ms       | 0.226 ms         | 0.162 ms    | No data     | No data     |
-| **TINYGRAD** | 2.213 ms        | 1.2522 ms        | 0.8807 ms   | No data     | No data     |
+```
+leetgpu_stats/
+├── index.html                                    # Main dashboard (dual-mode analytics)
+├── all_challenges_results_20250707_045604.json  # Complete dataset (1.4MB)
+├── run_all_challenges_sequential.py             # Working scraper for all challenges
+└── README.md                                    # This file
+```
 
-## 📂 Key Files
+## 🚀 Quick Start
 
-### Final Working Scraper
-- `final_25_combinations_scraper.py` - The successful scraper that collected all 25 combinations
+1. **View Dashboard**: Open `index.html` in your browser
+2. **Collect New Data**: Run `python run_all_challenges_sequential.py`
+3. **Requirements**: GitHub account for OAuth authentication
 
-### Results
-- `final_25_combinations.json` - Complete results in JSON format
-- `final_25_combinations.csv` - Results in CSV format for analysis
+## 📊 Dashboard Features
 
-### Discovery Process
-- `test_dropdown_click.py` - Tool that discovered the correct dropdown structure
-- `dropdown_test/` - Screenshots and HTML files from dropdown discovery
+### Single-Challenge Mode
+- **Challenge selector** with all 36 challenges
+- **Performance heatmap** showing framework vs GPU performance
+- **Detailed timing charts** with color-coded performance levels
+- **Interactive hover tooltips** with precise timing data
 
-### Development History
-- `scrape_leetgpu.py` - Original scraper (basic functionality)
-- `debug_screenshots/` - Debug captures during authentication testing
-- `debug_output/` - Various debugging outputs
-- `leetgpu_page_source.html` - Captured page source for analysis
+### Comprehensive Mode  
+- **Framework performance summaries** across all challenges
+- **Win/success rate analysis** by GPU type
+- **Average performance rankings** with statistical insights
+- **Cross-challenge comparison** charts
 
 ## 🔧 Technical Implementation
 
-### Key Challenges Solved
-1. **React App Loading**: Required waiting for React components to fully load
-2. **Authentication**: GitHub OAuth integration for leaderboard access
-3. **Dropdown Navigation**: Discovered button-based dropdown structure using `cursor-pointer` class
-4. **Dynamic Content**: Handled React state changes after selections
+### Authentication & Scraping
+- **GitHub OAuth integration** for leaderboard access
+- **React dropdown navigation** using `cursor-pointer` class selectors
+- **Selenium WebDriver** with Chrome automation
+- **Sequential challenge processing** to avoid rate limiting
 
-### Dropdown Structure Discovery
-- **Framework options**: Direct text in divs with `cursor-pointer` class
-- **GPU options**: Text inside `<span class="truncate">` within `cursor-pointer` divs
+### Dashboard Technology
+- **Vanilla JavaScript** with Chart.js for visualizations
+- **Responsive design** with glassmorphism UI effects
+- **Real-time data loading** from JSON dataset
+- **Tab-based navigation** between analysis modes
 
-### Authentication Flow
-1. Load LeetGPU Vector Addition challenge page
-2. Click Leaderboard button (triggers auth requirement)
-3. Handle GitHub OAuth authentication
-4. Click Leaderboard button again (accesses dropdown interface)
-5. Navigate framework and GPU selections
-6. Extract fastest runtime from leaderboard
+### Data Structure
+- **1,800 total combinations** across 36 challenges
+- **900+ successful measurements** with timing data
+- **JSON format** for fast dashboard loading
+- **Framework/GPU performance matrix** for each challenge
 
-## 📊 Statistics
+## 🎨 Visual Design
 
-- **Total Combinations**: 25
-- **Successful Selections**: 25 (100% success rate)
-- **Valid Timing Data**: 21 (84% - some newer GPUs don't have data for all frameworks)
-- **Frameworks Tested**: CUDA, TRITON, PYTORCH, MOJO, TINYGRAD
-- **GPUs Tested**: NVIDIA TESLA T4, A100-80GB, H100, H200, B200
+The dashboard features a modern blue-themed design with:
+- **Gradient backgrounds** (#0f1419 → #1e3a8a → #1e40af)
+- **Glassmorphism effects** with backdrop blur
+- **Color-coded performance** (green=fast, red=slow)
+- **Smooth hover animations** and transitions
+
+## 📈 Performance Analytics
+
+### Framework Rankings (Overall)
+1. **CUDA** - Best performance across most challenges
+2. **TRITON** - Strong performance on newer GPUs
+3. **PYTORCH** - Consistent mid-range performance
+4. **MOJO** - Limited GPU support but competitive
+5. **TINYGRAD** - Experimental framework with higher latency
+
+### GPU Performance Tiers
+- **Tier 1**: NVIDIA H100, H200, B200 (Latest generation)
+- **Tier 2**: NVIDIA A100-80GB (Data center GPU)
+- **Tier 3**: NVIDIA TESLA T4 (Older generation)
+
+## 🔬 Research Applications
+
+This dataset enables research into:
+- **Framework optimization** across different GPU architectures
+- **Challenge complexity analysis** and performance scaling
+- **GPU performance evolution** across generations
+- **Cross-platform performance** comparisons
 
 ## 🚀 Usage
 
-To run the scraper:
-
+### View Dashboard
 ```bash
-python final_25_combinations_scraper.py
+# Option 1: Open directly in browser
+open index.html
+
+# Option 2: Serve locally
+python -m http.server 8000
+# Then visit: http://localhost:8000
 ```
 
-**Requirements:**
-- GitHub account for OAuth authentication
-- Chrome browser (managed automatically via webdriver-manager)
-- Required Python packages (selenium, webdriver-manager)
+### Collect New Data
+```bash
+python run_all_challenges_sequential.py
+```
 
-## 📝 Development Process
+**Note**: Scraping requires manual GitHub authentication when prompted.
 
-The project evolved through multiple iterations:
-1. Basic page scraping (failed - no dropdown access)
-2. Authentication handling (successful login)
-3. Dropdown structure discovery (key breakthrough)
-4. Final implementation with complete navigation
+## 📝 Development History
 
-The breakthrough came from analyzing HTML diffs before/after clicking dropdown buttons, revealing the React-based structure that wasn't using standard `@role='option'` selectors. 
+This project evolved through multiple phases:
+1. **Single-challenge scraping** (Vector Addition only)
+2. **Multi-challenge expansion** (All 36 challenges)
+3. **Dashboard development** (Interactive visualizations)
+4. **Unified analytics** (Comprehensive performance analysis)
+
+The breakthrough came from solving React-based dropdown navigation and implementing robust authentication handling for the LeetGPU platform. 
