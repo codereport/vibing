@@ -1,0 +1,48 @@
+=== BUTTONS AND INTERACTIVE ELEMENTS - 06_final_state ===
+
+Found 14 buttons:
+  1. Text: 'NVIDIA TESLA T4' | Visible: True | Enabled: True
+  2. Text: '' | Visible: True | Enabled: True
+  3. Text: 'CUDA' | Visible: True | Enabled: True
+  4. Text: 'Run' | Visible: True | Enabled: True
+  5. Text: 'Submit' | Visible: True | Enabled: True
+  6. Text: 'Pro' | Visible: True | Enabled: True
+  7. Text: '' | Visible: True | Enabled: True
+  8. Text: 'Submissions' | Visible: True | Enabled: True
+  9. Text: 'Leaderboard' | Visible: True | Enabled: True
+  10. Text: 'Solutions' | Visible: True | Enabled: True
+  11. Text: 'Discuss' | Visible: True | Enabled: True
+  12. Text: 'Public' | Visible: True | Enabled: True
+  13. Text: 'Reset' | Visible: True | Enabled: True
+  14. Text: 'clear' | Visible: True | Enabled: True
+
+Found 0 select elements:
+
+Found 2 potential dropdown elements:
+  1. Tag: div | Text: '1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+#include "solve.h"
+#include <cuda_runtime.h>
+__global__ void vector_add(const float* A, const float* B, float* C, int N) {
+}
+// A, B, C are device pointers (i.e. pointers to memory on the GPU)
+void solve(const float* A, const float* B, float* C, int N) {
+    int threadsPerBlock = 256;
+    int blocksPerGrid = (N + threadsPerBlock - 1) / threadsPerBlock;
+    vector_add<<<blocksPerGrid, threadsPerBlock>>>(A, B, C, N);
+    cudaDeviceSynchronize();
+}' | Class: 'monaco-editor no-user-select  showUnused showDeprecated vs-dark focused'

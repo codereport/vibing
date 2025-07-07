@@ -1,0 +1,295 @@
+{
+  "collection_timestamp": "2025-07-04T18:40:17.877681",
+  "total_combinations": 25,
+  "frameworks_tested": [
+    "CUDA",
+    "TRITON",
+    "PYTORCH",
+    "MOJO",
+    "TINYGRAD"
+  ],
+  "gpus_tested": [
+    "NVIDIA TESLA T4",
+    "NVIDIA A100-80GB",
+    "NVIDIA H100",
+    "NVIDIA H200",
+    "NVIDIA B200"
+  ],
+  "results": [
+    {
+      "combination_number": 1,
+      "framework": "CUDA",
+      "gpu": "NVIDIA TESLA T4",
+      "fastest_time": "0.002 ms",
+      "fastest_ms": 0.002,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:34:55.413569"
+    },
+    {
+      "combination_number": 2,
+      "framework": "CUDA",
+      "gpu": "NVIDIA A100-80GB",
+      "fastest_time": "0.1757 ms",
+      "fastest_ms": 0.1757,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:35:08.843754"
+    },
+    {
+      "combination_number": 3,
+      "framework": "CUDA",
+      "gpu": "NVIDIA H100",
+      "fastest_time": "0.0998 ms",
+      "fastest_ms": 0.0998,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:35:22.274851"
+    },
+    {
+      "combination_number": 4,
+      "framework": "CUDA",
+      "gpu": "NVIDIA H200",
+      "fastest_time": "0.0774 ms",
+      "fastest_ms": 0.0774,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:35:35.717584"
+    },
+    {
+      "combination_number": 5,
+      "framework": "CUDA",
+      "gpu": "NVIDIA B200",
+      "fastest_time": "0.048 ms",
+      "fastest_ms": 0.048,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:35:49.160163"
+    },
+    {
+      "combination_number": 6,
+      "framework": "TRITON",
+      "gpu": "NVIDIA TESLA T4",
+      "fastest_time": "1.182 ms",
+      "fastest_ms": 1.182,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:36:02.601765"
+    },
+    {
+      "combination_number": 7,
+      "framework": "TRITON",
+      "gpu": "NVIDIA A100-80GB",
+      "fastest_time": "0.2009 ms",
+      "fastest_ms": 0.2009,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:36:16.043480"
+    },
+    {
+      "combination_number": 8,
+      "framework": "TRITON",
+      "gpu": "NVIDIA H100",
+      "fastest_time": "0.1214 ms",
+      "fastest_ms": 0.1214,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:36:29.477075"
+    },
+    {
+      "combination_number": 9,
+      "framework": "TRITON",
+      "gpu": "NVIDIA H200",
+      "fastest_time": "0.0963 ms",
+      "fastest_ms": 0.0963,
+      "total_timings_found": 2,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:36:42.908067"
+    },
+    {
+      "combination_number": 10,
+      "framework": "TRITON",
+      "gpu": "NVIDIA B200",
+      "fastest_time": "0.0705 ms",
+      "fastest_ms": 0.0705,
+      "total_timings_found": 2,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:36:56.342905"
+    },
+    {
+      "combination_number": 11,
+      "framework": "PYTORCH",
+      "gpu": "NVIDIA TESLA T4",
+      "fastest_time": "1.2038 ms",
+      "fastest_ms": 1.2038,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:37:09.776457"
+    },
+    {
+      "combination_number": 12,
+      "framework": "PYTORCH",
+      "gpu": "NVIDIA A100-80GB",
+      "fastest_time": "0.1768 ms",
+      "fastest_ms": 0.1768,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:37:23.210895"
+    },
+    {
+      "combination_number": 13,
+      "framework": "PYTORCH",
+      "gpu": "NVIDIA H100",
+      "fastest_time": "0.1034 ms",
+      "fastest_ms": 0.1034,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:37:36.647658"
+    },
+    {
+      "combination_number": 14,
+      "framework": "PYTORCH",
+      "gpu": "NVIDIA H200",
+      "fastest_time": "0.078 ms",
+      "fastest_ms": 0.078,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:37:50.077835"
+    },
+    {
+      "combination_number": 15,
+      "framework": "PYTORCH",
+      "gpu": "NVIDIA B200",
+      "fastest_time": "0.0488 ms",
+      "fastest_ms": 0.0488,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:38:03.507423"
+    },
+    {
+      "combination_number": 16,
+      "framework": "MOJO",
+      "gpu": "NVIDIA TESLA T4",
+      "fastest_time": "1.2245 ms",
+      "fastest_ms": 1.2245,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:38:16.947025"
+    },
+    {
+      "combination_number": 17,
+      "framework": "MOJO",
+      "gpu": "NVIDIA A100-80GB",
+      "fastest_time": "0.226 ms",
+      "fastest_ms": 0.226,
+      "total_timings_found": 1,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:38:30.387877"
+    },
+    {
+      "combination_number": 18,
+      "framework": "MOJO",
+      "gpu": "NVIDIA H100",
+      "fastest_time": "0.162 ms",
+      "fastest_ms": 0.162,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:38:43.816600"
+    },
+    {
+      "combination_number": 19,
+      "framework": "MOJO",
+      "gpu": "NVIDIA H200",
+      "fastest_time": null,
+      "fastest_ms": null,
+      "total_timings_found": 0,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:38:57.247704"
+    },
+    {
+      "combination_number": 20,
+      "framework": "MOJO",
+      "gpu": "NVIDIA B200",
+      "fastest_time": null,
+      "fastest_ms": null,
+      "total_timings_found": 0,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:39:10.700948"
+    },
+    {
+      "combination_number": 21,
+      "framework": "TINYGRAD",
+      "gpu": "NVIDIA TESLA T4",
+      "fastest_time": "2.213 ms",
+      "fastest_ms": 2.213,
+      "total_timings_found": 3,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:39:24.137708"
+    },
+    {
+      "combination_number": 22,
+      "framework": "TINYGRAD",
+      "gpu": "NVIDIA A100-80GB",
+      "fastest_time": "1.2522 ms",
+      "fastest_ms": 1.2522,
+      "total_timings_found": 1,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:39:37.583696"
+    },
+    {
+      "combination_number": 23,
+      "framework": "TINYGRAD",
+      "gpu": "NVIDIA H100",
+      "fastest_time": "0.8807 ms",
+      "fastest_ms": 0.8807,
+      "total_timings_found": 2,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:39:51.020290"
+    },
+    {
+      "combination_number": 24,
+      "framework": "TINYGRAD",
+      "gpu": "NVIDIA H200",
+      "fastest_time": null,
+      "fastest_ms": null,
+      "total_timings_found": 0,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:40:04.448591"
+    },
+    {
+      "combination_number": 25,
+      "framework": "TINYGRAD",
+      "gpu": "NVIDIA B200",
+      "fastest_time": null,
+      "fastest_ms": null,
+      "total_timings_found": 0,
+      "framework_selected": true,
+      "gpu_selected": true,
+      "timestamp": "2025-07-04T18:40:17.877474"
+    }
+  ]
+}
