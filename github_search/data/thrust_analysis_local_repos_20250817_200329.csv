@@ -1,0 +1,2 @@
+repository,stars,forks,language,combined_score,files_analyzed,total_thrust_usage,total_api_calls,clone_size_mb,analysis_time_seconds,top_extension_by_thrust,thrust_files_count
+cupy/cupy,10425,942,Python,100.0,998,671,17,13.783631324768066,1.775802,.py,10

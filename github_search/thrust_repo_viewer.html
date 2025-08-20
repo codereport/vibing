@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thrust Repositories - Star Ranking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .controls {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .stats {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .repo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .repo-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid #667eea;
+        }
+
+        .repo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+        }
+
+        .repo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .repo-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            text-decoration: none;
+            flex: 1;
+        }
+
+        .repo-name:hover {
+            color: #667eea;
+        }
+
+        .star-count {
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .star-icon {
+            color: #ffa500;
+        }
+
+        .repo-description {
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .repo-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .language-badge {
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .topic-tag {
+            background: #f0f0f0;
+            color: #666;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            margin: 50px 0;
+        }
+
+        .error {
+            background: #ffe6e6;
+            color: #cc0000;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .rank-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .repo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                min-width: 100%;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Thrust Repositories</h1>
+            <p>Discover GitHub repositories using NVIDIA Thrust, ranked by stars</p>
+            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">
+                📊 Latest search: 3,142 repositories found across .cu, .h, .cpp, .hpp, .cuh files (2025-08-19 - 50 min search)
+            </p>
+        </div>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Search repositories by name, description, or language...">
+            </div>
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">All Repos</button>
+                <button class="filter-btn" data-filter="1000+">1000+ Stars</button>
+                <button class="filter-btn" data-filter="100+">100+ Stars</button>
+                <button class="filter-btn" data-filter="recent">Recently Updated</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalRepos">-</div>
+                <div class="stat-label">Total Repositories</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalStars">-</div>
+                <div class="stat-label">Total Stars</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="averageStars">-</div>
+                <div class="stat-label">Average Stars</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="displayedRepos">-</div>
+                <div class="stat-label">Displayed</div>
+            </div>
+        </div>
+
+        <div id="loading" class="loading">
+            <p>🔄 Loading repository data...</p>
+        </div>
+
+        <div id="error" class="error" style="display: none;">
+            <p>❌ Error loading repository data. Please make sure the data file is available.</p>
+        </div>
+
+        <div id="repoGrid" class="repo-grid" style="display: none;">
+            <!-- Repository cards will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        let allRepos = [];
+        let filteredRepos = [];
+        let currentFilter = 'all';
+
+        // Load repository data
+        async function loadRepoData() {
+            try {
+                // Load the generated repository data
+                const response = await fetch('data/thrust_repos_with_stars_20250819_161159.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                allRepos = data.repositories || [];
+                filteredRepos = [...allRepos];
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('repoGrid').style.display = 'grid';
+                
+                updateStats();
+                renderRepositories();
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            const totalStars = allRepos.reduce((sum, repo) => sum + Math.max(0, repo.stars), 0);
+            const averageStars = Math.round(totalStars / allRepos.length);
+            
+            document.getElementById('totalRepos').textContent = allRepos.length.toLocaleString();
+            document.getElementById('totalStars').textContent = totalStars.toLocaleString();
+            document.getElementById('averageStars').textContent = averageStars.toLocaleString();
+            document.getElementById('displayedRepos').textContent = filteredRepos.length.toLocaleString();
+        }
+
+        // Render repositories
+        function renderRepositories() {
+            const grid = document.getElementById('repoGrid');
+            grid.innerHTML = '';
+            
+            filteredRepos.forEach((repo, index) => {
+                const card = createRepoCard(repo, index + 1);
+                grid.appendChild(card);
+            });
+            
+            document.getElementById('displayedRepos').textContent = filteredRepos.length.toLocaleString();
+        }
+
+        // Create repository card
+        function createRepoCard(repo, rank) {
+            const card = document.createElement('div');
+            card.className = 'repo-card';
+            
+            const stars = repo.stars >= 0 ? repo.stars.toLocaleString() : 'N/A';
+            const description = repo.description || 'No description available';
+            const language = repo.language || 'Unknown';
+            const forks = repo.forks ? repo.forks.toLocaleString() : '0';
+            const updated = repo.updated_at ? new Date(repo.updated_at).toLocaleDateString() : 'Unknown';
+            
+            card.innerHTML = `
+                <div class="repo-header">
+                    <a href="${repo.html_url}" target="_blank" class="repo-name">
+                        ${repo.full_name}
+                    </a>
+                    <div class="rank-badge">#${rank}</div>
+                </div>
+                <div class="star-count">
+                    <span class="star-icon">⭐</span>
+                    ${stars}
+                </div>
+                <div class="repo-description">${description}</div>
+                <div class="repo-meta">
+                    <div class="meta-item">
+                        <span class="language-badge">${language}</span>
+                    </div>
+                    <div class="meta-item">🍴 ${forks}</div>
+                    <div class="meta-item">📅 ${updated}</div>
+                    ${repo.license !== 'Unknown' ? `<div class="meta-item">📄 ${repo.license}</div>` : ''}
+                </div>
+                ${repo.topics && repo.topics.length > 0 ? `
+                    <div class="topics">
+                        ${repo.topics.slice(0, 5).map(topic => `<span class="topic-tag">${topic}</span>`).join('')}
+                    </div>
+                ` : ''}
+            `;
+            
+            return card;
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                applyFilters(query);
+            });
+        }
+
+        // Filter functionality
+        function setupFilters() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Update active button
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    
+                    currentFilter = e.target.dataset.filter;
+                    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+                    applyFilters(searchQuery);
+                });
+            });
+        }
+
+        // Apply filters and search
+        function applyFilters(searchQuery = '') {
+            filteredRepos = allRepos.filter(repo => {
+                // Apply search filter
+                const matchesSearch = !searchQuery || 
+                    repo.name.toLowerCase().includes(searchQuery) ||
+                    (repo.description && repo.description.toLowerCase().includes(searchQuery)) ||
+                    (repo.language && repo.language.toLowerCase().includes(searchQuery)) ||
+                    (repo.topics && repo.topics.some(topic => topic.toLowerCase().includes(searchQuery)));
+                
+                if (!matchesSearch) return false;
+                
+                // Apply category filter
+                switch (currentFilter) {
+                    case '1000+':
+                        return repo.stars >= 1000;
+                    case '100+':
+                        return repo.stars >= 100;
+                    case 'recent':
+                        const twoYearsAgo = new Date();
+                        twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
+                        return repo.updated_at && new Date(repo.updated_at) > twoYearsAgo;
+                    default:
+                        return true;
+                }
+            });
+            
+            renderRepositories();
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => {
+            setupSearch();
+            setupFilters();
+            loadRepoData();
+        });
+    </script>
+</body>
+</html>

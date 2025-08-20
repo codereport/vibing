@@ -1,0 +1,11 @@
+repository,file_path,extension,size_bytes,total_thrust,nvidia_apis,thrust_patterns
+cupy/cupy,cupy/cuda/cupy_thrust.cu,.cu,18124,134,9,"{'thrust::': 62, '#include\\s*<thrust/': 9, 'thrust\\s*::\\s*\\w+': 62, 'thrust\\.h': 1}"
+cupy/cupy,cupyx/signal/_filtering/_filtering.py,.py,27356,128,0,"{'thrust::': 64, 'thrust\\s*::\\s*\\w+': 64}"
+cupy/cupy,cupyx/jit/thrust.py,.py,34711,104,8,"{'thrust::': 51, '#include\\s*<thrust/': 2, 'thrust\\s*::\\s*\\w+': 51}"
+cupy/cupy,cupy/_core/include/cupy/complex/ccosh.h,.h,7188,46,0,"{'thrust::': 23, 'thrust\\s*::\\s*\\w+': 23}"
+cupy/cupy,cupy/cuda/cupy_cub.cu,.cu,40910,42,0,"{'thrust::': 21, 'thrust\\s*::\\s*\\w+': 21}"
+cupy/cupy,cupy/_core/include/cupy/complex.cuh,.cuh,2140,40,0,"{'thrust::': 20, 'thrust\\s*::\\s*\\w+': 20}"
+cupy/cupy,cupyx/scipy/signal/_upfirdn.py,.py,20805,32,0,"{'thrust::': 16, 'thrust\\s*::\\s*\\w+': 16}"
+cupy/cupy,cupyx/scipy/signal/_iir_utils.py,.py,21937,16,0,"{'thrust::': 8, 'thrust\\s*::\\s*\\w+': 8}"
+cupy/cupy,cupy/_core/include/cupy/complex/catrig.h,.h,24215,16,0,"{'thrust::': 8, 'thrust\\s*::\\s*\\w+': 8}"
+cupy/cupy,cupyx/scipy/special/_complexstuff.py,.py,1465,14,0,"{'thrust::': 7, 'thrust\\s*::\\s*\\w+': 7}"

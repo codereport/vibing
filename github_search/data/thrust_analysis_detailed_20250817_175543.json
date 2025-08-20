@@ -1,0 +1,1231 @@
+{
+  "metadata": {
+    "generated_at": "2025-08-17T17:55:43.779650",
+    "total_repositories": 8,
+    "analysis_version": "1.0"
+  },
+  "repositories": [
+    {
+      "repo_name": "NVIDIA/thrust",
+      "stars": 4985,
+      "forks": 766,
+      "language": "C++",
+      "combined_score": 80.8592,
+      "files_analyzed": 1077,
+      "files_by_extension": {
+        "no_extension": 11,
+        ".cu": 317,
+        ".md": 14,
+        ".h": 684,
+        ".cmake": 24,
+        ".txt": 16,
+        ".cpp": 3,
+        ".py": 8
+      },
+      "thrust_by_extension": {
+        ".h": 13386,
+        ".cu": 22029,
+        ".cpp": 80,
+        ".txt": 4,
+        ".py": 6,
+        ".cmake": 93,
+        ".md": 1057,
+        "no_extension": 2
+      },
+      "api_by_extension": {
+        ".h": 216,
+        ".cu": 1026,
+        ".cpp": 8,
+        ".txt": 0,
+        ".py": 0,
+        ".cmake": 0,
+        ".md": 69,
+        "no_extension": 0
+      },
+      "top_files": [
+        {
+          "file_path": "testing/partition.cu",
+          "extension": ".cu",
+          "size_bytes": 58411,
+          "thrust_patterns": {
+            "thrust::": 492,
+            "#include\\s*<thrust/": 6,
+            "thrust\\s*::\\s*\\w+": 492,
+            "device_vector\\s*<": 78,
+            "host_vector\\s*<": 62
+          },
+          "total_thrust": 1130,
+          "nvidia_apis": 116
+        },
+        {
+          "file_path": "CHANGELOG.md",
+          "extension": ".md",
+          "size_bytes": 100611,
+          "thrust_patterns": {
+            "thrust::": 488,
+            "thrust\\s*::\\s*\\w+": 476,
+            "device_vector\\s*<": 1
+          },
+          "total_thrust": 965,
+          "nvidia_apis": 67
+        },
+        {
+          "file_path": "thrust/binary_search.h",
+          "extension": ".h",
+          "size_bytes": 84960,
+          "thrust_patterns": {
+            "thrust::": 292,
+            "#include\\s*<thrust/": 88,
+            "thrust\\s*::\\s*\\w+": 292,
+            "device_vector\\s*<": 52
+          },
+          "total_thrust": 724,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "testing/transform.cu",
+          "extension": ".cu",
+          "size_bytes": 27167,
+          "thrust_patterns": {
+            "thrust::": 210,
+            "#include\\s*<thrust/": 7,
+            "thrust\\s*::\\s*\\w+": 210,
+            "device_vector\\s*<": 37,
+            "host_vector\\s*<": 27
+          },
+          "total_thrust": 491,
+          "nvidia_apis": 61
+        },
+        {
+          "file_path": "testing/copy.cu",
+          "extension": ".cu",
+          "size_bytes": 23176,
+          "thrust_patterns": {
+            "thrust::": 164,
+            "#include\\s*<thrust/": 10,
+            "thrust\\s*::\\s*\\w+": 164,
+            "device_vector\\s*<": 34,
+            "host_vector\\s*<": 26
+          },
+          "total_thrust": 398,
+          "nvidia_apis": 26
+        },
+        {
+          "file_path": "testing/remove.cu",
+          "extension": ".cu",
+          "size_bytes": 21934,
+          "thrust_patterns": {
+            "thrust::": 153,
+            "#include\\s*<thrust/": 6,
+            "thrust\\s*::\\s*\\w+": 153,
+            "device_vector\\s*<": 30,
+            "host_vector\\s*<": 18
+          },
+          "total_thrust": 360,
+          "nvidia_apis": 22
+        },
+        {
+          "file_path": "testing/scan.cu",
+          "extension": ".cu",
+          "size_bytes": 24351,
+          "thrust_patterns": {
+            "thrust::": 145,
+            "#include\\s*<thrust/": 8,
+            "thrust\\s*::\\s*\\w+": 145,
+            "device_vector\\s*<": 22,
+            "host_vector\\s*<": 17
+          },
+          "total_thrust": 337,
+          "nvidia_apis": 36
+        },
+        {
+          "file_path": "testing/async_reduce.cu",
+          "extension": ".cu",
+          "size_bytes": 34267,
+          "thrust_patterns": {
+            "thrust::": 161,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 161,
+            "device_vector\\s*<": 14,
+            "host_vector\\s*<": 10
+          },
+          "total_thrust": 351,
+          "nvidia_apis": 6
+        },
+        {
+          "file_path": "testing/unique_by_key.cu",
+          "extension": ".cu",
+          "size_bytes": 15785,
+          "thrust_patterns": {
+            "thrust::": 126,
+            "#include\\s*<thrust/": 4,
+            "thrust\\s*::\\s*\\w+": 126,
+            "device_vector\\s*<": 22,
+            "host_vector\\s*<": 19
+          },
+          "total_thrust": 297,
+          "nvidia_apis": 23
+        },
+        {
+          "file_path": "thrust/functional.h",
+          "extension": ".h",
+          "size_bytes": 55075,
+          "thrust_patterns": {
+            "thrust::": 104,
+            "#include\\s*<thrust/": 63,
+            "thrust\\s*::\\s*\\w+": 104,
+            "device_vector\\s*<": 30
+          },
+          "total_thrust": 301,
+          "nvidia_apis": 13
+        }
+      ]
+    },
+    {
+      "repo_name": "neka-nat/cupoch",
+      "stars": 991,
+      "forks": 115,
+      "language": "C++",
+      "combined_score": 64.102,
+      "files_analyzed": 703,
+      "files_by_extension": {
+        ".py": 59,
+        "no_extension": 29,
+        ".txt": 53,
+        ".md": 20,
+        ".js": 30,
+        ".cmake": 18,
+        ".h": 274,
+        ".cuh": 14,
+        ".cpp": 115,
+        ".cu": 73,
+        ".java": 12,
+        ".hpp": 1,
+        ".m": 5
+      },
+      "thrust_by_extension": {
+        ".cpp": 901,
+        ".h": 1204,
+        ".cu": 5098,
+        ".cuh": 114,
+        ".md": 10
+      },
+      "api_by_extension": {
+        ".cpp": 8,
+        ".h": 45,
+        ".cu": 762,
+        ".cuh": 18,
+        ".md": 2
+      },
+      "top_files": [
+        {
+          "file_path": "src/cupoch/geometry/trianglemesh.cu",
+          "extension": ".cu",
+          "size_bytes": 49876,
+          "thrust_patterns": {
+            "thrust::": 181,
+            "#include\\s*<thrust/": 7,
+            "thrust\\s*::\\s*\\w+": 181,
+            "device_vector\\s*<": 62,
+            "host_vector\\s*<": 14
+          },
+          "total_thrust": 445,
+          "nvidia_apis": 62
+        },
+        {
+          "file_path": "src/cupoch/geometry/graph.cu",
+          "extension": ".cu",
+          "size_bytes": 34223,
+          "thrust_patterns": {
+            "thrust::": 128,
+            "#include\\s*<thrust/": 6,
+            "thrust\\s*::\\s*\\w+": 128,
+            "device_vector\\s*<": 38,
+            "host_vector\\s*<": 14
+          },
+          "total_thrust": 314,
+          "nvidia_apis": 51
+        },
+        {
+          "file_path": "src/tests/geometry/trianglemesh.cpp",
+          "extension": ".cpp",
+          "size_bytes": 53062,
+          "thrust_patterns": {
+            "thrust::": 104,
+            "thrust\\s*::\\s*\\w+": 104,
+            "host_vector\\s*<": 104
+          },
+          "total_thrust": 312,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "src/cupoch/integration/uniform_tsdfvolume.cu",
+          "extension": ".cu",
+          "size_bytes": 43726,
+          "thrust_patterns": {
+            "thrust::": 115,
+            "#include\\s*<thrust/": 3,
+            "thrust\\s*::\\s*\\w+": 115,
+            "device_vector\\s*<": 8
+          },
+          "total_thrust": 241,
+          "nvidia_apis": 48
+        },
+        {
+          "file_path": "third_party/flann/algorithms/kdtree_cuda_builder.h",
+          "extension": ".h",
+          "size_bytes": 29358,
+          "thrust_patterns": {
+            "thrust::": 98,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 98,
+            "device_vector\\s*<": 64,
+            "host_vector\\s*<": 1
+          },
+          "total_thrust": 266,
+          "nvidia_apis": 19
+        },
+        {
+          "file_path": "third_party/flann/algorithms/kdtree_cuda_3d_index.cu",
+          "extension": ".cu",
+          "size_bytes": 36994,
+          "thrust_patterns": {
+            "thrust::": 126,
+            "#include\\s*<thrust/": 7,
+            "thrust\\s*::\\s*\\w+": 126,
+            "device_vector\\s*<": 17
+          },
+          "total_thrust": 276,
+          "nvidia_apis": 6
+        },
+        {
+          "file_path": "src/cupoch/visualization/shader/simple_shader.cu",
+          "extension": ".cu",
+          "size_bytes": 38301,
+          "thrust_patterns": {
+            "thrust::": 110,
+            "#include\\s*<thrust/": 2,
+            "thrust\\s*::\\s*\\w+": 110,
+            "device_vector\\s*<": 4
+          },
+          "total_thrust": 226,
+          "nvidia_apis": 40
+        },
+        {
+          "file_path": "src/cupoch/geometry/down_sample.cu",
+          "extension": ".cu",
+          "size_bytes": 20659,
+          "thrust_patterns": {
+            "thrust::": 89,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 89,
+            "device_vector\\s*<": 28
+          },
+          "total_thrust": 211,
+          "nvidia_apis": 35
+        },
+        {
+          "file_path": "src/cupoch/collision/collision.cu",
+          "extension": ".cu",
+          "size_bytes": 56636,
+          "thrust_patterns": {
+            "thrust::": 92,
+            "thrust\\s*::\\s*\\w+": 92,
+            "device_vector\\s*<": 5,
+            "host_vector\\s*<": 2
+          },
+          "total_thrust": 191,
+          "nvidia_apis": 51
+        },
+        {
+          "file_path": "src/cupoch/registration/fast_global_registration.cu",
+          "extension": ".cu",
+          "size_bytes": 19156,
+          "thrust_patterns": {
+            "thrust::": 75,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 75,
+            "device_vector\\s*<": 9
+          },
+          "total_thrust": 164,
+          "nvidia_apis": 25
+        }
+      ]
+    },
+    {
+      "repo_name": "NVIDIA/cub",
+      "stars": 1772,
+      "forks": 459,
+      "language": "Cuda",
+      "combined_score": 67.6388,
+      "files_analyzed": 310,
+      "files_by_extension": {
+        ".md": 7,
+        "no_extension": 13,
+        ".py": 17,
+        ".cu": 97,
+        ".cpp": 1,
+        ".cmake": 14,
+        ".txt": 12,
+        ".cuh": 142,
+        ".h": 7
+      },
+      "thrust_by_extension": {
+        ".txt": 2,
+        ".cu": 4314,
+        ".cuh": 266,
+        ".cmake": 4,
+        ".h": 37,
+        ".md": 10
+      },
+      "api_by_extension": {
+        ".txt": 0,
+        ".cu": 55,
+        ".cuh": 13,
+        ".cmake": 0,
+        ".h": 0,
+        ".md": 2
+      },
+      "top_files": [
+        {
+          "file_path": "test/catch2_test_device_radix_sort_custom.cu",
+          "extension": ".cu",
+          "size_bytes": 60982,
+          "thrust_patterns": {
+            "thrust::": 259,
+            "#include\\s*<thrust/": 6,
+            "thrust\\s*::\\s*\\w+": 259,
+            "device_vector\\s*<": 138,
+            "host_vector\\s*<": 14
+          },
+          "total_thrust": 676,
+          "nvidia_apis": 2
+        },
+        {
+          "file_path": "test/test_device_segmented_sort.cu",
+          "extension": ".cu",
+          "size_bytes": 60239,
+          "thrust_patterns": {
+            "thrust::": 149,
+            "#include\\s*<thrust/": 8,
+            "thrust\\s*::\\s*\\w+": 149,
+            "device_vector\\s*<": 30,
+            "host_vector\\s*<": 40
+          },
+          "total_thrust": 376,
+          "nvidia_apis": 2
+        },
+        {
+          "file_path": "test/test_device_select_if.cu",
+          "extension": ".cu",
+          "size_bytes": 37543,
+          "thrust_patterns": {
+            "thrust::": 78,
+            "#include\\s*<thrust/": 10,
+            "thrust\\s*::\\s*\\w+": 78,
+            "device_vector\\s*<": 21
+          },
+          "total_thrust": 187,
+          "nvidia_apis": 11
+        },
+        {
+          "file_path": "test/test_device_merge_sort.cu",
+          "extension": ".cu",
+          "size_bytes": 11544,
+          "thrust_patterns": {
+            "thrust::": 74,
+            "#include\\s*<thrust/": 9,
+            "thrust\\s*::\\s*\\w+": 74,
+            "device_vector\\s*<": 22
+          },
+          "total_thrust": 179,
+          "nvidia_apis": 2
+        },
+        {
+          "file_path": "benchmarks/nvbench_helper/nvbench_helper.cu",
+          "extension": ".cu",
+          "size_bytes": 20864,
+          "thrust_patterns": {
+            "thrust::": 66,
+            "#include\\s*<thrust/": 10,
+            "thrust\\s*::\\s*\\w+": 66,
+            "device_vector\\s*<": 28
+          },
+          "total_thrust": 170,
+          "nvidia_apis": 9
+        },
+        {
+          "file_path": "test/catch2_test_warp_scan.cu",
+          "extension": ".cu",
+          "size_bytes": 23306,
+          "thrust_patterns": {
+            "thrust::": 54,
+            "#include\\s*<thrust/": 2,
+            "thrust\\s*::\\s*\\w+": 54,
+            "device_vector\\s*<": 30,
+            "host_vector\\s*<": 16
+          },
+          "total_thrust": 156,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "test/test_device_three_way_partition.cu",
+          "extension": ".cu",
+          "size_bytes": 19786,
+          "thrust_patterns": {
+            "thrust::": 59,
+            "#include\\s*<thrust/": 7,
+            "thrust\\s*::\\s*\\w+": 59,
+            "device_vector\\s*<": 24,
+            "host_vector\\s*<": 1
+          },
+          "total_thrust": 150,
+          "nvidia_apis": 2
+        },
+        {
+          "file_path": "test/test_device_adjacent_difference.cu",
+          "extension": ".cu",
+          "size_bytes": 22209,
+          "thrust_patterns": {
+            "thrust::": 59,
+            "#include\\s*<thrust/": 9,
+            "thrust\\s*::\\s*\\w+": 59,
+            "device_vector\\s*<": 15
+          },
+          "total_thrust": 142,
+          "nvidia_apis": 4
+        },
+        {
+          "file_path": "test/catch2_test_block_radix_sort.cu",
+          "extension": ".cu",
+          "size_bytes": 14816,
+          "thrust_patterns": {
+            "thrust::": 50,
+            "thrust\\s*::\\s*\\w+": 50,
+            "device_vector\\s*<": 20,
+            "host_vector\\s*<": 10
+          },
+          "total_thrust": 130,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "test/catch2_test_warp_reduce.cu",
+          "extension": ".cu",
+          "size_bytes": 21493,
+          "thrust_patterns": {
+            "thrust::": 42,
+            "#include\\s*<thrust/": 3,
+            "thrust\\s*::\\s*\\w+": 42,
+            "device_vector\\s*<": 18,
+            "host_vector\\s*<": 16
+          },
+          "total_thrust": 121,
+          "nvidia_apis": 4
+        }
+      ]
+    },
+    {
+      "repo_name": "cupy/cupy",
+      "stars": 10425,
+      "forks": 942,
+      "language": "Python",
+      "combined_score": 100.0,
+      "files_analyzed": 1024,
+      "files_by_extension": {
+        ".pxd": 56,
+        ".py": 765,
+        ".pyx": 68,
+        "no_extension": 22,
+        ".hpp": 3,
+        ".h": 83,
+        ".md": 14,
+        ".txt": 2,
+        ".cuh": 6,
+        ".cu": 5
+      },
+      "thrust_by_extension": {
+        ".h": 120,
+        "no_extension": 1,
+        ".py": 321,
+        ".cuh": 43,
+        ".pyx": 11,
+        ".cu": 176
+      },
+      "api_by_extension": {
+        ".h": 0,
+        "no_extension": 0,
+        ".py": 8,
+        ".cuh": 0,
+        ".pyx": 0,
+        ".cu": 9
+      },
+      "top_files": [
+        {
+          "file_path": "cupy/cuda/cupy_thrust.cu",
+          "extension": ".cu",
+          "size_bytes": 18124,
+          "thrust_patterns": {
+            "thrust::": 62,
+            "#include\\s*<thrust/": 9,
+            "thrust\\s*::\\s*\\w+": 62,
+            "thrust\\.h": 1
+          },
+          "total_thrust": 134,
+          "nvidia_apis": 9
+        },
+        {
+          "file_path": "cupyx/signal/_filtering/_filtering.py",
+          "extension": ".py",
+          "size_bytes": 27356,
+          "thrust_patterns": {
+            "thrust::": 64,
+            "thrust\\s*::\\s*\\w+": 64
+          },
+          "total_thrust": 128,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupyx/jit/thrust.py",
+          "extension": ".py",
+          "size_bytes": 34711,
+          "thrust_patterns": {
+            "thrust::": 51,
+            "#include\\s*<thrust/": 2,
+            "thrust\\s*::\\s*\\w+": 51
+          },
+          "total_thrust": 104,
+          "nvidia_apis": 8
+        },
+        {
+          "file_path": "cupy/_core/include/cupy/complex/ccosh.h",
+          "extension": ".h",
+          "size_bytes": 7188,
+          "thrust_patterns": {
+            "thrust::": 23,
+            "thrust\\s*::\\s*\\w+": 23
+          },
+          "total_thrust": 46,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupy/cuda/cupy_cub.cu",
+          "extension": ".cu",
+          "size_bytes": 40910,
+          "thrust_patterns": {
+            "thrust::": 21,
+            "thrust\\s*::\\s*\\w+": 21
+          },
+          "total_thrust": 42,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupy/_core/include/cupy/complex.cuh",
+          "extension": ".cuh",
+          "size_bytes": 2140,
+          "thrust_patterns": {
+            "thrust::": 20,
+            "thrust\\s*::\\s*\\w+": 20
+          },
+          "total_thrust": 40,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupyx/scipy/signal/_upfirdn.py",
+          "extension": ".py",
+          "size_bytes": 20805,
+          "thrust_patterns": {
+            "thrust::": 16,
+            "thrust\\s*::\\s*\\w+": 16
+          },
+          "total_thrust": 32,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupyx/scipy/signal/_iir_utils.py",
+          "extension": ".py",
+          "size_bytes": 21937,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "thrust\\s*::\\s*\\w+": 8
+          },
+          "total_thrust": 16,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupy/_core/include/cupy/complex/catrig.h",
+          "extension": ".h",
+          "size_bytes": 24215,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "thrust\\s*::\\s*\\w+": 8
+          },
+          "total_thrust": 16,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupyx/scipy/special/_complexstuff.py",
+          "extension": ".py",
+          "size_bytes": 1465,
+          "thrust_patterns": {
+            "thrust::": 7,
+            "thrust\\s*::\\s*\\w+": 7
+          },
+          "total_thrust": 14,
+          "nvidia_apis": 0
+        }
+      ]
+    },
+    {
+      "repo_name": "NVIDIA/MinkowskiEngine",
+      "stars": 2745,
+      "forks": 416,
+      "language": "Python",
+      "combined_score": 71.4792,
+      "files_analyzed": 205,
+      "files_by_extension": {
+        ".py": 93,
+        "no_extension": 6,
+        ".txt": 1,
+        ".md": 14,
+        ".cuh": 20,
+        ".hpp": 27,
+        ".cpp": 20,
+        ".cu": 22,
+        ".h": 2
+      },
+      "thrust_by_extension": {
+        ".cuh": 121,
+        ".md": 4,
+        ".hpp": 4,
+        ".cu": 289
+      },
+      "api_by_extension": {
+        ".cuh": 13,
+        ".md": 0,
+        ".hpp": 0,
+        ".cu": 67
+      },
+      "top_files": [
+        {
+          "file_path": "src/coordinate_map_gpu.cu",
+          "extension": ".cu",
+          "size_bytes": 101866,
+          "thrust_patterns": {
+            "thrust::": 102,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 102
+          },
+          "total_thrust": 209,
+          "nvidia_apis": 56
+        },
+        {
+          "file_path": "src/kernel_map.cuh",
+          "extension": ".cuh",
+          "size_bytes": 16299,
+          "thrust_patterns": {
+            "thrust::": 16,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 16,
+            "host_vector\\s*<": 3
+          },
+          "total_thrust": 40,
+          "nvidia_apis": 8
+        },
+        {
+          "file_path": "src/coordinate_map_functors.cuh",
+          "extension": ".cuh",
+          "size_bytes": 7492,
+          "thrust_patterns": {
+            "thrust::": 15,
+            "#include\\s*<thrust/": 3,
+            "thrust\\s*::\\s*\\w+": 15
+          },
+          "total_thrust": 33,
+          "nvidia_apis": 2
+        },
+        {
+          "file_path": "src/pooling_max_kernel.cu",
+          "extension": ".cu",
+          "size_bytes": 16190,
+          "thrust_patterns": {
+            "thrust::": 9,
+            "#include\\s*<thrust/": 7,
+            "thrust\\s*::\\s*\\w+": 9
+          },
+          "total_thrust": 25,
+          "nvidia_apis": 3
+        },
+        {
+          "file_path": "src/spmm.cu",
+          "extension": ".cu",
+          "size_bytes": 24589,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "thrust\\s*::\\s*\\w+": 8
+          },
+          "total_thrust": 16,
+          "nvidia_apis": 5
+        },
+        {
+          "file_path": "src/3rdparty/concurrent_unordered_map.cuh",
+          "extension": ".cuh",
+          "size_bytes": 21970,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "#include\\s*<thrust/": 2,
+            "thrust\\s*::\\s*\\w+": 8
+          },
+          "total_thrust": 18,
+          "nvidia_apis": 2
+        },
+        {
+          "file_path": "src/storage.cuh",
+          "extension": ".cuh",
+          "size_bytes": 6828,
+          "thrust_patterns": {
+            "thrust::": 6,
+            "thrust\\s*::\\s*\\w+": 6,
+            "device_vector\\s*<": 6
+          },
+          "total_thrust": 18,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "src/pooling_avg_kernel.cu",
+          "extension": ".cu",
+          "size_bytes": 20998,
+          "thrust_patterns": {
+            "thrust::": 4,
+            "#include\\s*<thrust/": 7,
+            "thrust\\s*::\\s*\\w+": 4
+          },
+          "total_thrust": 15,
+          "nvidia_apis": 2
+        },
+        {
+          "file_path": "tests/cpp/coordinate_map_gpu_test.cu",
+          "extension": ".cu",
+          "size_bytes": 10238,
+          "thrust_patterns": {
+            "thrust::": 6,
+            "#include\\s*<thrust/": 3,
+            "thrust\\s*::\\s*\\w+": 6
+          },
+          "total_thrust": 15,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "src/broadcast_kernel.cu",
+          "extension": ".cu",
+          "size_bytes": 21596,
+          "thrust_patterns": {
+            "thrust::": 3,
+            "thrust\\s*::\\s*\\w+": 3
+          },
+          "total_thrust": 6,
+          "nvidia_apis": 1
+        }
+      ]
+    },
+    {
+      "repo_name": "boostorg/compute",
+      "stars": 1622,
+      "forks": 337,
+      "language": "C++",
+      "combined_score": 66.8924,
+      "files_analyzed": 638,
+      "files_by_extension": {
+        "no_extension": 1,
+        ".cpp": 284,
+        ".hpp": 323,
+        ".cu": 16,
+        ".txt": 6,
+        ".md": 2,
+        ".py": 2,
+        ".cmake": 4
+      },
+      "thrust_by_extension": {
+        ".cpp": 20,
+        ".cu": 292
+      },
+      "api_by_extension": {
+        ".cpp": 0,
+        ".cu": 5
+      },
+      "top_files": [
+        {
+          "file_path": "perf/perf_thrust_reduce_by_key.cu",
+          "extension": ".cu",
+          "size_bytes": 2788,
+          "thrust_patterns": {
+            "thrust::": 10,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 10,
+            "device_vector\\s*<": 5,
+            "host_vector\\s*<": 2
+          },
+          "total_thrust": 32,
+          "nvidia_apis": 1
+        },
+        {
+          "file_path": "perf/perf_thrust_merge.cu",
+          "extension": ".cu",
+          "size_bytes": 1947,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "#include\\s*<thrust/": 4,
+            "thrust\\s*::\\s*\\w+": 8,
+            "device_vector\\s*<": 3,
+            "host_vector\\s*<": 4
+          },
+          "total_thrust": 27,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "perf/perf_thrust_set_difference.cu",
+          "extension": ".cu",
+          "size_bytes": 1872,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "#include\\s*<thrust/": 4,
+            "thrust\\s*::\\s*\\w+": 8,
+            "device_vector\\s*<": 4,
+            "host_vector\\s*<": 2
+          },
+          "total_thrust": 26,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "perf/perf_thrust_saxpy.cu",
+          "extension": ".cu",
+          "size_bytes": 1900,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "#include\\s*<thrust/": 4,
+            "thrust\\s*::\\s*\\w+": 8,
+            "device_vector\\s*<": 2,
+            "host_vector\\s*<": 2
+          },
+          "total_thrust": 24,
+          "nvidia_apis": 1
+        },
+        {
+          "file_path": "perf/perf_thrust_rotate.cu",
+          "extension": ".cu",
+          "size_bytes": 1618,
+          "thrust_patterns": {
+            "thrust::": 7,
+            "#include\\s*<thrust/": 3,
+            "thrust\\s*::\\s*\\w+": 7,
+            "device_vector\\s*<": 2,
+            "host_vector\\s*<": 1
+          },
+          "total_thrust": 20,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "perf/perf_thrust_inner_product.cu",
+          "extension": ".cu",
+          "size_bytes": 1517,
+          "thrust_patterns": {
+            "thrust::": 5,
+            "#include\\s*<thrust/": 3,
+            "thrust\\s*::\\s*\\w+": 5,
+            "device_vector\\s*<": 2,
+            "host_vector\\s*<": 2
+          },
+          "total_thrust": 17,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "perf/perf_thrust_sort.cu",
+          "extension": ".cu",
+          "size_bytes": 1350,
+          "thrust_patterns": {
+            "thrust::": 4,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 4,
+            "device_vector\\s*<": 1,
+            "host_vector\\s*<": 1
+          },
+          "total_thrust": 15,
+          "nvidia_apis": 1
+        },
+        {
+          "file_path": "perf/perf_thrust_reverse_copy.cu",
+          "extension": ".cu",
+          "size_bytes": 1382,
+          "thrust_patterns": {
+            "thrust::": 4,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 4,
+            "device_vector\\s*<": 2,
+            "host_vector\\s*<": 1
+          },
+          "total_thrust": 16,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "perf/perf_thrust_partial_sum.cu",
+          "extension": ".cu",
+          "size_bytes": 1383,
+          "thrust_patterns": {
+            "thrust::": 4,
+            "#include\\s*<thrust/": 5,
+            "thrust\\s*::\\s*\\w+": 4,
+            "device_vector\\s*<": 1,
+            "host_vector\\s*<": 1
+          },
+          "total_thrust": 15,
+          "nvidia_apis": 1
+        },
+        {
+          "file_path": "perf/perf_thrust_find.cu",
+          "extension": ".cu",
+          "size_bytes": 1857,
+          "thrust_patterns": {
+            "thrust::": 5,
+            "#include\\s*<thrust/": 3,
+            "thrust\\s*::\\s*\\w+": 5,
+            "device_vector\\s*<": 2,
+            "host_vector\\s*<": 1
+          },
+          "total_thrust": 16,
+          "nvidia_apis": 0
+        }
+      ]
+    },
+    {
+      "repo_name": "OpenNMT/CTranslate2",
+      "stars": 3965,
+      "forks": 380,
+      "language": "C++",
+      "combined_score": 76.316,
+      "files_analyzed": 469,
+      "files_by_extension": {
+        ".txt": 22,
+        "no_extension": 33,
+        ".py": 44,
+        ".cmake": 2,
+        ".h": 132,
+        ".cc": 145,
+        ".md": 31,
+        ".cu": 56,
+        ".cuh": 1,
+        ".hpp": 3
+      },
+      "thrust_by_extension": {
+        ".cu": 125,
+        ".h": 23,
+        ".md": 2
+      },
+      "api_by_extension": {
+        ".cu": 20,
+        ".h": 7,
+        ".md": 0
+      },
+      "top_files": [
+        {
+          "file_path": "src/ops/concat_split_slide_gpu.cu",
+          "extension": ".cu",
+          "size_bytes": 9597,
+          "thrust_patterns": {
+            "thrust::": 27,
+            "#include\\s*<thrust/": 4,
+            "thrust\\s*::\\s*\\w+": 27
+          },
+          "total_thrust": 58,
+          "nvidia_apis": 9
+        },
+        {
+          "file_path": "src/cuda/primitives.cu",
+          "extension": ".cu",
+          "size_bytes": 35734,
+          "thrust_patterns": {
+            "thrust::": 17,
+            "#include\\s*<thrust/": 1,
+            "thrust\\s*::\\s*\\w+": 17
+          },
+          "total_thrust": 35,
+          "nvidia_apis": 7
+        },
+        {
+          "file_path": "src/cuda/helpers.h",
+          "extension": ".h",
+          "size_bytes": 13756,
+          "thrust_patterns": {
+            "thrust::": 10,
+            "thrust\\s*::\\s*\\w+": 10
+          },
+          "total_thrust": 20,
+          "nvidia_apis": 7
+        },
+        {
+          "file_path": "src/ops/tile_gpu.cu",
+          "extension": ".cu",
+          "size_bytes": 2562,
+          "thrust_patterns": {
+            "thrust::": 6,
+            "#include\\s*<thrust/": 3,
+            "thrust\\s*::\\s*\\w+": 6
+          },
+          "total_thrust": 15,
+          "nvidia_apis": 2
+        },
+        {
+          "file_path": "src/ops/gather_gpu.cu",
+          "extension": ".cu",
+          "size_bytes": 4279,
+          "thrust_patterns": {
+            "thrust::": 3,
+            "#include\\s*<thrust/": 3,
+            "thrust\\s*::\\s*\\w+": 3
+          },
+          "total_thrust": 9,
+          "nvidia_apis": 1
+        },
+        {
+          "file_path": "src/ops/gumbel_max_gpu.cu",
+          "extension": ".cu",
+          "size_bytes": 1460,
+          "thrust_patterns": {
+            "thrust::": 2,
+            "thrust\\s*::\\s*\\w+": 2
+          },
+          "total_thrust": 4,
+          "nvidia_apis": 1
+        },
+        {
+          "file_path": "src/cuda/utils.h",
+          "extension": ".h",
+          "size_bytes": 4241,
+          "thrust_patterns": {
+            "thrust::": 1,
+            "#include\\s*<thrust/": 1,
+            "thrust\\s*::\\s*\\w+": 1
+          },
+          "total_thrust": 3,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "src/ops/bias_add_gpu.cu",
+          "extension": ".cu",
+          "size_bytes": 3617,
+          "thrust_patterns": {
+            "thrust::": 1,
+            "thrust\\s*::\\s*\\w+": 1
+          },
+          "total_thrust": 2,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "src/ops/dequantize_gpu.cu",
+          "extension": ".cu",
+          "size_bytes": 7431,
+          "thrust_patterns": {
+            "thrust::": 1,
+            "thrust\\s*::\\s*\\w+": 1
+          },
+          "total_thrust": 2,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "CHANGELOG.md",
+          "extension": ".md",
+          "size_bytes": 77531,
+          "thrust_patterns": {
+            "thrust::": 1,
+            "thrust\\s*::\\s*\\w+": 1
+          },
+          "total_thrust": 2,
+          "nvidia_apis": 0
+        }
+      ]
+    },
+    {
+      "repo_name": "NVIDIA/retinanet-examples",
+      "stars": 895,
+      "forks": 269,
+      "language": "Python",
+      "combined_score": 63.9028,
+      "files_analyzed": 57,
+      "files_by_extension": {
+        ".py": 18,
+        "no_extension": 4,
+        ".md": 7,
+        ".txt": 7,
+        ".h": 11,
+        ".cpp": 6,
+        ".cu": 4
+      },
+      "thrust_by_extension": {
+        ".h": 1,
+        ".cu": 98
+      },
+      "api_by_extension": {
+        ".h": 0,
+        ".cu": 12
+      },
+      "top_files": [
+        {
+          "file_path": "csrc/cuda/decode.cu",
+          "extension": ".cu",
+          "size_bytes": 7058,
+          "thrust_patterns": {
+            "thrust::": 11,
+            "#include\\s*<thrust/": 7,
+            "thrust\\s*::\\s*\\w+": 11
+          },
+          "total_thrust": 29,
+          "nvidia_apis": 5
+        },
+        {
+          "file_path": "csrc/cuda/decode_rotate.cu",
+          "extension": ".cu",
+          "size_bytes": 7420,
+          "thrust_patterns": {
+            "thrust::": 11,
+            "#include\\s*<thrust/": 7,
+            "thrust\\s*::\\s*\\w+": 11
+          },
+          "total_thrust": 29,
+          "nvidia_apis": 5
+        },
+        {
+          "file_path": "csrc/cuda/nms.cu",
+          "extension": ".cu",
+          "size_bytes": 6867,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "#include\\s*<thrust/": 4,
+            "thrust\\s*::\\s*\\w+": 8
+          },
+          "total_thrust": 20,
+          "nvidia_apis": 1
+        },
+        {
+          "file_path": "csrc/cuda/nms_iou.cu",
+          "extension": ".cu",
+          "size_bytes": 17452,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "#include\\s*<thrust/": 4,
+            "thrust\\s*::\\s*\\w+": 8
+          },
+          "total_thrust": 20,
+          "nvidia_apis": 1
+        },
+        {
+          "file_path": "csrc/cuda/utils.h",
+          "extension": ".h",
+          "size_bytes": 2170,
+          "thrust_patterns": {
+            "#include\\s*<thrust/": 1
+          },
+          "total_thrust": 1,
+          "nvidia_apis": 0
+        }
+      ]
+    }
+  ]
+}

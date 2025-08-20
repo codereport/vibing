@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thrust Usage Analysis Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .control-group label {
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        select {
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+            min-width: 250px;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        .content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9ecef;
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            font-size: 1.2em;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        
+        .sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s ease;
+        }
+        
+        .sortable:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6b4190 100%);
+        }
+        
+        .sort-indicator {
+            font-size: 0.8em;
+            opacity: 0.6;
+            margin-left: 5px;
+        }
+        
+        .sorted-asc .sort-indicator::after {
+            content: " ▲";
+            opacity: 1;
+        }
+        
+        .sorted-desc .sort-indicator::after {
+            content: " ▼";
+            opacity: 1;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+            transition: background 0.2s ease;
+        }
+        
+        tr:hover td {
+            background: #f8f9fa;
+        }
+        
+        .number {
+            text-align: right;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-weight: 500;
+        }
+        
+        .extension {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-weight: 600;
+            color: #e83e8c;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #dc3545;
+            text-align: center;
+            padding: 20px;
+            background: #f8d7da;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            select {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="github_search.html" class="back-btn">← Back to Hub</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>📊 Thrust Usage Analysis Dashboard</h1>
+            <p>Comprehensive analysis of NVIDIA Thrust library usage across CUDA repositories</p>
+            <p id="analysisInfo" style="font-size: 0.9em; opacity: 0.8; margin-top: 10px;"></p>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="repoSelect">📁 Repository:</label>
+                <select id="repoSelect">
+                    <option value="all">Loading repositories...</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="section full-width">
+                <h2><span class="icon">📈</span>Thrust Usage by File Extension</h2>
+                <div class="table-container">
+                    <table id="extensionsTable">
+                        <thead>
+                            <tr>
+                                <th data-sort="extension" class="sortable">Extension <span class="sort-indicator">↕</span></th>
+                                <th data-sort="files" class="sortable">Files <span class="sort-indicator">↕</span></th>
+                                <th data-sort="thrust" class="sortable">Thrust <span class="sort-indicator">↕</span></th>
+                                <th data-sort="apis" class="sortable">APIs <span class="sort-indicator">↕</span></th>
+                                <th data-sort="avg" class="sortable">Avg/File <span class="sort-indicator">↕</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="5" class="loading">Loading data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><span class="icon">📊</span>Thrust Usage Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="thrustChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2><span class="icon">🎯</span>Files vs API Calls</h2>
+                <div class="chart-container">
+                    <canvas id="apiChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="section full-width">
+                <h2><span class="icon">📊</span>Summary Statistics</h2>
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <h3 id="totalFiles">-</h3>
+                        <p>Total Files</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalThrust">-</h3>
+                        <p>Total Thrust Usage</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="totalApis">-</h3>
+                        <p>Total API Calls</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="avgPerFile">-</h3>
+                        <p>Avg Thrust/File</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Static Analysis Dashboard - JavaScript version of analysis_dashboard.py
+        
+        class StaticThrustAnalyzer {
+            constructor() {
+                this.detailedData = null;
+                this.extensionsData = null;
+                this.repositoriesData = null;
+                this.loadData();
+            }
+            
+            async loadData() {
+                try {
+                    // Load detailed JSON data - find the most recent file
+                    const detailedFiles = [
+                        'thrust_analysis_detailed_20250817_175543.json',
+                        'thrust_analysis_local_clone_20250817_200329.json',
+                        'thrust_analysis_local_clone_20250817_200536.json',
+                        'thrust_search_detailed_20250817_211100.json',
+                        'thrust_search_detailed_20250817_211411.json',
+                        'thrust_search_detailed_20250819_142934.json',
+                        'thrust_search_detailed_20250819_155819.json'
+                    ];
+                    
+                    // Try to load the most recent detailed file
+                    for (const file of detailedFiles.reverse()) {
+                        try {
+                            const response = await fetch(`data/${file}`);
+                            if (response.ok) {
+                                this.detailedData = await response.json();
+                                console.log(`📊 Loaded analysis data from: ${file}`);
+                                break;
+                            }
+                        } catch (e) {
+                            continue;
+                        }
+                    }
+                    
+                    // Generate extensions data from detailed data
+                    if (this.detailedData) {
+                        console.log('📊 Generating extensions data from detailed analysis...');
+                        this.extensionsData = this.generateExtensionsFromDetailed();
+                    }
+                    
+                    // Load repositories data
+                    const repoFiles = [
+                        'thrust_analysis_repositories_20250817_175543.csv',
+                        'thrust_analysis_local_repos_20250817_200329.csv',
+                        'thrust_analysis_local_repos_20250817_200536.csv'
+                    ];
+                    
+                    // For CSV files, we'll use the detailed data to generate stats
+                    if (this.detailedData) {
+                        this.repositoriesData = this.generateStatsFromDetailed();
+                    }
+                    
+                    // Initialize dashboard
+                    this.initializeDashboard();
+                    
+                } catch (error) {
+                    console.error('Error loading data:', error);
+                    this.showError('Failed to load analysis data. Make sure the data files are available.');
+                }
+            }
+            
+            generateExtensionsFromDetailed() {
+                if (!this.detailedData || !this.detailedData.repositories) {
+                    return [];
+                }
+                
+                const extensionsSummary = {};
+                
+                for (const repo of this.detailedData.repositories) {
+                    // Add file counts by extension
+                    for (const [ext, count] of Object.entries(repo.files_by_extension || {})) {
+                        if (!extensionsSummary[ext]) {
+                            extensionsSummary[ext] = { total_files: 0, thrust_usage: 0, api_calls: 0 };
+                        }
+                        extensionsSummary[ext].total_files += count;
+                    }
+                    
+                    // Add thrust usage by extension
+                    for (const [ext, count] of Object.entries(repo.thrust_by_extension || {})) {
+                        if (!extensionsSummary[ext]) {
+                            extensionsSummary[ext] = { total_files: 0, thrust_usage: 0, api_calls: 0 };
+                        }
+                        extensionsSummary[ext].thrust_usage += count;
+                    }
+                    
+                    // Add API calls by extension
+                    for (const [ext, count] of Object.entries(repo.api_by_extension || {})) {
+                        if (!extensionsSummary[ext]) {
+                            extensionsSummary[ext] = { total_files: 0, thrust_usage: 0, api_calls: 0 };
+                        }
+                        extensionsSummary[ext].api_calls += count;
+                    }
+                }
+                
+                // Convert to array format and calculate derived metrics
+                const result = [];
+                for (const [ext, data] of Object.entries(extensionsSummary)) {
+                    const files = data.total_files;
+                    const thrust = data.thrust_usage;
+                    const apis = data.api_calls;
+                    
+                    // Only include extensions that have thrust usage > 0
+                    if (thrust > 0) {
+                        result.push({
+                            extension: ext,
+                            total_files: files,
+                            thrust_usage: thrust,
+                            api_calls: apis,
+                            avg_thrust_per_file: files > 0 ? Math.round((thrust / files) * 100) / 100 : 0,
+                            avg_apis_per_file: files > 0 ? Math.round((apis / files) * 100) / 100 : 0,
+                            thrust_density: files > 0 ? Math.round(((thrust + apis) / files) * 100) / 100 : 0
+                        });
+                    }
+                }
+                
+                // Sort by thrust usage
+                result.sort((a, b) => b.thrust_usage - a.thrust_usage);
+                return result;
+            }
+            
+            generateStatsFromDetailed() {
+                if (!this.detailedData || !this.detailedData.repositories) {
+                    return [];
+                }
+                
+                return this.detailedData.repositories.map(repo => {
+                    const totalThrust = Object.values(repo.thrust_by_extension || {}).reduce((sum, val) => sum + val, 0);
+                    const totalApis = Object.values(repo.api_by_extension || {}).reduce((sum, val) => sum + val, 0);
+                    const topExt = Object.entries(repo.thrust_by_extension || {})
+                        .sort(([,a], [,b]) => b - a)[0]?.[0] || 'none';
+                    
+                    return {
+                        repository: repo.repo_name || '',
+                        stars: repo.stars || 0,
+                        forks: repo.forks || 0,
+                        language: repo.language || 'Unknown',
+                        combined_score: repo.combined_score || 0,
+                        files_analyzed: repo.files_analyzed || 0,
+                        total_thrust_usage: totalThrust,
+                        total_api_calls: totalApis,
+                        top_extension_by_thrust: topExt,
+                        thrust_files_count: (repo.top_files || []).filter(f => (f.total_thrust || 0) > 0).length,
+                        clone_size_mb: repo.clone_size_mb || 0,
+                        analysis_time_seconds: repo.analysis_time_seconds || 0
+                    };
+                });
+            }
+            
+            getExtensionSummary(repoFilter = 'all') {
+                if (repoFilter === 'all' || !repoFilter) {
+                    return this.extensionsData || [];
+                }
+                
+                // Calculate for specific repository from detailed data
+                if (!this.detailedData || !this.detailedData.repositories) {
+                    return [];
+                }
+                
+                const repo = this.detailedData.repositories.find(r => r.repo_name === repoFilter);
+                if (!repo) {
+                    return [];
+                }
+                
+                const extensions = [];
+                for (const [ext, files] of Object.entries(repo.files_by_extension || {})) {
+                    const thrustUsage = repo.thrust_by_extension?.[ext] || 0;
+                    const apiCalls = repo.api_by_extension?.[ext] || 0;
+                    
+                    // Only include extensions that have thrust usage > 0
+                    if (thrustUsage > 0) {
+                        extensions.push({
+                            extension: ext,
+                            total_files: files,
+                            thrust_usage: thrustUsage,
+                            api_calls: apiCalls,
+                            avg_thrust_per_file: files > 0 ? Math.round((thrustUsage / files) * 100) / 100 : 0,
+                            avg_apis_per_file: files > 0 ? Math.round((apiCalls / files) * 100) / 100 : 0,
+                            thrust_density: files > 0 ? Math.round((thrustUsage / files) * 100) / 100 : 0
+                        });
+                    }
+                }
+                
+                extensions.sort((a, b) => b.thrust_usage - a.thrust_usage);
+                return extensions;
+            }
+            
+            getRepositories() {
+                const repos = [{ name: 'all', display: 'All Repositories' }];
+                if (this.detailedData && this.detailedData.repositories) {
+                    for (const repo of this.detailedData.repositories) {
+                        repos.push({
+                            name: repo.repo_name,
+                            display: `${repo.repo_name} (${repo.stars} ⭐)`
+                        });
+                    }
+                }
+                return repos;
+            }
+            
+            getRepositoryStats() {
+                return this.repositoriesData || [];
+            }
+            
+            initializeDashboard() {
+                // Load repositories dropdown
+                this.loadRepositories();
+                // Load initial extension data
+                this.loadExtensionData('all');
+            }
+            
+            loadRepositories() {
+                const repos = this.getRepositories();
+                const select = document.getElementById('repoSelect');
+                select.innerHTML = '';
+                
+                repos.forEach(repo => {
+                    const option = document.createElement('option');
+                    option.value = repo.name;
+                    option.textContent = repo.display;
+                    select.appendChild(option);
+                });
+                
+                // Show analysis info
+                const stats = this.getRepositoryStats();
+                const isLocalClone = stats.some(repo => 
+                    (repo.clone_size_mb !== undefined && repo.clone_size_mb > 0) || 
+                    (repo.analysis_time_seconds !== undefined && repo.analysis_time_seconds > 0)
+                );
+                
+                if (isLocalClone) {
+                    const totalSize = stats.reduce((sum, repo) => sum + (repo.clone_size_mb || 0), 0);
+                    const totalTime = stats.reduce((sum, repo) => sum + (repo.analysis_time_seconds || 0), 0);
+                    document.getElementById('analysisInfo').textContent = 
+                        `Local Clone Analysis • ${stats.length} repos • ${totalSize.toFixed(1)} MB • ${totalTime.toFixed(1)}s`;
+                } else {
+                    document.getElementById('analysisInfo').textContent = 
+                        `GitHub API Analysis • ${stats.length} repositories analyzed`;
+                }
+            }
+            
+            loadExtensionData(repoFilter) {
+                const extensions = this.getExtensionSummary(repoFilter);
+                window.currentExtensionData = extensions;
+                
+                // Apply current sort
+                window.sortExtensionData();
+                
+                window.updateTable(window.currentExtensionData);
+                window.updateCharts(window.currentExtensionData);
+                window.updateStats(window.currentExtensionData);
+                window.updateSortIndicators();
+            }
+            
+            showError(message) {
+                const tbody = document.querySelector('#extensionsTable tbody');
+                tbody.innerHTML = `<tr><td colspan="5" class="error">${message}</td></tr>`;
+            }
+        }
+        
+        // Global variables for sorting and charts
+        let thrustChart = null;
+        let apiChart = null;
+        let currentExtensionData = [];
+        let currentSortColumn = 'thrust';
+        let currentSortDirection = 'desc';
+        let analyzer = null;
+        
+        // Sort extension data
+        function sortExtensionData() {
+            currentExtensionData.sort((a, b) => {
+                let aValue, bValue;
+                
+                switch(currentSortColumn) {
+                    case 'extension':
+                        aValue = a.extension.toLowerCase();
+                        bValue = b.extension.toLowerCase();
+                        break;
+                    case 'files':
+                        aValue = a.total_files;
+                        bValue = b.total_files;
+                        break;
+                    case 'thrust':
+                        aValue = a.thrust_usage;
+                        bValue = b.thrust_usage;
+                        break;
+                    case 'apis':
+                        aValue = a.api_calls;
+                        bValue = b.api_calls;
+                        break;
+                    case 'avg':
+                        aValue = a.avg_thrust_per_file;
+                        bValue = b.avg_thrust_per_file;
+                        break;
+                    default:
+                        return 0;
+                }
+                
+                if (currentSortDirection === 'asc') {
+                    return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+                } else {
+                    return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+                }
+            });
+        }
+        
+        // Handle column sorting
+        function sortByColumn(column) {
+            if (currentSortColumn === column) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = column;
+                currentSortDirection = column === 'extension' ? 'asc' : 'desc';
+            }
+            
+            sortExtensionData();
+            updateTable(currentExtensionData);
+            updateSortIndicators();
+        }
+        
+        // Update sort indicators
+        function updateSortIndicators() {
+            document.querySelectorAll('.sortable').forEach(th => {
+                th.classList.remove('sorted-asc', 'sorted-desc');
+            });
+            
+            const currentHeader = document.querySelector(`[data-sort="${currentSortColumn}"]`);
+            if (currentHeader) {
+                currentHeader.classList.add(`sorted-${currentSortDirection}`);
+            }
+        }
+        
+        // Update the extensions table
+        function updateTable(extensions) {
+            const tbody = document.querySelector('#extensionsTable tbody');
+            tbody.innerHTML = '';
+            
+            let totalFiles = 0;
+            let totalThrust = 0;
+            let totalApis = 0;
+            
+            extensions.forEach((ext, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="extension">${ext.extension}</td>
+                    <td class="number">${ext.total_files.toLocaleString()}</td>
+                    <td class="number">${ext.thrust_usage.toLocaleString()}</td>
+                    <td class="number">${ext.api_calls.toLocaleString()}</td>
+                    <td class="number">${ext.avg_thrust_per_file.toFixed(1)}</td>
+                `;
+                tbody.appendChild(row);
+                
+                totalFiles += ext.total_files;
+                totalThrust += ext.thrust_usage;
+                totalApis += ext.api_calls;
+            });
+            
+            // Add total row
+            if (extensions.length > 0) {
+                const totalRow = document.createElement('tr');
+                totalRow.style.borderTop = '2px solid #667eea';
+                totalRow.style.fontWeight = 'bold';
+                totalRow.style.backgroundColor = '#f8f9fa';
+                
+                const overallAvg = totalFiles > 0 ? (totalThrust / totalFiles).toFixed(1) : '0.0';
+                
+                totalRow.innerHTML = `
+                    <td class="extension" style="font-weight: bold;">TOTAL</td>
+                    <td class="number" style="font-weight: bold;">${totalFiles.toLocaleString()}</td>
+                    <td class="number" style="font-weight: bold;">${totalThrust.toLocaleString()}</td>
+                    <td class="number" style="font-weight: bold;">${totalApis.toLocaleString()}</td>
+                    <td class="number" style="font-weight: bold;">${overallAvg}</td>
+                `;
+                tbody.appendChild(totalRow);
+            }
+        }
+        
+        // Update charts
+        function updateCharts(extensions) {
+            const labels = extensions.map(ext => ext.extension);
+            const thrustData = extensions.map(ext => ext.thrust_usage);
+            const apiData = extensions.map(ext => ext.api_calls);
+            const filesData = extensions.map(ext => ext.total_files);
+            
+            // Thrust usage chart
+            const thrustCtx = document.getElementById('thrustChart').getContext('2d');
+            if (thrustChart) thrustChart.destroy();
+            
+            thrustChart = new Chart(thrustCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: thrustData,
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                            '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF',
+                            '#4BC0C0', '#FF6384', '#36A2EB'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = thrustData.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                    return `${context.label}: ${context.parsed.toLocaleString()} (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // API calls vs Files chart
+            const apiCtx = document.getElementById('apiChart').getContext('2d');
+            if (apiChart) apiChart.destroy();
+            
+            apiChart = new Chart(apiCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Extensions',
+                        data: extensions.map((ext, i) => ({
+                            x: ext.total_files,
+                            y: ext.api_calls,
+                            label: ext.extension
+                        })),
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Total Files'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'API Calls'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const point = context.raw;
+                                    return `${point.label}: ${point.x} files, ${point.y} API calls`;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update summary statistics
+        function updateStats(extensions) {
+            const totalFiles = extensions.reduce((sum, ext) => sum + ext.total_files, 0);
+            const totalThrust = extensions.reduce((sum, ext) => sum + ext.thrust_usage, 0);
+            const totalApis = extensions.reduce((sum, ext) => sum + ext.api_calls, 0);
+            const avgPerFile = totalFiles > 0 ? (totalThrust / totalFiles).toFixed(1) : 0;
+            
+            document.getElementById('totalFiles').textContent = totalFiles.toLocaleString();
+            document.getElementById('totalThrust').textContent = totalThrust.toLocaleString();
+            document.getElementById('totalApis').textContent = totalApis.toLocaleString();
+            document.getElementById('avgPerFile').textContent = avgPerFile;
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize analyzer
+            analyzer = new StaticThrustAnalyzer();
+            
+            // Repository select change
+            document.getElementById('repoSelect').addEventListener('change', (e) => {
+                analyzer.loadExtensionData(e.target.value);
+            });
+            
+            // Add sorting event listeners
+            document.querySelectorAll('.sortable').forEach(header => {
+                header.addEventListener('click', () => {
+                    const sortColumn = header.getAttribute('data-sort');
+                    sortByColumn(sortColumn);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

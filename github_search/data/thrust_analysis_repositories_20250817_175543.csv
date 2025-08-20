@@ -1,0 +1,9 @@
+repository,stars,forks,language,combined_score,files_analyzed,total_thrust_usage,total_api_calls,top_extension_by_thrust,thrust_files_count
+NVIDIA/thrust,4985,766,C++,80.8592,1077,36657,1319,.cu,10
+neka-nat/cupoch,991,115,C++,64.102,703,7327,835,.cu,10
+NVIDIA/cub,1772,459,Cuda,67.6388,310,4633,70,.cu,10
+cupy/cupy,10425,942,Python,100.0,1024,672,17,.py,10
+NVIDIA/MinkowskiEngine,2745,416,Python,71.4792,205,418,80,.cu,10
+boostorg/compute,1622,337,C++,66.8924,638,312,5,.cu,10
+OpenNMT/CTranslate2,3965,380,C++,76.316,469,150,27,.cu,10
+NVIDIA/retinanet-examples,895,269,Python,63.9028,57,99,12,.cu,5

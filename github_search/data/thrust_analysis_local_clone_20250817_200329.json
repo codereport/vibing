@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "generated_at": "2025-08-17T20:03:29.678227",
+    "total_repositories": 1,
+    "analysis_version": "1.0_local_clone",
+    "analysis_method": "local_git_clone"
+  },
+  "repositories": [
+    {
+      "repo_name": "cupy/cupy",
+      "stars": 10425,
+      "forks": 942,
+      "language": "Python",
+      "combined_score": 100.0,
+      "files_analyzed": 998,
+      "files_by_extension": {
+        "no_extension": 6,
+        ".py": 760,
+        ".md": 11,
+        ".pyx": 68,
+        ".h": 82,
+        ".pxd": 56,
+        ".txt": 2,
+        ".cu": 5,
+        ".cuh": 6,
+        ".hpp": 2
+      },
+      "thrust_by_extension": {
+        ".py": 321,
+        ".pyx": 11,
+        ".h": 120,
+        ".cu": 176,
+        ".cuh": 43
+      },
+      "api_by_extension": {
+        ".py": 8,
+        ".pyx": 0,
+        ".h": 0,
+        ".cu": 9,
+        ".cuh": 0
+      },
+      "clone_size_mb": 13.783631324768066,
+      "analysis_time_seconds": 1.775802,
+      "top_files": [
+        {
+          "file_path": "cupy/cuda/cupy_thrust.cu",
+          "extension": ".cu",
+          "size_bytes": 18124,
+          "thrust_patterns": {
+            "thrust::": 62,
+            "#include\\s*<thrust/": 9,
+            "thrust\\s*::\\s*\\w+": 62,
+            "thrust\\.h": 1
+          },
+          "total_thrust": 134,
+          "nvidia_apis": 9
+        },
+        {
+          "file_path": "cupyx/signal/_filtering/_filtering.py",
+          "extension": ".py",
+          "size_bytes": 27356,
+          "thrust_patterns": {
+            "thrust::": 64,
+            "thrust\\s*::\\s*\\w+": 64
+          },
+          "total_thrust": 128,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupyx/jit/thrust.py",
+          "extension": ".py",
+          "size_bytes": 34711,
+          "thrust_patterns": {
+            "thrust::": 51,
+            "#include\\s*<thrust/": 2,
+            "thrust\\s*::\\s*\\w+": 51
+          },
+          "total_thrust": 104,
+          "nvidia_apis": 8
+        },
+        {
+          "file_path": "cupy/_core/include/cupy/complex/ccosh.h",
+          "extension": ".h",
+          "size_bytes": 7188,
+          "thrust_patterns": {
+            "thrust::": 23,
+            "thrust\\s*::\\s*\\w+": 23
+          },
+          "total_thrust": 46,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupy/cuda/cupy_cub.cu",
+          "extension": ".cu",
+          "size_bytes": 40910,
+          "thrust_patterns": {
+            "thrust::": 21,
+            "thrust\\s*::\\s*\\w+": 21
+          },
+          "total_thrust": 42,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupy/_core/include/cupy/complex.cuh",
+          "extension": ".cuh",
+          "size_bytes": 2140,
+          "thrust_patterns": {
+            "thrust::": 20,
+            "thrust\\s*::\\s*\\w+": 20
+          },
+          "total_thrust": 40,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupyx/scipy/signal/_upfirdn.py",
+          "extension": ".py",
+          "size_bytes": 20805,
+          "thrust_patterns": {
+            "thrust::": 16,
+            "thrust\\s*::\\s*\\w+": 16
+          },
+          "total_thrust": 32,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupyx/scipy/signal/_iir_utils.py",
+          "extension": ".py",
+          "size_bytes": 21937,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "thrust\\s*::\\s*\\w+": 8
+          },
+          "total_thrust": 16,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupy/_core/include/cupy/complex/catrig.h",
+          "extension": ".h",
+          "size_bytes": 24215,
+          "thrust_patterns": {
+            "thrust::": 8,
+            "thrust\\s*::\\s*\\w+": 8
+          },
+          "total_thrust": 16,
+          "nvidia_apis": 0
+        },
+        {
+          "file_path": "cupyx/scipy/special/_complexstuff.py",
+          "extension": ".py",
+          "size_bytes": 1465,
+          "thrust_patterns": {
+            "thrust::": 7,
+            "thrust\\s*::\\s*\\w+": 7
+          },
+          "total_thrust": 14,
+          "nvidia_apis": 0
+        }
+      ]
+    }
+  ]
+}
