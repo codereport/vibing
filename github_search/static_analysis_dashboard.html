@@ -232,25 +232,7 @@
             margin: 20px 0;
         }
         
-        .back-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-        
-        .back-btn:hover {
-            background: white;
-            transform: translateY(-2px);
-        }
+
         
         @media (max-width: 768px) {
             .content {
@@ -269,8 +251,6 @@
     </style>
 </head>
 <body>
-    <a href="github_search.html" class="back-btn">← Back to Hub</a>
-    
     <div class="container">
         <div class="header">
             <h1>📊 Thrust Usage Analysis Dashboard</h1>
@@ -359,27 +339,26 @@
             
             async loadData() {
                 try {
-                    // Load detailed JSON data - find the most recent file
+                    // Load detailed JSON data - only analysis files with repositories structure
                     const detailedFiles = [
-                        'thrust_analysis_detailed_20250817_175543.json',
-                        'thrust_analysis_local_clone_20250817_200329.json',
                         'thrust_analysis_local_clone_20250817_200536.json',
-                        'thrust_search_detailed_20250817_211100.json',
-                        'thrust_search_detailed_20250817_211411.json',
-                        'thrust_search_detailed_20250819_142934.json',
-                        'thrust_search_detailed_20250819_155819.json'
+                        'thrust_analysis_local_clone_20250817_200329.json',
+                        'thrust_analysis_detailed_20250817_175543.json'
                     ];
                     
                     // Try to load the most recent detailed file
-                    for (const file of detailedFiles.reverse()) {
+                    for (const file of detailedFiles) {
                         try {
+                            console.log(`🔍 Trying to load: ${file}`);
                             const response = await fetch(`data/${file}`);
                             if (response.ok) {
                                 this.detailedData = await response.json();
                                 console.log(`📊 Loaded analysis data from: ${file}`);
+                                console.log(`📊 Data contains ${this.detailedData.repositories?.length || 0} repositories`);
                                 break;
                             }
                         } catch (e) {
+                            console.log(`❌ Failed to load ${file}:`, e);
                             continue;
                         }
                     }
@@ -413,9 +392,11 @@
             
             generateExtensionsFromDetailed() {
                 if (!this.detailedData || !this.detailedData.repositories) {
+                    console.log('❌ No detailed data or repositories found');
                     return [];
                 }
                 
+                console.log(`📊 Processing ${this.detailedData.repositories.length} repositories`);
                 const extensionsSummary = {};
                 
                 for (const repo of this.detailedData.repositories) {
@@ -467,6 +448,10 @@
                 
                 // Sort by thrust usage
                 result.sort((a, b) => b.thrust_usage - a.thrust_usage);
+                console.log(`📊 Generated ${result.length} extensions with thrust usage`);
+                if (result.length > 0) {
+                    console.log(`📊 Top extension: ${result[0].extension} with ${result[0].thrust_usage} thrust usage`);
+                }
                 return result;
             }
             
@@ -554,10 +539,12 @@
             }
             
             initializeDashboard() {
+                console.log('🚀 Initializing dashboard...');
                 // Load repositories dropdown
                 this.loadRepositories();
                 // Load initial extension data
                 this.loadExtensionData('all');
+                console.log('✅ Dashboard initialization complete');
             }
             
             loadRepositories() {
