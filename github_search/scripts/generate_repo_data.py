@@ -184,7 +184,11 @@ class RepoDataGenerator:
     def save_repo_data(self, repo_data: List[Dict]):
         """Save repository data to JSON file for SPA"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"../data/thrust_repos_with_stars_{timestamp}.json"
+        # Get the directory where this script is located and find the data directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(script_dir)  # Go up one level from scripts/
+        data_dir = os.path.join(project_root, "data")
+        filename = os.path.join(data_dir, f"thrust_namespace_repos_with_stars_latest.json")
 
         output_data = {
             "generated_at": datetime.now().isoformat(),
@@ -222,7 +226,7 @@ class RepoDataGenerator:
 
 async def main():
     """Main function"""
-    search_file = "../data/thrust_search_detailed_20250819_142934.json"
+    search_file = "../data/thrust_search_detailed_20250820_133010.json"
 
     # Check if search results file exists
     if not os.path.exists(search_file):

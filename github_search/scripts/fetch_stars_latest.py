@@ -277,7 +277,11 @@ class GitHubStarFetcher:
     def save_results(self):
         """Save results to JSON file"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"../data/thrust_repos_with_stars_{timestamp}.json"
+        # Get the directory where this script is located and find the data directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(script_dir)  # Go up one level from scripts/
+        data_dir = os.path.join(project_root, "data")
+        filename = os.path.join(data_dir, f"thrust_namespace_repos_with_stars_{timestamp}.json")
 
         # Sort by stars (descending)
         sorted_results = sorted(
@@ -306,7 +310,7 @@ class GitHubStarFetcher:
 
 async def main():
     """Main function"""
-    csv_file = "../data/thrust_repositories_20250819_155819.csv"
+    csv_file = "../data/thrust_repositories_20250820_133010.csv"
 
     if not os.path.exists(csv_file):
         print(f"❌ Error: CSV file {csv_file} not found")

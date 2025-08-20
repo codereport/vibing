@@ -2,19 +2,19 @@
 """
 Enhanced GitHub Thrust Repository Search
 Efficiently uses the 10 requests/minute Code Search API limit by doing 2 searches per extension per minute.
-Runs for 50 minutes total (500 total requests) with real-time progress updates.
+Runs for 10 minutes total (100 total requests) with real-time progress updates.
 
 Usage:
     python thrust_repository_search.py
 
-This script searches for the keyword "thrust" in the following file extensions:
+This script searches for the keyword "thrust::" in the following file extensions:
 - .cu (CUDA source files)
 - .h (C/C++ header files)
 - .cpp (C++ source files)
 - .hpp (C++ header files)
 - .cuh (CUDA header files)
 
-Strategy: 2 searches per extension per minute × 5 extensions = 10 requests/minute × 50 minutes = 500 total requests
+Strategy: 2 searches per extension per minute × 5 extensions = 10 requests/minute × 10 minutes = 100 total requests
 """
 
 import os
@@ -53,7 +53,7 @@ class EnhancedThrustRepositorySearcher:
 
         # Enhanced batching strategy
         self.requests_per_minute = 10
-        self.minutes_to_run = 50
+        self.minutes_to_run = 10
         self.requests_per_extension_per_minute = 2  # 10 total / 5 extensions = 2 each
         self.results_per_page = 100
 
@@ -109,7 +109,7 @@ class EnhancedThrustRepositorySearcher:
         session = await self._get_session()
 
         current_page = self.extension_pages[extension]
-        query = f"thrust extension:{extension[1:]}"  # Remove the dot from extension
+        query = f"thrust:: extension:{extension[1:]}"  # Remove the dot from extension
 
         try:
             url = f"{self.base_url}/search/code"
@@ -288,11 +288,21 @@ class EnhancedThrustRepositorySearcher:
         """Save search results to files"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
+        # Get the directory where this script is located and find the data directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.dirname(script_dir)  # Go up one level from scripts/
+        data_dir = os.path.join(project_root, "data")
+
+        # Create data directory if it doesn't exist
+        os.makedirs(data_dir, exist_ok=True)
+
         # Save detailed results by extension
-        detailed_filename = f"../data/thrust_search_detailed_{timestamp}.json"
+        detailed_filename = os.path.join(
+            data_dir, f"thrust_search_detailed_{timestamp}.json"
+        )
         detailed_data = {
             "search_timestamp": datetime.now().isoformat(),
-            "keyword": "thrust",
+            "keyword": "thrust::",
             "extensions": self.target_extensions,
             "results_by_extension": {
                 ext: list(repos) for ext, repos in results.items()
@@ -305,11 +315,13 @@ class EnhancedThrustRepositorySearcher:
         print(f"💾 Detailed results saved to: {detailed_filename}")
 
         # Save unique repository list (what the user specifically requested)
-        repos_filename = f"../data/thrust_unique_repositories_{timestamp}.txt"
+        repos_filename = os.path.join(
+            data_dir, f"thrust_unique_repositories_{timestamp}.txt"
+        )
         sorted_repos = sorted(unique_repos)
 
         with open(repos_filename, "w") as f:
-            f.write(f"# Unique GitHub Repositories containing 'thrust' keyword\n")
+            f.write(f"# Unique GitHub Repositories containing 'thrust::' keyword\n")
             f.write(f"# Search performed: {datetime.now().isoformat()}\n")
             f.write(
                 f"# File extensions searched: {', '.join(self.target_extensions)}\n"
@@ -322,7 +334,7 @@ class EnhancedThrustRepositorySearcher:
         print(f"📝 Unique repository list saved to: {repos_filename}")
 
         # Save CSV format for easy analysis
-        csv_filename = f"../data/thrust_repositories_{timestamp}.csv"
+        csv_filename = os.path.join(data_dir, f"thrust_repositories_{timestamp}.csv")
         with open(csv_filename, "w") as f:
             f.write("repository_name,github_url\n")
             for repo in sorted_repos:
@@ -336,7 +348,7 @@ class EnhancedThrustRepositorySearcher:
         print("📊 ENHANCED SEARCH RESULTS SUMMARY")
         print("=" * 80)
 
-        print(f"🎯 Keyword searched: 'thrust'")
+        print(f"🎯 Keyword searched: 'thrust::'")
         print(f"📁 File extensions: {', '.join(self.target_extensions)}")
         print(f"🕒 Search completed: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print(
@@ -399,7 +411,7 @@ async def main():
 
         print(f"\n✅ Enhanced search completed successfully!")
         print(
-            f"🎯 Found {len(unique_repos)} unique GitHub repositories containing 'thrust'"
+            f"🎯 Found {len(unique_repos)} unique GitHub repositories containing 'thrust::'"
         )
         print(
             f"⚡ Efficiency: {len(unique_repos) / searcher.total_requests_made:.1f} unique repos per API request"

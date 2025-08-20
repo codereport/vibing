@@ -258,6 +258,10 @@
                 min-width: 100%;
             }
             
+            .dataset-selector {
+                margin: 10px 0;
+            }
+            
             .stats {
                 justify-content: center;
             }
@@ -269,7 +273,7 @@
         <div class="header">
             <h1>🚀 Thrust Repositories</h1>
             <p>Discover GitHub repositories using NVIDIA Thrust, ranked by stars</p>
-            <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">
+            <p id="datasetInfo" style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">
                 📊 Latest search: 3,142 repositories found across .cu, .h, .cpp, .hpp, .cuh files (2025-08-19 - 50 min search)
             </p>
         </div>
@@ -278,10 +282,17 @@
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 Search repositories by name, description, or language...">
             </div>
+            <div class="dataset-selector">
+                <label for="datasetSelect" style="margin-right: 10px; font-weight: 600; color: #667eea;">Dataset:</label>
+                <select id="datasetSelect" style="padding: 8px 12px; border: 2px solid #667eea; border-radius: 6px; background: white; color: #667eea; font-size: 14px; cursor: pointer;">
+                    <option value="thrust">thrust (3,142 repos - Aug 19, 2025)</option>
+                    <option value="thrust-namespace">thrust:: (2,201 repos - Aug 20, 2025)</option>
+                </select>
+            </div>
             <div class="filter-controls">
-                <button class="filter-btn active" data-filter="all">All Repos</button>
+                <button class="filter-btn" data-filter="all">All Repos</button>
                 <button class="filter-btn" data-filter="1000+">1000+ Stars</button>
-                <button class="filter-btn" data-filter="100+">100+ Stars</button>
+                <button class="filter-btn active" data-filter="100+">100+ Stars</button>
                 <button class="filter-btn" data-filter="recent">Recently Updated</button>
             </div>
         </div>
@@ -321,30 +332,47 @@
     <script>
         let allRepos = [];
         let filteredRepos = [];
-        let currentFilter = 'all';
+        let currentFilter = '100+';
+        let currentDataset = 'thrust';
 
-        // Load repository data
-        async function loadRepoData() {
+        // Data file mapping
+        const dataFiles = {
+            'thrust': 'data/thrust_repos_with_stars_20250819_161159.json',
+            'thrust-namespace': 'data/thrust_namespace_repos_with_stars_20250820_133404.json'
+        };
+
+        // Load repository data based on selected dataset
+        async function loadRepoData(dataset = 'thrust') {
             try {
-                // Load the generated repository data
-                const response = await fetch('data/thrust_repos_with_stars_20250819_161159.json');
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('repoGrid').style.display = 'none';
+                document.getElementById('error').style.display = 'none';
+                
+                const response = await fetch(dataFiles[dataset]);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
                 allRepos = data.repositories || [];
                 filteredRepos = [...allRepos];
+                currentDataset = dataset;
                 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('repoGrid').style.display = 'grid';
                 
                 updateStats();
-                renderRepositories();
+                // Apply default filter (100+ Stars)
+                applyFilters('');
+                updateHeader();
                 
             } catch (error) {
                 console.error('Error loading data:', error);
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('error').style.display = 'block';
+                document.getElementById('error').innerHTML = `
+                    <p>❌ Error loading ${dataset} data. ${error.message}</p>
+                    <p>Please make sure the data file is available.</p>
+                `;
             }
         }
 
@@ -468,11 +496,31 @@
             renderRepositories();
         }
 
+        // Update header information based on current dataset
+        function updateHeader() {
+            const datasetInfo = document.getElementById('datasetInfo');
+            if (currentDataset === 'thrust') {
+                datasetInfo.textContent = '📊 Search: "thrust" keyword - 3,142 repositories found across .cu, .h, .cpp, .hpp, .cuh files (Aug 19, 2025)';
+            } else {
+                datasetInfo.textContent = '📊 Search: "thrust::" namespace - 2,201 repositories found across .cu, .h, .cpp, .hpp, .cuh files (Aug 20, 2025)';
+            }
+        }
+
+        // Setup dataset selector
+        function setupDatasetSelector() {
+            const datasetSelect = document.getElementById('datasetSelect');
+            datasetSelect.addEventListener('change', (e) => {
+                const selectedDataset = e.target.value;
+                loadRepoData(selectedDataset);
+            });
+        }
+
         // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
             setupSearch();
             setupFilters();
-            loadRepoData();
+            setupDatasetSelector();
+            loadRepoData(); // Load default dataset
         });
     </script>
 </body>
