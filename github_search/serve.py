@@ -30,18 +30,14 @@ def main():
     with socketserver.TCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
         print(f"🚀 Starting HTTP server on port {PORT}")
         print(f"📂 Serving files from: {os.getcwd()}")
-        print(f"🔗 GitHub Search Hub: http://localhost:{PORT}/github_search.html")
-        print(
-            f"🚀 Thrust Repositories: http://localhost:{PORT}/thrust_repo_viewer.html"
-        )
-        print(
-            f"📊 Analysis Dashboard: Start separately with 'python analysis_dashboard.py'"
-        )
+        print(f"🔗 GitHub Search Hub: http://localhost:{PORT}/index.html")
+        print(f"🚀 Thrust Repositories: http://localhost:{PORT}/thrust_repos.html")
+        print(f"📊 Analysis Dashboard: http://localhost:{PORT}/thrust_usage.html")
         print(f"\n💡 Press Ctrl+C to stop the server")
 
         # Try to open the main page in browser
         try:
-            webbrowser.open(f"http://localhost:{PORT}/github_search.html")
+            webbrowser.open(f"http://localhost:{PORT}/index.html")
         except:
             pass
 

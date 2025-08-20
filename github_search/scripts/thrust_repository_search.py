@@ -289,7 +289,7 @@ class EnhancedThrustRepositorySearcher:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
         # Save detailed results by extension
-        detailed_filename = f"thrust_search_detailed_{timestamp}.json"
+        detailed_filename = f"../data/thrust_search_detailed_{timestamp}.json"
         detailed_data = {
             "search_timestamp": datetime.now().isoformat(),
             "keyword": "thrust",
@@ -305,7 +305,7 @@ class EnhancedThrustRepositorySearcher:
         print(f"💾 Detailed results saved to: {detailed_filename}")
 
         # Save unique repository list (what the user specifically requested)
-        repos_filename = f"thrust_unique_repositories_{timestamp}.txt"
+        repos_filename = f"../data/thrust_unique_repositories_{timestamp}.txt"
         sorted_repos = sorted(unique_repos)
 
         with open(repos_filename, "w") as f:
@@ -322,7 +322,7 @@ class EnhancedThrustRepositorySearcher:
         print(f"📝 Unique repository list saved to: {repos_filename}")
 
         # Save CSV format for easy analysis
-        csv_filename = f"thrust_repositories_{timestamp}.csv"
+        csv_filename = f"../data/thrust_repositories_{timestamp}.csv"
         with open(csv_filename, "w") as f:
             f.write("repository_name,github_url\n")
             for repo in sorted_repos:

@@ -173,7 +173,7 @@ class LocalCloneAnalyzer:
 
     async def load_cached_repositories(self) -> List[Dict]:
         """Load and parse cached repository data"""
-        cache_file = "thrust_analysis_cache.json"
+        cache_file = "../data/thrust_analysis_cache.json"
 
         if not os.path.exists(cache_file):
             raise FileNotFoundError(
@@ -657,7 +657,7 @@ class LocalCloneAnalyzer:
             }
             json_data["repositories"].append(repo_data)
 
-        json_filename = f"thrust_analysis_local_clone_{timestamp}.json"
+        json_filename = f"../data/thrust_analysis_local_clone_{timestamp}.json"
         with open(json_filename, "w") as f:
             json.dump(json_data, f, indent=2)
         print(f"💾 Saved detailed analysis to: {json_filename}")
@@ -665,7 +665,7 @@ class LocalCloneAnalyzer:
         # 2. Save file-level data as CSV
         import csv
 
-        csv_filename = f"thrust_analysis_local_files_{timestamp}.csv"
+        csv_filename = f"../data/thrust_analysis_local_files_{timestamp}.csv"
         with open(csv_filename, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(
@@ -696,7 +696,7 @@ class LocalCloneAnalyzer:
         print(f"📊 Saved file-level data to: {csv_filename}")
 
         # 3. Save repository summary as CSV
-        repo_csv_filename = f"thrust_analysis_local_repos_{timestamp}.csv"
+        repo_csv_filename = f"../data/thrust_analysis_local_repos_{timestamp}.csv"
         with open(repo_csv_filename, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(

@@ -1,227 +1,90 @@
-# GitHub Thrust Library Search Tool
+# GitHub Search - Thrust Analysis
 
-A web application that searches and ranks GitHub repositories based on their usage of the Nvidia Thrust library. The tool combines Thrust usage analysis with repository popularity metrics to provide comprehensive rankings.
+A comprehensive analysis and exploration platform for NVIDIA Thrust usage across GitHub repositories.
 
-## Features
+## 🌐 Live Demo
 
-🔍 **Smart Repository Search**
-- Search GitHub repositories with custom queries
-- Filter by programming language (C++, CUDA, Python, etc.)
-- Set minimum star thresholds
-- Intelligent default search for GPU/CUDA-related repositories
+- **Main Hub:** `index.html` - Landing page with links to both dashboards
+- **Repository Browser:** `thrust_repos.html` - Browse 3,142+ repositories using Thrust
+- **Usage Analysis:** `thrust_usage.html` - Interactive dashboard analyzing thrust usage patterns
 
-⚡ **Thrust Usage Analysis**
-- Analyzes repository code for Thrust library usage patterns
-- Detects namespace usage, header includes, and function calls
-- Counts occurrences across relevant source files
-- Supports multiple file formats (.cu, .cpp, .h, etc.)
+## 🚀 Quick Start
 
-📊 **Advanced Ranking System**
-- **Thrust Score**: Based on frequency of Thrust library usage
-- **Popularity Score**: Combines stars, forks, and recency
-- **Combined Score**: Weighted combination of both metrics
-- Logarithmic scaling to handle outliers
-
-🎨 **Modern Web Interface**
-- Clean, responsive design
-- Real-time search results
-- Sortable by different metrics
-- Repository cards with detailed information
-
-## Setup
-
-### Prerequisites
-- Python 3.8+
-- [uv](https://docs.astral.sh/uv/) (recommended) or pip
-- GitHub Personal Access Token (recommended for higher rate limits)
-
-### Quick Start
-
+### Local Development
 ```bash
-# 1. Install uv (if not already installed)
-curl -LsSf https://astral.sh/uv/install.sh | sh
+python serve.py
+```
+Opens `http://localhost:8080` with the full application.
 
-# 2. Install dependencies
-make install
+### GitHub Pages
+Just push to your repository and enable GitHub Pages - all files are static and will work immediately.
 
-# 3. Create .env file with your GitHub token
-echo "GITHUB_TOKEN=your_token_here" > .env
+## 📁 Project Structure
 
-# 4. Start the application
-make run
-
-# 5. Open http://localhost:8000 in your browser
+```
+github_search/
+├── index.html              # 🔍 Main landing page
+├── thrust_repos.html       # 🚀 Repository browser (3,142+ repos)
+├── thrust_usage.html       # 📊 Analysis dashboard
+├── serve.py                # 🌐 Local development server
+├── scripts/                # 📝 Data generation scripts
+│   ├── thrust_repository_search.py    # GitHub API search
+│   ├── fetch_stars_latest.py         # Fetch star counts
+│   ├── generate_repo_data.py         # Generate repository data
+│   └── local_clone_analysis.py       # Clone and analyze top repos
+├── data/                   # 📊 Generated data files
+│   ├── thrust_repos_with_stars_*.json        # Repository browser data
+│   └── thrust_analysis_local_clone_*.json    # Analysis dashboard data
+└── requirements.txt        # Python dependencies
 ```
 
-### Manual Installation
+## 🔄 Data Generation
 
-1. **Navigate to the project directory:**
+To generate fresh data:
+
+1. **Search for repositories:**
    ```bash
-   cd /home/cph/vibing/github_search
+   cd scripts
+   python thrust_repository_search.py
    ```
 
-2. **Install Python dependencies:**
-   
-   With uv (recommended):
+2. **Fetch star counts:**
    ```bash
-   uv sync
-   ```
-   
-   Or with pip:
-   ```bash
-   pip install -r requirements.txt
+   python fetch_stars_latest.py
    ```
 
-3. **Set up environment variables:**
-   Create a `.env` file:
+3. **Generate repository viewer data:**
    ```bash
-   echo "GITHUB_TOKEN=your_github_personal_access_token_here" > .env
+   python generate_repo_data.py
    ```
 
-4. **Run the application:**
+4. **Analyze top repositories:**
    ```bash
-   python run.py
-   # or
-   python main.py
+   python local_clone_analysis.py
    ```
 
-5. **Access the web interface:**
-   Open `http://localhost:8000` in your browser
+## 📊 Features
 
-### Docker Deployment
+### Repository Browser (`thrust_repos.html`)
+- 3,142+ repositories discovered
+- Star-based ranking system
+- Advanced search and filtering
+- Repository metadata and links
+- Language and topic categorization
 
-```bash
-# Build and run with Docker Compose
-make docker
+### Analysis Dashboard (`thrust_usage.html`)
+- Extension-based usage analysis
+- Interactive charts and visualizations
+- Repository filtering and sorting
+- Statistical summaries and metrics
+- Local clone vs API analysis comparison
 
-# Or manually:
-docker-compose up --build
-```
+## 🛠 Requirements
 
-### Testing
+- Python 3.8+ (for data generation scripts)
+- GitHub API token (set in `.env` file for data generation)
+- Modern web browser (for viewing dashboards)
 
-```bash
-# Run the test suite
-make test
+## ✨ GitHub Pages Ready
 
-# Or manually:
-python test_search.py
-```
-
-## Advanced Analysis
-
-### Secondary Analysis (GitHub API)
-Performs deep analysis of top repositories using the GitHub API:
-
-```bash
-# Analyze top 20 repositories with thrust usage
-uv run secondary_analysis.py --top 20
-```
-
-### Local Clone Analysis (No API Limits)
-Alternative analysis that clones repositories locally for comprehensive analysis without API rate limits:
-
-```bash
-# Analyze top 20 repositories by cloning locally
-uv run local_clone_analysis.py --top 20
-
-# Use custom clone directory
-uv run local_clone_analysis.py --top 10 --clone-dir /tmp/analysis_repos
-```
-
-**Benefits of Local Clone Analysis:**
-- ✅ No GitHub API rate limits
-- ✅ Faster analysis of repository contents
-- ✅ More comprehensive file analysis
-- ✅ Better performance metrics (clone size, analysis time)
-- ✅ Automatic cleanup of cloned repositories
-
-**Performance:** Typically analyzes 30+ repos/minute depending on repository size.
-
-## API Endpoints
-
-### `GET /`
-Serves the main web interface
-
-### `GET /search`
-Search and analyze repositories
-
-**Parameters:**
-- `query` (optional): Search query string
-- `language` (optional): Programming language filter
-- `min_stars` (optional): Minimum number of stars (default: 0)
-- `max_results` (optional): Maximum results to return (default: 50)
-- `sort_by` (optional): Sort criteria - "combined_score", "thrust_usage", or "popularity"
-
-**Example:**
-```
-GET /search?query=CUDA&language=C++&min_stars=10&sort_by=thrust_usage
-```
-
-## Scoring Algorithm
-
-### Thrust Score (0-100)
-- Based on the number of Thrust library usage occurrences
-- Uses logarithmic scaling: `100 * log(usage + 1) / log(base + 1)`
-- Patterns detected:
-  - `thrust::` namespace usage
-  - `#include <thrust/...>` header includes
-  - `thrust_` prefixed functions
-  - `using namespace thrust`
-
-### Popularity Score (0-100)
-- Combines stars and forks: `stars + (forks * 0.3)`
-- Applies recency factor based on last update
-- Uses logarithmic scaling to handle viral repositories
-- Recent updates boost the score
-
-### Combined Score
-- Weighted average: `(thrust_score * 0.6) + (popularity_score * 0.4)`
-- Balances technical relevance with community adoption
-
-## Architecture
-
-```
-main.py                    # FastAPI web server and routes
-github_analyzer.py         # GitHub API integration and code analysis  
-ranking_engine.py          # Scoring and ranking algorithms
-secondary_analysis.py      # Deep analysis using GitHub API
-local_clone_analysis.py    # Local repository clone analysis (no API limits)
-requirements.txt           # Python dependencies
-```
-
-## Rate Limiting
-
-- The tool respects GitHub API rate limits
-- With authentication: 5,000 requests/hour
-- Without authentication: 60 requests/hour
-- Automatic retry with exponential backoff
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
-
-MIT License - feel free to use this tool for your own projects!
-
-## Troubleshooting
-
-**Rate Limit Errors:**
-- Add a GitHub personal access token to increase limits
-- Reduce `max_results` parameter
-- Wait for rate limit reset
-
-**No Results Found:**
-- Try broader search terms
-- Lower `min_stars` threshold
-- Check repository language filters
-
-**Analysis Timeouts:**
-- Large repositories may take longer to analyze
-- The tool automatically skips very large files (>1MB)
-- Results are cached for efficiency
+All HTML files are fully static and work perfectly on GitHub Pages without any server-side requirements.
