@@ -82,6 +82,7 @@ class RepoDataGenerator:
                     "description": data.get("description", ""),
                     "language": data.get("language", "Unknown"),
                     "updated_at": data.get("updated_at", ""),
+                    "pushed_at": data.get("pushed_at", ""),
                     "html_url": data.get("html_url", f"https://github.com/{repo_name}"),
                     "topics": data.get("topics", []),
                     "forks": data.get("forks_count", 0),
@@ -102,6 +103,7 @@ class RepoDataGenerator:
                     "description": "Repository not found",
                     "language": "Unknown",
                     "updated_at": "",
+                    "pushed_at": "",
                     "html_url": f"https://github.com/{repo_name}",
                     "topics": [],
                     "forks": 0,
@@ -188,7 +190,9 @@ class RepoDataGenerator:
         script_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(script_dir)  # Go up one level from scripts/
         data_dir = os.path.join(project_root, "data")
-        filename = os.path.join(data_dir, f"thrust_namespace_repos_with_stars_latest.json")
+        filename = os.path.join(
+            data_dir, f"thrust_namespace_repos_with_stars_latest.json"
+        )
 
         output_data = {
             "generated_at": datetime.now().isoformat(),

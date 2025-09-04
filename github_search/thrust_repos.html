@@ -274,7 +274,7 @@
             <h1>🚀 Thrust Repositories</h1>
             <p>Discover GitHub repositories using NVIDIA Thrust, ranked by stars</p>
             <p id="datasetInfo" style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">
-                📊 Latest search: 3,142 repositories found across .cu, .h, .cpp, .hpp, .cuh files (2025-08-19 - 50 min search)
+                📊 2,195 repositories with ACCURATE last commit dates (fixed 229 repositories with major date errors)
             </p>
         </div>
 
@@ -286,7 +286,7 @@
                 <label for="datasetSelect" style="margin-right: 10px; font-weight: 600; color: #667eea;">Dataset:</label>
                 <select id="datasetSelect" style="padding: 8px 12px; border: 2px solid #667eea; border-radius: 6px; background: white; color: #667eea; font-size: 14px; cursor: pointer;">
                     <option value="thrust">thrust (3,142 repos - Aug 19, 2025)</option>
-                    <option value="thrust-namespace" selected>thrust:: (2,201 repos - Aug 20, 2025)</option>
+                    <option value="thrust-namespace" selected>thrust:: (2,195 repos - with ACCURATE commit dates)</option>
                 </select>
             </div>
             <div class="filter-controls">
@@ -338,7 +338,7 @@
         // Data file mapping
         const dataFiles = {
             'thrust': 'data/thrust_repos_with_stars_20250819_161159.json',
-            'thrust-namespace': 'data/thrust_namespace_repos_with_stars_20250820_133404.json'
+            'thrust-namespace': 'data/thrust_namespace_with_accurate_dates_20250904_121738.json'
         };
 
         // Load repository data based on selected dataset
@@ -409,7 +409,10 @@
             const description = repo.description || 'No description available';
             const language = repo.language || 'Unknown';
             const forks = repo.forks ? repo.forks.toLocaleString() : '0';
-            const updated = repo.updated_at ? new Date(repo.updated_at).toLocaleDateString() : 'Unknown';
+            // Use accurate_last_commit for the most accurate date (real commits only)
+            // Fall back to pushed_at, then updated_at if needed
+            const lastCommit = repo.accurate_last_commit || repo.pushed_at || repo.updated_at;
+            const updated = lastCommit ? new Date(lastCommit).toLocaleDateString() : 'Unknown';
             
             card.innerHTML = `
                 <div class="repo-header">
@@ -428,7 +431,7 @@
                         <span class="language-badge">${language}</span>
                     </div>
                     <div class="meta-item">🍴 ${forks}</div>
-                    <div class="meta-item">📅 ${updated}</div>
+                    <div class="meta-item">📅 Last commit: ${updated}</div>
                     ${repo.license !== 'Unknown' ? `<div class="meta-item">📄 ${repo.license}</div>` : ''}
                 </div>
                 ${repo.topics && repo.topics.length > 0 ? `
@@ -487,7 +490,9 @@
                     case 'recent':
                         const twoYearsAgo = new Date();
                         twoYearsAgo.setFullYear(twoYearsAgo.getFullYear() - 2);
-                        return repo.updated_at && new Date(repo.updated_at) > twoYearsAgo;
+                        // Use accurate_last_commit for the most accurate recent activity check
+                        const lastActivity = repo.accurate_last_commit || repo.pushed_at || repo.updated_at;
+                        return lastActivity && new Date(lastActivity) > twoYearsAgo;
                     default:
                         return true;
                 }
@@ -502,7 +507,7 @@
             if (currentDataset === 'thrust') {
                 datasetInfo.textContent = '📊 Search: "thrust" keyword - 3,142 repositories found across .cu, .h, .cpp, .hpp, .cuh files (Aug 19, 2025)';
             } else {
-                datasetInfo.textContent = '📊 Search: "thrust::" namespace - 2,201 repositories found across .cu, .h, .cpp, .hpp, .cuh files (Aug 20, 2025)';
+                datasetInfo.textContent = '📊 Search: "thrust::" namespace - 2,195 repositories with ACCURATE commit dates (fixed 229 major errors)';
             }
         }
 

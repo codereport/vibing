@@ -134,6 +134,7 @@ class GitHubStarFetcher:
                     "language": "Unknown",
                     "forks": 0,
                     "updated_at": None,
+                    "pushed_at": None,
                     "license": "Unknown",
                     "topics": [],
                 }
@@ -155,6 +156,7 @@ class GitHubStarFetcher:
                 "language": data.get("language", "Unknown"),
                 "forks": data.get("forks_count", 0),
                 "updated_at": data.get("updated_at"),
+                "pushed_at": data.get("pushed_at"),
                 "license": license_info,
                 "topics": data.get("topics", []),
             }
@@ -281,7 +283,9 @@ class GitHubStarFetcher:
         script_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(script_dir)  # Go up one level from scripts/
         data_dir = os.path.join(project_root, "data")
-        filename = os.path.join(data_dir, f"thrust_namespace_repos_with_stars_{timestamp}.json")
+        filename = os.path.join(
+            data_dir, f"thrust_namespace_repos_with_stars_{timestamp}.json"
+        )
 
         # Sort by stars (descending)
         sorted_results = sorted(
