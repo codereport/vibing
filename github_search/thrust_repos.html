@@ -245,6 +245,47 @@
             font-weight: bold;
         }
 
+        /* Thrust analysis section styles */
+        .thrust-analysis {
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+            color: white;
+        }
+
+        .thrust-header {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .thrust-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 4px;
+        }
+
+        .thrust-stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .thrust-count {
+            display: block;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .thrust-label {
+            display: block;
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
         @media (max-width: 768px) {
             .repo-grid {
                 grid-template-columns: 1fr;
@@ -274,7 +315,7 @@
             <h1>🚀 Thrust Repositories</h1>
             <p>Discover GitHub repositories using NVIDIA Thrust, ranked by stars</p>
             <p id="datasetInfo" style="font-size: 0.9rem; opacity: 0.8; margin-top: 8px;">
-                📊 2,195 repositories with ACCURATE last commit dates (fixed 229 repositories with major date errors)
+                📊 2,195 repositories
             </p>
         </div>
 
@@ -286,7 +327,17 @@
                 <label for="datasetSelect" style="margin-right: 10px; font-weight: 600; color: #667eea;">Dataset:</label>
                 <select id="datasetSelect" style="padding: 8px 12px; border: 2px solid #667eea; border-radius: 6px; background: white; color: #667eea; font-size: 14px; cursor: pointer;">
                     <option value="thrust">thrust (3,142 repos - Aug 19, 2025)</option>
-                    <option value="thrust-namespace" selected>thrust:: (2,195 repos - with ACCURATE commit dates)</option>
+                    <option value="thrust-namespace" selected>thrust:: (2,195 repos)</option>
+                </select>
+            </div>
+            <div class="ranking-selector">
+                <label for="rankingSelect" style="margin-right: 10px; font-weight: 600; color: #ff7e5f;">Rank by:</label>
+                <select id="rankingSelect" style="padding: 8px 12px; border: 2px solid #ff7e5f; border-radius: 6px; background: white; color: #ff7e5f; font-size: 14px; cursor: pointer;">
+                    <option value="stars" selected>⭐ GitHub Stars</option>
+                    <option value="thrust-patterns">🔥 Thrust :: Patterns</option>
+                    <option value="files-with-thrust">📁 Files with Thrust</option>
+                    <option value="coverage">📈 Thrust Coverage %</option>
+                    <option value="recent-commit">📅 Most Recent Commit</option>
                 </select>
             </div>
             <div class="filter-controls">
@@ -334,12 +385,54 @@
         let filteredRepos = [];
         let currentFilter = '100+';
         let currentDataset = 'thrust-namespace';
+        let currentRanking = 'stars';
 
         // Data file mapping
         const dataFiles = {
             'thrust': 'data/thrust_repos_with_stars_20250819_161159.json',
             'thrust-namespace': 'data/thrust_namespace_with_accurate_dates_20250904_121738.json'
         };
+
+        // Thrust analysis data
+        let thrustAnalysisData = {};
+
+        // Load thrust analysis data
+        async function loadThrustAnalysis() {
+            try {
+                // Find the latest thrust analysis file
+                const response = await fetch('data/thrust_analysis_local_clone_20250904_132356.json');
+                if (response.ok) {
+                    const analysisData = await response.json();
+                    
+                    // Create lookup map by repository full name
+                    thrustAnalysisData = {};
+                    for (const repo of analysisData.repositories || []) {
+                        const fullName = repo.repo_name;
+                        const totalThrust = Object.values(repo.thrust_by_extension || {}).reduce((a, b) => a + b, 0);
+                        const totalApis = Object.values(repo.api_by_extension || {}).reduce((a, b) => a + b, 0);
+                        
+                        // Get files with thrust and calculate percentage
+                        const filesWithThrust = repo.files_with_thrust_count || 0;
+                        const filesAnalyzed = repo.files_analyzed || 0;
+                        const thrustPercentage = filesAnalyzed > 0 ? (filesWithThrust / filesAnalyzed * 100) : 0;
+                        
+                        thrustAnalysisData[fullName] = {
+                            total_thrust_patterns: totalThrust,
+                            total_api_calls: totalApis,
+                            files_with_thrust: filesWithThrust,
+                            thrust_percentage: thrustPercentage,
+                            files_analyzed: filesAnalyzed, // Keep for calculation but don't display
+                            clone_size_mb: repo.clone_size_mb,
+                            thrust_by_extension: repo.thrust_by_extension || {},
+                            api_by_extension: repo.api_by_extension || {}
+                        };
+                    }
+                    console.log(`🎯 Loaded thrust analysis for ${Object.keys(thrustAnalysisData).length} repositories`);
+                }
+            } catch (error) {
+                console.warn('Could not load thrust analysis data:', error);
+            }
+        }
 
         // Load repository data based on selected dataset
         async function loadRepoData(dataset = 'thrust') {
@@ -348,11 +441,16 @@
                 document.getElementById('repoGrid').style.display = 'none';
                 document.getElementById('error').style.display = 'none';
                 
-                const response = await fetch(dataFiles[dataset]);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                // Load both repository data and thrust analysis
+                const [repoResponse] = await Promise.all([
+                    fetch(dataFiles[dataset]),
+                    loadThrustAnalysis()
+                ]);
+                
+                if (!repoResponse.ok) {
+                    throw new Error(`HTTP error! status: ${repoResponse.status}`);
                 }
-                const data = await response.json();
+                const data = await repoResponse.json();
                 allRepos = data.repositories || [];
                 filteredRepos = [...allRepos];
                 currentDataset = dataset;
@@ -387,17 +485,62 @@
             document.getElementById('displayedRepos').textContent = filteredRepos.length.toLocaleString();
         }
 
+        // Sort repositories by current ranking criteria
+        function sortRepositories(repos) {
+            return repos.sort((a, b) => {
+                let aValue, bValue;
+                
+                switch (currentRanking) {
+                    case 'stars':
+                        return (b.stars || 0) - (a.stars || 0);
+                    
+                    case 'thrust-patterns':
+                        const aThrustData = thrustAnalysisData[a.full_name];
+                        const bThrustData = thrustAnalysisData[b.full_name];
+                        aValue = aThrustData ? aThrustData.total_thrust_patterns : 0;
+                        bValue = bThrustData ? bThrustData.total_thrust_patterns : 0;
+                        return bValue - aValue;
+                    
+                    case 'files-with-thrust':
+                        const aThrustFiles = thrustAnalysisData[a.full_name];
+                        const bThrustFiles = thrustAnalysisData[b.full_name];
+                        aValue = aThrustFiles ? aThrustFiles.files_with_thrust : 0;
+                        bValue = bThrustFiles ? bThrustFiles.files_with_thrust : 0;
+                        return bValue - aValue;
+                    
+                    case 'coverage':
+                        const aCoverage = thrustAnalysisData[a.full_name];
+                        const bCoverage = thrustAnalysisData[b.full_name];
+                        aValue = aCoverage ? aCoverage.thrust_percentage : 0;
+                        bValue = bCoverage ? bCoverage.thrust_percentage : 0;
+                        return bValue - aValue;
+                    
+                    case 'recent-commit':
+                        // Use accurate_last_commit first, fallback to pushed_at, then updated_at
+                        const aDate = new Date(a.accurate_last_commit || a.pushed_at || a.updated_at || '1970-01-01');
+                        const bDate = new Date(b.accurate_last_commit || b.pushed_at || b.updated_at || '1970-01-01');
+                        return bDate.getTime() - aDate.getTime();
+                    
+                    default:
+                        return (b.stars || 0) - (a.stars || 0);
+                }
+            });
+        }
+
         // Render repositories
         function renderRepositories() {
             const grid = document.getElementById('repoGrid');
             grid.innerHTML = '';
             
-            filteredRepos.forEach((repo, index) => {
+            // Sort repositories according to current ranking
+            const sortedRepos = sortRepositories([...filteredRepos]);
+            
+            sortedRepos.forEach((repo, index) => {
                 const card = createRepoCard(repo, index + 1);
                 grid.appendChild(card);
             });
             
-            document.getElementById('displayedRepos').textContent = filteredRepos.length.toLocaleString();
+            document.getElementById('displayedRepos').textContent = sortedRepos.length.toLocaleString();
         }
 
         // Create repository card
@@ -414,6 +557,32 @@
             const lastCommit = repo.accurate_last_commit || repo.pushed_at || repo.updated_at;
             const updated = lastCommit ? new Date(lastCommit).toLocaleDateString() : 'Unknown';
             
+            // Get thrust analysis data if available
+            const thrustData = thrustAnalysisData[repo.full_name];
+            const thrustSection = thrustData ? `
+                <div class="thrust-analysis">
+                    <div class="thrust-header">🔥 Thrust Analysis</div>
+                    <div class="thrust-stats">
+                        <div class="thrust-stat">
+                            <span class="thrust-count">${thrustData.total_thrust_patterns.toLocaleString()}</span>
+                            <span class="thrust-label">thrust:: patterns</span>
+                        </div>
+                        <div class="thrust-stat">
+                            <span class="thrust-count">${thrustData.total_api_calls.toLocaleString()}</span>
+                            <span class="thrust-label">API calls</span>
+                        </div>
+                        <div class="thrust-stat">
+                            <span class="thrust-count">${thrustData.files_with_thrust.toLocaleString()}</span>
+                            <span class="thrust-label">files with thrust</span>
+                        </div>
+                        <div class="thrust-stat">
+                            <span class="thrust-count">${thrustData.thrust_percentage.toFixed(1)}%</span>
+                            <span class="thrust-label">thrust coverage</span>
+                        </div>
+                    </div>
+                </div>
+            ` : '';
+            
             card.innerHTML = `
                 <div class="repo-header">
                     <a href="${repo.html_url}" target="_blank" class="repo-name">
@@ -425,6 +594,7 @@
                     <span class="star-icon">⭐</span>
                     ${stars}
                 </div>
+                ${thrustSection}
                 <div class="repo-description">${description}</div>
                 <div class="repo-meta">
                     <div class="meta-item">
@@ -507,7 +677,7 @@
             if (currentDataset === 'thrust') {
                 datasetInfo.textContent = '📊 Search: "thrust" keyword - 3,142 repositories found across .cu, .h, .cpp, .hpp, .cuh files (Aug 19, 2025)';
             } else {
-                datasetInfo.textContent = '📊 Search: "thrust::" namespace - 2,195 repositories with ACCURATE commit dates (fixed 229 major errors)';
+                datasetInfo.textContent = '📊 Search: "thrust::" namespace - 2,195 repositories';
             }
         }
 
@@ -520,11 +690,20 @@
             });
         }
 
+        function setupRankingSelector() {
+            const rankingSelect = document.getElementById('rankingSelect');
+            rankingSelect.addEventListener('change', (e) => {
+                currentRanking = e.target.value;
+                renderRepositories();
+            });
+        }
+
         // Initialize the app
         document.addEventListener('DOMContentLoaded', () => {
             setupSearch();
             setupFilters();
             setupDatasetSelector();
+            setupRankingSelector();
             loadRepoData(currentDataset); // Load default dataset (thrust-namespace)
         });
     </script>

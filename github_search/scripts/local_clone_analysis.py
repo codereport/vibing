@@ -52,6 +52,7 @@ class RepoAnalysis:
     language: str
     combined_score: float
     files_analyzed: int
+    files_with_thrust_count: int  # Total number of files containing thrust patterns
     files_by_extension: Dict[str, int]
     thrust_by_extension: Dict[str, int]
     api_by_extension: Dict[str, int]
@@ -172,65 +173,71 @@ class LocalCloneAnalyzer:
         self.git_timeout = 300  # 5 minutes timeout for git operations
 
     async def load_cached_repositories(self) -> List[Dict]:
-        """Load and parse cached repository data"""
-        cache_file = "../data/thrust_analysis_cache.json"
+        """Load and parse repository data from current thrust namespace data"""
+        # Try the most recent data file first
+        data_files = [
+            "./data/thrust_namespace_with_accurate_dates_20250904_121738.json",
+            "./data/thrust_repos_with_stars_20250819_161159.json",
+        ]
 
-        if not os.path.exists(cache_file):
+        data_file = None
+        for file_path in data_files:
+            if os.path.exists(file_path):
+                data_file = file_path
+                break
+
+        if not data_file:
             raise FileNotFoundError(
-                f"Cache file {cache_file} not found. Run searches first to populate cache."
+                f"No thrust repository data found. Expected one of: {data_files}"
             )
 
-        with open(cache_file, "r") as f:
-            cache = json.load(f)
+        print(f"📊 Loading repository data from: {data_file}")
+        with open(data_file, "r") as f:
+            data = json.load(f)
 
-        # Parse cache entries and calculate combined scores
+        # Handle the current data format
         repos = []
-        for cache_key, cache_data in cache.items():
-            if ":" not in cache_key:
+        repositories = data.get("repositories", [])
+
+        # Limit to reasonable number for analysis (top repositories by stars)
+        print(f"✅ Found {len(repositories)} total repositories")
+
+        # Sort by stars and take top repositories for analysis
+        repositories.sort(key=lambda x: x.get("stars", 0), reverse=True)
+
+        for repo_data in repositories:
+            full_name = repo_data.get("full_name", "")
+            if not full_name:
                 continue
 
-            full_name = cache_key.split(":")[0]
+            # Calculate a basic combined score based on popularity for now
+            # We'll determine actual thrust usage during the local analysis
+            stars = repo_data.get("stars", 0)
+            forks = repo_data.get("forks", 0)
 
-            # Only include repos with some thrust usage
-            if (
-                cache_data.get("nvidia_apis", 0) == 0
-                and cache_data.get("total_thrust", 0) == 0
-            ):
-                continue
-
-            # Calculate combined score (same logic as ranking_engine.py)
-            thrust_usage = cache_data.get("total_thrust", 0)
-            nvidia_apis = cache_data.get("nvidia_apis", 0)
-            stars = cache_data.get("stars", 0)
-            forks = cache_data.get("forks", 0)
-
-            # Simple scoring (simplified version since we don't have the full ranking engine)
-            thrust_score = min(100, thrust_usage * 10)  # Basic thrust scoring
-            popularity_score = min(
-                100, (stars + forks * 0.3) / 100
-            )  # Basic popularity scoring
-            combined_score = (thrust_score * 0.6) + (popularity_score * 0.4)
+            # Basic popularity scoring - we'll do thrust analysis during cloning
+            popularity_score = min(100, (stars + forks * 0.3) / 100)
+            combined_score = popularity_score  # Will be refined after thrust analysis
 
             repos.append(
                 {
                     "full_name": full_name,
-                    "repo_name": cache_data.get("repo_name", full_name.split("/")[-1]),
+                    "repo_name": repo_data.get("name", full_name.split("/")[-1]),
                     "stars": stars,
                     "forks": forks,
-                    "language": cache_data.get("language", "Unknown"),
-                    "thrust_usage": thrust_usage,
-                    "nvidia_apis": nvidia_apis,
+                    "language": repo_data.get("language", "Unknown"),
+                    "thrust_usage": 0,  # Will be determined during local analysis
+                    "nvidia_apis": 0,  # Will be determined during local analysis
                     "combined_score": combined_score,
-                    "cached_data": cache_data,
+                    "cached_data": repo_data,
                 }
             )
 
-        # Sort by combined score and return top repositories
-        repos.sort(key=lambda x: x["combined_score"], reverse=True)
+        print(f"🎯 Prepared {len(repos)} repositories for analysis")
         return repos
 
     async def clone_repository(self, repo_info: Dict) -> Optional[Path]:
-        """Clone a repository using shallow git clone"""
+        """Clone a repository using minimal shallow git clone with sparse-checkout"""
         repo_name = repo_info["full_name"]
         safe_name = repo_name.replace("/", "_")
         clone_dir = self.clone_base_dir / safe_name
@@ -242,36 +249,92 @@ class LocalCloneAnalyzer:
 
         clone_url = f"https://github.com/{repo_name}.git"
 
-        print(f"   📥 Cloning {repo_name} (shallow)...")
+        print(f"   📥 Cloning {repo_name} (ultra-minimal: partial clone)...")
 
         try:
-            # Use shallow clone with depth=1 for efficiency
-            result = await asyncio.create_subprocess_exec(
+            # Use partial clone with aggressive blob filtering for source code analysis
+            # --filter=blob:limit=50k only downloads blobs smaller than 50KB
+            # --depth=1 for shallow clone
+            # --no-checkout to avoid checking out files initially
+            clone_result = await asyncio.create_subprocess_exec(
                 "git",
                 "clone",
-                "--depth",
-                "1",
+                "--filter=blob:limit=50k",  # Only download blobs < 50KB (aggressive!)
+                "--depth=1",  # Shallow clone
+                "--no-checkout",  # Don't checkout files yet
                 clone_url,
                 str(clone_dir),
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
             )
 
-            # Wait for completion with timeout
             try:
                 stdout, stderr = await asyncio.wait_for(
-                    result.communicate(), timeout=self.git_timeout
+                    clone_result.communicate(), timeout=self.git_timeout
                 )
             except asyncio.TimeoutError:
-                result.terminate()
-                await result.wait()
+                clone_result.terminate()
+                await clone_result.wait()
                 raise asyncio.TimeoutError("Git clone timeout")
 
-            if result.returncode != 0:
-                print(f"   ❌ Failed to clone {repo_name}: {stderr.decode()}")
+            if clone_result.returncode != 0:
+                print(f"   ❌ Failed to partial clone {repo_name}: {stderr.decode()}")
                 return None
 
-            print(f"   ✅ Successfully cloned {repo_name}")
+            # Enable sparse-checkout for selective file checkout
+            sparse_config_result = await asyncio.create_subprocess_exec(
+                "git",
+                "-C",
+                str(clone_dir),
+                "config",
+                "core.sparseCheckout",
+                "true",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+            await asyncio.wait_for(sparse_config_result.communicate(), timeout=30)
+
+            # Set sparse-checkout patterns for only the files we need (more restrictive)
+            sparse_checkout_file = clone_dir / ".git" / "info" / "sparse-checkout"
+            patterns = [
+                "*.cu",  # CUDA source (most likely to have thrust)
+                "*.cuh",  # CUDA headers (most likely to have thrust)
+                "*.h",  # C headers (thrust includes)
+                "*.hpp",  # C++ headers (thrust includes)
+                # Note: Excluding large .cpp/.cc files - they're filtered by 50KB limit anyway
+                "*.cmake",  # Build files (small)
+                "CMakeLists.txt",  # Build files (small)
+            ]
+
+            # Write sparse-checkout patterns
+            with open(sparse_checkout_file, "w") as f:
+                for pattern in patterns:
+                    f.write(f"**/{pattern}\n")  # Use ** for recursive matching
+
+            # Checkout only the files matching our patterns
+            checkout_result = await asyncio.create_subprocess_exec(
+                "git",
+                "-C",
+                str(clone_dir),
+                "checkout",
+                "HEAD",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+            )
+
+            checkout_stdout, checkout_stderr = await asyncio.wait_for(
+                checkout_result.communicate(), timeout=60
+            )
+
+            if checkout_result.returncode != 0:
+                print(
+                    f"   ❌ Failed to checkout {repo_name}: {checkout_stderr.decode()}"
+                )
+                return None
+
+            # Calculate and display actual size
+            actual_size = self.get_clone_size(clone_dir)
+            print(f"   ✅ Ultra-minimal clone: {repo_name} ({actual_size:.1f} MB)")
             return clone_dir
 
         except asyncio.TimeoutError:
@@ -388,8 +451,6 @@ class LocalCloneAnalyzer:
         repo_name = repo_info["full_name"]
         start_time = datetime.now()
 
-        print(f"🔬 Analyzing {repo_name} (score: {repo_info['combined_score']:.1f})...")
-
         # Clone the repository
         clone_dir = await self.clone_repository(repo_info)
         if not clone_dir:
@@ -451,6 +512,9 @@ class LocalCloneAnalyzer:
                 language=repo_info["language"],
                 combined_score=repo_info["combined_score"],
                 files_analyzed=len(relevant_files),
+                files_with_thrust_count=len(
+                    file_analyses
+                ),  # Total files with thrust patterns
                 files_by_extension=dict(files_by_extension),
                 thrust_by_extension=dict(thrust_by_extension),
                 api_by_extension=dict(api_by_extension),
@@ -465,9 +529,10 @@ class LocalCloneAnalyzer:
                 print(f"   🗑️  Cleaning up clone directory")
                 shutil.rmtree(clone_dir)
 
-    async def run_analysis(self, top_n: int = 20) -> None:
-        """Run the complete local clone analysis"""
+    async def run_analysis(self, top_n: int = 20, concurrent: int = 4) -> None:
+        """Run the complete local clone analysis with parallel processing"""
         print(f"🚀 Starting local clone analysis of top {top_n} repositories...")
+        print(f"⚡ Using {concurrent} concurrent analysis processes")
 
         # Load cached repositories
         print("📊 Loading cached repository data...")
@@ -479,18 +544,69 @@ class LocalCloneAnalyzer:
 
         print(f"✅ Found {len(repos)} repositories with thrust usage in cache")
 
-        # Analyze top N repositories
+        # Analyze top N repositories in parallel batches
         top_repos = repos[:top_n]
         print(f"\n🔍 Analyzing top {len(top_repos)} repositories by combined score...")
+        print(f"🔥 Running {concurrent} repositories in parallel...")
 
         analyses = []
-        for i, repo in enumerate(top_repos, 1):
-            print(f"\n[{i}/{len(top_repos)}]", end=" ")
-            analysis = await self.analyze_repository(repo)
-            if analysis:
-                analyses.append(analysis)
+
+        # Process repositories in batches for better progress tracking
+        for batch_start in range(0, len(top_repos), concurrent):
+            batch_end = min(batch_start + concurrent, len(top_repos))
+            batch_repos = top_repos[batch_start:batch_end]
+
+            print(
+                f"\n📦 Processing batch {batch_start//concurrent + 1} ({len(batch_repos)} repos)..."
+            )
+
+            # Create parallel tasks for this batch
+            tasks = []
+            for i, repo in enumerate(batch_repos):
+                overall_index = batch_start + i + 1
+                repo_with_index = {
+                    **repo,
+                    "_analysis_index": overall_index,
+                    "_total_repos": len(top_repos),
+                }
+                task = asyncio.create_task(
+                    self.analyze_repository_with_progress(repo_with_index)
+                )
+                tasks.append(task)
+
+            # Wait for all tasks in this batch to complete
+            batch_results = await asyncio.gather(*tasks, return_exceptions=True)
+
+            # Process results and filter out exceptions
+            for result in batch_results:
+                if isinstance(result, Exception):
+                    print(f"   ❌ Analysis failed with exception: {result}")
+                elif result is not None:
+                    analyses.append(result)
 
         await self.generate_report(analyses)
+
+    async def analyze_repository_with_progress(
+        self, repo_info: Dict
+    ) -> Optional[RepoAnalysis]:
+        """Wrapper for analyze_repository with progress tracking"""
+        index = repo_info.get("_analysis_index", "?")
+        total = repo_info.get("_total_repos", "?")
+
+        print(
+            f"\n[{index}/{total}] 🔬 Starting {repo_info['full_name']} (score: {repo_info['combined_score']:.1f})..."
+        )
+
+        try:
+            result = await self.analyze_repository(repo_info)
+            if result:
+                print(f"   ✅ [{index}/{total}] Completed {repo_info['full_name']}")
+            else:
+                print(f"   ⏭️ [{index}/{total}] Skipped {repo_info['full_name']}")
+            return result
+        except Exception as e:
+            print(f"   ❌ [{index}/{total}] Failed {repo_info['full_name']}: {e}")
+            return None
 
     async def generate_report(self, analyses: List[RepoAnalysis]) -> None:
         """Generate comprehensive analysis report"""
@@ -638,6 +754,7 @@ class LocalCloneAnalyzer:
                 "language": analysis.language,
                 "combined_score": analysis.combined_score,
                 "files_analyzed": analysis.files_analyzed,
+                "files_with_thrust_count": analysis.files_with_thrust_count,
                 "files_by_extension": analysis.files_by_extension,
                 "thrust_by_extension": analysis.thrust_by_extension,
                 "api_by_extension": analysis.api_by_extension,
@@ -657,7 +774,7 @@ class LocalCloneAnalyzer:
             }
             json_data["repositories"].append(repo_data)
 
-        json_filename = f"../data/thrust_analysis_local_clone_{timestamp}.json"
+        json_filename = f"./data/thrust_analysis_local_clone_{timestamp}.json"
         with open(json_filename, "w") as f:
             json.dump(json_data, f, indent=2)
         print(f"💾 Saved detailed analysis to: {json_filename}")
@@ -665,7 +782,7 @@ class LocalCloneAnalyzer:
         # 2. Save file-level data as CSV
         import csv
 
-        csv_filename = f"../data/thrust_analysis_local_files_{timestamp}.csv"
+        csv_filename = f"./data/thrust_analysis_local_files_{timestamp}.csv"
         with open(csv_filename, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(
@@ -696,7 +813,7 @@ class LocalCloneAnalyzer:
         print(f"📊 Saved file-level data to: {csv_filename}")
 
         # 3. Save repository summary as CSV
-        repo_csv_filename = f"../data/thrust_analysis_local_repos_{timestamp}.csv"
+        repo_csv_filename = f"./data/thrust_analysis_local_repos_{timestamp}.csv"
         with open(repo_csv_filename, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(
@@ -765,13 +882,20 @@ async def main():
         type=str,
         help="Directory to use for cloning repositories (default: ./cloned_repos)",
     )
+    parser.add_argument(
+        "--concurrent",
+        "-c",
+        type=int,
+        default=4,
+        help="Number of repositories to analyze concurrently (default: 4)",
+    )
 
     args = parser.parse_args()
 
     analyzer = LocalCloneAnalyzer(clone_dir=args.clone_dir)
 
     try:
-        await analyzer.run_analysis(args.top)
+        await analyzer.run_analysis(args.top, args.concurrent)
     except KeyboardInterrupt:
         print("\n🛑 Analysis interrupted by user")
     except Exception as e:
