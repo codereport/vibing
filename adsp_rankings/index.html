@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADSP Rankings Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-chart-line"></i> ADSP Rankings Dashboard</h1>
+            <p class="subtitle">Global rankings with absolute and per capita analysis</p>
+        </header>
+
+        <div class="controls">
+            <div class="view-toggle">
+                <button id="rawView" class="toggle-btn active">
+                    <i class="fas fa-download"></i>
+                    Download Rankings
+                </button>
+                <button id="perCapitaView" class="toggle-btn">
+                    <i class="fas fa-users"></i>
+                    Per Capita Rankings
+                </button>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search countries..." class="search-input">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+        </div>
+
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCountries">0</div>
+                <div class="stat-label">Total Countries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalDownloads">0</div>
+                <div class="stat-label">Total Downloads</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgDownloads">0</div>
+                <div class="stat-label">Average Downloads</div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading population data...</p>
+        </div>
+
+        <div class="rankings-container" id="rankingsContainer" style="display: none;">
+            <div class="table-header">
+                <div class="table-title">
+                    <h2 id="tableTitle">Download Rankings</h2>
+                    <span class="table-subtitle" id="tableSubtitle">Sorted by absolute downloads</span>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="rankings-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Country</th>
+                            <th class="raw-column">Downloads</th>
+                            <th class="raw-column">Per Capita Rank</th>
+                            <th class="per-capita-column" style="display: none;">Per Capita</th>
+                            <th class="per-capita-column" style="display: none;">Download Rank</th>
+                            <th class="per-capita-column" style="display: none;">Population</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingsTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>Failed to load population data. Showing raw rankings only.</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
