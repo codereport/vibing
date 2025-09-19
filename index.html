@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>vibing</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Share Tech Mono', monospace;
             background: #000;
@@ -21,7 +22,7 @@
             padding: 20px;
             position: relative;
         }
-        
+
         /* Matrix Rain Background */
         #matrix-canvas {
             position: fixed;
@@ -32,63 +33,63 @@
             z-index: -1;
             opacity: 0.3;
         }
-        
+
         .container {
             max-width: 1000px;
             margin: 0 auto;
         }
-        
+
         .header {
             text-align: center;
             padding: 30px 0;
             border-bottom: 1px solid #00ff00;
             margin-bottom: 30px;
         }
-        
+
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
         }
-        
+
         .header .subtitle {
             font-size: 1.2em;
             color: #00cc00;
         }
-        
 
-        
+
+
         .projects-table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
         }
-        
+
         .projects-table tr {
             cursor: pointer;
             background: rgba(0, 20, 0, 0.2);
             transition: background 0.2s ease;
         }
-        
+
         .projects-table tr:hover {
             background: rgba(0, 50, 0, 0.4);
         }
-        
+
         .projects-table td {
             padding: 15px 20px;
         }
-        
+
         .project-name {
             font-size: 1.2em;
             color: #00ff00;
             font-weight: bold;
             min-width: 250px;
         }
-        
+
         .project-desc {
             color: #00cc00;
             line-height: 1.4;
         }
-        
+
         .footer {
             text-align: center;
             padding: 20px 0;
@@ -96,111 +97,117 @@
             margin-top: 30px;
             color: #00cc00;
         }
-        
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2em;
             }
-            
+
             .projects-table td {
                 padding: 10px 15px;
             }
-            
+
             .project-name {
                 font-size: 1.1em;
                 min-width: 200px;
             }
-            
+
             .project-desc {
                 font-size: 0.9em;
             }
         }
     </style>
 </head>
+
 <body>
     <canvas id="matrix-canvas"></canvas>
-    
+
     <div class="container">
         <div class="header">
             <h1>VIBING PROJECTS</h1>
         </div>
-        
+
         <table class="projects-table">
             <tr onclick="window.location.href='ai_polls/poll_results_visualization.html'">
                 <td class="project-name">📊 AI_POLLS_ANALYZER</td>
                 <td class="project-desc">Interactive AI polling data visualization</td>
             </tr>
-            
+
             <tr onclick="window.location.href='wigglypaint/wigglypaint_top10.html'">
                 <td class="project-name">🎨 WIGGLYPAINT_SCRAPER</td>
                 <td class="project-desc">Community GIF analysis and top posts aggregator</td>
             </tr>
-            
+
             <tr onclick="window.location.href='https://codereport.github.io/cuda-x-docs/'">
                 <td class="project-name">⚡️ CUDA_ECOSYSTEM_DOCS</td>
                 <td class="project-desc">Interactive CUDA library grid and ecosystem documentation</td>
             </tr>
-            
+
             <tr onclick="window.location.href='ohip_billing/ohip_lookup.html'">
                 <td class="project-name">🩺 OHIP_BILLING_LOOKUP</td>
                 <td class="project-desc">Medical billing code lookup</td>
             </tr>
-            
+
             <tr onclick="window.location.href='leetgpu_stats/stats.html'">
                 <td class="project-name">🚀 LEETGPU_STATS</td>
                 <td class="project-desc">GPU performance benchmarking and statistics analysis</td>
             </tr>
-            
+
             <tr onclick="window.location.href='github_search/index.html'">
                 <td class="project-name">🔍 GITHUB_SEARCH</td>
                 <td class="project-desc">NVIDIA Thrust repository analysis and exploration hub</td>
             </tr>
+
+            <tr onclick="window.location.href='adsp_rankings/index.html'">
+                <td class="project-name">📈 ADSP_RANKINGS</td>
+                <td class="project-desc">ADSP rankings dashboard</td>
+            </tr>
         </table>
-        
+
         <div class="footer">
             <div>VIBING PROJECTS v2.1.0 | ACCESS GRANTED</div>
         </div>
     </div>
-    
+
     <script>
         // Matrix Digital Rain Effect
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
-        
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        
+
         const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
         const matrixArray = matrix.split("");
-        
+
         const fontSize = 16;
         const columns = canvas.width / fontSize;
-        
+
         const drops = [];
-        for(let x = 0; x < columns; x++) {
+        for (let x = 0; x < columns; x++) {
             drops[x] = 1;
         }
-        
+
         function draw() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
+
             ctx.fillStyle = '#00FF00';
             ctx.font = fontSize + 'px "MS Gothic", "Courier New", monospace';
-            
-            for(let i = 0; i < drops.length; i++) {
+
+            for (let i = 0; i < drops.length; i++) {
                 const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                
-                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
                 drops[i]++;
             }
         }
-        
+
         setInterval(draw, 50);
-        
+
         // Handle window resize
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
@@ -208,4 +215,5 @@
         });
     </script>
 </body>
-</html> 
+
+</html>
