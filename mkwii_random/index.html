@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mario Kart Wii Grand Prix Randomizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #4169E1 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #FF6B35;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #FF6B35, #FF8E53);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .results.show {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .grand-prix-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: 3px solid #FF6B35;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .grand-prix-card:hover {
+            transform: scale(1.02);
+        }
+
+        .grand-prix-number {
+            background: #FF6B35;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .grand-prix-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .grand-prix-description {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .best-of-3 {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏁 Mario Kart Wii</h1>
+        <div class="subtitle">Grand Prix Randomizer</div>
+        <div class="best-of-3">Best of 3 Series</div>
+        
+        <button class="generate-btn" onclick="generateGrandPrix()">
+            🎲 Generate Random Grand Prix
+        </button>
+        
+        <div id="results" class="results">
+            <div id="grandPrixList"></div>
+        </div>
+    </div>
+
+    <script>
+        const grandPrixData = {
+            1: {
+                name: "Mushroom Cup",
+                description: "Luigi Circuit • Moo Moo Meadows • Mushroom Gorge • Toad's Factory",
+                color: "#FF6B35"
+            },
+            2: {
+                name: "Flower Cup", 
+                description: "Mario Circuit • Coconut Mall • DK Summit • Wario's Gold Mine",
+                color: "#FF1744"
+            },
+            3: {
+                name: "Star Cup",
+                description: "Daisy Circuit • Koopa Cape • Maple Treeway • Grumble Volcano",
+                color: "#FFD700"
+            },
+            4: {
+                name: "Special Cup",
+                description: "Dry Dry Ruins • Moonview Highway • Bowser's Castle • Rainbow Road",
+                color: "#9C27B0"
+            },
+            5: {
+                name: "Shell Cup",
+                description: "GCN Peach Beach • DS Yoshi Falls • SNES Ghost Valley 2 • N64 Mario Raceway",
+                color: "#4CAF50"
+            },
+            6: {
+                name: "Banana Cup",
+                description: "N64 Sherbet Land • GBA Shy Guy Beach • DS Delfino Square • GCN Waluigi Stadium",
+                color: "#FFC107"
+            },
+            7: {
+                name: "Leaf Cup",
+                description: "DS Desert Hills • GBA Bowser Castle 3 • N64 DK's Jungle Parkway • GCN Mario Circuit",
+                color: "#8BC34A"
+            },
+            8: {
+                name: "Lightning Cup",
+                description: "SNES Mario Circuit 3 • DS Peach Gardens • GCN DK Mountain • N64 Bowser's Castle",
+                color: "#3F51B5"
+            }
+        };
+
+        function generateUniqueRandomNumbers() {
+            const numbers = [];
+            while (numbers.length < 3) {
+                const randomNum = Math.floor(Math.random() * 8) + 1;
+                if (!numbers.includes(randomNum)) {
+                    numbers.push(randomNum);
+                }
+            }
+            return numbers;
+        }
+
+        function generateGrandPrix() {
+            const randomNumbers = generateUniqueRandomNumbers();
+            const resultsDiv = document.getElementById('results');
+            const grandPrixList = document.getElementById('grandPrixList');
+            
+            let html = '';
+            randomNumbers.forEach((num, index) => {
+                const gp = grandPrixData[num];
+                html += `
+                    <div class="grand-prix-card">
+                        <div class="grand-prix-number">${index + 1}</div>
+                        <div class="grand-prix-name">${gp.name}</div>
+                        <div class="grand-prix-description">${gp.description}</div>
+                    </div>
+                `;
+            });
+            
+            grandPrixList.innerHTML = html;
+            resultsDiv.classList.add('show');
+        }
+    </script>
+</body>
+</html>
