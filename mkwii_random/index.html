@@ -28,7 +28,7 @@
             padding: 40px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
-            max-width: 600px;
+            max-width: 1300px;
             width: 100%;
         }
 
@@ -56,7 +56,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
-            margin-bottom: 30px;
+            height: fit-content;
         }
 
         .generate-btn:hover {
@@ -68,9 +68,20 @@
             transform: translateY(0);
         }
 
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .left-column.has-results {
+            justify-content: flex-start;
+        }
+
         .results {
             display: none;
-            margin-top: 20px;
         }
 
         .results.show {
@@ -132,6 +143,139 @@
             margin-bottom: 20px;
             display: inline-block;
         }
+
+        .win-tracker {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .win-tracker h2 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .win-record {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .player-stats {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            min-width: 120px;
+        }
+
+        .player-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .player-wins {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .vs-separator {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FFD700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            position: relative;
+            height: 300px;
+        }
+
+        .chart-title {
+            color: #333;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 250px;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke-width: 3;
+        }
+
+        .shima-line {
+            stroke: #FF6B35;
+        }
+
+        .conor-line {
+            stroke: #4169E1;
+        }
+
+        .chart-dot {
+            r: 4;
+            stroke-width: 2;
+            stroke: white;
+        }
+
+        .shima-dot {
+            fill: #FF6B35;
+        }
+
+        .conor-dot {
+            fill: #4169E1;
+        }
+
+        .chart-axis {
+            stroke: #666;
+            stroke-width: 1;
+        }
+
+        .chart-text {
+            font-size: 12px;
+            fill: #666;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
     </style>
 </head>
 <body>
@@ -140,16 +284,60 @@
         <div class="subtitle">Grand Prix Randomizer</div>
         <div class="best-of-3">Best of 3 Series</div>
         
-        <button class="generate-btn" onclick="generateGrandPrix()">
-            🎲 Generate Random Grand Prix
-        </button>
-        
-        <div id="results" class="results">
-            <div id="grandPrixList"></div>
+        <!-- Button and Win Record Section -->
+        <div style="display: flex; gap: 20px; align-items: stretch; justify-content: center; margin-bottom: 20px;">
+            <!-- Left Column: Button and Results -->
+            <div id="leftColumn" class="left-column">
+                <button class="generate-btn" onclick="generateGrandPrix()">
+                    🎲 Generate Random Grand Prix
+                </button>
+                
+                <div id="results" class="results">
+                    <div id="grandPrixList"></div>
+                </div>
+            </div>
+            
+            <!-- Right Column: Win Tracker Section -->
+            <div class="win-tracker" style="flex: 1; max-width: 500px;">
+                <h2>🏆 Win Record</h2>
+                <div class="win-record">
+                    <div class="player-stats">
+                        <div class="player-name">Shima</div>
+                        <div class="player-wins" id="shima-wins">0</div>
+                    </div>
+                    <div class="vs-separator">-</div>
+                    <div class="player-stats">
+                        <div class="player-name">Conor</div>
+                        <div class="player-wins" id="conor-wins">0</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="chart-title">Wins Over Time</div>
+                    <svg class="chart-svg" id="winsChart">
+                        <!-- Chart will be generated by JavaScript -->
+                    </svg>
+                    <div class="legend" style="margin-top: 20px;">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #FF6B35;"></div>
+                            <span style="color: #333;">Shima</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #4169E1;"></div>
+                            <span style="color: #333;">Conor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
+        // Win tracking data
+        let winData = [];
+        let shimaWins = 0;
+        let conorWins = 0;
+
         const grandPrixData = {
             1: {
                 name: "Mushroom Cup",
@@ -208,6 +396,7 @@
             const randomNumbers = generateUniqueRandomNumbers();
             const resultsDiv = document.getElementById('results');
             const grandPrixList = document.getElementById('grandPrixList');
+            const leftColumn = document.getElementById('leftColumn');
             
             let html = '';
             randomNumbers.forEach((num, index) => {
@@ -223,7 +412,202 @@
             
             grandPrixList.innerHTML = html;
             resultsDiv.classList.add('show');
+            leftColumn.classList.add('has-results');
         }
+
+        // Win tracking functions
+        async function loadWinData() {
+            try {
+                const response = await fetch('wins.txt');
+                const text = await response.text();
+                parseWinData(text);
+                updateWinDisplay();
+                drawChart();
+            } catch (error) {
+                console.error('Error loading win data:', error);
+                // Fallback to sample data for demonstration
+                winData = [
+                    { date: '19-10-2025', winner: 'Shima', score: 1 },
+                    { date: '19-10-2025', winner: 'Shima', score: 1 },
+                    { date: '19-10-2025', winner: 'Shima', score: 1 },
+                    { date: '21-10-2025', winner: 'Conor', score: 1 }
+                ];
+                calculateTotalWins();
+                updateWinDisplay();
+                drawChart();
+            }
+        }
+
+        function parseWinData(text) {
+            const lines = text.trim().split('\n').filter(line => line.trim());
+            winData = [];
+            
+            lines.forEach(line => {
+                // Parse format: "19-10-2025, Shima" or "19-10-2025, Shima 3-0"
+                const matchWithScore = line.match(/(\d{2}-\d{2}-\d{4}),\s*(\w+)\s+(\d+)-(\d+)/);
+                const matchSimple = line.match(/(\d{2}-\d{2}-\d{4}),\s*(\w+)$/);
+                
+                if (matchWithScore) {
+                    const [, date, winner, winScore, loseScore] = matchWithScore;
+                    winData.push({
+                        date: date,
+                        winner: winner,
+                        score: parseInt(winScore),
+                        opponentScore: parseInt(loseScore)
+                    });
+                } else if (matchSimple) {
+                    const [, date, winner] = matchSimple;
+                    winData.push({
+                        date: date,
+                        winner: winner,
+                        score: 1,
+                        opponentScore: 0
+                    });
+                }
+            });
+            
+            calculateTotalWins();
+        }
+
+        function calculateTotalWins() {
+            shimaWins = 0;
+            conorWins = 0;
+            
+            winData.forEach(match => {
+                if (match.winner === 'Shima') {
+                    shimaWins++;
+                } else if (match.winner === 'Conor') {
+                    conorWins++;
+                }
+            });
+        }
+
+        function updateWinDisplay() {
+            document.getElementById('shima-wins').textContent = shimaWins;
+            document.getElementById('conor-wins').textContent = conorWins;
+        }
+
+        function drawChart() {
+            const svg = document.getElementById('winsChart');
+            svg.innerHTML = ''; // Clear previous chart
+            
+            if (winData.length === 0) return;
+            
+            const width = 500;
+            const height = 200;
+            const margin = { top: 20, right: 30, bottom: 40, left: 40 };
+            const chartWidth = width - margin.left - margin.right;
+            const chartHeight = height - margin.top - margin.bottom;
+            
+            // Set SVG viewBox for responsiveness
+            svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            
+            // Calculate cumulative wins over time
+            let shimaRunningTotal = 0;
+            let conorRunningTotal = 0;
+            const chartData = [];
+            
+            winData.forEach((match, index) => {
+                if (match.winner === 'Shima') {
+                    shimaRunningTotal++;
+                } else if (match.winner === 'Conor') {
+                    conorRunningTotal++;
+                }
+                
+                chartData.push({
+                    index: index,
+                    date: match.date,
+                    shimaTotal: shimaRunningTotal,
+                    conorTotal: conorRunningTotal
+                });
+            });
+            
+            // Calculate scales
+            const maxWins = Math.max(shimaRunningTotal, conorRunningTotal);
+            const xScale = (index) => margin.left + (index / (winData.length - 1)) * chartWidth;
+            const yScale = (wins) => margin.top + chartHeight - (wins / maxWins) * chartHeight;
+            
+            // Draw axes
+            const axisGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            
+            // Y-axis
+            const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            yAxis.setAttribute('x1', margin.left);
+            yAxis.setAttribute('y1', margin.top);
+            yAxis.setAttribute('x2', margin.left);
+            yAxis.setAttribute('y2', margin.top + chartHeight);
+            yAxis.setAttribute('class', 'chart-axis');
+            axisGroup.appendChild(yAxis);
+            
+            // X-axis
+            const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xAxis.setAttribute('x1', margin.left);
+            xAxis.setAttribute('y1', margin.top + chartHeight);
+            xAxis.setAttribute('x2', margin.left + chartWidth);
+            xAxis.setAttribute('y2', margin.top + chartHeight);
+            xAxis.setAttribute('class', 'chart-axis');
+            axisGroup.appendChild(xAxis);
+            
+            // Y-axis labels
+            for (let i = 0; i <= maxWins; i++) {
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', margin.left - 10);
+                label.setAttribute('y', yScale(i) + 4);
+                label.setAttribute('class', 'chart-text');
+                label.setAttribute('text-anchor', 'end');
+                label.textContent = i;
+                axisGroup.appendChild(label);
+            }
+            
+            svg.appendChild(axisGroup);
+            
+            // Draw lines and dots
+            if (chartData.length > 1) {
+                // Shima line
+                const shimaPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                let shimaPathData = `M ${xScale(0)} ${yScale(chartData[0].shimaTotal)}`;
+                for (let i = 1; i < chartData.length; i++) {
+                    shimaPathData += ` L ${xScale(i)} ${yScale(chartData[i].shimaTotal)}`;
+                }
+                shimaPath.setAttribute('d', shimaPathData);
+                shimaPath.setAttribute('class', 'chart-line shima-line');
+                svg.appendChild(shimaPath);
+                
+                // Conor line
+                const conorPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                let conorPathData = `M ${xScale(0)} ${yScale(chartData[0].conorTotal)}`;
+                for (let i = 1; i < chartData.length; i++) {
+                    conorPathData += ` L ${xScale(i)} ${yScale(chartData[i].conorTotal)}`;
+                }
+                conorPath.setAttribute('d', conorPathData);
+                conorPath.setAttribute('class', 'chart-line conor-line');
+                svg.appendChild(conorPath);
+            }
+            
+            // Draw dots
+            chartData.forEach((point, index) => {
+                // Shima dot
+                const shimaDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                shimaDot.setAttribute('cx', xScale(index));
+                shimaDot.setAttribute('cy', yScale(point.shimaTotal));
+                shimaDot.setAttribute('class', 'chart-dot shima-dot');
+                svg.appendChild(shimaDot);
+                
+                // Conor dot
+                const conorDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                conorDot.setAttribute('cx', xScale(index));
+                conorDot.setAttribute('cy', yScale(point.conorTotal));
+                conorDot.setAttribute('class', 'chart-dot conor-dot');
+                svg.appendChild(conorDot);
+            });
+        }
+
+        // Load win data when page loads
+        window.addEventListener('load', loadWinData);
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadWinData, 30000);
     </script>
 </body>
 </html>
+
