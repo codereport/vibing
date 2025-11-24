@@ -8,6 +8,12 @@ DATA_FILE = "leaderboard_data.json"
 HTML_FILE = "index.html"
 PAGES_TO_FETCH = 5 # 12 per page * 5 = 60 runners, enough for top 50
 
+def clean_name(name):
+    # Specific fix for James Salmon
+    if "James Salmon" in name and "Purple Runner" in name:
+        return "James Salmon"
+    return name
+
 def fetch_leaderboard():
     runners = []
     headers = {
@@ -27,7 +33,8 @@ def fetch_leaderboard():
         
         for card in cards:
             name_tag = card.find("h3")
-            name = name_tag.get_text(strip=True) if name_tag else "Unknown"
+            raw_name = name_tag.get_text(strip=True) if name_tag else "Unknown"
+            name = clean_name(raw_name)
             
             # Extract streets count
             # Text is like "36656 total streets"
@@ -84,6 +91,10 @@ def calculate_deltas(current_runners, previous_data):
     return current_runners
 
 def generate_html(runners, last_updated):
+    # Prepare data for chart (All 50)
+    chart_labels = [r['name'].replace("'", "\\'") for r in runners]
+    chart_data = [r['streets'] for r in runners]
+    
     html = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -91,42 +102,66 @@ def generate_html(runners, last_updated):
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>CityStrides Top 50 Leaderboard</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
-            body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f4f5; color: #18181b; margin: 0; padding: 20px; }}
-            .container {{ max_width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }}
-            h1 {{ text-align: center; color: #4c1d95; }}
-            .updated {{ text-align: center; color: #71717a; font-size: 0.9em; margin-bottom: 20px; }}
-            table {{ width: 100%; border-collapse: collapse; }}
-            th, td {{ padding: 12px; text-align: left; border-bottom: 1px solid #e4e4e7; }}
-            th {{ background: #f8fafc; font-weight: 600; }}
+            body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f4f5; color: #18181b; margin: 0; padding: 30px; font-size: 24px; }}
+            .main-container {{ max_width: 95%; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }}
+            h1 {{ text-align: center; color: #4c1d95; margin-bottom: 30px; }}
+            .updated {{ text-align: center; color: #71717a; font-size: 0.8em; margin-bottom: 40px; }}
+            
+            .content-wrapper {{ display: flex; gap: 30px; }}
+            .chart-section {{ flex: 1; min-width: 0; }}
+            .table-section {{ flex: 1; min-width: 0; }}
+            
+            /* 60px per row * 50 rows = 3000px */
+            .chart-container {{ position: relative; height: 3000px; width: 100%; }}
+            
+            table {{ width: 100%; border-collapse: collapse; font-size: 1em; height: 100%; }}
+            th, td {{ padding: 12px 18px; text-align: left; border-bottom: 1px solid #e4e4e7; height: 60px; box-sizing: border-box; }}
+            th {{ background: #f8fafc; font-weight: 600; position: sticky; top: 0; z-index: 10; }}
+            
             .rank-up {{ color: #16a34a; }}
             .rank-down {{ color: #dc2626; }}
             .streets-up {{ color: #16a34a; font-size: 0.9em; }}
+            .gap {{ color: #71717a; font-size: 0.9em; }}
             .profile-link {{ color: #4c1d95; text-decoration: none; font-weight: 500; }}
             .profile-link:hover {{ text-decoration: underline; }}
+            
+            @media (max-width: 1400px) {{
+                .content-wrapper {{ flex-direction: column; }}
+                .chart-container {{ height: 1200px; }}
+            }}
         </style>
     </head>
     <body>
-        <div class="container">
+        <div class="main-container">
             <h1>CityStrides Top 50</h1>
             <p class="updated">Last updated: {last_updated}</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Runner</th>
-                        <th>Streets</th>
-                        <th>Change (Streets)</th>
-                        <th>Change (Rank)</th>
-                    </tr>
-                </thead>
-                <tbody>
+            
+            <div class="content-wrapper">
+                <div class="table-section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Runner</th>
+                                <th>Streets</th>
+                                <th>Gap</th>
+                                <th>Change</th>
+                            </tr>
+                        </thead>
+                        <tbody>
     """
     
     for i, runner in enumerate(runners):
         rank = i + 1
         rank_delta = runner.get("rank_delta", 0)
         streets_delta = runner.get("streets_delta", 0)
+        
+        # Calculate gap to runner ahead
+        gap = 0
+        if i > 0:
+            gap = runners[i-1]['streets'] - runner['streets']
         
         rank_display = f"{rank}"
         if rank_delta > 0:
@@ -135,21 +170,99 @@ def generate_html(runners, last_updated):
             rank_display += f" <span class='rank-down'>(▼{abs(rank_delta)})</span>"
             
         streets_delta_display = f"+{streets_delta}" if streets_delta > 0 else "-"
+        gap_display = f"-{gap:,}" if i > 0 else "-"
         
         html += f"""
-                    <tr>
-                        <td>{rank_display}</td>
-                        <td><a href="https://citystrides.com{runner['profile_url']}" class="profile-link" target="_blank">{runner['name']}</a></td>
-                        <td>{runner['streets']:,}</td>
-                        <td class="streets-up">{streets_delta_display}</td>
-                        <td>{rank_delta if rank_delta != 0 else '-'}</td>
-                    </tr>
+                            <tr>
+                                <td>{rank_display}</td>
+                                <td><a href="https://citystrides.com{runner['profile_url']}" class="profile-link" target="_blank">{runner['name']}</a></td>
+                                <td>{runner['streets']:,}</td>
+                                <td class="gap">{gap_display}</td>
+                                <td class="streets-up">{streets_delta_display}</td>
+                            </tr>
         """
         
-    html += """
-                </tbody>
-            </table>
+    html += f"""
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="chart-section">
+                    <div class="chart-container">
+                        <canvas id="rankingChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
+        
+        <script>
+            const ctx = document.getElementById('rankingChart').getContext('2d');
+            new Chart(ctx, {{
+                type: 'bar',
+                data: {{
+                    labels: {chart_labels},
+                    datasets: [{{
+                        label: 'Total Streets',
+                        data: {chart_data},
+                        backgroundColor: 'rgba(76, 29, 149, 0.6)',
+                        borderColor: 'rgba(76, 29, 149, 1)',
+                        borderWidth: 1,
+                        barPercentage: 0.8,
+                        categoryPercentage: 0.9
+                    }}]
+                }},
+                options: {{
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {{
+                        legend: {{
+                            display: false
+                        }},
+                        title: {{
+                            display: true,
+                            text: 'Street Count Distribution',
+                            font: {{
+                                size: 24
+                            }}
+                        }},
+                        tooltip: {{
+                            enabled: true,
+                            bodyFont: {{
+                                size: 18
+                            }},
+                            titleFont: {{
+                                size: 18
+                            }}
+                        }}
+                    }},
+                    scales: {{
+                        x: {{
+                            beginAtZero: true,
+                            grid: {{
+                                display: true
+                            }},
+                            ticks: {{
+                                font: {{
+                                    size: 16
+                                }}
+                            }}
+                        }},
+                        y: {{
+                            ticks: {{
+                                display: true,
+                                font: {{
+                                    size: 16
+                                }}
+                            }},
+                            grid: {{
+                                display: false
+                            }}
+                        }}
+                    }}
+                }}
+            }});
+        </script>
     </body>
     </html>
     """
