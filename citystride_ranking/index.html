@@ -30,6 +30,69 @@
             .profile-link { color: #4c1d95; text-decoration: none; font-weight: 500; }
             .profile-link:hover { text-decoration: underline; }
             
+            .toggle-button { 
+                display: inline-block; 
+                margin: 0 0 30px 0; 
+                padding: 12px 24px; 
+                background: #4c1d95; 
+                color: white; 
+                border: none; 
+                border-radius: 8px; 
+                font-size: 0.9em; 
+                cursor: pointer; 
+                transition: background 0.3s; 
+            }
+            .toggle-button:hover { background: #5b21b6; }
+            
+            /* Modal styles */
+            .modal { 
+                display: none; 
+                position: fixed; 
+                z-index: 1000; 
+                left: 0; 
+                top: 0; 
+                width: 100%; 
+                height: 100%; 
+                background-color: rgba(0, 0, 0, 0.5); 
+                backdrop-filter: blur(4px);
+            }
+            .modal.visible { display: flex; align-items: center; justify-content: center; }
+            
+            .modal-content { 
+                background: white; 
+                padding: 40px; 
+                border-radius: 16px; 
+                width: 90%; 
+                max-width: 1400px; 
+                max-height: 90vh; 
+                overflow-y: auto; 
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); 
+                position: relative;
+            }
+            
+            .modal-close { 
+                position: absolute; 
+                top: 20px; 
+                right: 20px; 
+                font-size: 32px; 
+                font-weight: bold; 
+                color: #71717a; 
+                cursor: pointer; 
+                background: none; 
+                border: none; 
+                padding: 0; 
+                width: 40px; 
+                height: 40px; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center; 
+                border-radius: 50%; 
+                transition: all 0.2s;
+            }
+            .modal-close:hover { background: #f4f4f5; color: #18181b; }
+            
+            .time-series-container { position: relative; height: 600px; width: 100%; margin-top: 20px; }
+            
             @media (max-width: 1400px) {
                 .content-wrapper { flex-direction: column; }
                 .chart-container { height: 1200px; }
@@ -39,7 +102,10 @@
     <body>
         <div class="main-container">
             <h1>CityStrides Top 50</h1>
-            <p class="updated">Last updated: 2025-11-24 17:53:04</p>
+            <div style="text-align: center;">
+                <button class="toggle-button" onclick="openModal()">📈 View Historical Progress (All 50)</button>
+            </div>
+            <p class="updated">Last updated: 2025-11-24 18:16:44</p>
             
             <div class="content-wrapper">
                 <div class="table-section">
@@ -50,33 +116,37 @@
                                 <th>Runner</th>
                                 <th>Streets</th>
                                 <th>Gap</th>
-                                <th>Change</th>
+                                <th>Streets Δ</th>
+                                <th>Rank Δ</th>
                             </tr>
                         </thead>
                         <tbody>
     
                             <tr>
                                 <td>1</td>
-                                <td><a href="https://citystrides.com/users/8376/map" class="profile-link" target="_blank">Thomas Pillow</a></td>
+                                <td><a href="https://citystrides.com/users/8376/map" class="profile-link" target="_blank">Thomas Pillow 🇺🇸</a></td>
                                 <td>36,656</td>
                                 <td class="gap">-</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>2</td>
-                                <td><a href="https://citystrides.com/users/35657/map" class="profile-link" target="_blank">James Salmon</a></td>
+                                <td><a href="https://citystrides.com/users/35657/map" class="profile-link" target="_blank">James Salmon 🇬🇧</a></td>
                                 <td>35,733</td>
                                 <td class="gap">-923</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>3</td>
-                                <td><a href="https://citystrides.com/users/6713/map" class="profile-link" target="_blank">Denis Bafounta</a></td>
+                                <td><a href="https://citystrides.com/users/6713/map" class="profile-link" target="_blank">Denis Bafounta 🇩🇪</a></td>
                                 <td>35,543</td>
                                 <td class="gap">-190</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -85,14 +155,16 @@
                                 <td>33,584</td>
                                 <td class="gap">-1,959</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>5</td>
-                                <td><a href="https://citystrides.com/users/2700/map" class="profile-link" target="_blank">Mike Sikkema</a></td>
+                                <td><a href="https://citystrides.com/users/2700/map" class="profile-link" target="_blank">Mike Sikkema 🇺🇸</a></td>
                                 <td>31,229</td>
                                 <td class="gap">-2,355</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -101,46 +173,52 @@
                                 <td>31,206</td>
                                 <td class="gap">-23</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>7</td>
-                                <td><a href="https://citystrides.com/users/48657/map" class="profile-link" target="_blank">John Erwin</a></td>
+                                <td><a href="https://citystrides.com/users/48657/map" class="profile-link" target="_blank">John Erwin 🇺🇸</a></td>
                                 <td>29,297</td>
                                 <td class="gap">-1,909</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>8</td>
-                                <td><a href="https://citystrides.com/users/22935/map" class="profile-link" target="_blank">Tim Van</a></td>
+                                <td><a href="https://citystrides.com/users/22935/map" class="profile-link" target="_blank">Tim Van 🇳🇱</a></td>
                                 <td>26,523</td>
                                 <td class="gap">-2,774</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>9</td>
-                                <td><a href="https://citystrides.com/users/5544/map" class="profile-link" target="_blank">DJ</a></td>
+                                <td><a href="https://citystrides.com/users/5544/map" class="profile-link" target="_blank">DJ 🇺🇸</a></td>
                                 <td>24,845</td>
                                 <td class="gap">-1,678</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>10</td>
-                                <td><a href="https://citystrides.com/users/15559/map" class="profile-link" target="_blank">Kevin Pels</a></td>
+                                <td><a href="https://citystrides.com/users/15559/map" class="profile-link" target="_blank">Kevin Pels 🇵🇹</a></td>
                                 <td>23,104</td>
                                 <td class="gap">-1,741</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>11</td>
-                                <td><a href="https://citystrides.com/users/5240/map" class="profile-link" target="_blank">Aaron Fitzsenry</a></td>
+                                <td><a href="https://citystrides.com/users/5240/map" class="profile-link" target="_blank">Aaron Fitzsenry 🇺🇸</a></td>
                                 <td>23,077</td>
                                 <td class="gap">-27</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -149,6 +227,7 @@
                                 <td>22,132</td>
                                 <td class="gap">-945</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -157,14 +236,16 @@
                                 <td>21,730</td>
                                 <td class="gap">-402</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>14</td>
-                                <td><a href="https://citystrides.com/users/26737/map" class="profile-link" target="_blank">Jon Ziefle</a></td>
+                                <td><a href="https://citystrides.com/users/26737/map" class="profile-link" target="_blank">Jon Ziefle 🇺🇸</a></td>
                                 <td>21,545</td>
                                 <td class="gap">-185</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -173,6 +254,7 @@
                                 <td>21,326</td>
                                 <td class="gap">-219</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -181,22 +263,25 @@
                                 <td>20,451</td>
                                 <td class="gap">-875</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>17</td>
-                                <td><a href="https://citystrides.com/users/49967/map" class="profile-link" target="_blank">Todd (Roll Toad!)</a></td>
+                                <td><a href="https://citystrides.com/users/49967/map" class="profile-link" target="_blank">Todd (Roll Toad!) 🇺🇸</a></td>
                                 <td>20,271</td>
                                 <td class="gap">-180</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>18</td>
-                                <td><a href="https://citystrides.com/users/788/map" class="profile-link" target="_blank">Krzysztof Kasprzyk</a></td>
+                                <td><a href="https://citystrides.com/users/788/map" class="profile-link" target="_blank">Krzysztof Kasprzyk 🇧🇪</a></td>
                                 <td>20,260</td>
                                 <td class="gap">-11</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -205,6 +290,7 @@
                                 <td>19,841</td>
                                 <td class="gap">-419</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -213,22 +299,25 @@
                                 <td>19,725</td>
                                 <td class="gap">-116</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>21</td>
-                                <td><a href="https://citystrides.com/users/7835/map" class="profile-link" target="_blank">Monkey Man</a></td>
+                                <td><a href="https://citystrides.com/users/7835/map" class="profile-link" target="_blank">Monkey Man 🇬🇧</a></td>
                                 <td>19,693</td>
                                 <td class="gap">-32</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>22</td>
-                                <td><a href="https://citystrides.com/users/25596/map" class="profile-link" target="_blank">Daniel Ratcliffe</a></td>
+                                <td><a href="https://citystrides.com/users/25596/map" class="profile-link" target="_blank">Daniel Ratcliffe 🇬🇧</a></td>
                                 <td>19,569</td>
                                 <td class="gap">-124</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -237,22 +326,25 @@
                                 <td>19,322</td>
                                 <td class="gap">-247</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>24</td>
-                                <td><a href="https://citystrides.com/users/1691/map" class="profile-link" target="_blank">Mookie The Cat</a></td>
+                                <td><a href="https://citystrides.com/users/1691/map" class="profile-link" target="_blank">Mookie The Cat 🇺🇸</a></td>
                                 <td>19,212</td>
                                 <td class="gap">-110</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>25</td>
-                                <td><a href="https://citystrides.com/users/39277/map" class="profile-link" target="_blank">Dave Parsons</a></td>
+                                <td><a href="https://citystrides.com/users/39277/map" class="profile-link" target="_blank">Dave Parsons 🇺🇸</a></td>
                                 <td>19,061</td>
                                 <td class="gap">-151</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -261,110 +353,124 @@
                                 <td>19,028</td>
                                 <td class="gap">-33</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>27</td>
-                                <td><a href="https://citystrides.com/users/16255/map" class="profile-link" target="_blank">Rancid Goat</a></td>
+                                <td><a href="https://citystrides.com/users/16255/map" class="profile-link" target="_blank">Rancid Goat 🇺🇸</a></td>
                                 <td>18,938</td>
                                 <td class="gap">-90</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>28</td>
-                                <td><a href="https://citystrides.com/users/3203/map" class="profile-link" target="_blank">John Teal</a></td>
+                                <td><a href="https://citystrides.com/users/3203/map" class="profile-link" target="_blank">John Teal 🇺🇸</a></td>
                                 <td>18,856</td>
                                 <td class="gap">-82</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>29</td>
-                                <td><a href="https://citystrides.com/users/55228/map" class="profile-link" target="_blank">Conor Hoekstra</a></td>
+                                <td><a href="https://citystrides.com/users/55228/map" class="profile-link" target="_blank">Conor Hoekstra 🇨🇦</a></td>
                                 <td>18,211</td>
                                 <td class="gap">-645</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>30</td>
-                                <td><a href="https://citystrides.com/users/15017/map" class="profile-link" target="_blank">Tim Grose</a></td>
+                                <td><a href="https://citystrides.com/users/15017/map" class="profile-link" target="_blank">Tim Grose 🇵🇹</a></td>
                                 <td>18,157</td>
                                 <td class="gap">-54</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>31</td>
-                                <td><a href="https://citystrides.com/users/8607/map" class="profile-link" target="_blank">Rob Piccolino</a></td>
+                                <td><a href="https://citystrides.com/users/8607/map" class="profile-link" target="_blank">Rob Piccolino 🇺🇸</a></td>
                                 <td>18,106</td>
                                 <td class="gap">-51</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>32</td>
-                                <td><a href="https://citystrides.com/users/37018/map" class="profile-link" target="_blank">Mark Macefield</a></td>
+                                <td><a href="https://citystrides.com/users/37018/map" class="profile-link" target="_blank">Mark Macefield 🇬🇧</a></td>
                                 <td>18,069</td>
                                 <td class="gap">-37</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>33</td>
-                                <td><a href="https://citystrides.com/users/60927/map" class="profile-link" target="_blank">Catherine Salin Derrow</a></td>
+                                <td><a href="https://citystrides.com/users/60927/map" class="profile-link" target="_blank">Catherine Salin Derrow 🇺🇸</a></td>
                                 <td>17,786</td>
                                 <td class="gap">-283</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>34</td>
-                                <td><a href="https://citystrides.com/users/85711/map" class="profile-link" target="_blank">Joel E Hibshman</a></td>
+                                <td><a href="https://citystrides.com/users/85711/map" class="profile-link" target="_blank">Joel E Hibshman 🇬🇧</a></td>
                                 <td>17,758</td>
                                 <td class="gap">-28</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>35</td>
-                                <td><a href="https://citystrides.com/users/46203/map" class="profile-link" target="_blank">Guy Schweitzer</a></td>
+                                <td><a href="https://citystrides.com/users/46203/map" class="profile-link" target="_blank">Guy Schweitzer 🇦🇺</a></td>
                                 <td>17,747</td>
                                 <td class="gap">-11</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>36</td>
-                                <td><a href="https://citystrides.com/users/716/map" class="profile-link" target="_blank">Jason Rossman</a></td>
+                                <td><a href="https://citystrides.com/users/716/map" class="profile-link" target="_blank">Jason Rossman 🇺🇸</a></td>
                                 <td>17,488</td>
                                 <td class="gap">-259</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>37</td>
-                                <td><a href="https://citystrides.com/users/32844/map" class="profile-link" target="_blank">Luma Zamarreño</a></td>
+                                <td><a href="https://citystrides.com/users/32844/map" class="profile-link" target="_blank">Luma Zamarreño 🇪🇸</a></td>
                                 <td>16,788</td>
                                 <td class="gap">-700</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>38</td>
-                                <td><a href="https://citystrides.com/users/3056/map" class="profile-link" target="_blank">Jan Smits</a></td>
+                                <td><a href="https://citystrides.com/users/3056/map" class="profile-link" target="_blank">Jan Smits 🇳🇱</a></td>
                                 <td>16,656</td>
                                 <td class="gap">-132</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>39</td>
-                                <td><a href="https://citystrides.com/users/65257/map" class="profile-link" target="_blank">Sheepie</a></td>
+                                <td><a href="https://citystrides.com/users/65257/map" class="profile-link" target="_blank">Sheepie 🇦🇺</a></td>
                                 <td>16,580</td>
                                 <td class="gap">-76</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -373,38 +479,43 @@
                                 <td>16,562</td>
                                 <td class="gap">-18</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>41</td>
-                                <td><a href="https://citystrides.com/users/33335/map" class="profile-link" target="_blank">Ryan Albano</a></td>
+                                <td><a href="https://citystrides.com/users/33335/map" class="profile-link" target="_blank">Ryan Albano 🇨🇦</a></td>
                                 <td>16,187</td>
                                 <td class="gap">-375</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>42</td>
-                                <td><a href="https://citystrides.com/users/8736/map" class="profile-link" target="_blank">Sean P</a></td>
+                                <td><a href="https://citystrides.com/users/8736/map" class="profile-link" target="_blank">Sean P 🇬🇧</a></td>
                                 <td>15,956</td>
                                 <td class="gap">-231</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>43</td>
-                                <td><a href="https://citystrides.com/users/45514/map" class="profile-link" target="_blank">Richard Barber</a></td>
+                                <td><a href="https://citystrides.com/users/45514/map" class="profile-link" target="_blank">Richard Barber 🇬🇧</a></td>
                                 <td>15,863</td>
                                 <td class="gap">-93</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>44</td>
-                                <td><a href="https://citystrides.com/users/20284/map" class="profile-link" target="_blank">Timtwo Grose</a></td>
+                                <td><a href="https://citystrides.com/users/20284/map" class="profile-link" target="_blank">Timtwo Grose 🇵🇹</a></td>
                                 <td>15,816</td>
                                 <td class="gap">-47</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -413,22 +524,25 @@
                                 <td>15,667</td>
                                 <td class="gap">-149</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>46</td>
-                                <td><a href="https://citystrides.com/users/35737/map" class="profile-link" target="_blank">Peter Groner</a></td>
+                                <td><a href="https://citystrides.com/users/35737/map" class="profile-link" target="_blank">Peter Groner 🇺🇸</a></td>
                                 <td>15,588</td>
                                 <td class="gap">-79</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>47</td>
-                                <td><a href="https://citystrides.com/users/30908/map" class="profile-link" target="_blank">Jule Jacobs</a></td>
+                                <td><a href="https://citystrides.com/users/30908/map" class="profile-link" target="_blank">Jule Jacobs 🇩🇪</a></td>
                                 <td>15,577</td>
                                 <td class="gap">-11</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
@@ -437,22 +551,25 @@
                                 <td>15,480</td>
                                 <td class="gap">-97</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>49</td>
-                                <td><a href="https://citystrides.com/users/39274/map" class="profile-link" target="_blank">Ken Varian</a></td>
+                                <td><a href="https://citystrides.com/users/39274/map" class="profile-link" target="_blank">Ken Varian 🇺🇸</a></td>
                                 <td>15,227</td>
                                 <td class="gap">-253</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                             <tr>
                                 <td>50</td>
-                                <td><a href="https://citystrides.com/users/7903/map" class="profile-link" target="_blank">jeffrey severijn</a></td>
+                                <td><a href="https://citystrides.com/users/7903/map" class="profile-link" target="_blank">jeffrey severijn 🇳🇱</a></td>
                                 <td>15,109</td>
                                 <td class="gap">-118</td>
                                 <td class="streets-up">-</td>
+                                <td class="">-</td>
                             </tr>
         
                         </tbody>
@@ -467,12 +584,46 @@
             </div>
         </div>
         
+        <!-- Modal for time series chart -->
+        <div id="chartModal" class="modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal()">×</button>
+                <h2 style="text-align: center; color: #4c1d95; margin-bottom: 20px;">Street Count Progress Over Time</h2>
+                <div class="time-series-container">
+                    <canvas id="timeSeriesChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
         <script>
+            function openModal() {
+                document.getElementById('chartModal').classList.add('visible');
+            }
+            
+            function closeModal() {
+                document.getElementById('chartModal').classList.remove('visible');
+            }
+            
+            // Close modal when clicking outside the content
+            window.onclick = function(event) {
+                const modal = document.getElementById('chartModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    closeModal();
+                }
+            })
+            
             const ctx = document.getElementById('rankingChart').getContext('2d');
             new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Thomas Pillow', 'James Salmon', 'Denis Bafounta', 'Nick Kollett', 'Mike Sikkema', 'Nameless Runner', 'John Erwin', 'Tim Van', 'DJ', 'Kevin Pels', 'Aaron Fitzsenry', 'Robert Buchanan 🇳🇿🇯🇵', 'Ed Sheldon -  StreeTRailn', 'Jon Ziefle', 'Peter Qumsiyeh 🇺🇸🇵🇸', 'Chris Irwin', 'Todd (Roll Toad!)', 'Krzysztof Kasprzyk', 'Daniel González Alguacil', 'Chris Thoms', 'Monkey Man', 'Daniel Ratcliffe', 'Tommy Toronto', 'Mookie The Cat', 'Dave Parsons', 'Chemie Banger', 'Rancid Goat', 'John Teal', 'Conor Hoekstra', 'Tim Grose', 'Rob Piccolino', 'Mark Macefield', 'Catherine Salin Derrow', 'Joel E Hibshman', 'Guy Schweitzer', 'Jason Rossman', 'Luma Zamarreño', 'Jan Smits', 'Sheepie', 'Clive Saffery', 'Ryan Albano', 'Sean P', 'Richard Barber', 'Timtwo Grose', 'B Weds', 'Peter Groner', 'Jule Jacobs', 'K Wed', 'Ken Varian', 'jeffrey severijn'],
+                    labels: ['Thomas Pillow 🇺🇸', 'James Salmon 🇬🇧', 'Denis Bafounta 🇩🇪', 'Nick Kollett', 'Mike Sikkema 🇺🇸', 'Nameless Runner', 'John Erwin 🇺🇸', 'Tim Van 🇳🇱', 'DJ 🇺🇸', 'Kevin Pels 🇵🇹', 'Aaron Fitzsenry 🇺🇸', 'Robert Buchanan 🇳🇿🇯🇵', 'Ed Sheldon -  StreeTRailn', 'Jon Ziefle 🇺🇸', 'Peter Qumsiyeh 🇺🇸🇵🇸', 'Chris Irwin', 'Todd (Roll Toad!) 🇺🇸', 'Krzysztof Kasprzyk 🇧🇪', 'Daniel González Alguacil', 'Chris Thoms', 'Monkey Man 🇬🇧', 'Daniel Ratcliffe 🇬🇧', 'Tommy Toronto', 'Mookie The Cat 🇺🇸', 'Dave Parsons 🇺🇸', 'Chemie Banger', 'Rancid Goat 🇺🇸', 'John Teal 🇺🇸', 'Conor Hoekstra 🇨🇦', 'Tim Grose 🇵🇹', 'Rob Piccolino 🇺🇸', 'Mark Macefield 🇬🇧', 'Catherine Salin Derrow 🇺🇸', 'Joel E Hibshman 🇬🇧', 'Guy Schweitzer 🇦🇺', 'Jason Rossman 🇺🇸', 'Luma Zamarreño 🇪🇸', 'Jan Smits 🇳🇱', 'Sheepie 🇦🇺', 'Clive Saffery', 'Ryan Albano 🇨🇦', 'Sean P 🇬🇧', 'Richard Barber 🇬🇧', 'Timtwo Grose 🇵🇹', 'B Weds', 'Peter Groner 🇺🇸', 'Jule Jacobs 🇩🇪', 'K Wed', 'Ken Varian 🇺🇸', 'jeffrey severijn 🇳🇱'],
                     datasets: [{
                         label: 'Total Streets',
                         data: [36656, 35733, 35543, 33584, 31229, 31206, 29297, 26523, 24845, 23104, 23077, 22132, 21730, 21545, 21326, 20451, 20271, 20260, 19841, 19725, 19693, 19569, 19322, 19212, 19061, 19028, 18938, 18856, 18211, 18157, 18106, 18069, 17786, 17758, 17747, 17488, 16788, 16656, 16580, 16562, 16187, 15956, 15863, 15816, 15667, 15588, 15577, 15480, 15227, 15109],
@@ -529,6 +680,62 @@
                             },
                             grid: {
                                 display: false
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Time series chart
+            const timeCtx = document.getElementById('timeSeriesChart').getContext('2d');
+            new Chart(timeCtx, {
+                type: 'line',
+                data: {
+                    labels: ["2025-11-24 18:07:47", "2025-11-24 18:13:32", "2025-11-24 18:16:44"],
+                    datasets: [{"label": "Thomas Pillow \ud83c\uddfa\ud83c\uddf8", "data": [36656, 36656, 36656], "borderColor": "rgb(76, 29, 149)", "backgroundColor": "rgba(76, 29, 149, 0.1)", "tension": 0.1, "fill": false}, {"label": "James Salmon \ud83c\uddec\ud83c\udde7", "data": [35733, 35733, 35733], "borderColor": "rgb(220, 38, 38)", "backgroundColor": "rgba(220, 38, 38, 0.1)", "tension": 0.1, "fill": false}, {"label": "Denis Bafounta \ud83c\udde9\ud83c\uddea", "data": [35543, 35543, 35543], "borderColor": "rgb(22, 163, 74)", "backgroundColor": "rgba(22, 163, 74, 0.1)", "tension": 0.1, "fill": false}, {"label": "Nick Kollett", "data": [33584, 33584, 33584], "borderColor": "rgb(37, 99, 235)", "backgroundColor": "rgba(37, 99, 235, 0.1)", "tension": 0.1, "fill": false}, {"label": "Mike Sikkema \ud83c\uddfa\ud83c\uddf8", "data": [31229, 31229, 31229], "borderColor": "rgb(234, 88, 12)", "backgroundColor": "rgba(234, 88, 12, 0.1)", "tension": 0.1, "fill": false}, {"label": "Nameless Runner", "data": [31206, 31206, 31206], "borderColor": "rgb(168, 85, 247)", "backgroundColor": "rgba(168, 85, 247, 0.1)", "tension": 0.1, "fill": false}, {"label": "John Erwin \ud83c\uddfa\ud83c\uddf8", "data": [29297, 29297, 29297], "borderColor": "rgb(236, 72, 153)", "backgroundColor": "rgba(236, 72, 153, 0.1)", "tension": 0.1, "fill": false}, {"label": "Tim Van \ud83c\uddf3\ud83c\uddf1", "data": [26523, 26523, 26523], "borderColor": "rgb(14, 165, 233)", "backgroundColor": "rgba(14, 165, 233, 0.1)", "tension": 0.1, "fill": false}, {"label": "DJ \ud83c\uddfa\ud83c\uddf8", "data": [24845, 24845, 24845], "borderColor": "rgb(132, 204, 22)", "backgroundColor": "rgba(132, 204, 22, 0.1)", "tension": 0.1, "fill": false}, {"label": "Kevin Pels \ud83c\uddf5\ud83c\uddf9", "data": [23104, 23104, 23104], "borderColor": "rgb(251, 146, 60)", "backgroundColor": "rgba(251, 146, 60, 0.1)", "tension": 0.1, "fill": false}, {"label": "Aaron Fitzsenry \ud83c\uddfa\ud83c\uddf8", "data": [23077, 23077, 23077], "borderColor": "rgb(59, 130, 246)", "backgroundColor": "rgba(59, 130, 246, 0.1)", "tension": 0.1, "fill": false}, {"label": "Robert Buchanan \ud83c\uddf3\ud83c\uddff\ud83c\uddef\ud83c\uddf5", "data": [22132, 22132, 22132], "borderColor": "rgb(239, 68, 68)", "backgroundColor": "rgba(239, 68, 68, 0.1)", "tension": 0.1, "fill": false}, {"label": "Ed Sheldon -  StreeTRailn", "data": [21730, 21730, 21730], "borderColor": "rgb(16, 185, 129)", "backgroundColor": "rgba(16, 185, 129, 0.1)", "tension": 0.1, "fill": false}, {"label": "Jon Ziefle \ud83c\uddfa\ud83c\uddf8", "data": [21545, 21545, 21545], "borderColor": "rgb(245, 158, 11)", "backgroundColor": "rgba(245, 158, 11, 0.1)", "tension": 0.1, "fill": false}, {"label": "Peter Qumsiyeh \ud83c\uddfa\ud83c\uddf8\ud83c\uddf5\ud83c\uddf8", "data": [21326, 21326, 21326], "borderColor": "rgb(139, 92, 246)", "backgroundColor": "rgba(139, 92, 246, 0.1)", "tension": 0.1, "fill": false}, {"label": "Chris Irwin", "data": [20451, 20451, 20451], "borderColor": "rgb(244, 114, 182)", "backgroundColor": "rgba(244, 114, 182, 0.1)", "tension": 0.1, "fill": false}, {"label": "Todd (Roll Toad!) \ud83c\uddfa\ud83c\uddf8", "data": [20271, 20271, 20271], "borderColor": "rgb(6, 182, 212)", "backgroundColor": "rgba(6, 182, 212, 0.1)", "tension": 0.1, "fill": false}, {"label": "Krzysztof Kasprzyk \ud83c\udde7\ud83c\uddea", "data": [20260, 20260, 20260], "borderColor": "rgb(163, 230, 53)", "backgroundColor": "rgba(163, 230, 53, 0.1)", "tension": 0.1, "fill": false}, {"label": "Daniel Gonz\u00e1lez Alguacil", "data": [19841, 19841, 19841], "borderColor": "rgb(251, 191, 36)", "backgroundColor": "rgba(251, 191, 36, 0.1)", "tension": 0.1, "fill": false}, {"label": "Chris Thoms", "data": [19725, 19725, 19725], "borderColor": "rgb(99, 102, 241)", "backgroundColor": "rgba(99, 102, 241, 0.1)", "tension": 0.1, "fill": false}, {"label": "Monkey Man \ud83c\uddec\ud83c\udde7", "data": [19693, 19693, 19693], "borderColor": "rgb(248, 113, 113)", "backgroundColor": "rgba(248, 113, 113, 0.1)", "tension": 0.1, "fill": false}, {"label": "Daniel Ratcliffe \ud83c\uddec\ud83c\udde7", "data": [19569, 19569, 19569], "borderColor": "rgb(52, 211, 153)", "backgroundColor": "rgba(52, 211, 153, 0.1)", "tension": 0.1, "fill": false}, {"label": "Tommy Toronto", "data": [19322, 19322, 19322], "borderColor": "rgb(251, 146, 60)", "backgroundColor": "rgba(251, 146, 60, 0.1)", "tension": 0.1, "fill": false}, {"label": "Mookie The Cat \ud83c\uddfa\ud83c\uddf8", "data": [19212, 19212, 19212], "borderColor": "rgb(167, 139, 250)", "backgroundColor": "rgba(167, 139, 250, 0.1)", "tension": 0.1, "fill": false}, {"label": "Dave Parsons \ud83c\uddfa\ud83c\uddf8", "data": [19061, 19061, 19061], "borderColor": "rgb(251, 113, 133)", "backgroundColor": "rgba(251, 113, 133, 0.1)", "tension": 0.1, "fill": false}, {"label": "Chemie Banger", "data": [19028, 19028, 19028], "borderColor": "rgb(34, 211, 238)", "backgroundColor": "rgba(34, 211, 238, 0.1)", "tension": 0.1, "fill": false}, {"label": "Rancid Goat \ud83c\uddfa\ud83c\uddf8", "data": [18938, 18938, 18938], "borderColor": "rgb(190, 242, 100)", "backgroundColor": "rgba(190, 242, 100, 0.1)", "tension": 0.1, "fill": false}, {"label": "John Teal \ud83c\uddfa\ud83c\uddf8", "data": [18856, 18856, 18856], "borderColor": "rgb(252, 211, 77)", "backgroundColor": "rgba(252, 211, 77, 0.1)", "tension": 0.1, "fill": false}, {"label": "Conor Hoekstra \ud83c\udde8\ud83c\udde6", "data": [18211, 18211, 18211], "borderColor": "rgb(129, 140, 248)", "backgroundColor": "rgba(129, 140, 248, 0.1)", "tension": 0.1, "fill": false}, {"label": "Tim Grose \ud83c\uddf5\ud83c\uddf9", "data": [18157, 18157, 18157], "borderColor": "rgb(252, 165, 165)", "backgroundColor": "rgba(252, 165, 165, 0.1)", "tension": 0.1, "fill": false}, {"label": "Rob Piccolino \ud83c\uddfa\ud83c\uddf8", "data": [18106, 18106, 18106], "borderColor": "rgb(110, 231, 183)", "backgroundColor": "rgba(110, 231, 183, 0.1)", "tension": 0.1, "fill": false}, {"label": "Mark Macefield \ud83c\uddec\ud83c\udde7", "data": [18069, 18069, 18069], "borderColor": "rgb(253, 186, 116)", "backgroundColor": "rgba(253, 186, 116, 0.1)", "tension": 0.1, "fill": false}, {"label": "Catherine Salin Derrow \ud83c\uddfa\ud83c\uddf8", "data": [17786, 17786, 17786], "borderColor": "rgb(196, 181, 253)", "backgroundColor": "rgba(196, 181, 253, 0.1)", "tension": 0.1, "fill": false}, {"label": "Joel E Hibshman \ud83c\uddec\ud83c\udde7", "data": [17758, 17758, 17758], "borderColor": "rgb(253, 164, 175)", "backgroundColor": "rgba(253, 164, 175, 0.1)", "tension": 0.1, "fill": false}, {"label": "Guy Schweitzer \ud83c\udde6\ud83c\uddfa", "data": [17747, 17747, 17747], "borderColor": "rgb(103, 232, 249)", "backgroundColor": "rgba(103, 232, 249, 0.1)", "tension": 0.1, "fill": false}, {"label": "Jason Rossman \ud83c\uddfa\ud83c\uddf8", "data": [17488, 17488, 17488], "borderColor": "rgb(217, 249, 157)", "backgroundColor": "rgba(217, 249, 157, 0.1)", "tension": 0.1, "fill": false}, {"label": "Luma Zamarre\u00f1o \ud83c\uddea\ud83c\uddf8", "data": [16788, 16788, 16788], "borderColor": "rgb(254, 240, 138)", "backgroundColor": "rgba(254, 240, 138, 0.1)", "tension": 0.1, "fill": false}, {"label": "Jan Smits \ud83c\uddf3\ud83c\uddf1", "data": [16656, 16656, 16656], "borderColor": "rgb(165, 180, 252)", "backgroundColor": "rgba(165, 180, 252, 0.1)", "tension": 0.1, "fill": false}, {"label": "Sheepie \ud83c\udde6\ud83c\uddfa", "data": [16580, 16580, 16580], "borderColor": "rgb(254, 202, 202)", "backgroundColor": "rgba(254, 202, 202, 0.1)", "tension": 0.1, "fill": false}, {"label": "Clive Saffery", "data": [16562, 16562, 16562], "borderColor": "rgb(167, 243, 208)", "backgroundColor": "rgba(167, 243, 208, 0.1)", "tension": 0.1, "fill": false}, {"label": "Ryan Albano \ud83c\udde8\ud83c\udde6", "data": [16187, 16187, 16187], "borderColor": "rgb(254, 215, 170)", "backgroundColor": "rgba(254, 215, 170, 0.1)", "tension": 0.1, "fill": false}, {"label": "Sean P \ud83c\uddec\ud83c\udde7", "data": [15956, 15956, 15956], "borderColor": "rgb(221, 214, 254)", "backgroundColor": "rgba(221, 214, 254, 0.1)", "tension": 0.1, "fill": false}, {"label": "Richard Barber \ud83c\uddec\ud83c\udde7", "data": [15863, 15863, 15863], "borderColor": "rgb(254, 205, 211)", "backgroundColor": "rgba(254, 205, 211, 0.1)", "tension": 0.1, "fill": false}, {"label": "Timtwo Grose \ud83c\uddf5\ud83c\uddf9", "data": [15816, 15816, 15816], "borderColor": "rgb(165, 243, 252)", "backgroundColor": "rgba(165, 243, 252, 0.1)", "tension": 0.1, "fill": false}, {"label": "B Weds", "data": [15667, 15667, 15667], "borderColor": "rgb(233, 250, 203)", "backgroundColor": "rgba(233, 250, 203, 0.1)", "tension": 0.1, "fill": false}, {"label": "Peter Groner \ud83c\uddfa\ud83c\uddf8", "data": [15588, 15588, 15588], "borderColor": "rgb(254, 249, 195)", "backgroundColor": "rgba(254, 249, 195, 0.1)", "tension": 0.1, "fill": false}, {"label": "Jule Jacobs \ud83c\udde9\ud83c\uddea", "data": [15577, 15577, 15577], "borderColor": "rgb(199, 210, 254)", "backgroundColor": "rgba(199, 210, 254, 0.1)", "tension": 0.1, "fill": false}, {"label": "K Wed", "data": [15480, 15480, 15480], "borderColor": "rgb(254, 226, 226)", "backgroundColor": "rgba(254, 226, 226, 0.1)", "tension": 0.1, "fill": false}, {"label": "Ken Varian \ud83c\uddfa\ud83c\uddf8", "data": [15227, 15227, 15227], "borderColor": "rgb(209, 250, 229)", "backgroundColor": "rgba(209, 250, 229, 0.1)", "tension": 0.1, "fill": false}, {"label": "jeffrey severijn \ud83c\uddf3\ud83c\uddf1", "data": [15109, 15109, 15109], "borderColor": "rgb(254, 235, 200)", "backgroundColor": "rgba(254, 235, 200, 0.1)", "tension": 0.1, "fill": false}]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            bodyFont: {
+                                size: 14
+                            },
+                            titleFont: {
+                                size: 14
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: true
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12
+                                },
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        },
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                display: true
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12
+                                }
                             }
                         }
                     }
