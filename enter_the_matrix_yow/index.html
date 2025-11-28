@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter the Matrix - YOW 2025</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: #000;
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .presentation-container {
+            text-align: center;
+            z-index: 10;
+            padding: 40px;
+        }
+
+        .main-title {
+            font-size: 7em;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            font-size: 3em;
+            color: #00cc00;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .conference {
+            font-size: 2.5em;
+            color: #009900;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .main-title {
+                font-size: 5.5em;
+            }
+            .subtitle {
+                font-size: 2.4em;
+            }
+            .conference {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 3.5em;
+                letter-spacing: 2px;
+            }
+            .subtitle {
+                font-size: 2em;
+                letter-spacing: 1px;
+            }
+            .conference {
+                font-size: 1.6em;
+            }
+            .presentation-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 2.8em;
+                letter-spacing: 1px;
+            }
+            .subtitle {
+                font-size: 1.6em;
+            }
+            .conference {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="presentation-container">
+        <h1 class="main-title">ENTER THE MATRIX</h1>
+        <div class="subtitle">Conor Hoekstra</div>
+        <div class="conference">YOW 2025</div>
+    </div>
+
+    <script>
+        // Matrix Digital Rain Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+        const matrixArray = matrix.split("");
+
+        const fontSize = 16;
+        let columns = Math.floor(canvas.width / fontSize);
+
+        let drops = [];
+        function initDrops() {
+            drops = [];
+            columns = Math.floor(canvas.width / fontSize);
+            for (let x = 0; x < columns; x++) {
+                drops[x] = Math.floor(Math.random() * canvas.height / fontSize);
+            }
+        }
+
+        initDrops();
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00FF00';
+            ctx.font = fontSize + 'px "MS Gothic", "Courier New", monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 50);
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initDrops();
+        });
+
+        // Add some keyboard interaction for presentation mode
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'f' || e.key === 'F') {
+                // Toggle fullscreen on 'f' key
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
