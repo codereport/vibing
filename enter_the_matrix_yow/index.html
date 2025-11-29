@@ -63,6 +63,17 @@
             opacity: 0.9;
         }
 
+        .qr-code {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 150px;
+            height: 150px;
+            z-index: 20;
+            border: 2px solid #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
 
         /* Responsive design */
         @media (max-width: 1200px) {
@@ -93,6 +104,12 @@
                 padding: 30px 20px;
                 margin: 20px;
             }
+            .qr-code {
+                width: 100px;
+                height: 100px;
+                top: 20px;
+                right: 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -106,12 +123,20 @@
             .conference {
                 font-size: 1.3em;
             }
+            .qr-code {
+                width: 80px;
+                height: 80px;
+                top: 15px;
+                right: 15px;
+            }
         }
     </style>
 </head>
 
 <body>
     <canvas id="matrix-canvas"></canvas>
+
+    <img src="qrcode.png" alt="QR Code" class="qr-code">
 
     <div class="presentation-container">
         <h1 class="main-title">ENTER THE MATRIX</h1>
