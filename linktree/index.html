@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conor Hoekstra | Linktree</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="theme-toggle">
+        <button id="theme-switch" aria-label="Toggle Dark Mode">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <div class="container">
+        <header class="profile">
+            <!-- <img src="profile.jpg" alt="Conor Hoekstra" class="profile-pic"> -->
+            <h1>Conor Hoekstra</h1>
+            <p class="title">Research Scientist at NVIDIA</p>
+            <div class="bio-text">
+                <p>
+                    Research Scientist at NVIDIA working on array programming models and languages. Creator of the
+                    <a href="https://nvlabs.github.io/parrot/" target="_blank">Parrot</a> library (a high-level,
+                    array-based library with implicit GPU fusion).
+                    Extremely passionate about programming languages, algorithms, and beautiful code.
+                </p>
+                <p>
+                    Founder and organizer of the <a href="https://www.meetup.com/Programming-Languages-Virtual-Meetup/"
+                        target="_blank">Programming Languages Virtual Meetup</a>.
+                    Host of four podcasts and an avid conference speaker.
+                </p>
+            </div>
+        </header>
+
+        <div class="social-icons">
+            <a href="https://twitter.com/code_report" target="_blank" aria-label="Twitter"><i
+                    class="fa-brands fa-x-twitter"></i></a>
+            <a href="https://github.com/codereport" target="_blank" aria-label="GitHub"><i
+                    class="fa-brands fa-github"></i></a>
+            <a href="https://www.youtube.com/@code_report" target="_blank" aria-label="YouTube"><i
+                    class="fa-brands fa-youtube"></i></a>
+            <a href="https://www.linkedin.com/in/conorhoekstra/" target="_blank" aria-label="LinkedIn"><i
+                    class="fa-brands fa-linkedin"></i></a>
+            <a href="https://mastodon.social/@code_report" target="_blank" aria-label="Mastodon"><i
+                    class="fa-brands fa-mastodon"></i></a>
+            <a href="https://bsky.app/profile/codereport.bsky.social" target="_blank" aria-label="Bluesky"><i
+                    class="fa-brands fa-bluesky"></i></a>
+        </div>
+
+        <div class="links">
+            <h2>Podcasts</h2>
+            <a href="https://adspthepodcast.com/" class="link-card adsp" target="_blank">
+                <div class="link-icon"><i class="fas fa-microphone-alt"></i></div>
+                <div class="link-text">
+                    <h3>ADSP: The Podcast</h3>
+                    <p>Algorithms + Data Structures = Programs</p>
+                </div>
+            </a>
+            <a href="https://www.arraycast.com/" class="link-card arraycast" target="_blank">
+                <div class="link-icon"><i class="fas fa-code"></i></div>
+                <div class="link-text">
+                    <h3>ArrayCast</h3>
+                    <p>A podcast about array languages</p>
+                </div>
+            </a>
+            <a href="https://tacittalk.com/" class="link-card tacit" target="_blank">
+                <div class="link-icon"><i class="fas fa-comments"></i></div>
+                <div class="link-text">
+                    <h3>Tacit Talk</h3>
+                    <p>Array languages and tacit programming</p>
+                </div>
+            </a>
+            <a href="https://r4podcast.com/" class="link-card run" target="_blank">
+                <div class="link-icon"><i class="fas fa-running"></i></div>
+                <div class="link-text">
+                    <h3>The R4 Podcast</h3>
+                    <p>A running podcast</p>
+                </div>
+            </a>
+
+            <h2>Resources</h2>
+            <a href="https://github.com/codereport/Content" class="link-card resources" target="_blank">
+                <div class="link-icon"><i class="fas fa-book"></i></div>
+                <div class="link-text">
+                    <h3>Conference Talks & Content</h3>
+                    <p>Slides, links, and materials</p>
+                </div>
+            </a>
+        </div>
+
+        <footer>
+            <p>&copy; <span id="year"></span> Conor Hoekstra</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

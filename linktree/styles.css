@@ -1,0 +1,299 @@
+:root {
+    /* Light Theme */
+    --bg-color: #f4f4f9;
+    --container-bg: #ffffff;
+    --text-primary: #2d3748;
+    --text-secondary: #718096;
+    --accent-color: #3182ce;
+    --card-bg: #ffffff;
+    --card-hover: #f7fafc;
+    --border-color: #e2e8f0;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --icon-color: #4a5568;
+    --icon-hover: #2b6cb0;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme */
+    --bg-color: #1a202c;
+    --container-bg: #2d3748;
+    --text-primary: #f7fafc;
+    --text-secondary: #a0aec0;
+    --accent-color: #63b3ed;
+    --card-bg: #2d3748;
+    --card-hover: #4a5568;
+    --border-color: #4a5568;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --icon-color: #cbd5e0;
+    --icon-hover: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.container {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+#theme-switch {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+
+#theme-switch:hover {
+    transform: scale(1.1);
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+/* Profile Section */
+.profile {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.profile .title {
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.profile .bio-text {
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 1rem auto 0;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.profile .bio-text p {
+    margin-bottom: 0.8rem;
+}
+
+.profile .bio-text a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.profile .bio-text a:hover {
+    text-decoration: underline;
+}
+
+/* Social Icons */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+}
+
+.social-icons a {
+    font-size: 2rem;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.social-icons a:hover {
+    transform: translateY(-3px);
+    filter: brightness(1.2);
+}
+
+/* Brand Colors */
+.social-icons a[aria-label="Twitter"] {
+    color: #000000;
+}
+[data-theme="dark"] .social-icons a[aria-label="Twitter"] {
+    color: #ffffff;
+}
+
+.social-icons a[aria-label="GitHub"] {
+    color: #333;
+}
+[data-theme="dark"] .social-icons a[aria-label="GitHub"] {
+    color: #f0f6fc;
+}
+
+.social-icons a[aria-label="YouTube"] {
+    color: #FF0000;
+}
+
+.social-icons a[aria-label="LinkedIn"] {
+    color: #0077b5;
+}
+
+.social-icons a[aria-label="Mastodon"] {
+    color: #6364FF;
+}
+
+.social-icons a[aria-label="Bluesky"] {
+    color: #0085ff;
+}
+
+/* Links Section */
+.links h2 {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.link-card {
+    display: flex;
+    align-items: center;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    /* border-left removed to support full coloring */
+}
+
+.link-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    background-color: var(--card-hover);
+}
+
+.link-icon {
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    margin-right: 1rem;
+    width: 40px;
+    text-align: center;
+    transition: color 0.2s;
+}
+
+.link-card:hover .link-icon {
+    color: var(--accent-color);
+}
+
+.link-text h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    transition: color 0.2s;
+}
+
+.link-text p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Podcast Specific Colors (Full Card) */
+
+/* Common style for colored cards */
+.link-card.adsp,
+.link-card.arraycast,
+.link-card.tacit,
+.link-card.run {
+    color: #ffffff;
+    border: none;
+}
+
+/* Ensure text and icons inside colored cards are white */
+.link-card.adsp .link-icon,
+.link-card.adsp .link-text p,
+.link-card.adsp .link-text h3,
+.link-card.arraycast .link-icon,
+.link-card.arraycast .link-text p,
+.link-card.arraycast .link-text h3,
+.link-card.tacit .link-icon,
+.link-card.tacit .link-text p,
+.link-card.tacit .link-text h3,
+.link-card.run .link-icon,
+.link-card.run .link-text p,
+.link-card.run .link-text h3 {
+    color: #ffffff;
+}
+
+/* Hover state for colored cards - slightly brighten */
+.link-card.adsp:hover,
+.link-card.arraycast:hover,
+.link-card.tacit:hover,
+.link-card.run:hover {
+    filter: brightness(1.1);
+}
+
+/* ADSP: Red */
+.link-card.adsp {
+    background-color: #BE123C;
+}
+
+/* ArrayCast: Purple */
+.link-card.arraycast {
+    background-color: #7E22CE;
+}
+
+/* Tacit Talk: Blue */
+.link-card.tacit {
+    background-color: #1E40AF;
+}
+
+/* R4 Podcast: Green */
+.link-card.run {
+    background-color: #15803D;
+}
+
+/* Footer */
+footer {
+    margin-top: 3rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .profile h1 {
+        font-size: 2rem;
+    }
+    .container {
+        padding: 0 1rem;
+    }
+}
