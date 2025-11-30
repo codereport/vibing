@@ -18,3 +18,4 @@ No build process required. This is a static HTML/CSS/JS project.
 - **Icons**: Uses FontAwesome 6.6.0 via CDN.
 - **Theme**: Colors are defined in `styles.css` under `:root` and `[data-theme="dark"]`.
 
+
