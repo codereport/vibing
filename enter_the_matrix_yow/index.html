@@ -144,6 +144,7 @@
         <div class="conference">YOW 2025</div>
     </div>
 
+    <script src="nav.js"></script>
     <script>
         // Matrix Digital Rain Effect
         const canvas = document.getElementById('matrix-canvas');
@@ -197,20 +198,6 @@
         window.addEventListener('resize', () => {
             resizeCanvas();
             initDrops();
-        });
-
-        // Add some keyboard interaction for presentation mode
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'f' || e.key === 'F') {
-                // Toggle fullscreen on 'f' key
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen();
-                } else {
-                    document.exitFullscreen();
-                }
-            } else if (e.key === 'ArrowRight') {
-                window.location.href = 'topics.html';
-            }
         });
     </script>
 </body>
