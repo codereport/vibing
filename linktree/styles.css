@@ -46,8 +46,10 @@ body {
     align-items: center;
     padding: 2rem 1rem;
     overflow-x: hidden;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -179,6 +181,7 @@ body::-webkit-scrollbar {
 .social-icons a[aria-label="Twitter"] {
     color: #000000;
 }
+
 [data-theme="dark"] .social-icons a[aria-label="Twitter"] {
     color: #ffffff;
 }
@@ -186,6 +189,7 @@ body::-webkit-scrollbar {
 .social-icons a[aria-label="GitHub"] {
     color: #333;
 }
+
 [data-theme="dark"] .social-icons a[aria-label="GitHub"] {
     color: #f0f6fc;
 }
@@ -360,7 +364,8 @@ body::-webkit-scrollbar {
     box-shadow: var(--shadow);
     transition: transform 0.2s, box-shadow 0.2s;
     background-color: #000;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    padding-bottom: 56.25%;
+    /* 16:9 Aspect Ratio */
     height: 0;
 }
 
@@ -392,7 +397,7 @@ body::-webkit-scrollbar {
     color: #fff;
     font-size: 2rem;
     opacity: 0.8;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     pointer-events: none;
     transition: opacity 0.2s, transform 0.2s;
 }
@@ -416,7 +421,7 @@ footer {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .container {
         max-width: 600px;
         padding: 0 1rem;
@@ -430,5 +435,12 @@ footer {
 @media (max-width: 600px) {
     .profile h1 {
         font-size: 2rem;
+    }
+
+    .floating-logo {
+        width: 40px;
+        height: 40px;
+        top: 1rem;
+        right: 1rem;
     }
 }

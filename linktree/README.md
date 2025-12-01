@@ -19,3 +19,4 @@ No build process required. This is a static HTML/CSS/JS project.
 - **Theme**: Colors are defined in `styles.css` under `:root` and `[data-theme="dark"]`.
 
 
+
