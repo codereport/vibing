@@ -8,7 +8,11 @@ const pages = [
     'ai_coding.html',
     'ai_tips.html',
     'blink.html',
-    'metric_6.html'
+    'metric_6.html',
+    'blink.html',
+    'topics.html',
+    'array_programming.html',
+    'bqn_pad.html',
 ];
 
 document.addEventListener('keydown', (e) => {

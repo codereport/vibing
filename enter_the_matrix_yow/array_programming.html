@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Programming - Enter the Matrix</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: #000;
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .page-title {
+            font-size: 4em;
+            color: #00ff00;
+            margin-bottom: 60px;
+            text-align: center;
+            z-index: 10;
+            /* text-shadow: 0 0 10px #00ff00; */
+            letter-spacing: 2px;
+        }
+
+        .logos-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            z-index: 10;
+            width: 90%;
+            max-width: 1200px;
+            flex-wrap: wrap;
+        }
+
+        .logo-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .logo-img {
+            height: 250px;
+            width: auto;
+            margin-bottom: 20px;
+        }
+
+        .logo-name {
+            font-size: 2em;
+            color: #00cc00;
+            letter-spacing: 2px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .logos-container {
+                gap: 40px;
+            }
+
+            .logo-img {
+                height: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 3em;
+            }
+
+            .logos-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+
+            .logo-img {
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2em;
+            }
+
+            .logo-img {
+                height: 120px;
+            }
+
+            .logo-name {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <h1 class="page-title">Array Programming</h1>
+
+    <div class="logos-container">
+        <div class="logo-item">
+            <img src="apl_logo.png" alt="APL" class="logo-img">
+            <div class="logo-name">APL</div>
+        </div>
+        <div class="logo-item">
+            <img src="j_logo.png" alt="J" class="logo-img">
+            <div class="logo-name">J</div>
+        </div>
+        <div class="logo-item">
+            <img src="bqn_logo.svg" alt="BQN" class="logo-img">
+            <div class="logo-name">BQN</div>
+        </div>
+        <div class="logo-item">
+            <img src="uiua.png" alt="Uiua" class="logo-img">
+            <div class="logo-name">Uiua</div>
+        </div>
+    </div>
+
+    <script src="nav.js"></script>
+    <script src="matrix_rain.js"></script>
+</body>
+
+</html>
