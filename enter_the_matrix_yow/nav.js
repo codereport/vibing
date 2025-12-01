@@ -7,6 +7,8 @@ const pages = [
     'topics.html',
     'ai_coding.html',
     'ai_tips.html',
+    'ai_analysis.html',
+    'ai_tips.html',
     'blink.html',
     'metric_6.html',
     'blink.html',
