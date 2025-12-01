@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enter the Matrix - YOW 2025</title>
+    <title>Topics - Enter the Matrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
 
@@ -37,97 +38,80 @@
             opacity: 0.4;
         }
 
-        .presentation-container {
+        .topics-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
             text-align: center;
             z-index: 10;
-            padding: 40px;
+            width: 90%;
+            max-width: 1400px;
+            padding: 20px;
         }
 
-        .main-title {
-            font-size: 7em;
+        .topic {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .topic:hover {
+            transform: translateY(-10px);
+        }
+
+        .icon {
+            font-size: 6em;
             margin-bottom: 30px;
-            letter-spacing: 3px;
+            color: #00ff00;
         }
 
-        .subtitle {
-            font-size: 3em;
-            color: #00cc00;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-
-        .conference {
+        .topic-text {
             font-size: 2.5em;
-            color: #009900;
-            letter-spacing: 1px;
-            opacity: 0.9;
+            color: #00cc00;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #00cc00;
         }
-
-        .qr-code {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            width: 150px;
-            height: 150px;
-            z-index: 20;
-            border: 2px solid #00ff00;
-            box-shadow: 0 0 10px #00ff00;
-        }
-
 
         /* Responsive design */
-        @media (max-width: 1200px) {
-            .main-title {
-                font-size: 5.5em;
+        @media (max-width: 1024px) {
+            .topics-container {
+                gap: 40px;
             }
-            .subtitle {
-                font-size: 2.4em;
+
+            .icon {
+                font-size: 4.5em;
             }
-            .conference {
+
+            .topic-text {
                 font-size: 2em;
             }
         }
 
         @media (max-width: 768px) {
-            .main-title {
-                font-size: 3.5em;
-                letter-spacing: 2px;
+            .topics-container {
+                flex-direction: column;
+                gap: 50px;
             }
-            .subtitle {
+
+            .icon {
+                font-size: 4em;
+                margin-bottom: 15px;
+            }
+
+            .topic-text {
                 font-size: 2em;
-                letter-spacing: 1px;
-            }
-            .conference {
-                font-size: 1.6em;
-            }
-            .presentation-container {
-                padding: 30px 20px;
-                margin: 20px;
-            }
-            .qr-code {
-                width: 100px;
-                height: 100px;
-                top: 20px;
-                right: 20px;
             }
         }
 
         @media (max-width: 480px) {
-            .main-title {
-                font-size: 2.8em;
-                letter-spacing: 1px;
+            .icon {
+                font-size: 3em;
             }
-            .subtitle {
-                font-size: 1.6em;
-            }
-            .conference {
-                font-size: 1.3em;
-            }
-            .qr-code {
-                width: 80px;
-                height: 80px;
-                top: 15px;
-                right: 15px;
+
+            .topic-text {
+                font-size: 1.5em;
             }
         }
     </style>
@@ -136,12 +120,19 @@
 <body>
     <canvas id="matrix-canvas"></canvas>
 
-    <img src="qrcode.png" alt="QR Code" class="qr-code">
-
-    <div class="presentation-container">
-        <h1 class="main-title">ENTER THE MATRIX</h1>
-        <div class="subtitle">Conor Hoekstra</div>
-        <div class="conference">YOW 2025</div>
+    <div class="topics-container">
+        <div class="topic">
+            <i class="fas fa-robot icon"></i>
+            <div class="topic-text">AI Assisted</div>
+        </div>
+        <div class="topic">
+            <i class="fas fa-th icon"></i>
+            <div class="topic-text">Array</div>
+        </div>
+        <div class="topic">
+            <i class="fas fa-microchip icon"></i>
+            <div class="topic-text">GPU</div>
+        </div>
     </div>
 
     <script>
@@ -208,8 +199,8 @@
                 } else {
                     document.exitFullscreen();
                 }
-            } else if (e.key === 'ArrowRight') {
-                window.location.href = 'topics.html';
+            } else if (e.key === 'ArrowLeft') {
+                window.location.href = 'index.html';
             }
         });
     </script>
