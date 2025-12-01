@@ -5,7 +5,10 @@ const pages = [
     'linktree.html',
     'index.html',
     'topics.html',
-    'ai_coding.html'
+    'ai_coding.html',
+    'ai_tips.html',
+    'ai_analysis.html',
+    'ai_tips.html'
 ];
 
 document.addEventListener('keydown', (e) => {

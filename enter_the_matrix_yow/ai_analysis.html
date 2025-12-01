@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Types of AI Assisted Coding - Enter the Matrix</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>AI Analysis - Enter the Matrix</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
 
@@ -39,103 +38,46 @@
             opacity: 0.4;
         }
 
-        .page-title {
-            font-size: 3em;
-            color: #00ff00;
-            margin-bottom: 50px;
-            /* text-shadow: 0 0 10px #00ff00; */
-            text-align: center;
+        .image-container {
+            width: 90%;
+            height: 85vh;
             z-index: 10;
-            padding: 0 20px;
-        }
-
-        .topics-container {
+            /* border: 2px solid #00ff00; */
+            /* box-shadow: 0 0 20px rgba(0, 255, 0, 0.3); */
+            /* background: rgba(0, 0, 0, 0.8); */
             display: flex;
             justify-content: center;
-            gap: 80px;
-            text-align: center;
-            z-index: 10;
-            width: 90%;
-            max-width: 1400px;
-            padding: 20px;
-        }
-
-        .topic {
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            flex: 1;
-            transition: transform 0.3s ease;
+            overflow: hidden;
         }
 
-        .topic:hover {
-            transform: translateY(-10px);
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
         }
 
-        .icon {
-            font-size: 6em;
-            margin-bottom: 30px;
-            /* Ensure emojis render in color if desired, or monochrome if Matrix style is strictly enforced. 
-               Emojis usually bypass color unless text-style is forced. 
-               To keep Matrix feel, maybe filter? But user asked for specific emojis. 
-               I'll let them be their natural colors or text color depending on browser implementation. */
-            line-height: 1;
+        .loading-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00ff00;
+            font-size: 2em;
+            z-index: -1;
+            animation: blink 1s infinite;
         }
 
-        .topic-text {
-            font-size: 2.5em;
-            color: #00cc00;
-            letter-spacing: 2px;
-            text-shadow: 0 0 5px #00cc00;
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         /* Responsive design */
-        @media (max-width: 1024px) {
-            .page-title {
-                font-size: 2.5em;
-            }
-
-            .topics-container {
-                gap: 40px;
-            }
-
-            .icon {
-                font-size: 4.5em;
-            }
-
-            .topic-text {
-                font-size: 2em;
-            }
-        }
-
         @media (max-width: 768px) {
-            .topics-container {
-                flex-direction: column;
-                gap: 50px;
-            }
-
-            .icon {
-                font-size: 4em;
-                margin-bottom: 15px;
-            }
-
-            .topic-text {
-                font-size: 2em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-title {
-                font-size: 2em;
-                margin-bottom: 30px;
-            }
-
-            .icon {
-                font-size: 3em;
-            }
-
-            .topic-text {
-                font-size: 1.5em;
+            .image-container {
+                width: 95%;
+                height: 90vh;
             }
         }
     </style>
@@ -144,21 +86,8 @@
 <body>
     <canvas id="matrix-canvas"></canvas>
 
-    <h1 class="page-title">Types of AI Assisted Coding</h1>
-
-    <div class="topics-container">
-        <div class="topic">
-            <div class="icon">😎</div>
-            <div class="topic-text">Vibe Coding</div>
-        </div>
-        <div class="topic">
-            <div class="icon">🙂</div>
-            <div class="topic-text">Guide Coding</div>
-        </div>
-        <div class="topic">
-            <div class="icon">🤬</div>
-            <div class="topic-text">Rage Coding</div>
-        </div>
+    <div class="image-container">
+        <img src="Frontier Language Model Intelligence, Over Time (30 Nov '25) - Frontier Models.png" alt="Frontier Language Model Intelligence Over Time">
     </div>
 
     <script src="nav.js"></script>
@@ -220,3 +149,4 @@
 </body>
 
 </html>
+
