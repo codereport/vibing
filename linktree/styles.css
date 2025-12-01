@@ -57,7 +57,7 @@ body::-webkit-scrollbar {
 
 .container {
     width: 100%;
-    max-width: 680px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -319,6 +319,89 @@ body::-webkit-scrollbar {
     background-color: #006b23;
 }
 
+/* Content Grid Layout */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    align-items: start;
+    width: 100%;
+}
+
+/* Ensure links section fills its column */
+.links {
+    width: 100%;
+}
+
+/* Video Column Styles */
+.video-column h2 {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.video-card {
+    position: relative;
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #000;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+}
+
+.video-card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+}
+
+.video-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.video-card:hover img {
+    opacity: 1;
+}
+
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 2rem;
+    opacity: 0.8;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.video-card:hover .play-overlay {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
 /* Footer */
 footer {
     margin-top: 1.5rem;
@@ -328,11 +411,24 @@ footer {
 }
 
 /* Responsive */
+@media (max-width: 768px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .container {
+        max-width: 600px;
+        padding: 0 1rem;
+    }
+
+    .video-column h2 {
+        margin-top: 1rem;
+    }
+}
+
 @media (max-width: 600px) {
     .profile h1 {
         font-size: 2rem;
-    }
-    .container {
-        padding: 0 1rem;
     }
 }
