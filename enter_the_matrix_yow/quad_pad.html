@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Quad Pad - Enter the Matrix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .grid-container {
+            width: 95%;
+            height: 95%;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .iframe-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border: 1px solid #003300;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            /* Some sites might need scaling if they aren't responsive enough for small quadrants */
+        }
+        
+        /* Specific scaling for some sites if needed, but starting with 100% width/height */
+    </style>
+</head>
+
+<body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="grid-container">
+        <div class="iframe-wrapper">
+            <iframe src="https://bqnpad.mechanize.systems/" title="BQN Pad"></iframe>
+        </div>
+        <div class="iframe-wrapper">
+            <iframe src="https://tryapl.org/" title="TryAPL"></iframe>
+        </div>
+        <div class="iframe-wrapper">
+            <iframe src="https://www.uiua.org/pad" title="Uiua Pad"></iframe>
+        </div>
+        <div class="iframe-wrapper">
+            <iframe src="https://jsoftware.github.io/j-playground/bin/html2/" title="J Playground"></iframe>
+        </div>
+    </div>
+
+    <script src="nav.js"></script>
+    <script src="matrix_rain.js"></script>
+</body>
+
+</html>
+

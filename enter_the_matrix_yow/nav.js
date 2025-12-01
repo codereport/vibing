@@ -17,6 +17,10 @@ const pages = [
     'topics.html',
     'array_programming.html',
     'bqn_pad.html',
+    'tryapl.html',
+    'uiua_pad.html',
+    'j_playground.html',
+    'quad_pad.html',
 ];
 
 document.addEventListener('keydown', (e) => {
