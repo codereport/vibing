@@ -4,7 +4,8 @@ const pages = [
     'qr.html',
     'linktree.html',
     'index.html',
-    'topics.html'
+    'topics.html',
+    'ai_coding.html'
 ];
 
 document.addEventListener('keydown', (e) => {

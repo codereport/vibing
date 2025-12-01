@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Types of AI Assisted Coding - Enter the Matrix</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: #000;
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .page-title {
+            font-size: 3em;
+            color: #00ff00;
+            margin-bottom: 50px;
+            text-shadow: 0 0 10px #00ff00;
+            text-align: center;
+            z-index: 10;
+            padding: 0 20px;
+        }
+
+        .topics-container {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            text-align: center;
+            z-index: 10;
+            width: 90%;
+            max-width: 1400px;
+            padding: 20px;
+        }
+
+        .topic {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .topic:hover {
+            transform: translateY(-10px);
+        }
+
+        .icon {
+            font-size: 6em;
+            margin-bottom: 30px;
+            /* Ensure emojis render in color if desired, or monochrome if Matrix style is strictly enforced. 
+               Emojis usually bypass color unless text-style is forced. 
+               To keep Matrix feel, maybe filter? But user asked for specific emojis. 
+               I'll let them be their natural colors or text color depending on browser implementation. */
+            line-height: 1;
+        }
+
+        .topic-text {
+            font-size: 2.5em;
+            color: #00cc00;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #00cc00;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .page-title {
+                font-size: 2.5em;
+            }
+
+            .topics-container {
+                gap: 40px;
+            }
+
+            .icon {
+                font-size: 4.5em;
+            }
+
+            .topic-text {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .topics-container {
+                flex-direction: column;
+                gap: 50px;
+            }
+
+            .icon {
+                font-size: 4em;
+                margin-bottom: 15px;
+            }
+
+            .topic-text {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2em;
+                margin-bottom: 30px;
+            }
+
+            .icon {
+                font-size: 3em;
+            }
+
+            .topic-text {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <h1 class="page-title">Types of AI Assisted Coding</h1>
+
+    <div class="topics-container">
+        <div class="topic">
+            <div class="icon">😎</div>
+            <div class="topic-text">Vibe Coding</div>
+        </div>
+        <div class="topic">
+            <div class="icon">🙂</div>
+            <div class="topic-text">Guide Coding</div>
+        </div>
+        <div class="topic">
+            <div class="icon">🤬</div>
+            <div class="topic-text">Rage Coding</div>
+        </div>
+    </div>
+
+    <script src="nav.js"></script>
+    <script>
+        // Matrix Digital Rain Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+        const matrixArray = matrix.split("");
+
+        const fontSize = 16;
+        let columns = Math.floor(canvas.width / fontSize);
+
+        let drops = [];
+        function initDrops() {
+            drops = [];
+            columns = Math.floor(canvas.width / fontSize);
+            for (let x = 0; x < columns; x++) {
+                drops[x] = Math.floor(Math.random() * canvas.height / fontSize);
+            }
+        }
+
+        initDrops();
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00FF00';
+            ctx.font = fontSize + 'px "MS Gothic", "Courier New", monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 50);
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initDrops();
+        });
+    </script>
+</body>
+
+</html>
