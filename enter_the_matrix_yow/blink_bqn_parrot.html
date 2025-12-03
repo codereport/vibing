@@ -45,6 +45,7 @@
             display: flex;
             gap: 8rem;
             align-items: flex-start;
+            margin-top: -50px;
         }
         .logo-container {
             display: flex;
@@ -53,8 +54,8 @@
             gap: 1rem;
         }
         .logo {
-            width: 300px;
-            height: 300px;
+            width: 400px;
+            height: 400px;
             object-fit: contain;
             border-radius: 10px;
             padding: 10px;
@@ -70,28 +71,20 @@
             margin-bottom: -20px;
         }
         .arrow {
-            font-size: 100px;
-            color: #ffffff;
-            transform: rotate(45deg);
+            display: none;
         }
         .arrow.left {
-            transform: rotate(135deg); /* Pointing down-leftish */
+            display: none;
         }
         .arrow.right {
-            transform: rotate(-135deg); /* Pointing down-rightish? No, -135 is up-left. Let's try simpler rotations */
+            display: none;
         }
         /* 
            Standard arrow is usually -> (right) or ^ (up) depending on font. 
            If we use unicode ↓ or ↙ ↘ it is easier.
            Let's use SVG arrows for better control or just unicode.
         */
-        .arrow-icon {
-            font-size: 150px;
-            color: #ffffff;
-            font-family: 'Courier New', Courier, monospace;
-            line-height: 1;
-        }
-
+        
         .label {
             font-size: 1.5rem;
             margin-top: 0.5rem;
@@ -109,22 +102,7 @@
             </div>
         </div>
 
-        <!-- Arrows -->
-        <div style="display: flex; gap: 200px; margin-top: -50px; margin-bottom: -20px; align-items: center; height: 150px;">
-            <!-- Left Arrow: Mirrored SE Arrow -->
-            <div style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; transform: scaleX(-1);">
-                <div style="transform: rotate(45deg);">
-                    <div class="arrow-icon">→</div>
-                </div>
-            </div>
-            
-            <!-- Right Arrow: SE Arrow -->
-            <div style="width: 150px; height: 150px; display: flex; align-items: center; justify-content: center;">
-                <div style="transform: rotate(45deg);">
-                    <div class="arrow-icon">→</div>
-                </div>
-            </div>
-        </div>
+        <!-- Arrows removed -->
 
         <!-- Bottom: BQN and Parrot -->
         <div class="bottom-section">
@@ -132,7 +110,7 @@
                 <img src="assets/bqn_logo.svg" alt="BQN Logo" class="logo">
             </div>
             <div class="logo-container">
-                <img src="https://nvlabs.github.io/parrot/_static/logo.png" alt="Parrot Logo" class="logo">
+                <img src="https://nvlabs.github.io/parrot/_static/logo.png" alt="Parrot Logo" class="logo" style="width: 460px; height: 460px;">
             </div>
         </div>
     </div>

@@ -15,6 +15,7 @@ const pages = [
     'metric_6.html',
     'blink.html',
     'blink_bqn_parrot.html',
+    'cuda_libraries.html',
     'rust_js.html',
     'topics.html',
     'array_programming.html',

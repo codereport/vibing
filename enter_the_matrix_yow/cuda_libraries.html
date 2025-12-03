@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUDA C++ Libraries</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #ffffff;
+            font-family: 'Share Tech Mono', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4rem;
+            z-index: 1;
+            width: 90%;
+            max-width: 1200px;
+        }
+        .page-title {
+            font-size: 3.5em;
+            color: #00ff00;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .logos-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+        .logo-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logo-placeholder {
+            width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #00ff00;
+            border-radius: 20px;
+            background: rgba(0, 20, 0, 0.3);
+            font-size: 4em;
+            color: #00ff00;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .logo-placeholder:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(0, 255, 0, 0.4);
+        }
+        .logo-image {
+            width: 300px;
+            height: 300px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        .logo-image:hover {
+            transform: scale(1.05);
+        }
+        .label {
+            font-size: 2rem;
+            color: #00cc00;
+            text-shadow: 0 0 5px #00ff00;
+        }
+        
+        @media (max-width: 1000px) {
+            .logos-container {
+                gap: 2rem;
+            }
+            .logo-placeholder, .logo-image {
+                width: 200px;
+                height: 200px;
+                font-size: 2.5em;
+            }
+            .page-title {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="container">
+        <h1 class="page-title">CUDA C++ Libraries</h1>
+        
+        <div class="logos-container">
+            <!-- CUB -->
+            <div class="logo-item">
+                <img src="https://repository-images.githubusercontent.com/8225159/68a74e00-557d-11eb-8f63-2cdf2ea55052" alt="CUB Logo" class="logo-image">
+                <div class="label" style="text-shadow: none;">CUB</div>
+            </div>
+
+            <!-- Thrust -->
+            <div class="logo-item">
+                <img src="https://raw.githubusercontent.com/codereport/hoogle-translate/main/public/media/logos/thrust_logo.png" alt="Thrust Logo" class="logo-image">
+                <div class="label" style="text-shadow: none;">Thrust</div>
+            </div>
+
+            <!-- Parrot -->
+            <div class="logo-item">
+                <img src="https://nvlabs.github.io/parrot/_static/logo.png" alt="Parrot Logo" class="logo-image">
+                <div class="label" style="text-shadow: none;">Parrot</div>
+            </div>
+        </div>
+    </div>
+    <script src="nav.js"></script>
+    <script src="matrix_rain.js"></script>
+</body>
+</html>
+
