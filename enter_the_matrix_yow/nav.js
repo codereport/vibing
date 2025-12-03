@@ -14,6 +14,8 @@ const pages = [
     'blink.html',
     'metric_6.html',
     'blink.html',
+    'blink_bqn_parrot.html',
+    'rust_js.html',
     'topics.html',
     'array_programming.html',
     'bqn_pad.html',
@@ -21,6 +23,7 @@ const pages = [
     'uiua_pad.html',
     'j_playground.html',
     'quad_pad.html',
+    'array_comparison.html',
 ];
 
 document.addEventListener('keydown', (e) => {
