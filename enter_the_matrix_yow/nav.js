@@ -6,6 +6,7 @@ const pages = [
     'index.html',
     'topics.html',
     'ai_coding.html',
+    'red_blue_pill.html',
     'ai_tips.html',
     'ai_analysis.html',
     'ai_tips.html',
