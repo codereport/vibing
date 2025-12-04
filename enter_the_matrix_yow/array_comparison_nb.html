@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Language Comparison - Enter the Matrix</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: #000;
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            z-index: 10;
+            /* background: rgba(0, 20, 0, 0.7); */
+            /* border: 1px solid #00ff00; */
+            padding: 20px;
+            /* box-shadow: 0 0 20px rgba(0, 255, 0, 0.1); */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        th,
+        td {
+            padding: 24px;
+            border: 1px solid #004400;
+            font-size: 1.8em;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        th {
+            background: rgba(0, 50, 0, 0.5);
+            vertical-align: bottom;
+            padding-bottom: 30px;
+        }
+
+        .logo-img {
+            height: 100px;
+            width: auto;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .property-name {
+            font-weight: bold;
+            color: #00cc00;
+            text-align: left;
+            padding-left: 30px;
+            width: 250px;
+        }
+
+        .value {
+            color: #fff;
+            /* text-shadow: 0 0 5px #00ff00; */
+        }
+
+        tr:hover td {
+            background: rgba(0, 255, 0, 0.1);
+        }
+
+        .blink-logo {
+            font-size: 1.5em;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+
+            th,
+            td {
+                padding: 10px;
+                font-size: 1em;
+            }
+
+            .logo-img {
+                height: 50px;
+            }
+
+            .property-name {
+                width: auto;
+                padding-left: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        <img src="assets/apl_logo.png" alt="APL" class="logo-img">
+                    </th>
+                    <th>
+                        <img src="assets/bqn_logo.svg" alt="BQN" class="logo-img">
+                    </th>
+                    <th>
+                        <img src="assets/j_logo.png" alt="J" class="logo-img">
+                    </th>
+                    <th>
+                        <img src="assets/uiua.png" alt="Uiua" class="logo-img">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="property-name">Symbols</td>
+                    <td class="value">✅</td>
+                    <td class="value">✅</td>
+                    <td class="value">⛔</td>
+                    <td class="value">✅</td>
+                </tr>
+                <tr>
+                    <td class="property-name">Input Method</td>
+                    <td class="value">`</td>
+                    <td class="value">/</td>
+                    <td class="value">N/A</td>
+                    <td class="value">keyword</td>
+                </tr>
+                <tr>
+                    <td class="property-name">Ambivalence</td>
+                    <td class="value">✅</td>
+                    <td class="value">✅</td>
+                    <td class="value">✅</td>
+                    <td class="value">⛔</td>
+                </tr>
+                <tr>
+                    <td class="property-name">Index Origin</td>
+                    <td class="value">⎕IO</td>
+                    <td class="value">0</td>
+                    <td class="value">0</td>
+                    <td class="value">0</td>
+                </tr>
+                <tr>
+                    <td class="property-name">2-trains</td>
+                    <td class="value">B / B<sub>1</sub></td>
+                    <td class="value">B / B<sub>1</sub></td>
+                    <td class="value">S / D</td>
+                    <td class="value">-</td>
+                </tr>
+                <tr>
+                    <td class="property-name">3-trains</td>
+                    <td class="value">Φ / Φ<sub>1</sub></td>
+                    <td class="value">Φ / Φ<sub>1</sub></td>
+                    <td class="value">Φ / Φ<sub>1</sub></td>
+                    <td class="value">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="nav.js"></script>
+    <script src="matrix_rain.js"></script>
+</body>
+
+</html>
+
