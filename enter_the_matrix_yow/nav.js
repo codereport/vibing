@@ -16,7 +16,9 @@ const pages = [
     'ai_tips.html',
     'rust_js.html',
     'blink.html',
-    'metric_6.html',
+    'metric_6_1.html',
+    'metric_6_2.html',
+    'metric_6_3.html',
     'blink.html',
     'topics.html',
     'array.html',
@@ -31,6 +33,10 @@ const pages = [
     'blink_bqn_parrot.html',
     'cuda_libraries.html',
     'parrot_sushi.html',
+    'summary.html',
+    'by_the_way.html',
+    'made_with_ai.html',
+    'thank_you.html',
     // 'quad_pad.html',
 ];
 
