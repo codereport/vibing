@@ -59,7 +59,7 @@ document.addEventListener('keydown', (e) => {
         return;
     }
 
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'PageUp' || e.key === 'PageDown') {
         const pathname = window.location.pathname;
         const currentPage = pathname.split('/').pop() || 'index.html';
 
@@ -88,7 +88,7 @@ document.addEventListener('keydown', (e) => {
         }
 
         let nextIndex;
-        if (e.key === 'ArrowLeft') {
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
             nextIndex = currentIndex - 1;
         } else {
             nextIndex = currentIndex + 1;
