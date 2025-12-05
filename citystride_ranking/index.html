@@ -125,7 +125,7 @@
     <div class="main-container">
         <h1>CityStrides Top 50</h1>
         <div style="text-align: center;">
-            <button class="toggle-button" onclick="openModal()">📈 View Historical Progress (All 50)</button>
+            <button class="toggle-button" onclick="openModal()">📈 View Rank History (All 50)</button>
         </div>
         <p class="updated">Last updated: 2025-12-04 19:25:07</p>
         
@@ -208,7 +208,7 @@
     <div id="chartModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
-            <h2 style="text-align: center; color: #4c1d95; margin-bottom: 20px;">Street Count Progress Over Time</h2>
+            <h2 style="text-align: center; color: #4c1d95; margin-bottom: 20px;">Rank Progress Over Time</h2>
             <div class="time-series-container">
                 <canvas id="timeSeriesChart"></canvas>
             </div>
@@ -352,17 +352,22 @@
                 'rgb(254, 235, 200)', 'rgb(238, 242, 255)'
             ];
             
-            const latestRunners = allData[allData.length - 1].data.runners;
-            const datasets = latestRunners.map((runner, idx) => ({
-                label: runner.name,
-                data: allData.map(({ data }) => {
-                    const found = data.runners.find(r => r.profile_url === runner.profile_url);
-                    return found ? found.streets : null;
-                }),
-                borderColor: colors[idx % colors.length],
-                tension: 0.1,
-                fill: false
-            }));
+            const latestRunners = allData[allData.length - 1].data.runners.slice(0, 30);
+            const datasets = latestRunners.map((runner, idx) => {
+                const isConor = runner.name.includes('Conor Hoekstra');
+                return {
+                    label: runner.name,
+                    data: allData.map(({ data }) => {
+                        const rankIndex = data.runners.findIndex(r => r.profile_url === runner.profile_url);
+                        return rankIndex >= 0 ? rankIndex + 1 : null;
+                    }),
+                    borderColor: isConor ? 'rgb(220, 38, 38)' : colors[idx % colors.length],
+                    borderWidth: isConor ? 4 : 1.5,
+                    tension: 0.1,
+                    fill: false,
+                    order: isConor ? 0 : 1
+                };
+            });
             
             const ctx = document.getElementById('timeSeriesChart').getContext('2d');
             timeSeriesChart = new Chart(ctx, {
@@ -374,7 +379,12 @@
                     plugins: { legend: { display: false } },
                     scales: {
                         x: { ticks: { maxRotation: 45, minRotation: 45 } },
-                        y: { beginAtZero: false }
+                        y: { 
+                            reverse: true,
+                            min: 1,
+                            max: 30,
+                            ticks: { stepSize: 5 }
+                        }
                     }
                 }
             });
