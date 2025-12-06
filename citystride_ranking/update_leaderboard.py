@@ -248,194 +248,279 @@ def load_historical_data():
     
     return historical_data
 
+def get_history_files_for_js():
+    if not os.path.exists(HISTORY_DIR):
+        return "[]"
+    
+    files = []
+    for f in sorted(os.listdir(HISTORY_DIR)):
+        if f.startswith("leaderboard_") and f.endswith(".json"):
+            # Parse timestamp from filename: leaderboard_YYYYMMDD_HHMMSS.json
+            try:
+                timestamp_str = f.replace("leaderboard_", "").replace(".json", "")
+                dt = datetime.strptime(timestamp_str, "%Y%m%d_%H%M%S")
+                formatted_date = dt.strftime("%Y-%m-%d %H:%M")
+                files.append({
+                    "file": f"{HISTORY_DIR}/{f}",
+                    "date": formatted_date
+                })
+            except ValueError:
+                continue
+                
+    return json.dumps(files, indent=4)
+
 def generate_html(runners, last_updated):
-    # Prepare data for chart (All 50)
-    chart_labels = [r['name'].replace("'", "\\'") for r in runners]
-    chart_data = [r['streets'] for r in runners]
-    
-    # Load historical data for time series
-    historical_data = load_historical_data()
-    
-    # Prepare time series data (track all 50 runners over time)
-    time_series_data = {}
-    time_labels = []
-    
-    if historical_data:
-        # Get all 50 current runners
-        all_runner_names = [r['name'] for r in runners[:50]]
-        
-        # Initialize data structure
-        for name in all_runner_names:
-            time_series_data[name] = []
-        
-        # Collect data points
-        for snapshot in historical_data:
-            timestamp = snapshot.get('last_updated', '')
-            time_labels.append(timestamp)
-            
-            # Create a map of runner data in this snapshot
-            snapshot_map = {r['name']: r['streets'] for r in snapshot.get('runners', [])}
-            
-            # Add data point for each runner
-            for name in all_runner_names:
-                time_series_data[name].append(snapshot_map.get(name, None))
-    
-    # Convert to Chart.js format
-    time_series_datasets = []
-    # Generate 50 distinct colors
-    colors = [
-        'rgb(76, 29, 149)', 'rgb(220, 38, 38)', 'rgb(22, 163, 74)', 
-        'rgb(37, 99, 235)', 'rgb(234, 88, 12)', 'rgb(168, 85, 247)',
-        'rgb(236, 72, 153)', 'rgb(14, 165, 233)', 'rgb(132, 204, 22)',
-        'rgb(251, 146, 60)', 'rgb(59, 130, 246)', 'rgb(239, 68, 68)',
-        'rgb(16, 185, 129)', 'rgb(245, 158, 11)', 'rgb(139, 92, 246)',
-        'rgb(244, 114, 182)', 'rgb(6, 182, 212)', 'rgb(163, 230, 53)',
-        'rgb(251, 191, 36)', 'rgb(99, 102, 241)', 'rgb(248, 113, 113)',
-        'rgb(52, 211, 153)', 'rgb(251, 146, 60)', 'rgb(167, 139, 250)',
-        'rgb(251, 113, 133)', 'rgb(34, 211, 238)', 'rgb(190, 242, 100)',
-        'rgb(252, 211, 77)', 'rgb(129, 140, 248)', 'rgb(252, 165, 165)',
-        'rgb(110, 231, 183)', 'rgb(253, 186, 116)', 'rgb(196, 181, 253)',
-        'rgb(253, 164, 175)', 'rgb(103, 232, 249)', 'rgb(217, 249, 157)',
-        'rgb(254, 240, 138)', 'rgb(165, 180, 252)', 'rgb(254, 202, 202)',
-        'rgb(167, 243, 208)', 'rgb(254, 215, 170)', 'rgb(221, 214, 254)',
-        'rgb(254, 205, 211)', 'rgb(165, 243, 252)', 'rgb(233, 250, 203)',
-        'rgb(254, 249, 195)', 'rgb(199, 210, 254)', 'rgb(254, 226, 226)',
-        'rgb(209, 250, 229)', 'rgb(254, 235, 200)', 'rgb(237, 233, 254)'
-    ]
-    
-    for i, name in enumerate(list(time_series_data.keys())[:50]):
-        time_series_datasets.append({
-            'label': name,
-            'data': time_series_data[name],
-            'borderColor': colors[i % len(colors)],
-            'backgroundColor': colors[i % len(colors)].replace('rgb', 'rgba').replace(')', ', 0.1)'),
-            'tension': 0.1,
-            'fill': False
-        })
+    # Generate history files JSON for the frontend
+    history_files_json = get_history_files_for_js()
     
     html = f"""
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CityStrides Top 50 Leaderboard</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <style>
-            body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f4f5; color: #18181b; margin: 0; padding: 30px; font-size: 24px; }}
-            .main-container {{ max_width: 95%; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }}
-            h1 {{ text-align: center; color: #4c1d95; margin-bottom: 30px; }}
-            .updated {{ text-align: center; color: #71717a; font-size: 0.8em; margin-bottom: 40px; }}
-            
-            .content-wrapper {{ display: flex; gap: 30px; }}
-            .chart-section {{ flex: 1; min-width: 0; }}
-            .table-section {{ flex: 1; min-width: 0; }}
-            
-            /* 60px per row * 50 rows = 3000px */
-            .chart-container {{ position: relative; height: 3000px; width: 100%; }}
-            
-            table {{ width: 100%; border-collapse: collapse; font-size: 1em; height: 100%; }}
-            th, td {{ padding: 12px 18px; text-align: left; border-bottom: 1px solid #e4e4e7; height: 60px; box-sizing: border-box; }}
-            th {{ background: #f8fafc; font-weight: 600; position: sticky; top: 0; z-index: 10; }}
-            
-            .rank-up {{ color: #16a34a; }}
-            .rank-down {{ color: #dc2626; }}
-            .streets-up {{ color: #16a34a; font-size: 0.9em; }}
-            .gap {{ color: #71717a; font-size: 0.9em; }}
-            .profile-link {{ color: #4c1d95; text-decoration: none; font-weight: 500; }}
-            .profile-link:hover {{ text-decoration: underline; }}
-            
-            .toggle-button {{ 
-                display: inline-block; 
-                margin: 0 0 30px 0; 
-                padding: 12px 24px; 
-                background: #4c1d95; 
-                color: white; 
-                border: none; 
-                border-radius: 8px; 
-                font-size: 0.9em; 
-                cursor: pointer; 
-                transition: background 0.3s; 
-            }}
-            .toggle-button:hover {{ background: #5b21b6; }}
-            
-            /* Modal styles */
-            .modal {{ 
-                display: none; 
-                position: fixed; 
-                z-index: 1000; 
-                left: 0; 
-                top: 0; 
-                width: 100%; 
-                height: 100%; 
-                background-color: rgba(0, 0, 0, 0.5); 
-                backdrop-filter: blur(4px);
-            }}
-            .modal.visible {{ display: flex; align-items: center; justify-content: center; }}
-            
-            .modal-content {{ 
-                background: white; 
-                padding: 40px; 
-                border-radius: 16px; 
-                width: 90%; 
-                max-width: 1400px; 
-                max-height: 90vh; 
-                overflow-y: auto; 
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); 
-                position: relative;
-            }}
-            
-            .modal-close {{ 
-                position: absolute; 
-                top: 20px; 
-                right: 20px; 
-                font-size: 32px; 
-                font-weight: bold; 
-                color: #71717a; 
-                cursor: pointer; 
-                background: none; 
-                border: none; 
-                padding: 0; 
-                width: 40px; 
-                height: 40px; 
-                display: flex; 
-                align-items: center; 
-                justify-content: center; 
-                border-radius: 50%; 
-                transition: all 0.2s;
-            }}
-            .modal-close:hover {{ background: #f4f4f5; color: #18181b; }}
-            
-            .time-series-container {{ position: relative; height: 600px; width: 100%; margin-top: 20px; }}
-            
-            @media (max-width: 1400px) {{
-                .content-wrapper {{ flex-direction: column; }}
-                .chart-container {{ height: 1200px; }}
-            }}
-        </style>
-    </head>
-    <body>
-        <div class="main-container">
-            <h1>CityStrides Top 50</h1>
-            <div style="text-align: center;">
-                <button class="toggle-button" onclick="openModal()">📈 View Historical Progress (All 50)</button>
-            </div>
-            <p class="updated">Last updated: {last_updated}</p>
-            
-            <div class="content-wrapper">
-                <div class="table-section">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Runner</th>
-                                <th>Streets</th>
-                                <th>Gap</th>
-                                <th>Streets Δ</th>
-                                <th>Rank Δ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityStrides Top 50 Leaderboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f4f4f5;
+            color: #18181b;
+            margin: 0;
+            padding: 30px;
+            font-size: 24px;
+        }}
+
+        .main-container {{
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }}
+
+        h1 {{
+            text-align: center;
+            color: #4c1d95;
+            margin-bottom: 30px;
+        }}
+
+        .updated {{
+            text-align: center;
+            color: #71717a;
+            font-size: 0.8em;
+            margin-bottom: 20px;
+        }}
+
+        .delta-controls {{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }}
+
+        .delta-controls label {{
+            font-size: 0.85em;
+            font-weight: 500;
+            color: #4c1d95;
+        }}
+
+        .delta-controls select {{
+            padding: 10px 15px;
+            font-size: 0.85em;
+            border: 2px solid #e4e4e7;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            min-width: 180px;
+        }}
+
+        .delta-controls select:focus {{
+            outline: none;
+            border-color: #4c1d95;
+        }}
+
+        .delta-arrow {{
+            font-size: 1.5em;
+            color: #4c1d95;
+        }}
+
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1em;
+        }}
+
+        th,
+        td {{
+            padding: 12px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e4e4e7;
+        }}
+
+        th {{
+            background: #f8fafc;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }}
+
+        th.custom-col {{
+            background: #ede9fe;
+        }}
+
+        .rank-up {{
+            color: #16a34a;
+        }}
+
+        .rank-down {{
+            color: #dc2626;
+        }}
+
+        .streets-up {{
+            color: #16a34a;
+            font-size: 0.9em;
+        }}
+
+        .streets-down {{
+            color: #dc2626;
+            font-size: 0.9em;
+        }}
+
+        .gap {{
+            color: #71717a;
+            font-size: 0.9em;
+        }}
+
+        .profile-link {{
+            color: #4c1d95;
+            text-decoration: none;
+            font-weight: 500;
+        }}
+
+        .profile-link:hover {{
+            text-decoration: underline;
+        }}
+
+        .toggle-button {{
+            display: inline-block;
+            margin: 0 0 30px 0;
+            padding: 12px 24px;
+            background: #4c1d95;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background 0.3s;
+        }}
+
+        .toggle-button:hover {{
+            background: #5b21b6;
+        }}
+
+        .modal {{
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }}
+
+        .modal.visible {{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }}
+
+        .modal-content {{
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 1400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }}
+
+        .modal-close {{
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #71717a;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }}
+
+        .modal-close:hover {{
+            background: #f4f4f5;
+            color: #18181b;
+        }}
+
+        .time-series-container {{
+            position: relative;
+            height: 600px;
+            width: 100%;
+            margin-top: 20px;
+        }}
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <h1>CityStrides Top 50</h1>
+        <div style="text-align: center;">
+            <button class="toggle-button" onclick="openModal()">📈 View Rank History (Top 30)</button>
+        </div>
+        <p class="updated">Last updated: {last_updated}</p>
+
+        <div class="delta-controls">
+            <label for="fromDate">Custom compare from:</label>
+            <select id="fromDate" onchange="updateCustomDeltas()"></select>
+            <span class="delta-arrow">→</span>
+            <label for="toDate">to:</label>
+            <select id="toDate" onchange="updateCustomDeltas()"></select>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Runner</th>
+                    <th>Streets</th>
+                    <th>Gap</th>
+                    <th>Streets Δ</th>
+                    <th>Rank Δ</th>
+                    <th class="custom-col">Custom Streets Δ</th>
+                    <th class="custom-col">Custom Rank Δ</th>
+                </tr>
+            </thead>
+            <tbody>
     """
     
     for i, runner in enumerate(runners):
@@ -448,16 +533,19 @@ def generate_html(runners, last_updated):
         if i > 0:
             gap = runners[i-1]['streets'] - runner['streets']
         
-        rank_display = f"{rank}"
-        if rank_delta > 0:
-            rank_display += f" <span class='rank-up'>(▲{rank_delta})</span>"
-        elif rank_delta < 0:
-            rank_display += f" <span class='rank-down'>(▼{abs(rank_delta)})</span>"
-            
-        streets_delta_display = f"+{streets_delta}" if streets_delta > 0 else "-"
+        # Gap display
         gap_display = f"-{gap:,}" if i > 0 else "-"
         
-        # Format rank delta display
+        # Streets delta display
+        streets_delta_display = "-"
+        streets_delta_class = "streets-up" # Default green, change if negative
+        if streets_delta > 0:
+            streets_delta_display = f"+{streets_delta}"
+        elif streets_delta < 0:
+            streets_delta_display = f"{streets_delta}"
+            streets_delta_class = "streets-down"
+            
+        # Rank delta display
         rank_delta_display = "-"
         rank_delta_class = ""
         if rank_delta > 0:
@@ -468,190 +556,208 @@ def generate_html(runners, last_updated):
             rank_delta_class = "rank-down"
         
         html += f"""
-                            <tr>
-                                <td>{rank}</td>
-                                <td><a href="https://citystrides.com{runner['profile_url']}" class="profile-link" target="_blank">{runner['name']}</a></td>
-                                <td>{runner['streets']:,}</td>
-                                <td class="gap">{gap_display}</td>
-                                <td class="streets-up">{streets_delta_display}</td>
-                                <td class="{rank_delta_class}">{rank_delta_display}</td>
-                            </tr>
+                <tr data-url="{runner['profile_url']}">
+                    <td>{rank}</td>
+                    <td><a href="https://citystrides.com{runner['profile_url']}" class="profile-link" target="_blank">{runner['name']}</a></td>
+                    <td>{runner['streets']:,}</td>
+                    <td class="gap">{gap_display}</td>
+                    <td class="{streets_delta_class}">{streets_delta_display}</td>
+                    <td class="{rank_delta_class}">{rank_delta_display}</td>
+                    <td class="custom-streets">-</td>
+                    <td class="custom-rank">-</td>
+                </tr>
         """
         
     html += f"""
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="chart-section">
-                    <div class="chart-container">
-                        <canvas id="rankingChart"></canvas>
-                    </div>
-                </div>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h2 style="text-align: center; color: #4c1d95; margin-bottom: 20px;">Rank Progress Over Time</h2>
+            <div class="time-series-container">
+                <canvas id="timeSeriesChart"></canvas>
             </div>
         </div>
-        
-        <!-- Modal for time series chart -->
-        <div id="chartModal" class="modal">
-            <div class="modal-content">
-                <button class="modal-close" onclick="closeModal()">×</button>
-                <h2 style="text-align: center; color: #4c1d95; margin-bottom: 20px;">Street Count Progress Over Time</h2>
-                <div class="time-series-container">
-                    <canvas id="timeSeriesChart"></canvas>
-                </div>
-            </div>
-        </div>
-        
-        <script>
-            function openModal() {{
-                document.getElementById('chartModal').classList.add('visible');
+    </div>
+
+    <script>
+        const historyFiles = {history_files_json};
+
+        let historyCache = {{}};
+
+        async function init() {{
+            const fromSelect = document.getElementById('fromDate');
+            const toSelect = document.getElementById('toDate');
+
+            historyFiles.forEach((item, index) => {{
+                fromSelect.add(new Option(item.date, item.file));
+                toSelect.add(new Option(item.date, item.file));
+            }});
+
+            // Default to comparing oldest vs newest
+            if (historyFiles.length > 0) {{
+                fromSelect.selectedIndex = 0;
+                toSelect.selectedIndex = historyFiles.length - 1;
             }}
-            
-            function closeModal() {{
-                document.getElementById('chartModal').classList.remove('visible');
+
+            await updateCustomDeltas();
+            console.log('Custom deltas initialized');
+        }}
+
+        async function loadHistoryData(file) {{
+            if (historyCache[file]) return historyCache[file];
+            try {{
+                const response = await fetch(file);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const data = await response.json();
+                historyCache[file] = data;
+                return data;
+            }} catch (e) {{
+                console.error('Failed to load', file, '- Are you using a web server? fetch() does not work with file:// URLs.', e);
+                return null;
             }}
+        }}
+
+        async function updateCustomDeltas() {{
+            const fromFile = document.getElementById('fromDate').value;
+            const toFile = document.getElementById('toDate').value;
             
-            // Close modal when clicking outside the content
-            window.onclick = function(event) {{
-                const modal = document.getElementById('chartModal');
-                if (event.target === modal) {{
-                    closeModal();
-                }}
-            }}
-            
-            // Close modal with Escape key
-            document.addEventListener('keydown', function(event) {{
-                if (event.key === 'Escape') {{
-                    closeModal();
-                }}
-            }})
-            
-            const ctx = document.getElementById('rankingChart').getContext('2d');
-            new Chart(ctx, {{
-                type: 'bar',
-                data: {{
-                    labels: {chart_labels},
-                    datasets: [{{
-                        label: 'Total Streets',
-                        data: {chart_data},
-                        backgroundColor: 'rgba(76, 29, 149, 0.6)',
-                        borderColor: 'rgba(76, 29, 149, 1)',
-                        borderWidth: 1,
-                        barPercentage: 0.8,
-                        categoryPercentage: 0.9
-                    }}]
-                }},
-                options: {{
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {{
-                        legend: {{
-                            display: false
-                        }},
-                        title: {{
-                            display: true,
-                            text: 'Street Count Distribution',
-                            font: {{
-                                size: 24
-                            }}
-                        }},
-                        tooltip: {{
-                            enabled: true,
-                            bodyFont: {{
-                                size: 18
-                            }},
-                            titleFont: {{
-                                size: 18
-                            }}
-                        }}
-                    }},
-                    scales: {{
-                        x: {{
-                            beginAtZero: true,
-                            grid: {{
-                                display: true
-                            }},
-                            ticks: {{
-                                font: {{
-                                    size: 16
-                                }}
-                            }}
-                        }},
-                        y: {{
-                            ticks: {{
-                                display: true,
-                                font: {{
-                                    size: 16
-                                }}
-                            }},
-                            grid: {{
-                                display: false
-                            }}
-                        }}
-                    }}
+            if (!fromFile || !toFile) return;
+
+            const fromData = await loadHistoryData(fromFile);
+            const toData = await loadHistoryData(toFile);
+
+            if (!fromData || !toData) return;
+
+            const fromByUrl = {{}};
+            fromData.runners.forEach((runner, idx) => {{
+                fromByUrl[runner.profile_url] = {{ ...runner, rank: idx + 1 }};
+            }});
+
+            const toByUrl = {{}};
+            toData.runners.forEach((runner, idx) => {{
+                toByUrl[runner.profile_url] = {{ ...runner, rank: idx + 1 }};
+            }});
+
+            document.querySelectorAll('tbody tr').forEach(row => {{
+                const url = row.dataset.url;
+                const fromRunner = fromByUrl[url];
+                const toRunner = toByUrl[url];
+
+                const streetsCell = row.querySelector('.custom-streets');
+                const rankCell = row.querySelector('.custom-rank');
+
+                if (fromRunner && toRunner) {{
+                    const streetsDelta = toRunner.streets - fromRunner.streets;
+                    const rankDelta = fromRunner.rank - toRunner.rank;
+
+                    streetsCell.textContent = streetsDelta === 0 ? '-' : (streetsDelta > 0 ? '+' + streetsDelta.toLocaleString() : streetsDelta.toLocaleString());
+                    streetsCell.className = 'custom-streets ' + (streetsDelta > 0 ? 'streets-up' : streetsDelta < 0 ? 'streets-down' : '');
+
+                    rankCell.textContent = rankDelta === 0 ? '-' : (rankDelta > 0 ? '▲' + rankDelta : '▼' + Math.abs(rankDelta));
+                    rankCell.className = 'custom-rank ' + (rankDelta > 0 ? 'rank-up' : rankDelta < 0 ? 'rank-down' : '');
+                }} else {{
+                    streetsCell.textContent = '-';
+                    streetsCell.className = 'custom-streets';
+                    rankCell.textContent = '-';
+                    rankCell.className = 'custom-rank';
                 }}
             }});
-            
-            // Time series chart
-            const timeCtx = document.getElementById('timeSeriesChart').getContext('2d');
-            new Chart(timeCtx, {{
+        }}
+
+        function openModal() {{
+            document.getElementById('chartModal').classList.add('visible');
+            initTimeSeriesChart();
+        }}
+
+        function closeModal() {{
+            document.getElementById('chartModal').classList.remove('visible');
+        }}
+
+        window.onclick = function (event) {{
+            if (event.target === document.getElementById('chartModal')) closeModal();
+        }}
+
+        document.addEventListener('keydown', function (event) {{
+            if (event.key === 'Escape') closeModal();
+        }});
+
+        let timeSeriesChart = null;
+        async function initTimeSeriesChart() {{
+            if (timeSeriesChart) return;
+
+            const allData = await Promise.all(
+                historyFiles.map(async (item) => {{
+                    const data = await loadHistoryData(item.file);
+                    return {{ date: item.date, data }};
+                }})
+            );
+
+            if (allData.some(d => !d.data)) return;
+
+            const colors = [
+                'rgb(76, 29, 149)', 'rgb(220, 38, 38)', 'rgb(22, 163, 74)', 'rgb(37, 99, 235)',
+                'rgb(234, 88, 12)', 'rgb(168, 85, 247)', 'rgb(236, 72, 153)', 'rgb(14, 165, 233)',
+                'rgb(132, 204, 22)', 'rgb(251, 146, 60)', 'rgb(59, 130, 246)', 'rgb(239, 68, 68)',
+                'rgb(16, 185, 129)', 'rgb(245, 158, 11)', 'rgb(139, 92, 246)', 'rgb(244, 114, 182)',
+                'rgb(6, 182, 212)', 'rgb(163, 230, 53)', 'rgb(251, 191, 36)', 'rgb(99, 102, 241)',
+                'rgb(248, 113, 113)', 'rgb(52, 211, 153)', 'rgb(167, 139, 250)', 'rgb(251, 113, 133)',
+                'rgb(34, 211, 238)', 'rgb(190, 242, 100)', 'rgb(252, 211, 77)', 'rgb(129, 140, 248)',
+                'rgb(252, 165, 165)', 'rgb(110, 231, 183)', 'rgb(253, 186, 116)', 'rgb(196, 181, 253)',
+                'rgb(253, 164, 175)', 'rgb(103, 232, 249)', 'rgb(217, 249, 157)', 'rgb(254, 240, 138)',
+                'rgb(165, 180, 252)', 'rgb(254, 202, 202)', 'rgb(167, 243, 208)', 'rgb(254, 215, 170)',
+                'rgb(221, 214, 254)', 'rgb(254, 205, 211)', 'rgb(165, 243, 252)', 'rgb(233, 250, 203)',
+                'rgb(254, 249, 195)', 'rgb(199, 210, 254)', 'rgb(254, 226, 226)', 'rgb(209, 250, 229)',
+                'rgb(254, 235, 200)', 'rgb(238, 242, 255)'
+            ];
+
+            // Use the last data point's runners to determine the top list
+            const latestRunners = allData[allData.length - 1].data.runners.slice(0, 30);
+            const datasets = latestRunners.map((runner, idx) => {{
+                const isConor = runner.name.includes('Conor Hoekstra');
+                return {{
+                    label: runner.name,
+                    data: allData.map(({{ data }}) => {{
+                        const rankIndex = data.runners.findIndex(r => r.profile_url === runner.profile_url);
+                        return rankIndex >= 0 ? rankIndex + 1 : null;
+                    }}),
+                    borderColor: isConor ? 'rgb(220, 38, 38)' : colors[idx % colors.length],
+                    borderWidth: isConor ? 4 : 1.5,
+                    tension: 0.1,
+                    fill: false,
+                    order: isConor ? 0 : 1
+                }};
+            }});
+
+            const ctx = document.getElementById('timeSeriesChart').getContext('2d');
+            timeSeriesChart = new Chart(ctx, {{
                 type: 'line',
-                data: {{
-                    labels: {json.dumps(time_labels)},
-                    datasets: {json.dumps(time_series_datasets)}
-                }},
+                data: {{ labels: allData.map(d => d.date), datasets }},
                 options: {{
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {{
-                        legend: {{
-                            display: false
-                        }},
-                        title: {{
-                            display: false
-                        }},
-                        tooltip: {{
-                            enabled: true,
-                            bodyFont: {{
-                                size: 14
-                            }},
-                            titleFont: {{
-                                size: 14
-                            }}
-                        }}
-                    }},
+                    plugins: {{ legend: {{ display: false }} }},
                     scales: {{
-                        x: {{
-                            grid: {{
-                                display: true
-                            }},
-                            ticks: {{
-                                font: {{
-                                    size: 12
-                                }},
-                                maxRotation: 45,
-                                minRotation: 45
-                            }}
-                        }},
+                        x: {{ ticks: {{ maxRotation: 45, minRotation: 45 }} }},
                         y: {{
-                            beginAtZero: false,
-                            grid: {{
-                                display: true
-                            }},
-                            ticks: {{
-                                font: {{
-                                    size: 12
-                                }}
-                            }}
+                            reverse: true,
+                            min: 1,
+                            max: 30,
+                            ticks: {{ stepSize: 5 }}
                         }}
                     }}
                 }}
             }});
-        </script>
-    </body>
-    </html>
-    """
+        }}
+
+        init();
+    </script>
+</body>
+</html>
+"""
     
     with open(HTML_FILE, "w") as f:
         f.write(html)
