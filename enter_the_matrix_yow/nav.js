@@ -3,6 +3,8 @@ const pages = [
     'index.html',
     'qr.html',
     'linktree.html',
+    'qr_pres.html',
+    'linktree.html',
     'index.html',
     'topics.html',
     'ai.html',
