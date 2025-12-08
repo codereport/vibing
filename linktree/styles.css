@@ -170,6 +170,8 @@ body::-webkit-scrollbar {
 .social-icons a {
     font-size: 3rem;
     transition: color 0.2s, transform 0.2s;
+    position: relative;
+    /* Added for stat-bubble positioning */
 }
 
 .social-icons a:hover {
@@ -208,6 +210,60 @@ body::-webkit-scrollbar {
 
 .social-icons a[aria-label="Bluesky"] {
     color: #0085ff;
+}
+
+/* Stat Bubbles */
+.stat-bubble {
+    position: absolute;
+    bottom: 120%;
+    right: 50%;
+    /* Position to the left */
+    transform: scale(0.8);
+    transform-origin: bottom right;
+    background-color: var(--container-bg);
+    color: var(--text-primary);
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1.5rem;
+    /* Bigger font */
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border-color);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+    text-align: center;
+    /* Centered text */
+    line-height: 1.3;
+    font-family: monospace;
+}
+
+/* Specific adjustment for YouTube bubble to move it left */
+.social-icons .stat-bubble {
+    right: 70%;
+}
+
+.show-stats .stat-bubble {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Line pointing to logo */
+.stat-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    width: 2px;
+    height: 30px;
+    background-color: var(--text-primary);
+    transform: rotate(-45deg);
+    transform-origin: top left;
+    margin-left: -15px;
+    /* Adjust based on position */
+    margin-top: -2px;
 }
 
 /* Links Section */
@@ -334,7 +390,7 @@ body::-webkit-scrollbar {
 .podcast-card {
     display: block;
     border-radius: 12px;
-    overflow: hidden;
+    /* overflow: hidden; */
     box-shadow: var(--shadow);
     transition: transform 0.2s, box-shadow 0.2s;
     background-color: var(--card-bg);
@@ -347,6 +403,7 @@ body::-webkit-scrollbar {
     height: 100%;
     object-fit: cover;
     display: block;
+    border-radius: 12px;
 }
 
 .podcast-card:hover {
