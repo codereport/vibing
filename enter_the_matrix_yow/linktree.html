@@ -24,7 +24,17 @@
     </style>
 </head>
 <body>
-    <iframe src="https://codereport.github.io/vibing/linktree/index.html" title="Linktree"></iframe>
+    <iframe src="../linktree/index.html" title="Linktree"></iframe>
     <script src="nav.js"></script>
+    <script>
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 's' || e.key === 'S') {
+                const iframe = document.querySelector('iframe');
+                if (iframe && iframe.contentWindow) {
+                    iframe.contentWindow.postMessage('toggle-stats', '*');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
