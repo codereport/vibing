@@ -132,3 +132,74 @@ function handleSwipe(startX, startY, endX, endY) {
         }
     }
 }
+
+// Create and inject mobile navigation buttons
+function createMobileNavButtons() {
+    // Inject CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+            pointer-events: none; /* Let clicks pass through the container */
+        }
+        .nav-btn {
+            background: rgba(0, 0, 0, 0.5);
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto; /* Re-enable clicks for buttons */
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px #00ff00;
+            transition: transform 0.2s, background 0.2s;
+        }
+        .nav-btn:active {
+            transform: scale(0.95);
+            background: rgba(0, 255, 0, 0.2);
+        }
+        @media (max-width: 768px) {
+            .mobile-nav {
+                display: flex;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Create Elements
+    const container = document.createElement('div');
+    container.className = 'mobile-nav';
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'nav-btn prev';
+    prevBtn.innerHTML = '❮';
+    prevBtn.onclick = () => navigate(-1);
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'nav-btn next';
+    nextBtn.innerHTML = '❯';
+    nextBtn.onclick = () => navigate(1);
+
+    container.appendChild(prevBtn);
+    container.appendChild(nextBtn);
+    document.body.appendChild(container);
+}
+
+// Initialize mobile nav buttons
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createMobileNavButtons);
+} else {
+    createMobileNavButtons();
+}
