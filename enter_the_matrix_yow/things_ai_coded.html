@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Things AI Coded - Enter the Matrix</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono:wght@400&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background: #000;
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .content-container {
+            z-index: 10;
+            width: 95%;
+            max-width: 1280px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .page-title {
+            font-size: 3.5em;
+            color: #00ff00;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .tips-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        /* Top level items */
+        .tips-list > li {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #00cc00;
+            position: relative;
+            padding-left: 40px;
+            line-height: 1.2;
+        }
+
+        .tips-list > li::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        /* Nested lists generic */
+        ul {
+            list-style-type: none;
+        }
+
+        li ul {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        li li {
+            font-size: 0.8em;
+            margin-bottom: 10px;
+            color: #00aa00;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        li li::before {
+            content: "*";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #00ff00;
+        }
+        
+        /* Third level */
+        li li li {
+            font-size: 0.9em; /* relative to parent */
+            color: #008800;
+        }
+        
+        li li li::before {
+            content: "-";
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5em;
+            }
+
+            .tips-list > li {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 2em;
+            }
+
+            .tips-list > li {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="content-container">
+        <h1 class="page-title">Things AI Coded</h1>
+        <ul class="tips-list">
+            <li>Blink</li>
+            <li>Blink DSL
+                <ul>
+                    <li>Transpilation to both:
+                        <ul>
+                            <li>BQN Backend (CPU)</li>
+                            <li>Parrot Backend (GPU)</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>About Me / Linktree Page</li>
+            <li>Parrot Library</li>
+        </ul>
+    </div>
+
+    <script src="nav.js"></script>
+    <script src="matrix_rain.js"></script>
+</body>
+
+</html>

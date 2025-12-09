@@ -43,6 +43,8 @@ const pages = [
     'cuda_libraries.html',
     'parrot_sushi.html',
     'summary.html',
+    'things_ai_coded.html',
+    'summary.html',
     'matrix_clip_know.html',
     'by_the_way.html',
     'made_with_ai.html',
