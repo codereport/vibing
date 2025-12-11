@@ -951,9 +951,12 @@
                 toSelect.add(new Option(item.date, item.file));
             });
 
-            // Default to comparing oldest vs newest
+            // Default to comparing specific date vs newest
             if (historyFiles.length > 0) {
-                fromSelect.selectedIndex = 0;
+                const defaultFromFile = "history/leaderboard_20251129_210724.json";
+                const defaultFromIndex = historyFiles.findIndex(item => item.file === defaultFromFile);
+                
+                fromSelect.selectedIndex = defaultFromIndex !== -1 ? defaultFromIndex : 0;
                 toSelect.selectedIndex = historyFiles.length - 1;
             }
 
