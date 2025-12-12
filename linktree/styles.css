@@ -1,20 +1,5 @@
 :root {
-    /* Light Theme */
-    --bg-color: #f4f4f9;
-    --container-bg: #ffffff;
-    --text-primary: #2d3748;
-    --text-secondary: #718096;
-    --accent-color: #3182ce;
-    --card-bg: #ffffff;
-    --card-hover: #f7fafc;
-    --border-color: #e2e8f0;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --icon-color: #4a5568;
-    --icon-hover: #2b6cb0;
-}
-
-[data-theme="dark"] {
-    /* Dark Theme */
+    /* Dark Theme (Fixed) */
     --bg-color: #18181b;
     --container-bg: #27272a;
     --text-primary: #f4f4f5;
@@ -75,29 +60,6 @@ body::-webkit-scrollbar {
 
 .floating-logo:hover {
     transform: scale(1.2);
-}
-
-/* Theme Toggle */
-.theme-toggle {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-}
-
-#theme-switch {
-    background: none;
-    border: none;
-    color: var(--text-primary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: transform 0.2s;
-}
-
-#theme-switch:hover {
-    transform: scale(1.1);
-    background-color: rgba(128, 128, 128, 0.1);
 }
 
 /* Profile Section */
@@ -181,18 +143,10 @@ body::-webkit-scrollbar {
 
 /* Brand Colors */
 .social-icons a[aria-label="Twitter"] {
-    color: #000000;
-}
-
-[data-theme="dark"] .social-icons a[aria-label="Twitter"] {
     color: #ffffff;
 }
 
 .social-icons a[aria-label="GitHub"] {
-    color: #333;
-}
-
-[data-theme="dark"] .social-icons a[aria-label="GitHub"] {
     color: #f0f6fc;
 }
 
