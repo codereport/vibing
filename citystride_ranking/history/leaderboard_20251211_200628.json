@@ -1,39 +1,39 @@
 {
-  "last_updated": "2025-12-13 20:29:05",
+  "last_updated": "2025-12-11 20:06:28",
   "runners": [
     {
       "name": "Thomas Pillow \ud83c\uddfa\ud83c\uddf8",
-      "streets": 41383,
+      "streets": 41329,
       "profile_url": "/users/8376/map",
-      "streets_delta": 54,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
       "name": "James Salmon \ud83c\uddec\ud83c\udde7",
-      "streets": 35974,
+      "streets": 35959,
       "profile_url": "/users/35657/map",
-      "streets_delta": 15,
+      "streets_delta": 1,
       "rank_delta": 0
     },
     {
       "name": "Denis Bafounta \ud83c\udde9\ud83c\uddea",
-      "streets": 35684,
+      "streets": 35655,
       "profile_url": "/users/6713/map",
-      "streets_delta": 29,
+      "streets_delta": 5,
       "rank_delta": 0
     },
     {
       "name": "Nick Kollett",
-      "streets": 33984,
+      "streets": 33952,
       "profile_url": "/users/4394/map",
-      "streets_delta": 32,
+      "streets_delta": 39,
       "rank_delta": 0
     },
     {
       "name": "Mike Sikkema \ud83c\uddfa\ud83c\uddf8",
-      "streets": 31520,
+      "streets": 31492,
       "profile_url": "/users/2700/map",
-      "streets_delta": 28,
+      "streets_delta": 20,
       "rank_delta": 0
     },
     {
@@ -45,9 +45,9 @@
     },
     {
       "name": "John Erwin \ud83c\uddfa\ud83c\uddf8",
-      "streets": 29396,
+      "streets": 29381,
       "profile_url": "/users/48657/map",
-      "streets_delta": 15,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
@@ -66,9 +66,9 @@
     },
     {
       "name": "Kevin Pels \ud83c\uddf5\ud83c\uddf9",
-      "streets": 23250,
+      "streets": 23220,
       "profile_url": "/users/15559/map",
-      "streets_delta": 30,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
@@ -94,30 +94,30 @@
     },
     {
       "name": "Peter Qumsiyeh \ud83c\uddfa\ud83c\uddf8\ud83c\uddf5\ud83c\uddf8",
-      "streets": 21645,
+      "streets": 21583,
       "profile_url": "/users/9602/map",
-      "streets_delta": 62,
+      "streets_delta": 16,
       "rank_delta": 0
     },
     {
       "name": "Jon Ziefle \ud83c\uddfa\ud83c\uddf8",
-      "streets": 21541,
+      "streets": 21530,
       "profile_url": "/users/26737/map",
-      "streets_delta": 11,
+      "streets_delta": 3,
       "rank_delta": 0
     },
     {
       "name": "Todd (Roll Toad!) \ud83c\uddfa\ud83c\uddf8",
-      "streets": 20584,
+      "streets": 20553,
       "profile_url": "/users/49967/map",
-      "streets_delta": 31,
+      "streets_delta": 19,
       "rank_delta": 0
     },
     {
       "name": "Chris Irwin",
-      "streets": 20539,
+      "streets": 20533,
       "profile_url": "/users/41482/map",
-      "streets_delta": 6,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
@@ -129,23 +129,23 @@
     },
     {
       "name": "Daniel Ratcliffe \ud83c\uddec\ud83c\udde7",
-      "streets": 20108,
+      "streets": 20060,
       "profile_url": "/users/25596/map",
-      "streets_delta": 48,
+      "streets_delta": 66,
       "rank_delta": 0
     },
     {
       "name": "Daniel Gonz\u00e1lez Alguacil",
-      "streets": 19987,
+      "streets": 19958,
       "profile_url": "/users/23692/map",
-      "streets_delta": 29,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
       "name": "Chris Thoms",
-      "streets": 19829,
+      "streets": 19808,
       "profile_url": "/users/7538/map",
-      "streets_delta": 21,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
@@ -157,23 +157,23 @@
     },
     {
       "name": "Mookie The Cat \ud83c\uddfa\ud83c\uddf8",
-      "streets": 19520,
+      "streets": 19499,
       "profile_url": "/users/1691/map",
       "streets_delta": 21,
       "rank_delta": 0
     },
     {
       "name": "Tommy Toronto",
-      "streets": 19398,
+      "streets": 19393,
       "profile_url": "/users/10714/map",
-      "streets_delta": 5,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
       "name": "Conor Hoekstra \ud83c\udde8\ud83c\udde6",
-      "streets": 19192,
+      "streets": 19184,
       "profile_url": "/users/55228/map",
-      "streets_delta": 8,
+      "streets_delta": 26,
       "rank_delta": 0
     },
     {
@@ -191,31 +191,31 @@
       "rank_delta": 0
     },
     {
-      "name": "John Teal \ud83c\uddfa\ud83c\uddf8",
-      "streets": 18843,
-      "profile_url": "/users/3203/map",
-      "streets_delta": 35,
-      "rank_delta": 1
-    },
-    {
       "name": "Rancid Goat \ud83c\uddfa\ud83c\uddf8",
       "streets": 18836,
       "profile_url": "/users/16255/map",
       "streets_delta": 0,
-      "rank_delta": -1
+      "rank_delta": 0
+    },
+    {
+      "name": "John Teal \ud83c\uddfa\ud83c\uddf8",
+      "streets": 18808,
+      "profile_url": "/users/3203/map",
+      "streets_delta": 0,
+      "rank_delta": 0
     },
     {
       "name": "Tim Grose \ud83c\uddf5\ud83c\uddf9",
-      "streets": 18209,
+      "streets": 18208,
       "profile_url": "/users/15017/map",
-      "streets_delta": 1,
+      "streets_delta": 22,
       "rank_delta": 0
     },
     {
       "name": "Rob Piccolino \ud83c\uddfa\ud83c\uddf8",
-      "streets": 18149,
+      "streets": 18138,
       "profile_url": "/users/8607/map",
-      "streets_delta": 11,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
@@ -227,16 +227,16 @@
     },
     {
       "name": "Guy Schweitzer \ud83c\udde6\ud83c\uddfa",
-      "streets": 18053,
+      "streets": 18024,
       "profile_url": "/users/46203/map",
-      "streets_delta": 29,
+      "streets_delta": 27,
       "rank_delta": 0
     },
     {
       "name": "Catherine Salin Derrow \ud83c\uddfa\ud83c\uddf8",
-      "streets": 17970,
+      "streets": 17929,
       "profile_url": "/users/60927/map",
-      "streets_delta": 41,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
@@ -248,31 +248,31 @@
     },
     {
       "name": "Jason Rossman \ud83c\uddfa\ud83c\uddf8",
-      "streets": 17550,
+      "streets": 17545,
       "profile_url": "/users/716/map",
-      "streets_delta": 5,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
       "name": "Luma Zamarre\u00f1o \ud83c\uddea\ud83c\uddf8",
-      "streets": 16928,
+      "streets": 16914,
       "profile_url": "/users/32844/map",
-      "streets_delta": 14,
+      "streets_delta": 0,
       "rank_delta": 0
-    },
-    {
-      "name": "Sheepie \ud83c\udde6\ud83c\uddfa",
-      "streets": 16911,
-      "profile_url": "/users/65257/map",
-      "streets_delta": 174,
-      "rank_delta": 1
     },
     {
       "name": "Clive Saffery",
       "streets": 16780,
       "profile_url": "/users/50251/map",
       "streets_delta": 0,
-      "rank_delta": -1
+      "rank_delta": 0
+    },
+    {
+      "name": "Sheepie \ud83c\udde6\ud83c\uddfa",
+      "streets": 16737,
+      "profile_url": "/users/65257/map",
+      "streets_delta": 0,
+      "rank_delta": 0
     },
     {
       "name": "Jan Smits \ud83c\uddf3\ud83c\uddf1",
@@ -290,51 +290,51 @@
     },
     {
       "name": "Sean P \ud83c\uddec\ud83c\udde7",
-      "streets": 15998,
+      "streets": 15990,
       "profile_url": "/users/8736/map",
-      "streets_delta": 8,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
       "name": "Richard Barber \ud83c\uddec\ud83c\udde7",
-      "streets": 15950,
+      "streets": 15942,
       "profile_url": "/users/45514/map",
-      "streets_delta": 8,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
       "name": "Timtwo Grose \ud83c\uddf5\ud83c\uddf9",
-      "streets": 15883,
+      "streets": 15882,
       "profile_url": "/users/20284/map",
-      "streets_delta": 1,
+      "streets_delta": 22,
       "rank_delta": 0
     },
     {
       "name": "Jule Jacobs \ud83c\udde9\ud83c\uddea",
-      "streets": 15809,
+      "streets": 15754,
       "profile_url": "/users/30908/map",
-      "streets_delta": 55,
+      "streets_delta": 12,
       "rank_delta": 0
     },
     {
       "name": "B Weds",
-      "streets": 15627,
+      "streets": 15624,
       "profile_url": "/users/23256/map",
-      "streets_delta": 3,
+      "streets_delta": 7,
       "rank_delta": 0
     },
     {
       "name": "Peter Groner \ud83c\uddfa\ud83c\uddf8",
-      "streets": 15545,
+      "streets": 15537,
       "profile_url": "/users/35737/map",
-      "streets_delta": 8,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
       "name": "K Wed",
-      "streets": 15448,
+      "streets": 15446,
       "profile_url": "/users/23287/map",
-      "streets_delta": 2,
+      "streets_delta": 0,
       "rank_delta": 0
     },
     {
@@ -346,9 +346,9 @@
     },
     {
       "name": "Ken Varian \ud83c\uddfa\ud83c\uddf8",
-      "streets": 15342,
+      "streets": 15300,
       "profile_url": "/users/39274/map",
-      "streets_delta": 42,
+      "streets_delta": 12,
       "rank_delta": 0
     }
   ]

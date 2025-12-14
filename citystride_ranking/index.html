@@ -77,17 +77,10 @@
             color: #4c1d95;
         }
 
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 1em;
-            min-width: 600px; /* Ensure table doesn't get too squished */
         }
 
         th,
@@ -220,58 +213,6 @@
             width: 100%;
             margin-top: 20px;
         }
-
-        /* Mobile Responsive Styles */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-                font-size: 16px; /* Reduce base font size */
-            }
-
-            .main-container {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 1.5em;
-                margin-bottom: 20px;
-            }
-
-            .delta-controls {
-                flex-direction: column;
-                gap: 10px;
-                padding: 15px;
-            }
-
-            .delta-controls select {
-                width: 100%;
-                min-width: 0;
-            }
-            
-            .delta-arrow {
-                transform: rotate(90deg);
-            }
-
-            th, td {
-                padding: 8px 10px;
-                font-size: 0.9em;
-            }
-
-            .toggle-button {
-                width: 100%;
-                padding: 12px;
-            }
-
-            .modal-content {
-                padding: 20px;
-                width: 95%;
-            }
-            
-            .modal-close {
-                top: 10px;
-                right: 10px;
-            }
-        }
     </style>
 </head>
 
@@ -281,7 +222,7 @@
         <div style="text-align: center;">
             <button class="toggle-button" onclick="openModal()">📈 View Rank History (Top 30)</button>
         </div>
-        <p class="updated">Last updated: 2025-12-10 17:39:29</p>
+        <p class="updated">Last updated: 2025-12-13 20:29:05</p>
 
         <div class="delta-controls">
             <label for="fromDate">Custom compare from:</label>
@@ -291,9 +232,8 @@
             <select id="toDate" onchange="updateCustomDeltas()"></select>
         </div>
 
-        <div class="table-container">
-            <table>
-                <thead>
+        <table>
+            <thead>
                 <tr>
                     <th>Rank</th>
                     <th>Runner</th>
@@ -310,9 +250,9 @@
                 <tr data-url="/users/8376/map">
                     <td>1</td>
                     <td><a href="https://citystrides.com/users/8376/map" class="profile-link" target="_blank">Thomas Pillow 🇺🇸</a></td>
-                    <td>41,329</td>
+                    <td>41,383</td>
                     <td class="gap">-</td>
-                    <td class="streets-up">-</td>
+                    <td class="streets-up">+54</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -321,9 +261,9 @@
                 <tr data-url="/users/35657/map">
                     <td>2</td>
                     <td><a href="https://citystrides.com/users/35657/map" class="profile-link" target="_blank">James Salmon 🇬🇧</a></td>
-                    <td>35,958</td>
-                    <td class="gap">-5,371</td>
-                    <td class="streets-up">+7</td>
+                    <td>35,974</td>
+                    <td class="gap">-5,409</td>
+                    <td class="streets-up">+15</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -332,9 +272,9 @@
                 <tr data-url="/users/6713/map">
                     <td>3</td>
                     <td><a href="https://citystrides.com/users/6713/map" class="profile-link" target="_blank">Denis Bafounta 🇩🇪</a></td>
-                    <td>35,650</td>
-                    <td class="gap">-308</td>
-                    <td class="streets-up">+1</td>
+                    <td>35,684</td>
+                    <td class="gap">-290</td>
+                    <td class="streets-up">+29</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -343,9 +283,9 @@
                 <tr data-url="/users/4394/map">
                     <td>4</td>
                     <td><a href="https://citystrides.com/users/4394/map" class="profile-link" target="_blank">Nick Kollett</a></td>
-                    <td>33,913</td>
-                    <td class="gap">-1,737</td>
-                    <td class="streets-up">+24</td>
+                    <td>33,984</td>
+                    <td class="gap">-1,700</td>
+                    <td class="streets-up">+32</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -354,9 +294,9 @@
                 <tr data-url="/users/2700/map">
                     <td>5</td>
                     <td><a href="https://citystrides.com/users/2700/map" class="profile-link" target="_blank">Mike Sikkema 🇺🇸</a></td>
-                    <td>31,472</td>
-                    <td class="gap">-2,441</td>
-                    <td class="streets-up">+9</td>
+                    <td>31,520</td>
+                    <td class="gap">-2,464</td>
+                    <td class="streets-up">+28</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -366,7 +306,7 @@
                     <td>6</td>
                     <td><a href="https://citystrides.com/users/96287/map" class="profile-link" target="_blank">Nameless Runner</a></td>
                     <td>31,206</td>
-                    <td class="gap">-266</td>
+                    <td class="gap">-314</td>
                     <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
@@ -376,9 +316,9 @@
                 <tr data-url="/users/48657/map">
                     <td>7</td>
                     <td><a href="https://citystrides.com/users/48657/map" class="profile-link" target="_blank">John Erwin 🇺🇸</a></td>
-                    <td>29,381</td>
-                    <td class="gap">-1,825</td>
-                    <td class="streets-up">-</td>
+                    <td>29,396</td>
+                    <td class="gap">-1,810</td>
+                    <td class="streets-up">+15</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -388,7 +328,7 @@
                     <td>8</td>
                     <td><a href="https://citystrides.com/users/22935/map" class="profile-link" target="_blank">Tim Van 🇳🇱</a></td>
                     <td>26,686</td>
-                    <td class="gap">-2,695</td>
+                    <td class="gap">-2,710</td>
                     <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
@@ -409,9 +349,9 @@
                 <tr data-url="/users/15559/map">
                     <td>10</td>
                     <td><a href="https://citystrides.com/users/15559/map" class="profile-link" target="_blank">Kevin Pels 🇵🇹</a></td>
-                    <td>23,220</td>
-                    <td class="gap">-1,614</td>
-                    <td class="streets-up">-</td>
+                    <td>23,250</td>
+                    <td class="gap">-1,584</td>
+                    <td class="streets-up">+30</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -421,7 +361,7 @@
                     <td>11</td>
                     <td><a href="https://citystrides.com/users/5240/map" class="profile-link" target="_blank">Aaron Fitzsenry 🇺🇸</a></td>
                     <td>23,074</td>
-                    <td class="gap">-146</td>
+                    <td class="gap">-176</td>
                     <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
@@ -433,7 +373,7 @@
                     <td><a href="https://citystrides.com/users/42072/map" class="profile-link" target="_blank">Robert Buchanan 🇳🇿🇯🇵</a></td>
                     <td>22,380</td>
                     <td class="gap">-694</td>
-                    <td class="streets-up">+24</td>
+                    <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -453,9 +393,9 @@
                 <tr data-url="/users/9602/map">
                     <td>14</td>
                     <td><a href="https://citystrides.com/users/9602/map" class="profile-link" target="_blank">Peter Qumsiyeh 🇺🇸🇵🇸</a></td>
-                    <td>21,567</td>
-                    <td class="gap">-150</td>
-                    <td class="streets-up">+16</td>
+                    <td>21,645</td>
+                    <td class="gap">-72</td>
+                    <td class="streets-up">+62</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -464,9 +404,9 @@
                 <tr data-url="/users/26737/map">
                     <td>15</td>
                     <td><a href="https://citystrides.com/users/26737/map" class="profile-link" target="_blank">Jon Ziefle 🇺🇸</a></td>
-                    <td>21,527</td>
-                    <td class="gap">-40</td>
-                    <td class="streets-up">+3</td>
+                    <td>21,541</td>
+                    <td class="gap">-104</td>
+                    <td class="streets-up">+11</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -475,10 +415,10 @@
                 <tr data-url="/users/49967/map">
                     <td>16</td>
                     <td><a href="https://citystrides.com/users/49967/map" class="profile-link" target="_blank">Todd (Roll Toad!) 🇺🇸</a></td>
-                    <td>20,534</td>
-                    <td class="gap">-993</td>
-                    <td class="streets-up">+19</td>
-                    <td class="rank-up">▲1</td>
+                    <td>20,584</td>
+                    <td class="gap">-957</td>
+                    <td class="streets-up">+31</td>
+                    <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
                 </tr>
@@ -486,10 +426,10 @@
                 <tr data-url="/users/41482/map">
                     <td>17</td>
                     <td><a href="https://citystrides.com/users/41482/map" class="profile-link" target="_blank">Chris Irwin</a></td>
-                    <td>20,533</td>
-                    <td class="gap">-1</td>
-                    <td class="streets-up">-</td>
-                    <td class="rank-down">▼1</td>
+                    <td>20,539</td>
+                    <td class="gap">-45</td>
+                    <td class="streets-up">+6</td>
+                    <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
                 </tr>
@@ -498,7 +438,7 @@
                     <td>18</td>
                     <td><a href="https://citystrides.com/users/788/map" class="profile-link" target="_blank">Krzysztof Kasprzyk 🇧🇪</a></td>
                     <td>20,410</td>
-                    <td class="gap">-123</td>
+                    <td class="gap">-129</td>
                     <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
@@ -508,9 +448,9 @@
                 <tr data-url="/users/25596/map">
                     <td>19</td>
                     <td><a href="https://citystrides.com/users/25596/map" class="profile-link" target="_blank">Daniel Ratcliffe 🇬🇧</a></td>
-                    <td>19,994</td>
-                    <td class="gap">-416</td>
-                    <td class="streets-up">-</td>
+                    <td>20,108</td>
+                    <td class="gap">-302</td>
+                    <td class="streets-up">+48</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -519,9 +459,9 @@
                 <tr data-url="/users/23692/map">
                     <td>20</td>
                     <td><a href="https://citystrides.com/users/23692/map" class="profile-link" target="_blank">Daniel González Alguacil</a></td>
-                    <td>19,958</td>
-                    <td class="gap">-36</td>
-                    <td class="streets-up">+44</td>
+                    <td>19,987</td>
+                    <td class="gap">-121</td>
+                    <td class="streets-up">+29</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -530,9 +470,9 @@
                 <tr data-url="/users/7538/map">
                     <td>21</td>
                     <td><a href="https://citystrides.com/users/7538/map" class="profile-link" target="_blank">Chris Thoms</a></td>
-                    <td>19,808</td>
-                    <td class="gap">-150</td>
-                    <td class="streets-up">-</td>
+                    <td>19,829</td>
+                    <td class="gap">-158</td>
+                    <td class="streets-up">+21</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -542,7 +482,7 @@
                     <td>22</td>
                     <td><a href="https://citystrides.com/users/7835/map" class="profile-link" target="_blank">Monkey Man 🇬🇧</a></td>
                     <td>19,697</td>
-                    <td class="gap">-111</td>
+                    <td class="gap">-132</td>
                     <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
@@ -552,9 +492,9 @@
                 <tr data-url="/users/1691/map">
                     <td>23</td>
                     <td><a href="https://citystrides.com/users/1691/map" class="profile-link" target="_blank">Mookie The Cat 🇺🇸</a></td>
-                    <td>19,478</td>
-                    <td class="gap">-219</td>
-                    <td class="streets-up">+24</td>
+                    <td>19,520</td>
+                    <td class="gap">-177</td>
+                    <td class="streets-up">+21</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -563,9 +503,9 @@
                 <tr data-url="/users/10714/map">
                     <td>24</td>
                     <td><a href="https://citystrides.com/users/10714/map" class="profile-link" target="_blank">Tommy Toronto</a></td>
-                    <td>19,393</td>
-                    <td class="gap">-85</td>
-                    <td class="streets-up">+1</td>
+                    <td>19,398</td>
+                    <td class="gap">-122</td>
+                    <td class="streets-up">+5</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -574,9 +514,9 @@
                 <tr data-url="/users/55228/map">
                     <td>25</td>
                     <td><a href="https://citystrides.com/users/55228/map" class="profile-link" target="_blank">Conor Hoekstra 🇨🇦</a></td>
-                    <td>19,158</td>
-                    <td class="gap">-235</td>
-                    <td class="streets-up">+39</td>
+                    <td>19,192</td>
+                    <td class="gap">-206</td>
+                    <td class="streets-up">+8</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -586,7 +526,7 @@
                     <td>26</td>
                     <td><a href="https://citystrides.com/users/38789/map" class="profile-link" target="_blank">Chemie Banger</a></td>
                     <td>19,034</td>
-                    <td class="gap">-124</td>
+                    <td class="gap">-158</td>
                     <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
@@ -604,24 +544,24 @@
                     <td class="custom-rank">-</td>
                 </tr>
         
-                <tr data-url="/users/16255/map">
+                <tr data-url="/users/3203/map">
                     <td>28</td>
-                    <td><a href="https://citystrides.com/users/16255/map" class="profile-link" target="_blank">Rancid Goat 🇺🇸</a></td>
-                    <td>18,836</td>
-                    <td class="gap">-104</td>
-                    <td class="streets-up">-</td>
-                    <td class="">-</td>
+                    <td><a href="https://citystrides.com/users/3203/map" class="profile-link" target="_blank">John Teal 🇺🇸</a></td>
+                    <td>18,843</td>
+                    <td class="gap">-97</td>
+                    <td class="streets-up">+35</td>
+                    <td class="rank-up">▲1</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
                 </tr>
         
-                <tr data-url="/users/3203/map">
+                <tr data-url="/users/16255/map">
                     <td>29</td>
-                    <td><a href="https://citystrides.com/users/3203/map" class="profile-link" target="_blank">John Teal 🇺🇸</a></td>
-                    <td>18,808</td>
-                    <td class="gap">-28</td>
+                    <td><a href="https://citystrides.com/users/16255/map" class="profile-link" target="_blank">Rancid Goat 🇺🇸</a></td>
+                    <td>18,836</td>
+                    <td class="gap">-7</td>
                     <td class="streets-up">-</td>
-                    <td class="">-</td>
+                    <td class="rank-down">▼1</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
                 </tr>
@@ -629,9 +569,9 @@
                 <tr data-url="/users/15017/map">
                     <td>30</td>
                     <td><a href="https://citystrides.com/users/15017/map" class="profile-link" target="_blank">Tim Grose 🇵🇹</a></td>
-                    <td>18,186</td>
-                    <td class="gap">-622</td>
-                    <td class="streets-up">+18</td>
+                    <td>18,209</td>
+                    <td class="gap">-627</td>
+                    <td class="streets-up">+1</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -640,9 +580,9 @@
                 <tr data-url="/users/8607/map">
                     <td>31</td>
                     <td><a href="https://citystrides.com/users/8607/map" class="profile-link" target="_blank">Rob Piccolino 🇺🇸</a></td>
-                    <td>18,138</td>
-                    <td class="gap">-48</td>
-                    <td class="streets-up">-</td>
+                    <td>18,149</td>
+                    <td class="gap">-60</td>
+                    <td class="streets-up">+11</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -652,7 +592,7 @@
                     <td>32</td>
                     <td><a href="https://citystrides.com/users/37018/map" class="profile-link" target="_blank">Mark Macefield 🇬🇧</a></td>
                     <td>18,071</td>
-                    <td class="gap">-67</td>
+                    <td class="gap">-78</td>
                     <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
@@ -662,9 +602,9 @@
                 <tr data-url="/users/46203/map">
                     <td>33</td>
                     <td><a href="https://citystrides.com/users/46203/map" class="profile-link" target="_blank">Guy Schweitzer 🇦🇺</a></td>
-                    <td>17,997</td>
-                    <td class="gap">-74</td>
-                    <td class="streets-up">-</td>
+                    <td>18,053</td>
+                    <td class="gap">-18</td>
+                    <td class="streets-up">+29</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -673,9 +613,9 @@
                 <tr data-url="/users/60927/map">
                     <td>34</td>
                     <td><a href="https://citystrides.com/users/60927/map" class="profile-link" target="_blank">Catherine Salin Derrow 🇺🇸</a></td>
-                    <td>17,929</td>
-                    <td class="gap">-68</td>
-                    <td class="streets-up">+16</td>
+                    <td>17,970</td>
+                    <td class="gap">-83</td>
+                    <td class="streets-up">+41</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -685,7 +625,7 @@
                     <td>35</td>
                     <td><a href="https://citystrides.com/users/85711/map" class="profile-link" target="_blank">Joel E Hibshman 🇬🇧</a></td>
                     <td>17,564</td>
-                    <td class="gap">-365</td>
+                    <td class="gap">-406</td>
                     <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
@@ -695,9 +635,9 @@
                 <tr data-url="/users/716/map">
                     <td>36</td>
                     <td><a href="https://citystrides.com/users/716/map" class="profile-link" target="_blank">Jason Rossman 🇺🇸</a></td>
-                    <td>17,545</td>
-                    <td class="gap">-19</td>
-                    <td class="streets-up">-</td>
+                    <td>17,550</td>
+                    <td class="gap">-14</td>
+                    <td class="streets-up">+5</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -706,32 +646,32 @@
                 <tr data-url="/users/32844/map">
                     <td>37</td>
                     <td><a href="https://citystrides.com/users/32844/map" class="profile-link" target="_blank">Luma Zamarreño 🇪🇸</a></td>
-                    <td>16,914</td>
-                    <td class="gap">-631</td>
-                    <td class="streets-up">-</td>
-                    <td class="">-</td>
-                    <td class="custom-streets">-</td>
-                    <td class="custom-rank">-</td>
-                </tr>
-        
-                <tr data-url="/users/50251/map">
-                    <td>38</td>
-                    <td><a href="https://citystrides.com/users/50251/map" class="profile-link" target="_blank">Clive Saffery</a></td>
-                    <td>16,780</td>
-                    <td class="gap">-134</td>
-                    <td class="streets-up">+29</td>
+                    <td>16,928</td>
+                    <td class="gap">-622</td>
+                    <td class="streets-up">+14</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
                 </tr>
         
                 <tr data-url="/users/65257/map">
-                    <td>39</td>
+                    <td>38</td>
                     <td><a href="https://citystrides.com/users/65257/map" class="profile-link" target="_blank">Sheepie 🇦🇺</a></td>
-                    <td>16,737</td>
-                    <td class="gap">-43</td>
+                    <td>16,911</td>
+                    <td class="gap">-17</td>
+                    <td class="streets-up">+174</td>
+                    <td class="rank-up">▲1</td>
+                    <td class="custom-streets">-</td>
+                    <td class="custom-rank">-</td>
+                </tr>
+        
+                <tr data-url="/users/50251/map">
+                    <td>39</td>
+                    <td><a href="https://citystrides.com/users/50251/map" class="profile-link" target="_blank">Clive Saffery</a></td>
+                    <td>16,780</td>
+                    <td class="gap">-131</td>
                     <td class="streets-up">-</td>
-                    <td class="">-</td>
+                    <td class="rank-down">▼1</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
                 </tr>
@@ -740,7 +680,7 @@
                     <td>40</td>
                     <td><a href="https://citystrides.com/users/3056/map" class="profile-link" target="_blank">Jan Smits 🇳🇱</a></td>
                     <td>16,709</td>
-                    <td class="gap">-28</td>
+                    <td class="gap">-71</td>
                     <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
@@ -761,9 +701,9 @@
                 <tr data-url="/users/8736/map">
                     <td>42</td>
                     <td><a href="https://citystrides.com/users/8736/map" class="profile-link" target="_blank">Sean P 🇬🇧</a></td>
-                    <td>15,990</td>
-                    <td class="gap">-193</td>
-                    <td class="streets-down">-14</td>
+                    <td>15,998</td>
+                    <td class="gap">-185</td>
+                    <td class="streets-up">+8</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -772,9 +712,9 @@
                 <tr data-url="/users/45514/map">
                     <td>43</td>
                     <td><a href="https://citystrides.com/users/45514/map" class="profile-link" target="_blank">Richard Barber 🇬🇧</a></td>
-                    <td>15,942</td>
+                    <td>15,950</td>
                     <td class="gap">-48</td>
-                    <td class="streets-up">-</td>
+                    <td class="streets-up">+8</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -783,9 +723,9 @@
                 <tr data-url="/users/20284/map">
                     <td>44</td>
                     <td><a href="https://citystrides.com/users/20284/map" class="profile-link" target="_blank">Timtwo Grose 🇵🇹</a></td>
-                    <td>15,860</td>
-                    <td class="gap">-82</td>
-                    <td class="streets-up">+18</td>
+                    <td>15,883</td>
+                    <td class="gap">-67</td>
+                    <td class="streets-up">+1</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -794,9 +734,9 @@
                 <tr data-url="/users/30908/map">
                     <td>45</td>
                     <td><a href="https://citystrides.com/users/30908/map" class="profile-link" target="_blank">Jule Jacobs 🇩🇪</a></td>
-                    <td>15,742</td>
-                    <td class="gap">-118</td>
-                    <td class="streets-up">+8</td>
+                    <td>15,809</td>
+                    <td class="gap">-74</td>
+                    <td class="streets-up">+55</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -805,9 +745,9 @@
                 <tr data-url="/users/23256/map">
                     <td>46</td>
                     <td><a href="https://citystrides.com/users/23256/map" class="profile-link" target="_blank">B Weds</a></td>
-                    <td>15,617</td>
-                    <td class="gap">-125</td>
-                    <td class="streets-up">-</td>
+                    <td>15,627</td>
+                    <td class="gap">-182</td>
+                    <td class="streets-up">+3</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -816,9 +756,9 @@
                 <tr data-url="/users/35737/map">
                     <td>47</td>
                     <td><a href="https://citystrides.com/users/35737/map" class="profile-link" target="_blank">Peter Groner 🇺🇸</a></td>
-                    <td>15,537</td>
-                    <td class="gap">-80</td>
-                    <td class="streets-up">+2</td>
+                    <td>15,545</td>
+                    <td class="gap">-82</td>
+                    <td class="streets-up">+8</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -827,9 +767,9 @@
                 <tr data-url="/users/23287/map">
                     <td>48</td>
                     <td><a href="https://citystrides.com/users/23287/map" class="profile-link" target="_blank">K Wed</a></td>
-                    <td>15,446</td>
-                    <td class="gap">-91</td>
-                    <td class="streets-up">-</td>
+                    <td>15,448</td>
+                    <td class="gap">-97</td>
+                    <td class="streets-up">+2</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -839,8 +779,8 @@
                     <td>49</td>
                     <td><a href="https://citystrides.com/users/7903/map" class="profile-link" target="_blank">jeffrey severijn 🇳🇱</a></td>
                     <td>15,377</td>
-                    <td class="gap">-69</td>
-                    <td class="streets-up">+2</td>
+                    <td class="gap">-71</td>
+                    <td class="streets-up">-</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -849,9 +789,9 @@
                 <tr data-url="/users/39274/map">
                     <td>50</td>
                     <td><a href="https://citystrides.com/users/39274/map" class="profile-link" target="_blank">Ken Varian 🇺🇸</a></td>
-                    <td>15,288</td>
-                    <td class="gap">-89</td>
-                    <td class="streets-up">-</td>
+                    <td>15,342</td>
+                    <td class="gap">-35</td>
+                    <td class="streets-up">+42</td>
                     <td class="">-</td>
                     <td class="custom-streets">-</td>
                     <td class="custom-rank">-</td>
@@ -859,7 +799,6 @@
         
             </tbody>
         </table>
-    </div>
     </div>
 
     <div id="chartModal" class="modal">
@@ -937,6 +876,14 @@
     {
         "file": "history/leaderboard_20251210_173929.json",
         "date": "2025-12-10 17:39"
+    },
+    {
+        "file": "history/leaderboard_20251211_200628.json",
+        "date": "2025-12-11 20:06"
+    },
+    {
+        "file": "history/leaderboard_20251213_202905.json",
+        "date": "2025-12-13 20:29"
     }
 ];
 
@@ -951,12 +898,9 @@
                 toSelect.add(new Option(item.date, item.file));
             });
 
-            // Default to comparing specific date vs newest
+            // Default to comparing oldest vs newest
             if (historyFiles.length > 0) {
-                const defaultFromFile = "history/leaderboard_20251129_210724.json";
-                const defaultFromIndex = historyFiles.findIndex(item => item.file === defaultFromFile);
-                
-                fromSelect.selectedIndex = defaultFromIndex !== -1 ? defaultFromIndex : 0;
+                fromSelect.selectedIndex = 0;
                 toSelect.selectedIndex = historyFiles.length - 1;
             }
 
