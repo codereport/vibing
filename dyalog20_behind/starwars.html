@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dyalog 20.0</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Antonio:wght@700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #000000 0%, #0a0a1a 50%, #000000 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Antonio', 'Franklin Gothic Medium', 'Arial Narrow', sans-serif;
+            font-weight: 700;
+        }
+        
+        /* Starfield background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .stars::before,
+        .stars::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 230px 180px, #fff, transparent),
+                radial-gradient(2px 2px at 300px 50px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 380px 220px, #fff, transparent),
+                radial-gradient(2px 2px at 450px 90px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 520px 160px, #fff, transparent),
+                radial-gradient(2px 2px at 600px 200px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 680px 30px, #fff, transparent),
+                radial-gradient(2px 2px at 750px 140px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 820px 80px, #fff, transparent),
+                radial-gradient(2px 2px at 900px 190px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 100px 250px, #fff, transparent),
+                radial-gradient(2px 2px at 200px 300px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 350px 280px, #fff, transparent),
+                radial-gradient(2px 2px at 500px 320px, rgba(255,255,255,0.7), transparent),
+                radial-gradient(1px 1px at 650px 270px, #fff, transparent),
+                radial-gradient(2px 2px at 800px 310px, rgba(255,255,255,0.8), transparent);
+            background-repeat: repeat;
+            background-size: 1000px 400px;
+            animation: twinkle 4s ease-in-out infinite alternate;
+        }
+        
+        .stars::after {
+            background-position: 50px 50px;
+            animation-delay: 2s;
+            opacity: 0.7;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* The crawl container */
+        .crawl-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            perspective: 400px;
+            overflow: hidden;
+        }
+        
+        /* The fade overlay at top */
+        .fade {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(0,0,0,1) 0%,
+                rgba(0,0,0,0.7) 15%,
+                transparent 30%,
+                transparent 100%
+            );
+            z-index: 10;
+            pointer-events: none;
+        }
+        
+        /* The scrolling text */
+        .crawl {
+            position: absolute;
+            top: 150%;
+            left: 50%;
+            transform: translateX(-50%) rotateX(25deg);
+            transform-origin: 50% 100%;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+        }
+        
+        .crawl.running {
+            animation: crawl 45s linear forwards;
+        }
+        
+        @keyframes crawl {
+            0% {
+                top: 150%;
+            }
+            100% {
+                top: -150%;
+            }
+        }
+        
+        .prompt {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FF6600;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+            z-index: 100;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .prompt.hidden {
+            display: none;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+        
+        .crawl-content {
+            color: #FF6600;
+        }
+        
+        .title {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5em;
+            line-height: 1.1;
+            white-space: nowrap;
+        }
+        
+        .version {
+            font-size: clamp(2rem, 6vw, 5rem);
+            font-weight: bold;
+            letter-spacing: 0.15em;
+            margin-bottom: 2em;
+            opacity: 0.9;
+        }
+        
+        .subtitle {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: bold;
+            letter-spacing: 0.08em;
+            margin-bottom: 1em;
+        }
+        
+        .tagline {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            line-height: 1.4;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    
+    <div class="crawl-container">
+        <div class="fade"></div>
+        <div class="crawl" id="crawl">
+            <div class="crawl-content">
+                <div class="title">Dyalog 20.0</div>
+                <div class="subtitle">has arrived...</div>
+                <div class="tagline">
+                    ⍛ is here.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="prompt" id="prompt">Press ENTER to begin</div>
+    
+    <script>
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('crawl').classList.add('running');
+                document.getElementById('prompt').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
+
