@@ -41,6 +41,7 @@
             background: #060606;
             color: #ffffff;
             font-family: "Times New Roman", "Georgia", serif;
+            font-size: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -55,7 +56,7 @@
 
         h1 {
             margin: 0 0 18px;
-            font-size: 22px;
+            font-size: 32px;
             font-weight: 600;
             letter-spacing: 0.04em;
             font-family: "Linux Libertine", "Times New Roman", serif;
@@ -64,7 +65,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 18px;
+            font-size: 26px;
             line-height: 1.2;
         }
 
@@ -74,6 +75,7 @@
             border-bottom: 2px solid #d4d4d4;
             border-top: 2px solid #d4d4d4;
             font-family: "Linux Libertine", "Times New Roman", serif;
+            text-align: center;
         }
 
         tbody td,
@@ -83,10 +85,15 @@
         }
 
         tbody th {
-            text-align: right;
+            text-align: center;
             white-space: nowrap;
-            padding-right: 14px;
+            padding-right: 10px;
             font-family: "Linux Libertine", "Times New Roman", serif;
+        }
+
+        thead th:last-child,
+        tbody td:last-child {
+            padding-right: 6px;
         }
 
         tbody tr:last-child td,
@@ -108,6 +115,12 @@
 
         .font-code {
             font-family: "Courier New", monospace;
+        }
+
+        .font-jetbrains {
+            font-family: "JetBrains Mono", "Consolas", "Courier New", monospace;
+            font-variant-ligatures: none;
+            font-feature-settings: "liga" 0, "calt" 0;
         }
 
         .highlight {
@@ -162,10 +175,10 @@
         .legend {
             margin-top: 18px;
             display: flex;
-            gap: 18px;
+            gap: 2.5rem;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 24px;
             font-family: "JetBrains Mono", "Courier New", monospace;
         }
 
@@ -195,7 +208,7 @@
 
         @media (max-width: 860px) {
             table {
-                font-size: 15px;
+                font-size: 22px;
             }
             thead th,
             tbody td,
@@ -207,7 +220,7 @@
             }
             .legend {
                 flex-wrap: wrap;
-                font-size: 16px;
+                font-size: 22px;
                 gap: 12px;
             }
         }
@@ -238,7 +251,7 @@
                     <td class="font-bqn">˜</td>
                     <td>`</td>
                     <td class="font-uiua">˙</td>
-                    <td class="font-code"><span class="highlight blue">join</span></td>
+                    <td class="font-jetbrains"><span class="highlight blue">join</span></td>
                 </tr>
                 <tr>
                     <th>C</th>
@@ -248,7 +261,7 @@
                     <td class="font-bqn">˜</td>
                     <td>@</td>
                     <td class="font-uiua">˜</td>
-                    <td class="font-code"><span class="highlight blue">flip</span></td>
+                    <td class="font-jetbrains"><span class="highlight blue">flip</span></td>
                 </tr>
                 <tr>
                     <th>B</th>
@@ -258,7 +271,7 @@
                     <td class="font-bqn">∘○</td>
                     <td><span class="highlight yellow font-apl">*</span></td>
                     <td class="font-uiua"><span class="highlight red">mm</span></td>
-                    <td class="font-code">.</td>
+                    <td class="font-jetbrains">.</td>
                 </tr>
                 <tr>
                     <th>B<sub>1</sub></th>
@@ -268,7 +281,7 @@
                     <td class="font-bqn">∘</td>
                     <td><span class="highlight yellow font-apl">*</span></td>
                     <td class="font-uiua"><span class="highlight red">md</span></td>
-                    <td class="font-code">:.</td>
+                    <td class="font-jetbrains">:.</td>
                 </tr>
                 <tr>
                     <th>S</th>
@@ -278,7 +291,7 @@
                     <td class="font-bqn">⟜</td>
                     <td></td>
                     <td class="font-uiua">⟜</td>
-                    <td class="font-code"><span class="highlight blue">ap</span> / &lt;*&gt;</td>
+                    <td class="font-jetbrains"><span class="highlight blue">ap</span> / &lt;*&gt;</td>
                 </tr>
                 <tr>
                     <th>Σ</th>
@@ -288,7 +301,7 @@
                     <td class="font-bqn">⊸</td>
                     <td><span class="highlight yellow font-apl">*</span></td>
                     <td class="font-uiua">⊸</td>
-                    <td class="font-code">=&lt;&lt;</td>
+                    <td class="font-jetbrains">=&lt;&lt;</td>
                 </tr>
                 <tr>
                     <th>D</th>
@@ -298,13 +311,13 @@
                     <td class="font-bqn">⟜</td>
                     <td></td>
                     <td class="font-uiua"><span class="highlight red">d⊙m</span></td>
-                    <td class="font-code"></td>
+                    <td class="font-jetbrains"></td>
                 </tr>
                 <tr>
                     <th>Δ</th>
                     <td class="font-apl">⍛</td>
                     <td class="font-apl">⍛</td>
-                    <td class="font-code"></td>
+                    <td class="font-jetbrains"></td>
                     <td class="font-bqn">⊸</td>
                     <td><span class="highlight yellow font-apl">*</span></td>
                     <td class="font-uiua"><span class="highlight red">dm</span></td>
@@ -318,13 +331,13 @@
                     <td class="font-bqn">○</td>
                     <td><span class="highlight yellow font-apl">*</span></td>
                     <td class="font-uiua">∩</td>
-                    <td class="font-code"><span class="highlight blue">on</span></td>
+                    <td class="font-jetbrains"><span class="highlight blue">on</span></td>
                 </tr>
                 <tr>
                     <th>D<sub>2</sub></th>
                     <td class="font-apl">a⍛b∘c</td>
                     <td class="font-apl">a⍛b∘c</td>
-                    <td class="font-code"></td>
+                    <td class="font-jetbrains"></td>
                     <td class="font-bqn">a⊸b⟜c</td>
                     <td></td>
                     <td class="font-uiua">⊓</td>
@@ -338,7 +351,7 @@
                     <td class="font-bqn"><span class="highlight green">*</span></td>
                     <td><span class="highlight yellow font-apl">*</span></td>
                     <td class="font-uiua">⊃</td>
-                    <td class="font-code"><span class="highlight blue">liftA2</span></td>
+                    <td class="font-jetbrains"><span class="highlight blue">liftA2</span></td>
                 </tr>
                 <tr>
                     <th>Φ<sub>1</sub></th>
@@ -348,7 +361,7 @@
                     <td class="font-bqn"><span class="highlight green">*</span></td>
                     <td><span class="highlight yellow font-apl">*</span></td>
                     <td class="font-uiua">⊃</td>
-                    <td class="font-code"></td>
+                    <td class="font-jetbrains"></td>
                 </tr>
             </tbody>
         </table>
