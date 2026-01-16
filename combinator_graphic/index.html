@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Combinators as Operators</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap");
+        @font-face {
+            font-family: "Apl385";
+            src: local("Apl385"), url("Apl385.ttf") format("truetype");
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "BQN386";
+            src: local("BQN386"), url("BQN386.ttf") format("truetype");
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Uiua";
+            src: local("Uiua"), url("Uiua386.ttf") format("truetype");
+            font-display: swap;
+        }
+        @font-face {
+            font-family: "Linux Libertine";
+            src: local("Linux Libertine"), local("Linux Libertine O");
+            font-display: swap;
+        }
+
+        :root {
+            color-scheme: dark;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #060606;
+            color: #ffffff;
+            font-family: "Times New Roman", "Georgia", serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .table-wrap {
+            max-width: 1100px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0 0 18px;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            font-family: "Linux Libertine", "Times New Roman", serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        thead th {
+            font-weight: 600;
+            padding: 8px 10px;
+            border-bottom: 2px solid #d4d4d4;
+            border-top: 2px solid #d4d4d4;
+            font-family: "Linux Libertine", "Times New Roman", serif;
+        }
+
+        tbody td,
+        tbody th {
+            padding: 7px 10px;
+            font-weight: 400;
+        }
+
+        tbody th {
+            text-align: right;
+            white-space: nowrap;
+            padding-right: 14px;
+            font-family: "Linux Libertine", "Times New Roman", serif;
+        }
+
+        tbody tr:last-child td,
+        tbody tr:last-child th {
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .font-apl {
+            font-family: "Apl385", "Times New Roman", serif;
+        }
+
+        .font-bqn {
+            font-family: "BQN386", "Times New Roman", serif;
+        }
+
+        .font-uiua {
+            font-family: "Uiua", "Times New Roman", serif;
+        }
+
+        .font-code {
+            font-family: "Courier New", monospace;
+        }
+
+        .highlight {
+            display: inline-block;
+            min-width: 2.4em;
+            padding: 0.12em 0.3em;
+            border-radius: 0.18em;
+            text-align: center;
+            color: #ffffff;
+            font-weight: 600;
+            opacity: 1;
+            transition: opacity 0.8s ease, box-shadow 0.8s ease;
+            box-shadow:
+                0 0 6px var(--glow-color, rgba(255, 255, 255, 0.2)),
+                0 0 12px rgba(255, 255, 255, 0.18);
+        }
+
+        .highlight.green {
+            background: rgba(0, 176, 80, 0.5);
+            --glow-color: rgba(0, 176, 80, 0.9);
+        }
+
+        .highlight.yellow {
+            background: rgba(255, 255, 0, 0.5);
+            --glow-color: rgba(255, 255, 0, 0.95);
+        }
+
+        .highlight.red {
+            background: rgba(255, 0, 0, 0.5);
+            --glow-color: rgba(255, 0, 0, 0.9);
+        }
+
+        .highlight.blue {
+            background: rgba(0, 176, 240, 0.5);
+            --glow-color: rgba(0, 176, 240, 0.9);
+        }
+
+        body.cycle-highlights .highlight {
+            opacity: 0.2;
+        }
+
+        body.cycle-highlights[data-active="green"] .highlight.green,
+        body.cycle-highlights[data-active="yellow"] .highlight.yellow,
+        body.cycle-highlights[data-active="red"] .highlight.red,
+        body.cycle-highlights[data-active="blue"] .highlight.blue {
+            opacity: 1;
+            box-shadow:
+                0 0 8px var(--glow-color),
+                0 0 16px rgba(255, 255, 255, 0.28);
+        }
+
+        .legend {
+            margin-top: 18px;
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-family: "JetBrains Mono", "Courier New", monospace;
+        }
+
+        .legend span {
+            font-weight: 600;
+        }
+
+        .legend .operators {
+            color: #ffffff;
+        }
+
+        .legend .functions {
+            color: #00b0f0;
+        }
+
+        .legend .trains {
+            color: #00b050;
+        }
+
+        .legend .chains {
+            color: #ffff00;
+        }
+
+        .legend .stacks {
+            color: #ff0000;
+        }
+
+        @media (max-width: 860px) {
+            table {
+                font-size: 15px;
+            }
+            thead th,
+            tbody td,
+            tbody th {
+                padding: 6px 6px;
+            }
+            .highlight {
+                min-width: 2em;
+            }
+            .legend {
+                flex-wrap: wrap;
+                font-size: 16px;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="table-wrap">
+        <h1>Combinators as Operators</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>FOF</th>
+                    <th>APL</th>
+                    <th>Kap</th>
+                    <th>J</th>
+                    <th>BQN</th>
+                    <th>Jelly</th>
+                    <th>Uiua</th>
+                    <th>Haskell</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>W</th>
+                    <td class="font-apl">⍨</td>
+                    <td class="font-apl">⍨</td>
+                    <td class="font-code">~</td>
+                    <td class="font-bqn">˜</td>
+                    <td>`</td>
+                    <td class="font-uiua">˙</td>
+                    <td class="font-code"><span class="highlight blue">join</span></td>
+                </tr>
+                <tr>
+                    <th>C</th>
+                    <td class="font-apl">⍨</td>
+                    <td class="font-apl">⍨</td>
+                    <td class="font-code">~</td>
+                    <td class="font-bqn">˜</td>
+                    <td>@</td>
+                    <td class="font-uiua">˜</td>
+                    <td class="font-code"><span class="highlight blue">flip</span></td>
+                </tr>
+                <tr>
+                    <th>B</th>
+                    <td class="font-apl">∘⍤⍥</td>
+                    <td class="font-apl">⍥</td>
+                    <td class="font-code">@:&amp;:</td>
+                    <td class="font-bqn">∘○</td>
+                    <td><span class="highlight yellow font-apl">*</span></td>
+                    <td class="font-uiua"><span class="highlight red">mm</span></td>
+                    <td class="font-code">.</td>
+                </tr>
+                <tr>
+                    <th>B<sub>1</sub></th>
+                    <td class="font-apl">⍤</td>
+                    <td class="font-apl"><span class="highlight green">*</span></td>
+                    <td class="font-code">@:</td>
+                    <td class="font-bqn">∘</td>
+                    <td><span class="highlight yellow font-apl">*</span></td>
+                    <td class="font-uiua"><span class="highlight red">md</span></td>
+                    <td class="font-code">:.</td>
+                </tr>
+                <tr>
+                    <th>S</th>
+                    <td class="font-apl"></td>
+                    <td class="font-apl">∘</td>
+                    <td class="font-code"><span class="highlight green font-apl">*</span></td>
+                    <td class="font-bqn">⟜</td>
+                    <td></td>
+                    <td class="font-uiua">⟜</td>
+                    <td class="font-code"><span class="highlight blue">ap</span> / &lt;*&gt;</td>
+                </tr>
+                <tr>
+                    <th>Σ</th>
+                    <td class="font-apl">⍛</td>
+                    <td class="font-apl">⍛</td>
+                    <td class="font-code"></td>
+                    <td class="font-bqn">⊸</td>
+                    <td><span class="highlight yellow font-apl">*</span></td>
+                    <td class="font-uiua">⊸</td>
+                    <td class="font-code">=&lt;&lt;</td>
+                </tr>
+                <tr>
+                    <th>D</th>
+                    <td class="font-apl">∘</td>
+                    <td class="font-apl">∘</td>
+                    <td class="font-code"><span class="highlight green font-apl">*</span></td>
+                    <td class="font-bqn">⟜</td>
+                    <td></td>
+                    <td class="font-uiua"><span class="highlight red">d⊙m</span></td>
+                    <td class="font-code"></td>
+                </tr>
+                <tr>
+                    <th>Δ</th>
+                    <td class="font-apl">⍛</td>
+                    <td class="font-apl">⍛</td>
+                    <td class="font-code"></td>
+                    <td class="font-bqn">⊸</td>
+                    <td><span class="highlight yellow font-apl">*</span></td>
+                    <td class="font-uiua"><span class="highlight red">dm</span></td>
+                    <td class="font-code"></td>
+                </tr>
+                <tr>
+                    <th>Ψ</th>
+                    <td class="font-apl">⍥</td>
+                    <td class="font-apl">⍥</td>
+                    <td class="font-code">&amp;:</td>
+                    <td class="font-bqn">○</td>
+                    <td><span class="highlight yellow font-apl">*</span></td>
+                    <td class="font-uiua">∩</td>
+                    <td class="font-code"><span class="highlight blue">on</span></td>
+                </tr>
+                <tr>
+                    <th>D<sub>2</sub></th>
+                    <td class="font-apl">a⍛b∘c</td>
+                    <td class="font-apl">a⍛b∘c</td>
+                    <td class="font-code"></td>
+                    <td class="font-bqn">a⊸b⟜c</td>
+                    <td></td>
+                    <td class="font-uiua">⊓</td>
+                    <td class="font-code"></td>
+                </tr>
+                <tr>
+                    <th>Φ</th>
+                    <td class="font-apl"><span class="highlight green">*</span></td>
+                    <td class="font-apl">a«b»c</td>
+                    <td class="font-code"><span class="highlight green font-apl">*</span></td>
+                    <td class="font-bqn"><span class="highlight green">*</span></td>
+                    <td><span class="highlight yellow font-apl">*</span></td>
+                    <td class="font-uiua">⊃</td>
+                    <td class="font-code"><span class="highlight blue">liftA2</span></td>
+                </tr>
+                <tr>
+                    <th>Φ<sub>1</sub></th>
+                    <td class="font-apl"><span class="highlight green">*</span></td>
+                    <td class="font-apl">a«b»c</td>
+                    <td class="font-code"><span class="highlight green font-apl">*</span></td>
+                    <td class="font-bqn"><span class="highlight green">*</span></td>
+                    <td><span class="highlight yellow font-apl">*</span></td>
+                    <td class="font-uiua">⊃</td>
+                    <td class="font-code"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="legend">
+            <span class="operators">Operators</span>
+            <span class="functions">Functions</span>
+            <span class="trains">Trains</span>
+            <span class="chains">Chains</span>
+            <span class="stacks">Stacks*</span>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                const colors = ["green", "yellow", "red", "blue"];
+                let index = 0;
+                const body = document.body;
+                body.classList.add("cycle-highlights");
+                body.dataset.active = colors[index];
+                index += 1;
+                setInterval(() => {
+                    body.dataset.active = colors[index % colors.length];
+                    index += 1;
+                }, 2000);
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
