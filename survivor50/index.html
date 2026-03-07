@@ -149,14 +149,14 @@
 
     .players-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 20px;
     }
 
     .player-card {
       position: relative;
       border-radius: 12px;
-      overflow: hidden;
+      overflow: visible;
       background: #1a1a1a;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       cursor: default;
@@ -175,6 +175,11 @@
     .player-card.eliminated:hover {
       transform: none;
       box-shadow: none;
+    }
+
+    .player-card-inner {
+      border-radius: 12px;
+      overflow: hidden;
     }
 
     .player-img-wrap {
@@ -207,6 +212,32 @@
     .x-overlay svg {
       width: 70%;
       height: 70%;
+    }
+
+    /* Pool pick icon */
+    .pool-pick {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 28px;
+      height: 28px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+      border: 2px solid #fff;
+    }
+
+    .pool-pick svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .pool-pick.visible {
+      display: flex;
     }
 
     .player-info {
@@ -243,6 +274,134 @@
       display: block;
     }
 
+    /* Advantage badges */
+    .badges {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 0 6px 8px;
+    }
+
+    .badge {
+      display: none;
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 3px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .badge.visible {
+      display: inline-block;
+    }
+
+    .badge-idol {
+      background: #854d0e;
+      color: #fbbf24;
+      border: 1px solid #a16207;
+    }
+
+    .badge-extra-vote {
+      background: #1e3a5f;
+      color: #60a5fa;
+      border: 1px solid #2563eb;
+    }
+
+    .badge-lost-vote {
+      background: #3f0f0f;
+      color: #f87171;
+      border: 1px solid #991b1b;
+    }
+
+    .badge-boomerang {
+      background: #4a1d6a;
+      color: #c084fc;
+      border: 1px solid #7c3aed;
+    }
+
+    /* Alliance indicators */
+    .alliance-tag {
+      display: none;
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 3px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .alliance-tag.visible {
+      display: inline-block;
+    }
+
+    /* Alliance colored borders */
+    .player-card.alliance-highlight {
+      outline: 3px solid;
+      outline-offset: -1px;
+      border-radius: 12px;
+    }
+
+    /* Alliance legend */
+    .alliances-legend {
+      display: none;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 16px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .alliances-legend.visible {
+      display: flex;
+    }
+
+    .alliance-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+
+    .alliance-legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 2px solid;
+    }
+
+    /* Pool pick legend */
+    .pool-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+
+    .pool-legend-icon {
+      width: 20px;
+      height: 20px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+    }
+
+    .pool-legend-icon svg {
+      width: 10px;
+      height: 10px;
+    }
+
     .legend {
       text-align: center;
       padding: 20px;
@@ -251,10 +410,10 @@
       border-top: 1px solid #1a1a1a;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 900px) {
       .players-grid {
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(8, minmax(100px, 1fr));
+        overflow-x: auto;
       }
       .tribe { padding: 16px; }
       .tribe-name { font-size: 1.4rem; }
@@ -276,6 +435,8 @@
   <button class="ep-btn" data-ep="2">Episode 2</button>
 </nav>
 
+<div class="alliances-legend" id="alliances-legend"></div>
+
 <main class="tribes-container">
 
   <section class="tribe tribe-cila">
@@ -287,92 +448,124 @@
       </div>
     </div>
     <div class="players-grid">
-      <div class="player-card" data-player="joe_hunter" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/joe_hunter.jpg" alt="Joe Hunter" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Joe Hunter</div>
-          <div class="player-season">S48</div>
-          <div class="elim-tag"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="savannah_louie" data-elim="2">
-        <div class="player-img-wrap">
-          <img src="images/savannah_louie.jpg" alt="Savannah Louie" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Savannah Louie</div>
-          <div class="player-season">S49 Winner</div>
-          <div class="elim-tag">Voted Out — Ep. 2</div>
+      <div class="player-card" data-player="joe_hunter">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/joe_hunter.jpg" alt="Joe Hunter" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Joe Hunter</div>
+            <div class="player-season">S48</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="christian_hubicki" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/christian_hubicki.jpg" alt="Christian Hubicki" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Christian Hubicki</div>
-          <div class="player-season">S37</div>
-          <div class="elim-tag"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="cirie_fields" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/cirie_fields.jpg" alt="Cirie Fields" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Cirie Fields</div>
-          <div class="player-season">S12 / S16 / S20 / S34</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="savannah_louie">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/savannah_louie.jpg" alt="Savannah Louie" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Savannah Louie</div>
+            <div class="player-season">S49 Winner</div>
+            <div class="elim-tag">Voted Out — Ep. 2</div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="ozzy_lusth" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/ozzy_lusth.jpg" alt="Ozzy Lusth" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Ozzy Lusth</div>
-          <div class="player-season">S13 / S16 / S23 / S34</div>
-          <div class="elim-tag"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="emily_flippen" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/emily_flippen.jpg" alt="Emily Flippen" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Emily Flippen</div>
-          <div class="player-season">S45</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="christian_hubicki">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/christian_hubicki.jpg" alt="Christian Hubicki" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Christian Hubicki</div>
+            <div class="player-season">S37</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="rick_devens" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/rick_devens.jpg" alt="Rick Devens" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Rick Devens</div>
-          <div class="player-season">S38</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="cirie_fields">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/cirie_fields.jpg" alt="Cirie Fields" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Cirie Fields</div>
+            <div class="player-season">S12 / S16 / S20 / S34</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="jenna_lewis" data-elim="1">
-        <div class="player-img-wrap">
-          <img src="images/jenna_lewis.jpg" alt="Jenna Lewis-Dougherty" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+      <div class="player-card" data-player="ozzy_lusth">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/ozzy_lusth.jpg" alt="Ozzy Lusth" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Ozzy Lusth</div>
+            <div class="player-season">S13 / S16 / S23 / S34</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
-        <div class="player-info">
-          <div class="player-name">Jenna Lewis-Dougherty</div>
-          <div class="player-season">S1 / S8</div>
-          <div class="elim-tag">Voted Out — Ep. 1</div>
+      </div>
+      <div class="player-card" data-player="emily_flippen">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/emily_flippen.jpg" alt="Emily Flippen" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Emily Flippen</div>
+            <div class="player-season">S45</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="rick_devens">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/rick_devens.jpg" alt="Rick Devens" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Rick Devens</div>
+            <div class="player-season">S38</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="jenna_lewis">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/jenna_lewis.jpg" alt="Jenna Lewis-Dougherty" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Jenna Lewis-Dougherty</div>
+            <div class="player-season">S1 / S8</div>
+            <div class="elim-tag">Voted Out — Ep. 1</div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
     </div>
@@ -387,92 +580,124 @@
       </div>
     </div>
     <div class="players-grid">
-      <div class="player-card" data-player="jonathan_young" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/jonathan_young.jpg" alt="Jonathan Young" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Jonathan Young</div>
-          <div class="player-season">S42</div>
-          <div class="elim-tag"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="dee_valladares" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/dee_valladares.jpg" alt="Dee Valladares" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Dee Valladares</div>
-          <div class="player-season">S45 Winner</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="jonathan_young">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/jonathan_young.jpg" alt="Jonathan Young" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Jonathan Young</div>
+            <div class="player-season">S42</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="mike_white" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/mike_white.jpg" alt="Mike White" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Mike White</div>
-          <div class="player-season">S37</div>
-          <div class="elim-tag"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="kamilla_karthigesu" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/kamilla_karthigesu.jpg" alt="Kamilla Karthigesu" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Kamilla Karthigesu</div>
-          <div class="player-season">S48</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="dee_valladares">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/dee_valladares.jpg" alt="Dee Valladares" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Dee Valladares</div>
+            <div class="player-season">S45 Winner</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="charlie_davis" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/charlie_davis.jpg" alt="Charlie Davis" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Charlie Davis</div>
-          <div class="player-season">S46</div>
-          <div class="elim-tag"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="tiffany_ervin" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/tiffany_ervin.jpg" alt="Tiffany Ervin" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Tiffany Ervin</div>
-          <div class="player-season">S46</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="mike_white">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/mike_white.jpg" alt="Mike White" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Mike White</div>
+            <div class="player-season">S37</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="coach_wade" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/coach_wade.jpg" alt='Benjamin "Coach" Wade' loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">"Coach" Wade</div>
-          <div class="player-season">S18 / S20 / S23</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="kamilla_karthigesu">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/kamilla_karthigesu.jpg" alt="Kamilla Karthigesu" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Kamilla Karthigesu</div>
+            <div class="player-season">S48</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="chrissy_hofbeck" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/chrissy_hofbeck.jpg" alt="Chrissy Hofbeck" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+      <div class="player-card" data-player="charlie_davis">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/charlie_davis.jpg" alt="Charlie Davis" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Charlie Davis</div>
+            <div class="player-season">S46</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
-        <div class="player-info">
-          <div class="player-name">Chrissy Hofbeck</div>
-          <div class="player-season">S35</div>
-          <div class="elim-tag"></div>
+      </div>
+      <div class="player-card" data-player="tiffany_ervin">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/tiffany_ervin.jpg" alt="Tiffany Ervin" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Tiffany Ervin</div>
+            <div class="player-season">S46</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="coach_wade">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/coach_wade.jpg" alt='Benjamin "Coach" Wade' loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">"Coach" Wade</div>
+            <div class="player-season">S18 / S20 / S23</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="chrissy_hofbeck">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/chrissy_hofbeck.jpg" alt="Chrissy Hofbeck" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Chrissy Hofbeck</div>
+            <div class="player-season">S35</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
     </div>
@@ -487,92 +712,124 @@
       </div>
     </div>
     <div class="players-grid">
-      <div class="player-card" data-player="colby_donaldson" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/colby_donaldson.jpg" alt="Colby Donaldson" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Colby Donaldson</div>
-          <div class="player-season">S2 / S8 / S20</div>
-          <div class="elim-tag"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="genevieve_mushaluk" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/genevieve_mushaluk.jpg" alt="Genevieve Mushaluk" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Genevieve Mushaluk</div>
-          <div class="player-season">S47</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="colby_donaldson">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/colby_donaldson.jpg" alt="Colby Donaldson" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Colby Donaldson</div>
+            <div class="player-season">S2 / S8 / S20</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="rizo_velovic" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/rizo_velovic.jpg" alt="Rizo Velovic" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Rizo Velovic</div>
-          <div class="player-season">S49</div>
-          <div class="elim-tag"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="angelina_keeley" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/angelina_keeley.jpg" alt="Angelina Keeley" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Angelina Keeley</div>
-          <div class="player-season">S37</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="genevieve_mushaluk">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/genevieve_mushaluk.jpg" alt="Genevieve Mushaluk" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Genevieve Mushaluk</div>
+            <div class="player-season">S47</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="q_burdette" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/q_burdette.jpg" alt="Q Burdette" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Q Burdette</div>
-          <div class="player-season">S46</div>
-          <div class="elim-tag"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="stephenie_lagrossa" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/stephenie_lagrossa.jpg" alt="Stephenie LaGrossa Kendrick" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Stephenie LaGrossa</div>
-          <div class="player-season">S10 / S11 / S20</div>
-          <div class="elim-tag"></div>
+      <div class="player-card" data-player="rizo_velovic">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/rizo_velovic.jpg" alt="Rizo Velovic" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Rizo Velovic</div>
+            <div class="player-season">S49</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="kyle_fraser" data-elim="1">
-        <div class="player-img-wrap">
-          <img src="images/kyle_fraser.jpg" alt="Kyle Fraser" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-        </div>
-        <div class="player-info">
-          <div class="player-name">Kyle Fraser</div>
-          <div class="player-season">S48 Winner</div>
-          <div class="elim-tag">Med. Evac — Ep. 1</div>
+      <div class="player-card" data-player="angelina_keeley">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/angelina_keeley.jpg" alt="Angelina Keeley" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Angelina Keeley</div>
+            <div class="player-season">S37</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
-      <div class="player-card" data-player="aubry_bracco" data-elim="">
-        <div class="player-img-wrap">
-          <img src="images/aubry_bracco.jpg" alt="Aubry Bracco" loading="lazy">
-          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+      <div class="player-card" data-player="q_burdette">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/q_burdette.jpg" alt="Q Burdette" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Q Burdette</div>
+            <div class="player-season">S46</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
-        <div class="player-info">
-          <div class="player-name">Aubry Bracco</div>
-          <div class="player-season">S32 / S34 / S38</div>
-          <div class="elim-tag"></div>
+      </div>
+      <div class="player-card" data-player="stephenie_lagrossa">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/stephenie_lagrossa.jpg" alt="Stephenie LaGrossa Kendrick" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Stephenie LaGrossa</div>
+            <div class="player-season">S10 / S11 / S20</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="kyle_fraser">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/kyle_fraser.jpg" alt="Kyle Fraser" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Kyle Fraser</div>
+            <div class="player-season">S48 Winner</div>
+            <div class="elim-tag">Med. Evac — Ep. 1</div>
+          </div>
+          <div class="badges"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="aubry_bracco">
+        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
+        <div class="player-card-inner">
+          <div class="player-img-wrap">
+            <img src="images/aubry_bracco.jpg" alt="Aubry Bracco" loading="lazy">
+            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+          </div>
+          <div class="player-info">
+            <div class="player-name">Aubry Bracco</div>
+            <div class="player-season">S32 / S34 / S38</div>
+            <div class="elim-tag"></div>
+          </div>
+          <div class="badges"></div>
         </div>
       </div>
     </div>
@@ -581,21 +838,65 @@
 </main>
 
 <footer class="legend">
-  Survivor 50: In the Hands of the Fans &mdash; Premieres Feb. 25, 2026 on CBS
+  Survivor 50: In the Hands of the Fans &mdash; CBS, Spring 2026
 </footer>
 
 <script>
+  // === DATA ===
+
   const eliminations = {
     1: ['jenna_lewis', 'kyle_fraser'],
     2: ['savannah_louie'],
   };
 
+  // Your survivor pool picks per episode
+  const poolPicks = {
+    2: 'cirie_fields',
+  };
+
+  // Advantages keyed by episode they're known to be held at end of that episode
+  // Each entry: { player, type, label }
+  //   type: 'idol' | 'extra-vote' | 'lost-vote' | 'boomerang'
+  const advantages = {
+    1: [
+      { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'colby_donaldson', type: 'lost-vote', label: 'Lost Vote' },
+      { player: 'q_burdette', type: 'lost-vote', label: 'Lost Vote' },
+    ],
+    2: [
+      { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'aubry_bracco', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'ozzy_lusth', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'colby_donaldson', type: 'lost-vote', label: 'Lost Vote' },
+      { player: 'q_burdette', type: 'lost-vote', label: 'Lost Vote' },
+    ],
+  };
+
+  // Alliances keyed by episode
+  // Each alliance: { name, color, members[] }
+  const alliances = {
+    1: [
+      { name: 'Christian & Devens', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens'] },
+      { name: 'Ozzy & Cirie', color: '#22d3ee', members: ['ozzy_lusth', 'cirie_fields'] },
+      { name: 'Vatu 5', color: '#d946ef', members: ['q_burdette', 'colby_donaldson', 'genevieve_mushaluk', 'rizo_velovic', 'stephenie_lagrossa'] },
+    ],
+    2: [
+      { name: 'Christian & Devens', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens'] },
+      { name: 'Ozzy & Cirie', color: '#22d3ee', members: ['ozzy_lusth', 'cirie_fields'] },
+      { name: 'Vatu 5', color: '#d946ef', members: ['q_burdette', 'colby_donaldson', 'genevieve_mushaluk', 'rizo_velovic', 'stephenie_lagrossa'] },
+    ],
+  };
+
+  // === LOGIC ===
+
   const buttons = document.querySelectorAll('.ep-btn');
   const cards = document.querySelectorAll('.player-card');
+  const legendEl = document.getElementById('alliances-legend');
 
   function setEpisode(ep) {
     buttons.forEach(b => b.classList.toggle('active', parseInt(b.dataset.ep) === ep));
 
+    // Eliminations
     const eliminatedSet = new Set();
     for (let e = 1; e <= ep; e++) {
       if (eliminations[e]) {
@@ -603,15 +904,99 @@
       }
     }
 
+    // Pool picks up to this ep
+    const poolSet = new Set();
+    for (let e = 1; e <= ep; e++) {
+      if (poolPicks[e]) poolSet.add(poolPicks[e]);
+    }
+
+    // Current advantages
+    let currentAdvantages = [];
+    for (let e = ep; e >= 1; e--) {
+      if (advantages[e]) { currentAdvantages = advantages[e]; break; }
+    }
+    const advMap = {};
+    currentAdvantages.forEach(a => {
+      if (!advMap[a.player]) advMap[a.player] = [];
+      advMap[a.player].push(a);
+    });
+
+    // Current alliances
+    let currentAlliances = [];
+    for (let e = ep; e >= 1; e--) {
+      if (alliances[e]) { currentAlliances = alliances[e]; break; }
+    }
+    const allianceMap = {};
+    currentAlliances.forEach(a => {
+      a.members.forEach(m => {
+        if (!allianceMap[m]) allianceMap[m] = [];
+        allianceMap[m].push(a);
+      });
+    });
+
+    // Update cards
     cards.forEach(card => {
       const player = card.dataset.player;
-      const elimEp = card.dataset.elim;
+
+      // Elimination
       if (eliminatedSet.has(player)) {
         card.classList.add('eliminated');
       } else {
         card.classList.remove('eliminated');
       }
+
+      // Pool pick icon
+      const poolIcon = card.querySelector('.pool-pick');
+      if (poolSet.has(player) && ep > 0) {
+        poolIcon.classList.add('visible');
+      } else {
+        poolIcon.classList.remove('visible');
+      }
+
+      // Badges
+      const badgesEl = card.querySelector('.badges');
+      badgesEl.innerHTML = '';
+      if (ep > 0 && advMap[player] && !eliminatedSet.has(player)) {
+        advMap[player].forEach(adv => {
+          const badge = document.createElement('span');
+          badge.className = `badge badge-${adv.type} visible`;
+          badge.textContent = adv.label;
+          badgesEl.appendChild(badge);
+        });
+      }
+
+      // Alliance border
+      card.classList.remove('alliance-highlight');
+      card.style.outlineColor = '';
+      if (ep > 0 && allianceMap[player] && !eliminatedSet.has(player)) {
+        const a = allianceMap[player][0];
+        card.classList.add('alliance-highlight');
+        card.style.outlineColor = a.color;
+      }
     });
+
+    // Alliance legend
+    legendEl.innerHTML = '';
+    if (ep > 0 && currentAlliances.length > 0) {
+      legendEl.classList.add('visible');
+
+      // Pool pick legend item
+      if (poolSet.size > 0) {
+        const item = document.createElement('div');
+        item.className = 'pool-legend';
+        item.innerHTML = `<div class="pool-legend-icon"><svg viewBox="0 0 24 24" fill="none" width="10" height="10"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div> My Pool Pick`;
+        legendEl.appendChild(item);
+      }
+
+      currentAlliances.forEach(a => {
+        const item = document.createElement('div');
+        item.className = 'alliance-legend-item';
+        item.innerHTML = `<div class="alliance-legend-swatch" style="background:${a.color}33;border-color:${a.color}"></div> ${a.name}`;
+        legendEl.appendChild(item);
+      });
+    } else {
+      legendEl.classList.remove('visible');
+    }
   }
 
   buttons.forEach(btn => {
@@ -620,7 +1005,8 @@
     });
   });
 
-  setEpisode(0);
+  const maxEp = Math.max(...Array.from(buttons).map(b => parseInt(b.dataset.ep)));
+  setEpisode(maxEp);
 </script>
 
 </body>
