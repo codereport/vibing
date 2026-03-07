@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survivor 50: In the Hands of the Fans</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0a;
+      color: #e8e8e8;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+      border-bottom: 2px solid #333;
+    }
+
+    header h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, #f59e0b, #ef4444, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header .subtitle {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      color: #888;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .episode-bar {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 24px 20px;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #222;
+    }
+
+    .ep-btn {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      border: 2px solid #444;
+      border-radius: 6px;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .ep-btn:hover {
+      border-color: #888;
+      color: #fff;
+    }
+
+    .ep-btn.active {
+      background: #fff;
+      color: #0a0a0a;
+      border-color: #fff;
+    }
+
+    .ep-btn.active:hover {
+      background: #ddd;
+      border-color: #ddd;
+    }
+
+    .tribes-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+    }
+
+    .tribe {
+      border-radius: 16px;
+      padding: 30px;
+      background: #111;
+      border: 1px solid #222;
+    }
+
+    .tribe-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid;
+    }
+
+    .tribe-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .tribe-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .tribe-label {
+      font-size: 0.85rem;
+      color: #888;
+      letter-spacing: 1px;
+    }
+
+    .tribe-cila .tribe-header { border-color: #f59e0b; }
+    .tribe-cila .tribe-dot { background: #f59e0b; }
+    .tribe-cila .tribe-name { color: #f59e0b; }
+
+    .tribe-kalo .tribe-header { border-color: #14b8a6; }
+    .tribe-kalo .tribe-dot { background: #14b8a6; }
+    .tribe-kalo .tribe-name { color: #14b8a6; }
+
+    .tribe-vatu .tribe-header { border-color: #d946ef; }
+    .tribe-vatu .tribe-dot { background: #d946ef; }
+    .tribe-vatu .tribe-name { color: #d946ef; }
+
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+    }
+
+    .player-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #1a1a1a;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: default;
+    }
+
+    .player-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .player-card.eliminated {
+      filter: grayscale(1);
+      opacity: 0.5;
+    }
+
+    .player-card.eliminated:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .player-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 2/3;
+      overflow: hidden;
+    }
+
+    .player-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .x-overlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .eliminated .x-overlay {
+      display: flex;
+    }
+
+    .x-overlay svg {
+      width: 70%;
+      height: 70%;
+    }
+
+    .player-info {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .player-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+
+    .player-season {
+      font-size: 0.75rem;
+      color: #777;
+      margin-top: 3px;
+    }
+
+    .elim-tag {
+      display: none;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #ef4444;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .eliminated .elim-tag {
+      display: block;
+    }
+
+    .legend {
+      text-align: center;
+      padding: 20px;
+      color: #555;
+      font-size: 0.8rem;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    @media (max-width: 600px) {
+      .players-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 10px;
+      }
+      .tribe { padding: 16px; }
+      .tribe-name { font-size: 1.4rem; }
+      .player-info { padding: 8px; }
+      .player-name { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Survivor 50</h1>
+  <div class="subtitle">In the Hands of the Fans</div>
+</header>
+
+<nav class="episode-bar">
+  <button class="ep-btn active" data-ep="0">Pre-Game</button>
+  <button class="ep-btn" data-ep="1">Episode 1</button>
+  <button class="ep-btn" data-ep="2">Episode 2</button>
+</nav>
+
+<main class="tribes-container">
+
+  <section class="tribe tribe-cila">
+    <div class="tribe-header">
+      <div class="tribe-dot"></div>
+      <div>
+        <div class="tribe-name">Cila</div>
+        <div class="tribe-label">Orange Tribe</div>
+      </div>
+    </div>
+    <div class="players-grid">
+      <div class="player-card" data-player="joe_hunter" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/joe_hunter.jpg" alt="Joe Hunter" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Joe Hunter</div>
+          <div class="player-season">S48</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="savannah_louie" data-elim="2">
+        <div class="player-img-wrap">
+          <img src="images/savannah_louie.jpg" alt="Savannah Louie" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Savannah Louie</div>
+          <div class="player-season">S49 Winner</div>
+          <div class="elim-tag">Voted Out — Ep. 2</div>
+        </div>
+      </div>
+      <div class="player-card" data-player="christian_hubicki" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/christian_hubicki.jpg" alt="Christian Hubicki" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Christian Hubicki</div>
+          <div class="player-season">S37</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="cirie_fields" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/cirie_fields.jpg" alt="Cirie Fields" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Cirie Fields</div>
+          <div class="player-season">S12 / S16 / S20 / S34</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="ozzy_lusth" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/ozzy_lusth.jpg" alt="Ozzy Lusth" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Ozzy Lusth</div>
+          <div class="player-season">S13 / S16 / S23 / S34</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="emily_flippen" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/emily_flippen.jpg" alt="Emily Flippen" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Emily Flippen</div>
+          <div class="player-season">S45</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="rick_devens" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/rick_devens.jpg" alt="Rick Devens" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Rick Devens</div>
+          <div class="player-season">S38</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="jenna_lewis" data-elim="1">
+        <div class="player-img-wrap">
+          <img src="images/jenna_lewis.jpg" alt="Jenna Lewis-Dougherty" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Jenna Lewis-Dougherty</div>
+          <div class="player-season">S1 / S8</div>
+          <div class="elim-tag">Voted Out — Ep. 1</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tribe tribe-kalo">
+    <div class="tribe-header">
+      <div class="tribe-dot"></div>
+      <div>
+        <div class="tribe-name">Kalo</div>
+        <div class="tribe-label">Teal Tribe</div>
+      </div>
+    </div>
+    <div class="players-grid">
+      <div class="player-card" data-player="jonathan_young" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/jonathan_young.jpg" alt="Jonathan Young" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Jonathan Young</div>
+          <div class="player-season">S42</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="dee_valladares" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/dee_valladares.jpg" alt="Dee Valladares" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Dee Valladares</div>
+          <div class="player-season">S45 Winner</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="mike_white" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/mike_white.jpg" alt="Mike White" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Mike White</div>
+          <div class="player-season">S37</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="kamilla_karthigesu" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/kamilla_karthigesu.jpg" alt="Kamilla Karthigesu" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Kamilla Karthigesu</div>
+          <div class="player-season">S48</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="charlie_davis" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/charlie_davis.jpg" alt="Charlie Davis" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Charlie Davis</div>
+          <div class="player-season">S46</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="tiffany_ervin" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/tiffany_ervin.jpg" alt="Tiffany Ervin" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Tiffany Ervin</div>
+          <div class="player-season">S46</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="coach_wade" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/coach_wade.jpg" alt='Benjamin "Coach" Wade' loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">"Coach" Wade</div>
+          <div class="player-season">S18 / S20 / S23</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="chrissy_hofbeck" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/chrissy_hofbeck.jpg" alt="Chrissy Hofbeck" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Chrissy Hofbeck</div>
+          <div class="player-season">S35</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tribe tribe-vatu">
+    <div class="tribe-header">
+      <div class="tribe-dot"></div>
+      <div>
+        <div class="tribe-name">Vatu</div>
+        <div class="tribe-label">Magenta Tribe</div>
+      </div>
+    </div>
+    <div class="players-grid">
+      <div class="player-card" data-player="colby_donaldson" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/colby_donaldson.jpg" alt="Colby Donaldson" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Colby Donaldson</div>
+          <div class="player-season">S2 / S8 / S20</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="genevieve_mushaluk" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/genevieve_mushaluk.jpg" alt="Genevieve Mushaluk" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Genevieve Mushaluk</div>
+          <div class="player-season">S47</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="rizo_velovic" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/rizo_velovic.jpg" alt="Rizo Velovic" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Rizo Velovic</div>
+          <div class="player-season">S49</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="angelina_keeley" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/angelina_keeley.jpg" alt="Angelina Keeley" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Angelina Keeley</div>
+          <div class="player-season">S37</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="q_burdette" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/q_burdette.jpg" alt="Q Burdette" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Q Burdette</div>
+          <div class="player-season">S46</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="stephenie_lagrossa" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/stephenie_lagrossa.jpg" alt="Stephenie LaGrossa Kendrick" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Stephenie LaGrossa</div>
+          <div class="player-season">S10 / S11 / S20</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="kyle_fraser" data-elim="1">
+        <div class="player-img-wrap">
+          <img src="images/kyle_fraser.jpg" alt="Kyle Fraser" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Kyle Fraser</div>
+          <div class="player-season">S48 Winner</div>
+          <div class="elim-tag">Med. Evac — Ep. 1</div>
+        </div>
+      </div>
+      <div class="player-card" data-player="aubry_bracco" data-elim="">
+        <div class="player-img-wrap">
+          <img src="images/aubry_bracco.jpg" alt="Aubry Bracco" loading="lazy">
+          <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">Aubry Bracco</div>
+          <div class="player-season">S32 / S34 / S38</div>
+          <div class="elim-tag"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="legend">
+  Survivor 50: In the Hands of the Fans &mdash; Premieres Feb. 25, 2026 on CBS
+</footer>
+
+<script>
+  const eliminations = {
+    1: ['jenna_lewis', 'kyle_fraser'],
+    2: ['savannah_louie'],
+  };
+
+  const buttons = document.querySelectorAll('.ep-btn');
+  const cards = document.querySelectorAll('.player-card');
+
+  function setEpisode(ep) {
+    buttons.forEach(b => b.classList.toggle('active', parseInt(b.dataset.ep) === ep));
+
+    const eliminatedSet = new Set();
+    for (let e = 1; e <= ep; e++) {
+      if (eliminations[e]) {
+        eliminations[e].forEach(p => eliminatedSet.add(p));
+      }
+    }
+
+    cards.forEach(card => {
+      const player = card.dataset.player;
+      const elimEp = card.dataset.elim;
+      if (eliminatedSet.has(player)) {
+        card.classList.add('eliminated');
+      } else {
+        card.classList.remove('eliminated');
+      }
+    });
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setEpisode(parseInt(btn.dataset.ep));
+    });
+  });
+
+  setEpisode(0);
+</script>
+
+</body>
+</html>
