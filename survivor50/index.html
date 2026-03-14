@@ -433,6 +433,7 @@
   <button class="ep-btn active" data-ep="0">Pre-Game</button>
   <button class="ep-btn" data-ep="1">Episode 1</button>
   <button class="ep-btn" data-ep="2">Episode 2</button>
+  <button class="ep-btn" data-ep="3">Episode 3</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -782,7 +783,7 @@
           <div class="player-info">
             <div class="player-name">Q Burdette</div>
             <div class="player-season">S46</div>
-            <div class="elim-tag"></div>
+            <div class="elim-tag">Voted Out — Ep. 3</div>
           </div>
           <div class="badges"></div>
         </div>
@@ -847,16 +848,16 @@
   const eliminations = {
     1: ['jenna_lewis', 'kyle_fraser'],
     2: ['savannah_louie'],
+    3: ['q_burdette'],
   };
 
   // Your survivor pool picks per episode
   const poolPicks = {
     2: 'cirie_fields',
+    3: 'angelina_keeley',
   };
 
   // Advantages keyed by episode they're known to be held at end of that episode
-  // Each entry: { player, type, label }
-  //   type: 'idol' | 'extra-vote' | 'lost-vote' | 'boomerang'
   const advantages = {
     1: [
       { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
@@ -870,10 +871,15 @@
       { player: 'colby_donaldson', type: 'lost-vote', label: 'Lost Vote' },
       { player: 'q_burdette', type: 'lost-vote', label: 'Lost Vote' },
     ],
+    3: [
+      { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'aubry_bracco', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'ozzy_lusth', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'colby_donaldson', type: 'lost-vote', label: 'Lost Vote' },
+    ],
   };
 
   // Alliances keyed by episode
-  // Each alliance: { name, color, members[] }
   const alliances = {
     1: [
       { name: 'Christian & Devens', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens'] },
@@ -884,6 +890,12 @@
       { name: 'Christian & Devens', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens'] },
       { name: 'Ozzy & Cirie', color: '#22d3ee', members: ['ozzy_lusth', 'cirie_fields'] },
       { name: 'Vatu 5', color: '#d946ef', members: ['q_burdette', 'colby_donaldson', 'genevieve_mushaluk', 'rizo_velovic', 'stephenie_lagrossa'] },
+    ],
+    3: [
+      { name: 'Christian & Devens', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens'] },
+      { name: 'Ozzy & Cirie', color: '#22d3ee', members: ['ozzy_lusth', 'cirie_fields'] },
+      { name: 'Kalo Honor Alliance', color: '#10b981', members: ['coach_wade', 'colby_donaldson', 'joe_hunter', 'chrissy_hofbeck'] },
+      { name: 'Dee & Jonathan', color: '#f472b6', members: ['dee_valladares', 'jonathan_young'] },
     ],
   };
 
