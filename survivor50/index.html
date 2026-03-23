@@ -434,6 +434,7 @@
   <button class="ep-btn" data-ep="1">Episode 1</button>
   <button class="ep-btn" data-ep="2">Episode 2</button>
   <button class="ep-btn" data-ep="3">Episode 3</button>
+  <button class="ep-btn" data-ep="4">Episode 4</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -621,7 +622,7 @@
           <div class="player-info">
             <div class="player-name">Mike White</div>
             <div class="player-season">S37</div>
-            <div class="elim-tag"></div>
+            <div class="elim-tag">Voted Out — Ep. 4</div>
           </div>
           <div class="badges"></div>
         </div>
@@ -849,12 +850,14 @@
     1: ['jenna_lewis', 'kyle_fraser'],
     2: ['savannah_louie'],
     3: ['q_burdette'],
+    4: ['mike_white'],
   };
 
   // Your survivor pool picks per episode
   const poolPicks = {
     2: 'cirie_fields',
     3: 'angelina_keeley',
+    4: 'colby_donaldson',
   };
 
   // Advantages keyed by episode they're known to be held at end of that episode
@@ -877,6 +880,13 @@
       { player: 'ozzy_lusth', type: 'boomerang', label: 'Boomerang Idol' },
       { player: 'colby_donaldson', type: 'lost-vote', label: 'Lost Vote' },
     ],
+    4: [
+      { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'aubry_bracco', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'ozzy_lusth', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'colby_donaldson', type: 'lost-vote', label: 'Lost Vote' },
+      { player: 'rizo_velovic', type: 'boomerang', label: 'Boomerang Idol' },
+    ],
   };
 
   // Alliances keyed by episode
@@ -893,6 +903,12 @@
     ],
     3: [
       { name: 'Christian & Devens', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens'] },
+      { name: 'Ozzy & Cirie', color: '#22d3ee', members: ['ozzy_lusth', 'cirie_fields'] },
+      { name: 'Kalo Honor Alliance', color: '#10b981', members: ['coach_wade', 'colby_donaldson', 'joe_hunter', 'chrissy_hofbeck'] },
+      { name: 'Dee & Jonathan', color: '#f472b6', members: ['dee_valladares', 'jonathan_young'] },
+    ],
+    4: [
+      { name: 'Christian & Emily & Stephenie', color: '#f59e0b', members: ['christian_hubicki', 'emily_flippen', 'stephenie_lagrossa'] },
       { name: 'Ozzy & Cirie', color: '#22d3ee', members: ['ozzy_lusth', 'cirie_fields'] },
       { name: 'Kalo Honor Alliance', color: '#10b981', members: ['coach_wade', 'colby_donaldson', 'joe_hunter', 'chrissy_hofbeck'] },
       { name: 'Dee & Jonathan', color: '#f472b6', members: ['dee_valladares', 'jonathan_young'] },
