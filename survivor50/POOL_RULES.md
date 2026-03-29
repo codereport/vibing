@@ -31,9 +31,11 @@ This means you want to pick players who are **safe this week** but **on borrowed
 | Ep. 2 | Cirie Fields | SAFE |
 | Ep. 3 | Angelina Keeley | SAFE |
 | Ep. 4 | Colby Donaldson | SAFE |
+| Ep. 5 | Stephenie LaGrossa | SAFE |
 
 ## Players Already Used
 
 - [x] Cirie Fields (Ep. 2)
 - [x] Angelina Keeley (Ep. 3)
 - [x] Colby Donaldson (Ep. 4)
+- [x] Stephenie LaGrossa (Ep. 5)
