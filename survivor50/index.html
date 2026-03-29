@@ -73,21 +73,57 @@
       transition: all 0.25s ease;
     }
 
-    .ep-btn:hover {
-      border-color: #888;
-      color: #fff;
+    .ep-btn:hover { border-color: #888; color: #fff; }
+    .ep-btn.active { background: #fff; color: #0a0a0a; border-color: #fff; }
+    .ep-btn.active:hover { background: #ddd; border-color: #ddd; }
+
+    .alliances-legend {
+      display: none;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 16px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
-    .ep-btn.active {
-      background: #fff;
-      color: #0a0a0a;
-      border-color: #fff;
+    .alliances-legend.visible { display: flex; }
+
+    .alliance-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #aaa;
     }
 
-    .ep-btn.active:hover {
-      background: #ddd;
-      border-color: #ddd;
+    .alliance-legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      border: 2px solid;
     }
+
+    .pool-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+
+    .pool-legend-icon {
+      width: 20px;
+      height: 20px;
+      background: #3b82f6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #fff;
+    }
+
+    .pool-legend-icon svg { width: 10px; height: 10px; }
 
     .tribes-container {
       max-width: 1400px;
@@ -121,7 +157,7 @@
       flex-shrink: 0;
     }
 
-    .tribe-name {
+    .tribe-name-text {
       font-family: 'Oswald', sans-serif;
       font-size: 1.8rem;
       font-weight: 700;
@@ -134,18 +170,6 @@
       color: #888;
       letter-spacing: 1px;
     }
-
-    .tribe-cila .tribe-header { border-color: #f59e0b; }
-    .tribe-cila .tribe-dot { background: #f59e0b; }
-    .tribe-cila .tribe-name { color: #f59e0b; }
-
-    .tribe-kalo .tribe-header { border-color: #14b8a6; }
-    .tribe-kalo .tribe-dot { background: #14b8a6; }
-    .tribe-kalo .tribe-name { color: #14b8a6; }
-
-    .tribe-vatu .tribe-header { border-color: #d946ef; }
-    .tribe-vatu .tribe-dot { background: #d946ef; }
-    .tribe-vatu .tribe-name { color: #d946ef; }
 
     .players-grid {
       display: grid;
@@ -162,25 +186,11 @@
       cursor: default;
     }
 
-    .player-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    }
+    .player-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+    .player-card.eliminated { filter: grayscale(1); opacity: 0.5; }
+    .player-card.eliminated:hover { transform: none; box-shadow: none; }
 
-    .player-card.eliminated {
-      filter: grayscale(1);
-      opacity: 0.5;
-    }
-
-    .player-card.eliminated:hover {
-      transform: none;
-      box-shadow: none;
-    }
-
-    .player-card-inner {
-      border-radius: 12px;
-      overflow: hidden;
-    }
+    .player-card-inner { border-radius: 12px; overflow: hidden; }
 
     .player-img-wrap {
       position: relative;
@@ -189,12 +199,7 @@
       overflow: hidden;
     }
 
-    .player-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .player-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .x-overlay {
       position: absolute;
@@ -205,16 +210,9 @@
       background: rgba(0, 0, 0, 0.55);
     }
 
-    .eliminated .x-overlay {
-      display: flex;
-    }
+    .eliminated .x-overlay { display: flex; }
+    .x-overlay svg { width: 70%; height: 70%; }
 
-    .x-overlay svg {
-      width: 70%;
-      height: 70%;
-    }
-
-    /* Pool pick icon */
     .pool-pick {
       position: absolute;
       top: 6px;
@@ -231,19 +229,10 @@
       border: 2px solid #fff;
     }
 
-    .pool-pick svg {
-      width: 14px;
-      height: 14px;
-    }
+    .pool-pick svg { width: 14px; height: 14px; }
+    .pool-pick.visible { display: flex; }
 
-    .pool-pick.visible {
-      display: flex;
-    }
-
-    .player-info {
-      padding: 10px;
-      text-align: center;
-    }
+    .player-info { padding: 10px; text-align: center; }
 
     .player-name {
       font-family: 'Oswald', sans-serif;
@@ -254,11 +243,7 @@
       line-height: 1.2;
     }
 
-    .player-season {
-      font-size: 0.75rem;
-      color: #777;
-      margin-top: 3px;
-    }
+    .player-season { font-size: 0.75rem; color: #777; margin-top: 3px; }
 
     .elim-tag {
       display: none;
@@ -270,11 +255,8 @@
       letter-spacing: 0.5px;
     }
 
-    .eliminated .elim-tag {
-      display: block;
-    }
+    .eliminated .elim-tag { display: block; }
 
-    /* Advantage badges */
     .badges {
       display: flex;
       justify-content: center;
@@ -295,112 +277,63 @@
       line-height: 1;
     }
 
-    .badge.visible {
-      display: inline-block;
-    }
+    .badge.visible { display: inline-block; }
+    .badge-idol { background: #854d0e; color: #fbbf24; border: 1px solid #a16207; }
+    .badge-extra-vote { background: #1e3a5f; color: #60a5fa; border: 1px solid #2563eb; }
+    .badge-lost-vote { background: #3f0f0f; color: #f87171; border: 1px solid #991b1b; }
+    .badge-boomerang { background: #4a1d6a; color: #c084fc; border: 1px solid #7c3aed; }
 
-    .badge-idol {
-      background: #854d0e;
-      color: #fbbf24;
-      border: 1px solid #a16207;
-    }
-
-    .badge-extra-vote {
-      background: #1e3a5f;
-      color: #60a5fa;
-      border: 1px solid #2563eb;
-    }
-
-    .badge-lost-vote {
-      background: #3f0f0f;
-      color: #f87171;
-      border: 1px solid #991b1b;
-    }
-
-    .badge-boomerang {
-      background: #4a1d6a;
-      color: #c084fc;
-      border: 1px solid #7c3aed;
-    }
-
-    /* Alliance indicators */
-    .alliance-tag {
-      display: none;
-      font-size: 0.6rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.3px;
-      padding: 3px 7px;
-      border-radius: 4px;
-      white-space: nowrap;
-      line-height: 1;
-    }
-
-    .alliance-tag.visible {
-      display: inline-block;
-    }
-
-    /* Alliance colored borders */
     .player-card.alliance-highlight {
       outline: 3px solid;
       outline-offset: -1px;
       border-radius: 12px;
     }
 
-    /* Alliance legend */
-    .alliances-legend {
-      display: none;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      padding: 16px 20px;
-      max-width: 1400px;
-      margin: 0 auto;
+    .voted-out-section {
+      border-radius: 16px;
+      padding: 30px;
+      background: #0d0d0d;
+      border: 1px solid #1a1a1a;
     }
 
-    .alliances-legend.visible {
-      display: flex;
-    }
-
-    .alliance-legend-item {
+    .voted-out-header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      color: #aaa;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid #333;
     }
 
-    .alliance-legend-swatch {
-      width: 14px;
-      height: 14px;
-      border-radius: 3px;
-      border: 2px solid;
+    .voted-out-header .tribe-dot { background: #555; }
+
+    .voted-out-header .tribe-name-text {
+      color: #555;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 3px;
     }
 
-    /* Pool pick legend */
-    .pool-legend {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      color: #aaa;
+    .voted-out-grid {
+      display: grid;
+      gap: 20px;
+      max-width: 900px;
     }
 
-    .pool-legend-icon {
-      width: 20px;
-      height: 20px;
-      background: #3b82f6;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #fff;
+    .voted-out-section .player-card {
+      filter: grayscale(1);
+      opacity: 0.5;
     }
 
-    .pool-legend-icon svg {
-      width: 10px;
-      height: 10px;
+    .voted-out-section .player-card:hover {
+      transform: none;
+      box-shadow: none;
     }
+
+    .voted-out-section .x-overlay { display: flex; }
+    .voted-out-section .elim-tag { display: block; }
 
     .legend {
       text-align: center;
@@ -416,7 +349,7 @@
         overflow-x: auto;
       }
       .tribe { padding: 16px; }
-      .tribe-name { font-size: 1.4rem; }
+      .tribe-name-text { font-size: 1.4rem; }
       .player-info { padding: 8px; }
       .player-name { font-size: 0.8rem; }
     }
@@ -439,413 +372,63 @@
 
 <div class="alliances-legend" id="alliances-legend"></div>
 
-<main class="tribes-container">
-
-  <section class="tribe tribe-cila">
-    <div class="tribe-header">
-      <div class="tribe-dot"></div>
-      <div>
-        <div class="tribe-name">Cila</div>
-        <div class="tribe-label">Orange Tribe</div>
-      </div>
-    </div>
-    <div class="players-grid">
-      <div class="player-card" data-player="joe_hunter">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/joe_hunter.jpg" alt="Joe Hunter" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Joe Hunter</div>
-            <div class="player-season">S48</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="savannah_louie">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/savannah_louie.jpg" alt="Savannah Louie" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Savannah Louie</div>
-            <div class="player-season">S49 Winner</div>
-            <div class="elim-tag">Voted Out — Ep. 2</div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="christian_hubicki">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/christian_hubicki.jpg" alt="Christian Hubicki" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Christian Hubicki</div>
-            <div class="player-season">S37</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="cirie_fields">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/cirie_fields.jpg" alt="Cirie Fields" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Cirie Fields</div>
-            <div class="player-season">S12 / S16 / S20 / S34</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="ozzy_lusth">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/ozzy_lusth.jpg" alt="Ozzy Lusth" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Ozzy Lusth</div>
-            <div class="player-season">S13 / S16 / S23 / S34</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="emily_flippen">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/emily_flippen.jpg" alt="Emily Flippen" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Emily Flippen</div>
-            <div class="player-season">S45</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="rick_devens">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/rick_devens.jpg" alt="Rick Devens" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Rick Devens</div>
-            <div class="player-season">S38</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="jenna_lewis">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/jenna_lewis.jpg" alt="Jenna Lewis-Dougherty" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Jenna Lewis-Dougherty</div>
-            <div class="player-season">S1 / S8</div>
-            <div class="elim-tag">Voted Out — Ep. 1</div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="tribe tribe-kalo">
-    <div class="tribe-header">
-      <div class="tribe-dot"></div>
-      <div>
-        <div class="tribe-name">Kalo</div>
-        <div class="tribe-label">Teal Tribe</div>
-      </div>
-    </div>
-    <div class="players-grid">
-      <div class="player-card" data-player="jonathan_young">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/jonathan_young.jpg" alt="Jonathan Young" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Jonathan Young</div>
-            <div class="player-season">S42</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="dee_valladares">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/dee_valladares.jpg" alt="Dee Valladares" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Dee Valladares</div>
-            <div class="player-season">S45 Winner</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="mike_white">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/mike_white.jpg" alt="Mike White" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Mike White</div>
-            <div class="player-season">S37</div>
-            <div class="elim-tag">Voted Out — Ep. 4</div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="kamilla_karthigesu">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/kamilla_karthigesu.jpg" alt="Kamilla Karthigesu" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Kamilla Karthigesu</div>
-            <div class="player-season">S48</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="charlie_davis">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/charlie_davis.jpg" alt="Charlie Davis" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Charlie Davis</div>
-            <div class="player-season">S46</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="tiffany_ervin">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/tiffany_ervin.jpg" alt="Tiffany Ervin" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Tiffany Ervin</div>
-            <div class="player-season">S46</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="coach_wade">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/coach_wade.jpg" alt='Benjamin "Coach" Wade' loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">"Coach" Wade</div>
-            <div class="player-season">S18 / S20 / S23</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="chrissy_hofbeck">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/chrissy_hofbeck.jpg" alt="Chrissy Hofbeck" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Chrissy Hofbeck</div>
-            <div class="player-season">S35</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="tribe tribe-vatu">
-    <div class="tribe-header">
-      <div class="tribe-dot"></div>
-      <div>
-        <div class="tribe-name">Vatu</div>
-        <div class="tribe-label">Magenta Tribe</div>
-      </div>
-    </div>
-    <div class="players-grid">
-      <div class="player-card" data-player="colby_donaldson">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/colby_donaldson.jpg" alt="Colby Donaldson" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Colby Donaldson</div>
-            <div class="player-season">S2 / S8 / S20</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="genevieve_mushaluk">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/genevieve_mushaluk.jpg" alt="Genevieve Mushaluk" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Genevieve Mushaluk</div>
-            <div class="player-season">S47</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="rizo_velovic">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/rizo_velovic.jpg" alt="Rizo Velovic" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Rizo Velovic</div>
-            <div class="player-season">S49</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="angelina_keeley">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/angelina_keeley.jpg" alt="Angelina Keeley" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Angelina Keeley</div>
-            <div class="player-season">S37</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="q_burdette">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/q_burdette.jpg" alt="Q Burdette" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Q Burdette</div>
-            <div class="player-season">S46</div>
-            <div class="elim-tag">Voted Out — Ep. 3</div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="stephenie_lagrossa">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/stephenie_lagrossa.jpg" alt="Stephenie LaGrossa Kendrick" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Stephenie LaGrossa</div>
-            <div class="player-season">S10 / S11 / S20</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="kyle_fraser">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/kyle_fraser.jpg" alt="Kyle Fraser" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Kyle Fraser</div>
-            <div class="player-season">S48 Winner</div>
-            <div class="elim-tag">Med. Evac — Ep. 1</div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-      <div class="player-card" data-player="aubry_bracco">
-        <div class="pool-pick"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div>
-        <div class="player-card-inner">
-          <div class="player-img-wrap">
-            <img src="images/aubry_bracco.jpg" alt="Aubry Bracco" loading="lazy">
-            <div class="x-overlay"><svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg></div>
-          </div>
-          <div class="player-info">
-            <div class="player-name">Aubry Bracco</div>
-            <div class="player-season">S32 / S34 / S38</div>
-            <div class="elim-tag"></div>
-          </div>
-          <div class="badges"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</main>
+<main class="tribes-container" id="tribes-container"></main>
 
 <footer class="legend">
   Survivor 50: In the Hands of the Fans &mdash; CBS, Spring 2026
 </footer>
 
 <script>
-  // === DATA ===
+  // === PLAYER DATA ===
+  const players = {
+    joe_hunter:          { name: 'Joe Hunter',             season: 'S48',                    img: 'joe_hunter.jpg',          elimTag: '' },
+    savannah_louie:      { name: 'Savannah Louie',         season: 'S49 Winner',             img: 'savannah_louie.jpg',      elimTag: 'Voted Out — Ep. 2' },
+    christian_hubicki:   { name: 'Christian Hubicki',      season: 'S37',                    img: 'christian_hubicki.jpg',   elimTag: '' },
+    cirie_fields:        { name: 'Cirie Fields',           season: 'S12 / S16 / S20 / S34', img: 'cirie_fields.jpg',        elimTag: '' },
+    ozzy_lusth:          { name: 'Ozzy Lusth',             season: 'S13 / S16 / S23 / S34', img: 'ozzy_lusth.jpg',          elimTag: '' },
+    emily_flippen:       { name: 'Emily Flippen',          season: 'S45',                    img: 'emily_flippen.jpg',       elimTag: '' },
+    rick_devens:         { name: 'Rick Devens',            season: 'S38',                    img: 'rick_devens.jpg',         elimTag: '' },
+    jenna_lewis:         { name: 'Jenna Lewis-Dougherty',  season: 'S1 / S8',                img: 'jenna_lewis.jpg',         elimTag: 'Voted Out — Ep. 1' },
+    jonathan_young:      { name: 'Jonathan Young',         season: 'S42',                    img: 'jonathan_young.jpg',      elimTag: '' },
+    dee_valladares:      { name: 'Dee Valladares',         season: 'S45 Winner',             img: 'dee_valladares.jpg',      elimTag: '' },
+    mike_white:          { name: 'Mike White',             season: 'S37',                    img: 'mike_white.jpg',          elimTag: 'Voted Out — Ep. 4' },
+    kamilla_karthigesu:  { name: 'Kamilla Karthigesu',     season: 'S48',                    img: 'kamilla_karthigesu.jpg',  elimTag: '' },
+    charlie_davis:       { name: 'Charlie Davis',          season: 'S46',                    img: 'charlie_davis.jpg',       elimTag: '' },
+    tiffany_ervin:       { name: 'Tiffany Ervin',          season: 'S46',                    img: 'tiffany_ervin.jpg',       elimTag: '' },
+    coach_wade:          { name: '"Coach" Wade',           season: 'S18 / S20 / S23',       img: 'coach_wade.jpg',          elimTag: '' },
+    chrissy_hofbeck:     { name: 'Chrissy Hofbeck',        season: 'S35',                    img: 'chrissy_hofbeck.jpg',     elimTag: '' },
+    colby_donaldson:     { name: 'Colby Donaldson',        season: 'S2 / S8 / S20',         img: 'colby_donaldson.jpg',     elimTag: '' },
+    genevieve_mushaluk:  { name: 'Genevieve Mushaluk',     season: 'S47',                    img: 'genevieve_mushaluk.jpg',  elimTag: '' },
+    rizo_velovic:        { name: 'Rizo Velovic',           season: 'S49',                    img: 'rizo_velovic.jpg',        elimTag: '' },
+    angelina_keeley:     { name: 'Angelina Keeley',        season: 'S37',                    img: 'angelina_keeley.jpg',     elimTag: '' },
+    q_burdette:          { name: 'Q Burdette',             season: 'S46',                    img: 'q_burdette.jpg',          elimTag: 'Voted Out — Ep. 3' },
+    stephenie_lagrossa:  { name: 'Stephenie LaGrossa',     season: 'S10 / S11 / S20',       img: 'stephenie_lagrossa.jpg',  elimTag: '' },
+    kyle_fraser:         { name: 'Kyle Fraser',            season: 'S48 Winner',             img: 'kyle_fraser.jpg',         elimTag: 'Med. Evac — Ep. 1' },
+    aubry_bracco:        { name: 'Aubry Bracco',           season: 'S32 / S34 / S38',       img: 'aubry_bracco.jpg',        elimTag: '' },
+  };
 
+  // === TRIBE DEFINITIONS (keyed by episode range) ===
+  const tribeColors = {
+    Cila:  { color: '#f59e0b', label: 'Orange Tribe' },
+    Kalo:  { color: '#14b8a6', label: 'Teal Tribe' },
+    Vatu:  { color: '#d946ef', label: 'Magenta Tribe' },
+  };
+
+  // Tribe rosters by episode. Each key is the first episode that layout applies.
+  const tribesByEpisode = {
+    0: {
+      Cila: ['joe_hunter','savannah_louie','christian_hubicki','cirie_fields','ozzy_lusth','emily_flippen','rick_devens','jenna_lewis'],
+      Kalo: ['jonathan_young','dee_valladares','mike_white','kamilla_karthigesu','charlie_davis','tiffany_ervin','coach_wade','chrissy_hofbeck'],
+      Vatu: ['colby_donaldson','genevieve_mushaluk','rizo_velovic','angelina_keeley','q_burdette','stephenie_lagrossa','kyle_fraser','aubry_bracco'],
+    },
+    3: {
+      Cila: ['dee_valladares','rizo_velovic','kamilla_karthigesu','rick_devens','cirie_fields','charlie_davis','jonathan_young'],
+      Kalo: ['aubry_bracco','colby_donaldson','tiffany_ervin','coach_wade','chrissy_hofbeck','genevieve_mushaluk','joe_hunter'],
+      Vatu: ['stephenie_lagrossa','ozzy_lusth','emily_flippen','christian_hubicki','mike_white','angelina_keeley','q_burdette'],
+    },
+  };
+
+  // === GAME DATA ===
   const eliminations = {
     1: ['jenna_lewis', 'kyle_fraser'],
     2: ['savannah_louie'],
@@ -853,14 +436,12 @@
     4: ['mike_white'],
   };
 
-  // Your survivor pool picks per episode
   const poolPicks = {
     2: 'cirie_fields',
     3: 'angelina_keeley',
     4: 'colby_donaldson',
   };
 
-  // Advantages keyed by episode they're known to be held at end of that episode
   const advantages = {
     1: [
       { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
@@ -889,7 +470,6 @@
     ],
   };
 
-  // Alliances keyed by episode
   const alliances = {
     1: [
       { name: 'Christian & Devens', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens'] },
@@ -915,30 +495,75 @@
     ],
   };
 
-  // === LOGIC ===
+  // === RENDERING ===
 
-  const buttons = document.querySelectorAll('.ep-btn');
-  const cards = document.querySelectorAll('.player-card');
+  const xSvg = `<svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg>`;
+  const poolSvg = `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg>`;
+
+  function buildCard(id) {
+    const p = players[id];
+    return `<div class="player-card" data-player="${id}">
+      <div class="pool-pick">${poolSvg}</div>
+      <div class="player-card-inner">
+        <div class="player-img-wrap">
+          <img src="images/${p.img}" alt="${p.name}" loading="lazy">
+          <div class="x-overlay">${xSvg}</div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">${p.name}</div>
+          <div class="player-season">${p.season}</div>
+          <div class="elim-tag">${p.elimTag}</div>
+        </div>
+        <div class="badges"></div>
+      </div>
+    </div>`;
+  }
+
+  function buildTribe(tribeName, memberIds) {
+    const tc = tribeColors[tribeName];
+    const cols = Math.max(memberIds.length, 1);
+    return `<section class="tribe">
+      <div class="tribe-header" style="border-color:${tc.color}">
+        <div class="tribe-dot" style="background:${tc.color}"></div>
+        <div>
+          <div class="tribe-name-text" style="color:${tc.color}">${tribeName}</div>
+          <div class="tribe-label">${tc.label}</div>
+        </div>
+      </div>
+      <div class="players-grid" style="grid-template-columns:repeat(${cols},1fr)">
+        ${memberIds.map(id => buildCard(id)).join('')}
+      </div>
+    </section>`;
+  }
+
+  const container = document.getElementById('tribes-container');
   const legendEl = document.getElementById('alliances-legend');
+  const buttons = document.querySelectorAll('.ep-btn');
+
+  function getTribesForEp(ep) {
+    let tribes = tribesByEpisode[0];
+    for (const key of Object.keys(tribesByEpisode).map(Number).sort((a,b) => a-b)) {
+      if (key <= ep) tribes = tribesByEpisode[key];
+    }
+    return tribes;
+  }
 
   function setEpisode(ep) {
     buttons.forEach(b => b.classList.toggle('active', parseInt(b.dataset.ep) === ep));
 
-    // Eliminations
+    // Build eliminated set
     const eliminatedSet = new Set();
     for (let e = 1; e <= ep; e++) {
-      if (eliminations[e]) {
-        eliminations[e].forEach(p => eliminatedSet.add(p));
-      }
+      if (eliminations[e]) eliminations[e].forEach(p => eliminatedSet.add(p));
     }
 
-    // Pool picks up to this ep
+    // Pool picks
     const poolSet = new Set();
     for (let e = 1; e <= ep; e++) {
       if (poolPicks[e]) poolSet.add(poolPicks[e]);
     }
 
-    // Current advantages
+    // Advantages
     let currentAdvantages = [];
     for (let e = ep; e >= 1; e--) {
       if (advantages[e]) { currentAdvantages = advantages[e]; break; }
@@ -949,7 +574,7 @@
       advMap[a.player].push(a);
     });
 
-    // Current alliances
+    // Alliances
     let currentAlliances = [];
     for (let e = ep; e >= 1; e--) {
       if (alliances[e]) { currentAlliances = alliances[e]; break; }
@@ -962,30 +587,49 @@
       });
     });
 
-    // Update cards
-    cards.forEach(card => {
-      const player = card.dataset.player;
-
-      // Elimination
-      if (eliminatedSet.has(player)) {
-        card.classList.add('eliminated');
-      } else {
-        card.classList.remove('eliminated');
+    // Render tribes
+    const tribes = getTribesForEp(ep);
+    const allTribeMembers = new Set(Object.values(tribes).flat());
+    const votedOutList = [];
+    for (let e = 1; e <= ep; e++) {
+      if (eliminations[e]) {
+        eliminations[e].forEach(id => {
+          if (!allTribeMembers.has(id)) votedOutList.push(id);
+        });
       }
+    }
 
-      // Pool pick icon
+    let html = Object.entries(tribes).map(([name, members]) => buildTribe(name, members)).join('');
+
+    if (votedOutList.length > 0) {
+      const cols = Math.max(votedOutList.length, 1);
+      html += `<section class="voted-out-section">
+        <div class="voted-out-header">
+          <div class="tribe-dot"></div>
+          <div>
+            <div class="tribe-name-text">Voted Out</div>
+          </div>
+        </div>
+        <div class="voted-out-grid" style="grid-template-columns:repeat(${cols},1fr)">
+          ${votedOutList.map(id => buildCard(id)).join('')}
+        </div>
+      </section>`;
+    }
+
+    container.innerHTML = html;
+
+    // Apply state to cards
+    container.querySelectorAll('.player-card').forEach(card => {
+      const id = card.dataset.player;
+
+      if (eliminatedSet.has(id)) card.classList.add('eliminated');
+
       const poolIcon = card.querySelector('.pool-pick');
-      if (poolSet.has(player) && ep > 0) {
-        poolIcon.classList.add('visible');
-      } else {
-        poolIcon.classList.remove('visible');
-      }
+      if (poolSet.has(id) && ep > 0) poolIcon.classList.add('visible');
 
-      // Badges
       const badgesEl = card.querySelector('.badges');
-      badgesEl.innerHTML = '';
-      if (ep > 0 && advMap[player] && !eliminatedSet.has(player)) {
-        advMap[player].forEach(adv => {
+      if (ep > 0 && advMap[id] && !eliminatedSet.has(id)) {
+        advMap[id].forEach(adv => {
           const badge = document.createElement('span');
           badge.className = `badge badge-${adv.type} visible`;
           badge.textContent = adv.label;
@@ -993,29 +637,24 @@
         });
       }
 
-      // Alliance border
       card.classList.remove('alliance-highlight');
       card.style.outlineColor = '';
-      if (ep > 0 && allianceMap[player] && !eliminatedSet.has(player)) {
-        const a = allianceMap[player][0];
+      if (ep > 0 && allianceMap[id] && !eliminatedSet.has(id)) {
         card.classList.add('alliance-highlight');
-        card.style.outlineColor = a.color;
+        card.style.outlineColor = allianceMap[id][0].color;
       }
     });
 
-    // Alliance legend
+    // Legend
     legendEl.innerHTML = '';
-    if (ep > 0 && currentAlliances.length > 0) {
+    if (ep > 0 && (currentAlliances.length > 0 || poolSet.size > 0)) {
       legendEl.classList.add('visible');
-
-      // Pool pick legend item
       if (poolSet.size > 0) {
         const item = document.createElement('div');
         item.className = 'pool-legend';
         item.innerHTML = `<div class="pool-legend-icon"><svg viewBox="0 0 24 24" fill="none" width="10" height="10"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg></div> My Pool Pick`;
         legendEl.appendChild(item);
       }
-
       currentAlliances.forEach(a => {
         const item = document.createElement('div');
         item.className = 'alliance-legend-item';
@@ -1028,9 +667,7 @@
   }
 
   buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      setEpisode(parseInt(btn.dataset.ep));
-    });
+    btn.addEventListener('click', () => setEpisode(parseInt(btn.dataset.ep)));
   });
 
   const maxEp = Math.max(...Array.from(buttons).map(b => parseInt(b.dataset.ep)));
