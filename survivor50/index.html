@@ -319,7 +319,6 @@
     .voted-out-grid {
       display: grid;
       gap: 20px;
-      max-width: 900px;
     }
 
     .voted-out-section .player-card {
@@ -369,6 +368,7 @@
   <button class="ep-btn" data-ep="3">Episode 3</button>
   <button class="ep-btn" data-ep="4">Episode 4</button>
   <button class="ep-btn" data-ep="5">Episode 5</button>
+  <button class="ep-btn" data-ep="6">Episode 6</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -393,13 +393,13 @@
     jonathan_young:      { name: 'Jonathan Young',         season: 'S42',                    img: 'jonathan_young.jpg',      elimTag: '' },
     dee_valladares:      { name: 'Dee Valladares',         season: 'S45 Winner',             img: 'dee_valladares.jpg',      elimTag: '' },
     mike_white:          { name: 'Mike White',             season: 'S37',                    img: 'mike_white.jpg',          elimTag: 'Voted Out — Ep. 4' },
-    kamilla_karthigesu:  { name: 'Kamilla Karthigesu',     season: 'S48',                    img: 'kamilla_karthigesu.jpg',  elimTag: '' },
+    kamilla_karthigesu:  { name: 'Kamilla Karthigesu',     season: 'S48',                    img: 'kamilla_karthigesu.jpg',  elimTag: 'Voted Out — Ep. 6' },
     charlie_davis:       { name: 'Charlie Davis',          season: 'S46',                    img: 'charlie_davis.jpg',       elimTag: 'Voted Out — Ep. 5' },
     tiffany_ervin:       { name: 'Tiffany Ervin',          season: 'S46',                    img: 'tiffany_ervin.jpg',       elimTag: '' },
     coach_wade:          { name: '"Coach" Wade',           season: 'S18 / S20 / S23',       img: 'coach_wade.jpg',          elimTag: '' },
     chrissy_hofbeck:     { name: 'Chrissy Hofbeck',        season: 'S35',                    img: 'chrissy_hofbeck.jpg',     elimTag: '' },
-    colby_donaldson:     { name: 'Colby Donaldson',        season: 'S2 / S8 / S20',         img: 'colby_donaldson.jpg',     elimTag: '' },
-    genevieve_mushaluk:  { name: 'Genevieve Mushaluk',     season: 'S47',                    img: 'genevieve_mushaluk.jpg',  elimTag: '' },
+    colby_donaldson:     { name: 'Colby Donaldson',        season: 'S2 / S8 / S20',         img: 'colby_donaldson.jpg',     elimTag: 'Voted Out — Ep. 6' },
+    genevieve_mushaluk:  { name: 'Genevieve Mushaluk',     season: 'S47',                    img: 'genevieve_mushaluk.jpg',  elimTag: 'Voted Out — Ep. 6' },
     rizo_velovic:        { name: 'Rizo Velovic',           season: 'S49',                    img: 'rizo_velovic.jpg',        elimTag: '' },
     angelina_keeley:     { name: 'Angelina Keeley',        season: 'S37',                    img: 'angelina_keeley.jpg',     elimTag: 'Voted Out — Ep. 5' },
     q_burdette:          { name: 'Q Burdette',             season: 'S46',                    img: 'q_burdette.jpg',          elimTag: 'Voted Out — Ep. 3' },
@@ -410,9 +410,10 @@
 
   // === TRIBE DEFINITIONS (keyed by episode range) ===
   const tribeColors = {
-    Cila:  { color: '#f59e0b', label: 'Orange Tribe' },
-    Kalo:  { color: '#14b8a6', label: 'Teal Tribe' },
-    Vatu:  { color: '#d946ef', label: 'Magenta Tribe' },
+    Cila:     { color: '#f59e0b', label: 'Orange Tribe' },
+    Kalo:     { color: '#14b8a6', label: 'Teal Tribe' },
+    Vatu:     { color: '#d946ef', label: 'Magenta Tribe' },
+    Manulevu: { color: '#facc15', label: 'Merged Tribe' },
   };
 
   // Tribe rosters by episode. Each key is the first episode that layout applies.
@@ -427,6 +428,9 @@
       Kalo: ['aubry_bracco','colby_donaldson','tiffany_ervin','coach_wade','chrissy_hofbeck','genevieve_mushaluk','joe_hunter'],
       Vatu: ['stephenie_lagrossa','ozzy_lusth','emily_flippen','christian_hubicki','mike_white','angelina_keeley','q_burdette'],
     },
+    6: {
+      Manulevu: ['cirie_fields','ozzy_lusth','rizo_velovic','dee_valladares','emily_flippen','christian_hubicki','rick_devens','joe_hunter','aubry_bracco','coach_wade','chrissy_hofbeck','tiffany_ervin','stephenie_lagrossa','jonathan_young'],
+    },
   };
 
   // === GAME DATA ===
@@ -436,6 +440,7 @@
     3: ['q_burdette'],
     4: ['mike_white'],
     5: ['angelina_keeley', 'charlie_davis'],
+    6: ['kamilla_karthigesu', 'genevieve_mushaluk', 'colby_donaldson'],
   };
 
   const poolPicks = {
@@ -443,6 +448,7 @@
     3: 'angelina_keeley',
     4: 'colby_donaldson',
     5: 'stephenie_lagrossa',
+    6: 'coach_wade',
   };
 
   const advantages = {
@@ -478,6 +484,12 @@
       { player: 'colby_donaldson', type: 'lost-vote', label: 'Lost Vote' },
       { player: 'rizo_velovic', type: 'boomerang', label: 'Boomerang Idol' },
     ],
+    6: [
+      { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'aubry_bracco', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'ozzy_lusth', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'rizo_velovic', type: 'boomerang', label: 'Boomerang Idol' },
+    ],
   };
 
   const alliances = {
@@ -509,6 +521,12 @@
       { name: 'Kalo Knights', color: '#10b981', members: ['coach_wade', 'colby_donaldson', 'joe_hunter', 'aubry_bracco'] },
       { name: 'Cila Women + Rizo', color: '#f472b6', members: ['dee_valladares', 'cirie_fields', 'kamilla_karthigesu', 'rizo_velovic'] },
     ],
+    6: [
+      { name: 'Cirie / Ozzy / Rizo', color: '#22d3ee', members: ['cirie_fields', 'ozzy_lusth', 'rizo_velovic'] },
+      { name: 'Old Guard', color: '#10b981', members: ['stephenie_lagrossa', 'chrissy_hofbeck', 'jonathan_young'] },
+      { name: 'Christian & Devens & Joe & Aubry', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens', 'joe_hunter', 'aubry_bracco'] },
+      { name: 'Cirie & Dee & Emily', color: '#f472b6', members: ['cirie_fields', 'dee_valladares', 'emily_flippen'] },
+    ],
   };
 
   // === RENDERING ===
@@ -537,7 +555,7 @@
 
   function buildTribe(tribeName, memberIds) {
     const tc = tribeColors[tribeName];
-    const cols = Math.max(memberIds.length, 1);
+    const cols = Math.min(Math.max(memberIds.length, 1), 7);
     return `<section class="tribe">
       <div class="tribe-header" style="border-color:${tc.color}">
         <div class="tribe-dot" style="background:${tc.color}"></div>
@@ -618,7 +636,7 @@
     let html = Object.entries(tribes).map(([name, members]) => buildTribe(name, members)).join('');
 
     if (votedOutList.length > 0) {
-      const cols = Math.max(votedOutList.length, 1);
+      const cols = Math.min(Math.max(votedOutList.length, 1), 7);
       html += `<section class="voted-out-section">
         <div class="voted-out-header">
           <div class="tribe-dot"></div>

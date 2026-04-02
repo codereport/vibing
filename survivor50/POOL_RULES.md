@@ -32,6 +32,7 @@ This means you want to pick players who are **safe this week** but **on borrowed
 | Ep. 3 | Angelina Keeley | SAFE |
 | Ep. 4 | Colby Donaldson | SAFE |
 | Ep. 5 | Stephenie LaGrossa | SAFE |
+| Ep. 6 | "Coach" Wade | SAFE |
 
 ## Players Already Used
 
@@ -39,3 +40,4 @@ This means you want to pick players who are **safe this week** but **on borrowed
 - [x] Angelina Keeley (Ep. 3)
 - [x] Colby Donaldson (Ep. 4)
 - [x] Stephenie LaGrossa (Ep. 5)
+- [x] "Coach" Wade (Ep. 6)
