@@ -617,14 +617,26 @@ body {
 /* Default: 4-color mode */
 .chip-primitive.subtype-monadic-function { background: var(--dracula-cyan); color: #1a1a2e; }
 .chip-primitive.subtype-dyadic-function  { background: var(--dracula-green); color: #1a1a2e; }
-.chip-primitive.subtype-1-modifier       { background: var(--dracula-yellow); color: #1a1a2e; }
-.chip-primitive.subtype-2-modifier       { background: var(--dracula-pink); color: #1a1a2e; }
+.chip-primitive.subtype-1-modifier       { background: var(--dracula-yellow); color: #1a1a2e; border: 2px solid transparent; }
+.chip-primitive.subtype-2-modifier       { background: var(--dracula-pink); color: #1a1a2e; border: 2px solid transparent; }
+
+/* Modifier arity borders (4-color mode) */
+.chip-primitive.subtype-1-modifier.arity-monadic { border-color: var(--dracula-cyan); }
+.chip-primitive.subtype-1-modifier.arity-dyadic  { border-color: var(--dracula-green); }
+.chip-primitive.subtype-2-modifier.arity-monadic { border-color: var(--dracula-cyan); }
+.chip-primitive.subtype-2-modifier.arity-dyadic  { border-color: var(--dracula-green); }
 
 /* 3-color mode: function = cyan, 1-mod = green, 2-mod = yellow */
 .app.mode-3color .chip-primitive.subtype-monadic-function { background: var(--dracula-cyan); color: #1a1a2e; }
 .app.mode-3color .chip-primitive.subtype-dyadic-function  { background: var(--dracula-cyan); color: #1a1a2e; }
 .app.mode-3color .chip-primitive.subtype-1-modifier       { background: var(--dracula-green); color: #1a1a2e; }
 .app.mode-3color .chip-primitive.subtype-2-modifier       { background: var(--dracula-yellow); color: #1a1a2e; }
+
+/* Modifier arity borders (3-color mode -- function is cyan for both) */
+.app.mode-3color .chip-primitive.subtype-1-modifier.arity-monadic { border-color: var(--dracula-cyan); }
+.app.mode-3color .chip-primitive.subtype-1-modifier.arity-dyadic  { border-color: var(--dracula-cyan); }
+.app.mode-3color .chip-primitive.subtype-2-modifier.arity-monadic { border-color: var(--dracula-cyan); }
+.app.mode-3color .chip-primitive.subtype-2-modifier.arity-dyadic  { border-color: var(--dracula-cyan); }
 
 /* Expression chip: syntax-highlighted text on gray bg, colored border by sub-type */
 .chip-expression {

@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APL Dojo</title>
+    <title>☠️☠️ APL Dojo ☠️☠️</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app">
         <header class="app-header">
-            <h1>APL Dojo</h1>
+            <h1>☠️☠️ APL Dojo ☠️☠️</h1>
             <div class="header-actions">
                 <button class="btn-header" id="btn-export" title="Export current state as data.json">Export</button>
                 <button class="btn-header btn-header-dim" id="btn-reset" title="Reset to published defaults">Reset</button>
@@ -62,6 +62,14 @@
                             <label><input type="radio" name="item-subtype" value="dyadic-function"> Dyadic Fn</label>
                             <label><input type="radio" name="item-subtype" value="1-modifier"> 1-Modifier</label>
                             <label><input type="radio" name="item-subtype" value="2-modifier"> 2-Modifier</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="arity-group" style="display:none">
+                        <label class="form-label">Derived Function Arity</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="item-arity" value="monadic" checked> Monadic</label>
+                            <label><input type="radio" name="item-arity" value="dyadic"> Dyadic</label>
                         </div>
                     </div>
 

@@ -1,4 +1,5 @@
 import { highlightCode } from './array-box/src/syntax.js';
+import { createKeyboardHandler } from './array-box/src/keymap.js';
 
 const STORAGE_KEY = 'apl-dojo-tierlist';
 
@@ -93,6 +94,7 @@ function renderChip(item) {
 
     if (item.type === 'primitive') {
         el.classList.add('chip-primitive', `subtype-${item.subType}`);
+        if (item.arity) el.classList.add(`arity-${item.arity}`);
         const fontCls = item.highlightLang ? LANG_FONT_CLASS[item.highlightLang] : '';
         el.innerHTML = `<span class="chip-text ${fontCls}" style="font-size:${fontSize}">${escapeHtml(item.text)}</span>`;
     } else if (item.type === 'expression') {
@@ -185,12 +187,20 @@ function editItem(id) {
         cb.checked = item.ranks && item.ranks.includes(cb.value);
     });
 
+    if (item.arity) {
+        const arityRadio = document.querySelector(`input[name="item-arity"][value="${item.arity}"]`);
+        if (arityRadio) arityRadio.checked = true;
+    }
+
     const showSubtype = item.type === 'primitive' || item.type === 'expression';
     const isFn = item.subType === 'monadic-function' || item.subType === 'dyadic-function';
-    document.getElementById('subtype-group').style.display = showSubtype ? '' : 'none';
-    document.getElementById('lang-group').style.display = item.type === 'expression' ? '' : 'none';
-    document.getElementById('rank-group').style.display = (showSubtype && isFn) ? '' : 'none';
-    document.getElementById('name-group').style.display = item.type === 'primitive' ? '' : 'none';
+    const isMod = item.subType === '1-modifier' || item.subType === '2-modifier';
+    const sh = (el, v) => { el.style.display = v ? 'flex' : 'none'; };
+    sh(document.getElementById('subtype-group'), showSubtype);
+    sh(document.getElementById('lang-group'), item.type === 'expression');
+    sh(document.getElementById('rank-group'), showSubtype && isFn);
+    sh(document.getElementById('arity-group'), showSubtype && isMod);
+    sh(document.getElementById('name-group'), item.type === 'primitive');
 
     const btn = document.getElementById('btn-create');
     btn.textContent = 'Update';
@@ -294,6 +304,8 @@ function setupForm() {
     const btnCreate = document.getElementById('btn-create');
     const textInput = document.getElementById('item-text');
 
+    createKeyboardHandler(textInput, 'apl');
+
     btnAdd.addEventListener('click', () => {
         if (editingId) {
             editingId = null;
@@ -301,7 +313,10 @@ function setupForm() {
             textInput.value = '';
         }
         form.hidden = !form.hidden;
-        if (!form.hidden) textInput.focus();
+        if (!form.hidden) {
+            updateFormVisibility();
+            textInput.focus();
+        }
     });
 
     const rankGroup = document.getElementById('rank-group');
@@ -310,21 +325,31 @@ function setupForm() {
     function isFunction(subType) {
         return subType === 'monadic-function' || subType === 'dyadic-function';
     }
+    function isModifier(subType) {
+        return subType === '1-modifier' || subType === '2-modifier';
+    }
 
     const nameGroup = document.getElementById('name-group');
+    const arityGroup = document.getElementById('arity-group');
+
+    function showHide(el, visible) {
+        el.style.display = visible ? 'flex' : 'none';
+    }
 
     function updateFormVisibility() {
         const type = document.querySelector('input[name="item-type"]:checked').value;
         const showSubtype = type === 'primitive' || type === 'expression';
-        subtypeGroup.style.display = showSubtype ? '' : 'none';
-        langGroup.style.display = type === 'expression' ? '' : 'none';
-        nameGroup.style.display = type === 'primitive' ? '' : 'none';
+        showHide(subtypeGroup, showSubtype);
+        showHide(langGroup, type === 'expression');
+        showHide(nameGroup, type === 'primitive');
 
         if (showSubtype) {
             const sub = document.querySelector('input[name="item-subtype"]:checked').value;
-            rankGroup.style.display = isFunction(sub) ? '' : 'none';
+            showHide(rankGroup, isFunction(sub));
+            showHide(arityGroup, isModifier(sub));
         } else {
-            rankGroup.style.display = 'none';
+            showHide(rankGroup, false);
+            showHide(arityGroup, false);
         }
     }
 
@@ -374,12 +399,16 @@ function createItem() {
     });
 
     const isFn = subType === 'monadic-function' || subType === 'dyadic-function';
+    const isMod = subType === '1-modifier' || subType === '2-modifier';
     const ranks = [];
     if (isFn) {
         document.querySelectorAll('#rank-checkboxes input[type="checkbox"]:checked').forEach(cb => {
             ranks.push(cb.value);
         });
     }
+    const arity = isMod
+        ? document.querySelector('input[name="item-arity"]:checked').value
+        : null;
 
     if (editingId) {
         const existing = items.find(it => it.id === editingId);
@@ -391,6 +420,7 @@ function createItem() {
             existing.highlightLang = highlightLang;
             existing.languages = languages;
             existing.ranks = ranks;
+            existing.arity = arity;
         }
         editingId = null;
         document.getElementById('btn-create').textContent = 'Create';
@@ -404,6 +434,7 @@ function createItem() {
             highlightLang,
             languages,
             ranks,
+            arity,
             tierId: null,
         });
     }

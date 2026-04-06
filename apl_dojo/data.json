@@ -1,0 +1,314 @@
+[
+  {
+    "id": "item-1775484798879-p8qln",
+    "type": "primitive",
+    "subType": "monadic-function",
+    "text": "⍳",
+    "name": "Iota",
+    "highlightLang": null,
+    "languages": [
+      "apl",
+      "bqn",
+      "j",
+      "uiua",
+      "kap",
+      "tinyapl"
+    ],
+    "ranks": [
+      "0"
+    ],
+    "tierId": "white"
+  },
+  {
+    "id": "item-1775484910118-8gor6",
+    "type": "primitive",
+    "subType": "monadic-function",
+    "text": "⊢",
+    "name": "Identity",
+    "highlightLang": null,
+    "languages": [
+      "apl",
+      "bqn",
+      "j",
+      "uiua",
+      "kap",
+      "tinyapl"
+    ],
+    "ranks": [
+      "0"
+    ],
+    "tierId": "white"
+  },
+  {
+    "id": "item-1775486658193-dqs36",
+    "type": "primitive",
+    "subType": "1-modifier",
+    "text": "/",
+    "name": "Reduce",
+    "highlightLang": null,
+    "languages": [
+      "apl",
+      "bqn",
+      "j",
+      "uiua",
+      "kap",
+      "tinyapl"
+    ],
+    "ranks": [],
+    "tierId": "green",
+    "arity": "monadic"
+  },
+  {
+    "id": "item-1775486704053-6gkp4",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "≠/",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl",
+      "bqn",
+      "j",
+      "uiua",
+      "kap",
+      "tinyapl"
+    ],
+    "ranks": [],
+    "tierId": "blue"
+  },
+  {
+    "id": "item-1775487235558-5zckv",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "n⊕/",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl",
+      "kap"
+    ],
+    "ranks": [],
+    "arity": null,
+    "tierId": "blue"
+  },
+  {
+    "id": "item-1775487255680-i1ocj",
+    "type": "primitive",
+    "subType": "1-modifier",
+    "text": "⌿",
+    "name": null,
+    "highlightLang": null,
+    "languages": [
+      "apl",
+      "bqn",
+      "j",
+      "uiua",
+      "kap",
+      "tinyapl"
+    ],
+    "ranks": [],
+    "arity": "monadic",
+    "tierId": "blue"
+  },
+  {
+    "id": "item-1775487688530-23dhj",
+    "type": "primitive",
+    "subType": "dyadic-function",
+    "text": "⍉",
+    "name": "Dyadic Transpose",
+    "highlightLang": null,
+    "languages": [
+      "apl",
+      "bqn",
+      "j",
+      "uiua",
+      "kap",
+      "tinyapl"
+    ],
+    "ranks": [],
+    "arity": null,
+    "tierId": "black"
+  },
+  {
+    "id": "item-1775487774881-zkllu",
+    "type": "concept",
+    "subType": null,
+    "text": "Double ⍤",
+    "name": null,
+    "highlightLang": null,
+    "languages": [
+      "apl",
+      "bqn",
+      "j",
+      "kap",
+      "tinyapl"
+    ],
+    "ranks": [],
+    "arity": null,
+    "tierId": "black"
+  },
+  {
+    "id": "item-1775489569270-ykn3c",
+    "type": "primitive",
+    "subType": "monadic-function",
+    "text": "○",
+    "name": null,
+    "highlightLang": null,
+    "languages": [
+      "apl"
+    ],
+    "ranks": [],
+    "arity": null,
+    "tierId": "white"
+  },
+  {
+    "id": "item-1775491442037-isnaw",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "1∘/",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl"
+    ],
+    "ranks": [],
+    "arity": null,
+    "tierId": "blue"
+  },
+  {
+    "id": "item-1775491536214-k0e19",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "⊥⍨",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl"
+    ],
+    "ranks": [],
+    "arity": null,
+    "tierId": "purple"
+  },
+  {
+    "id": "item-1775491591994-etchh",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "1 1∘⍉",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl"
+    ],
+    "ranks": [],
+    "arity": null,
+    "tierId": "purple"
+  },
+  {
+    "id": "item-1775491652207-3dlbc",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "0 1∘⊤",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl"
+    ],
+    "ranks": [],
+    "arity": null,
+    "tierId": "purple"
+  },
+  {
+    "id": "item-1775491786773-am1xi",
+    "type": "concept",
+    "subType": null,
+    "text": "Rotations ⌽⍉⊖",
+    "name": null,
+    "highlightLang": null,
+    "languages": [
+      "apl"
+    ],
+    "ranks": [],
+    "arity": null,
+    "tierId": "blue"
+  },
+  {
+    "id": "item-1775491918021-wzxhk",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "{⍵ ⍵⍴1,⍵⍴0}",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl"
+    ],
+    "ranks": [
+      "0"
+    ],
+    "arity": null,
+    "tierId": "purple"
+  },
+  {
+    "id": "item-1775491969649-i65sm",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": ",⍨⍴1,⍴∘0",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl"
+    ],
+    "ranks": [
+      "0"
+    ],
+    "arity": null,
+    "tierId": "purple"
+  },
+  {
+    "id": "item-1775492423762-xda5g",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "1 1∘⊂",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl"
+    ],
+    "ranks": [
+      "0"
+    ],
+    "arity": null,
+    "tierId": "purple"
+  },
+  {
+    "id": "item-1775492775162-50ude",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "⊃⍪/",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl"
+    ],
+    "ranks": [
+      "0"
+    ],
+    "arity": null,
+    "tierId": "purple"
+  },
+  {
+    "id": "item-1775493334222-vksbp",
+    "type": "expression",
+    "subType": "monadic-function",
+    "text": "{⍎¨⍵∩⎕D}",
+    "name": null,
+    "highlightLang": "apl",
+    "languages": [
+      "apl"
+    ],
+    "ranks": [
+      "0"
+    ],
+    "arity": null,
+    "tierId": "purple"
+  }
+]
