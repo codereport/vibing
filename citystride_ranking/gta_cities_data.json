@@ -1,0 +1,104 @@
+{
+  "last_updated": "2026-04-07 13:42:06",
+  "cities": {
+    "38108": {
+      "city_id": "38108",
+      "name": "North York",
+      "completed": 2710,
+      "total": 2710,
+      "percentage": 100.0,
+      "rank": 1,
+      "total_runners": 998,
+      "city_url": "https://citystrides.com/users/55228/cities/38108",
+      "was_100": true
+    },
+    "38121": {
+      "city_id": "38121",
+      "name": "Old Toronto",
+      "completed": 2456,
+      "total": 2464,
+      "percentage": 99.68,
+      "rank": 6,
+      "total_runners": 3425,
+      "city_url": "https://citystrides.com/users/55228/cities/38121",
+      "was_100": true
+    },
+    "38114": {
+      "city_id": "38114",
+      "name": "East York",
+      "completed": 402,
+      "total": 404,
+      "percentage": 99.5,
+      "rank": 10,
+      "total_runners": 741,
+      "city_url": "https://citystrides.com/users/55228/cities/38114",
+      "was_100": false
+    },
+    "38102": {
+      "city_id": "38102",
+      "name": "York",
+      "completed": 581,
+      "total": 588,
+      "percentage": 98.81,
+      "rank": 9,
+      "total_runners": 703,
+      "city_url": "https://citystrides.com/users/55228/cities/38102",
+      "was_100": false
+    },
+    "131268": {
+      "city_id": "131268",
+      "name": "Toronto",
+      "completed": 7890,
+      "total": 10317,
+      "percentage": 76.48,
+      "rank": 7,
+      "total_runners": 3693,
+      "city_url": "https://citystrides.com/users/55228/cities/131268",
+      "was_100": false
+    },
+    "38014": {
+      "city_id": "38014",
+      "name": "Etobicoke",
+      "completed": 1137,
+      "total": 1931,
+      "percentage": 58.88,
+      "rank": 9,
+      "total_runners": 885,
+      "city_url": "https://citystrides.com/users/55228/cities/38014",
+      "was_100": false
+    },
+    "38007": {
+      "city_id": "38007",
+      "name": "Scarborough",
+      "completed": 969,
+      "total": 2596,
+      "percentage": 37.33,
+      "rank": 9,
+      "total_runners": 560,
+      "city_url": "https://citystrides.com/users/55228/cities/38007",
+      "was_100": false
+    },
+    "37668": {
+      "city_id": "37668",
+      "name": "Vaughan",
+      "completed": 411,
+      "total": 2365,
+      "percentage": 17.38,
+      "rank": 6,
+      "total_runners": 324,
+      "city_url": "https://citystrides.com/users/55228/cities/37668",
+      "was_100": false
+    },
+    "37680": {
+      "city_id": "37680",
+      "name": "Markham",
+      "completed": 361,
+      "total": 2308,
+      "percentage": 15.64,
+      "rank": 9,
+      "total_runners": 390,
+      "city_url": "https://citystrides.com/users/55228/cities/37680",
+      "was_100": false
+    }
+  }
+}

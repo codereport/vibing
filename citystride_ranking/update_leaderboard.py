@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 
+import re
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -10,6 +11,21 @@ DATA_FILE = "leaderboard_data.json"
 HTML_FILE = "index.html"
 PAGES_TO_FETCH = 5 # 12 per page * 5 = 60 runners, enough for top 50
 HISTORY_DIR = "history"
+
+GTA_DATA_FILE = "gta_cities_data.json"
+CONOR_USER_ID = "55228"
+
+GTA_CITIES = {
+    "131268": "Toronto",
+    "38108": "North York",
+    "38102": "York",
+    "38114": "East York",
+    "38121": "Old Toronto",
+    "38014": "Etobicoke",
+    "37668": "Vaughan",
+    "37680": "Markham",
+    "38007": "Scarborough",
+}
 
 def clean_name(name):
     # Specific fix for James Salmon
@@ -271,10 +287,131 @@ def get_history_files_for_js():
                 
     return json.dumps(files, indent=4)
 
-def generate_html(runners, last_updated):
+
+def fetch_gta_cities():
+    """Fetch GTA city data from Conor's CityStrides profile page"""
+    url = f"https://citystrides.com/users/{CONOR_USER_ID}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+
+    print("Fetching GTA cities data...")
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        print(f"Failed to fetch profile: {response.status_code}")
+        return []
+
+    soup = BeautifulSoup(response.content, "html.parser")
+    cities = []
+
+    for city_id, city_name in GTA_CITIES.items():
+        city_path = f"/users/{CONOR_USER_ID}/cities/{city_id}"
+        link = soup.find("a", href=lambda h: h and city_path in h)
+        if not link:
+            print(f"  Could not find link for {city_name} (id={city_id})")
+            continue
+
+        text = link.get_text(separator=" ")
+
+        streets_match = re.search(r'(\d[\d,]*)\s+of\s+(\d[\d,]*)\s+streets', text)
+        rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+of\s+([\d,]+)', text)
+        pct_match = re.search(r'([\d.]+)%', text)
+
+        completed = int(streets_match.group(1).replace(",", "")) if streets_match else 0
+        total = int(streets_match.group(2).replace(",", "")) if streets_match else 0
+        rank = int(rank_match.group(1).replace(",", "")) if rank_match else 0
+        total_runners = int(rank_match.group(2).replace(",", "")) if rank_match else 0
+        percentage = float(pct_match.group(1)) if pct_match else 0.0
+
+        city_full_url = f"https://citystrides.com{city_path}"
+
+        # Fetch the individual city page to check for the 💯 badge
+        time.sleep(0.5)
+        city_resp = requests.get(city_full_url, headers=headers)
+        was_100 = False
+        if city_resp.status_code == 200:
+            city_soup = BeautifulSoup(city_resp.content, "html.parser")
+            badge = city_soup.find("span", title="Completed this city")
+            was_100 = badge is not None
+
+        cities.append({
+            "city_id": city_id,
+            "name": city_name,
+            "completed": completed,
+            "total": total,
+            "percentage": percentage,
+            "rank": rank,
+            "total_runners": total_runners,
+            "city_url": city_full_url,
+            "was_100": was_100,
+        })
+        status = "💯" if was_100 else ""
+        print(f"  {city_name}: {percentage}% ({completed}/{total}), rank {rank} of {total_runners} {status}")
+
+    cities.sort(key=lambda x: x["percentage"], reverse=True)
+    print(f"Fetched {len(cities)} GTA cities")
+    return cities
+
+
+def load_gta_data():
+    if os.path.exists(GTA_DATA_FILE):
+        with open(GTA_DATA_FILE, "r") as f:
+            return json.load(f)
+    return {"cities": {}, "last_updated": None}
+
+
+def save_gta_data(gta_data):
+    with open(GTA_DATA_FILE, "w") as f:
+        json.dump(gta_data, f, indent=2)
+
+
+def update_gta_tracking(cities):
+    """Save GTA data snapshot"""
+    gta_data = {
+        "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "cities": {city["city_id"]: city for city in cities},
+    }
+    save_gta_data(gta_data)
+    return cities
+
+
+def ordinal(n):
+    if 11 <= (n % 100) <= 13:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
+
+
+def generate_html(runners, last_updated, gta_cities=None):
     # Generate history files JSON for the frontend
     history_files_json = get_history_files_for_js()
-    
+
+    # Build GTA cities table rows
+    gta_rows_html = ""
+    if gta_cities:
+        for city in gta_cities:
+            is_100 = city["percentage"] >= 100.0
+            was_100 = city.get("was_100", False)
+
+            row_class = ""
+            if is_100:
+                row_class = ' class="city-100"'
+            elif was_100:
+                row_class = ' class="city-was-100"'
+
+            hundred_emoji = "💯" if is_100 or was_100 else ""
+            rank_str = f"{ordinal(city['rank'])} of {city['total_runners']:,}"
+
+            gta_rows_html += f"""
+                <tr{row_class}>
+                    <td><a href="{city['city_url']}" class="profile-link" target="_blank">{city['name']}</a></td>
+                    <td>{city['completed']:,} / {city['total']:,}</td>
+                    <td><strong>{city['percentage']:.2f}%</strong></td>
+                    <td>{rank_str}</td>
+                    <td style="text-align:center; font-size:1.2em;">{hundred_emoji}</td>
+                </tr>"""
+
     html = f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -282,7 +419,7 @@ def generate_html(runners, last_updated):
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CityStrides Top 50 Leaderboard</title>
+    <title>CityStrides Rankings</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {{
@@ -306,7 +443,47 @@ def generate_html(runners, last_updated):
         h1 {{
             text-align: center;
             color: #4c1d95;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+        }}
+
+        .tab-bar {{
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #e4e4e7;
+            margin-bottom: 0;
+        }}
+
+        .tab-btn {{
+            padding: 14px 28px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #71717a;
+            cursor: pointer;
+            transition: all 0.2s;
+        }}
+
+        .tab-btn:hover {{
+            color: #4c1d95;
+            background: #faf5ff;
+        }}
+
+        .tab-btn.active {{
+            color: #4c1d95;
+            border-bottom-color: #4c1d95;
+            font-weight: 600;
+        }}
+
+        .tab-content {{
+            display: none;
+            padding-top: 20px;
+        }}
+
+        .tab-content.active {{
+            display: block;
         }}
 
         .updated {{
@@ -429,6 +606,14 @@ def generate_html(runners, last_updated):
             background: #5b21b6;
         }}
 
+        .city-100 {{
+            background-color: #dcfce7;
+        }}
+
+        .city-was-100 {{
+            background-color: #fef9c3;
+        }}
+
         .modal {{
             display: none;
             position: fixed;
@@ -495,34 +680,41 @@ def generate_html(runners, last_updated):
 
 <body>
     <div class="main-container">
-        <h1>CityStrides Top 50</h1>
-        <div style="text-align: center;">
-            <button class="toggle-button" onclick="openModal()">📈 View Rank History (Top 30)</button>
-        </div>
-        <p class="updated">Last updated: {last_updated}</p>
+        <h1>CityStrides Rankings</h1>
 
-        <div class="delta-controls">
-            <label for="fromDate">Custom compare from:</label>
-            <select id="fromDate" onchange="updateCustomDeltas()"></select>
-            <span class="delta-arrow">→</span>
-            <label for="toDate">to:</label>
-            <select id="toDate" onchange="updateCustomDeltas()"></select>
+        <div class="tab-bar">
+            <button class="tab-btn active" data-tab="leaderboard" onclick="switchTab('leaderboard')">Top 50 Leaderboard</button>
+            <button class="tab-btn" data-tab="gta" onclick="switchTab('gta')">Top GTA Cities</button>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Runner</th>
-                    <th>Streets</th>
-                    <th>Gap</th>
-                    <th>Streets Δ</th>
-                    <th>Rank Δ</th>
-                    <th class="custom-col">Custom Streets Δ</th>
-                    <th class="custom-col">Custom Rank Δ</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div id="tab-leaderboard" class="tab-content active">
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="toggle-button" onclick="openModal()">📈 View Rank History (Top 30)</button>
+            </div>
+            <p class="updated">Last updated: {last_updated}</p>
+
+            <div class="delta-controls">
+                <label for="fromDate">Custom compare from:</label>
+                <select id="fromDate" onchange="updateCustomDeltas()"></select>
+                <span class="delta-arrow">→</span>
+                <label for="toDate">to:</label>
+                <select id="toDate" onchange="updateCustomDeltas()"></select>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Runner</th>
+                        <th>Streets</th>
+                        <th>Gap</th>
+                        <th>Streets Δ</th>
+                        <th>Rank Δ</th>
+                        <th class="custom-col">Custom Streets Δ</th>
+                        <th class="custom-col">Custom Rank Δ</th>
+                    </tr>
+                </thead>
+                <tbody>
     """
     
     for i, runner in enumerate(runners):
@@ -571,8 +763,27 @@ def generate_html(runners, last_updated):
         """
         
     html += f"""
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tab-gta" class="tab-content">
+            <p class="updated" style="margin-top: 20px;">Data for <a href="https://citystrides.com/users/{CONOR_USER_ID}" class="profile-link" target="_blank">Conor Hoekstra</a> &middot; Last updated: {last_updated}</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>Progress</th>
+                        <th>% Complete</th>
+                        <th>Rank</th>
+                        <th style="text-align:center;">💯</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {gta_rows_html}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div id="chartModal" class="modal">
@@ -586,6 +797,13 @@ def generate_html(runners, last_updated):
     </div>
 
     <script>
+        function switchTab(tabId) {{
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('[data-tab="' + tabId + '"]').classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+        }}
+
         const historyFiles = {history_files_json};
 
         let historyCache = {{}};
@@ -599,14 +817,12 @@ def generate_html(runners, last_updated):
                 toSelect.add(new Option(item.date, item.file));
             }});
 
-            // Default to comparing oldest vs newest
             if (historyFiles.length > 0) {{
                 fromSelect.selectedIndex = 0;
                 toSelect.selectedIndex = historyFiles.length - 1;
             }}
 
             await updateCustomDeltas();
-            console.log('Custom deltas initialized');
         }}
 
         async function loadHistoryData(file) {{
@@ -618,7 +834,7 @@ def generate_html(runners, last_updated):
                 historyCache[file] = data;
                 return data;
             }} catch (e) {{
-                console.error('Failed to load', file, '- Are you using a web server? fetch() does not work with file:// URLs.', e);
+                console.error('Failed to load', file, e);
                 return null;
             }}
         }}
@@ -626,7 +842,7 @@ def generate_html(runners, last_updated):
         async function updateCustomDeltas() {{
             const fromFile = document.getElementById('fromDate').value;
             const toFile = document.getElementById('toDate').value;
-            
+
             if (!fromFile || !toFile) return;
 
             const fromData = await loadHistoryData(fromFile);
@@ -644,7 +860,7 @@ def generate_html(runners, last_updated):
                 toByUrl[runner.profile_url] = {{ ...runner, rank: idx + 1 }};
             }});
 
-            document.querySelectorAll('tbody tr').forEach(row => {{
+            document.querySelectorAll('#tab-leaderboard tbody tr').forEach(row => {{
                 const url = row.dataset.url;
                 const fromRunner = fromByUrl[url];
                 const toRunner = toByUrl[url];
@@ -716,7 +932,6 @@ def generate_html(runners, last_updated):
                 'rgb(254, 235, 200)', 'rgb(238, 242, 255)'
             ];
 
-            // Use the last data point's runners to determine the top list
             const latestRunners = allData[allData.length - 1].data.runners.slice(0, 30);
             const datasets = latestRunners.map((runner, idx) => {{
                 const isConor = runner.name.includes('Conor Hoekstra');
@@ -768,25 +983,24 @@ def generate_html(runners, last_updated):
 def main():
     print("Starting leaderboard update...")
     
-    # Load previous data
     previous_data = load_previous_data()
     
-    # Fetch current data
     current_runners = fetch_leaderboard()
     print(f"Fetched {len(current_runners)} runners")
     
-    # Calculate deltas
     processed_runners = calculate_deltas(current_runners, previous_data)
     
-    # Save new data
     new_data = {
         "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "runners": processed_runners
     }
     save_data(new_data)
     
-    # Generate HTML
-    generate_html(processed_runners, new_data["last_updated"])
+    gta_cities = fetch_gta_cities()
+    if gta_cities:
+        gta_cities = update_gta_tracking(gta_cities)
+    
+    generate_html(processed_runners, new_data["last_updated"], gta_cities)
     print("Done!")
 
 if __name__ == "__main__":
