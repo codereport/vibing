@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-08 12:23:11",
+  "last_updated": "2026-04-09 16:13:31",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -12,6 +12,17 @@
       "city_url": "https://citystrides.com/users/55228/cities/38108",
       "was_100": true
     },
+    "38114": {
+      "city_id": "38114",
+      "name": "East York",
+      "completed": 404,
+      "total": 404,
+      "percentage": 100.0,
+      "rank": 1,
+      "total_runners": 742,
+      "city_url": "https://citystrides.com/users/55228/cities/38114",
+      "was_100": true
+    },
     "38121": {
       "city_id": "38121",
       "name": "Old Toronto",
@@ -19,20 +30,9 @@
       "total": 2464,
       "percentage": 99.68,
       "rank": 6,
-      "total_runners": 3426,
+      "total_runners": 3428,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true
-    },
-    "38114": {
-      "city_id": "38114",
-      "name": "East York",
-      "completed": 402,
-      "total": 404,
-      "percentage": 99.5,
-      "rank": 10,
-      "total_runners": 741,
-      "city_url": "https://citystrides.com/users/55228/cities/38114",
-      "was_100": false
     },
     "38102": {
       "city_id": "38102",
@@ -48,11 +48,11 @@
     "131268": {
       "city_id": "131268",
       "name": "Toronto",
-      "completed": 7924,
+      "completed": 7959,
       "total": 10317,
-      "percentage": 76.81,
+      "percentage": 77.14,
       "rank": 7,
-      "total_runners": 3694,
+      "total_runners": 3696,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false
     },
@@ -70,9 +70,9 @@
     "38007": {
       "city_id": "38007",
       "name": "Scarborough",
-      "completed": 1003,
+      "completed": 1037,
       "total": 2596,
-      "percentage": 38.64,
+      "percentage": 39.95,
       "rank": 9,
       "total_runners": 560,
       "city_url": "https://citystrides.com/users/55228/cities/38007",
