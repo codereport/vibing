@@ -282,6 +282,7 @@
     .badge-extra-vote { background: #1e3a5f; color: #60a5fa; border: 1px solid #2563eb; }
     .badge-lost-vote { background: #3f0f0f; color: #f87171; border: 1px solid #991b1b; }
     .badge-boomerang { background: #4a1d6a; color: #c084fc; border: 1px solid #7c3aed; }
+    .badge-steal-vote { background: #1a3f2e; color: #34d399; border: 1px solid #059669; }
 
     .player-card.alliance-highlight {
       outline: 3px solid;
@@ -369,6 +370,7 @@
   <button class="ep-btn" data-ep="4">Episode 4</button>
   <button class="ep-btn" data-ep="5">Episode 5</button>
   <button class="ep-btn" data-ep="6">Episode 6</button>
+  <button class="ep-btn" data-ep="7">Episode 7</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -391,7 +393,7 @@
     rick_devens:         { name: 'Rick Devens',            season: 'S38',                    img: 'rick_devens.jpg',         elimTag: '' },
     jenna_lewis:         { name: 'Jenna Lewis-Dougherty',  season: 'S1 / S8',                img: 'jenna_lewis.jpg',         elimTag: 'Voted Out — Ep. 1' },
     jonathan_young:      { name: 'Jonathan Young',         season: 'S42',                    img: 'jonathan_young.jpg',      elimTag: '' },
-    dee_valladares:      { name: 'Dee Valladares',         season: 'S45 Winner',             img: 'dee_valladares.jpg',      elimTag: '' },
+    dee_valladares:      { name: 'Dee Valladares',         season: 'S45 Winner',             img: 'dee_valladares.jpg',      elimTag: 'Voted Out — Ep. 7' },
     mike_white:          { name: 'Mike White',             season: 'S37',                    img: 'mike_white.jpg',          elimTag: 'Voted Out — Ep. 4' },
     kamilla_karthigesu:  { name: 'Kamilla Karthigesu',     season: 'S48',                    img: 'kamilla_karthigesu.jpg',  elimTag: 'Voted Out — Ep. 6' },
     charlie_davis:       { name: 'Charlie Davis',          season: 'S46',                    img: 'charlie_davis.jpg',       elimTag: 'Voted Out — Ep. 5' },
@@ -441,6 +443,7 @@
     4: ['mike_white'],
     5: ['angelina_keeley', 'charlie_davis'],
     6: ['kamilla_karthigesu', 'genevieve_mushaluk', 'colby_donaldson'],
+    7: ['dee_valladares'],
   };
 
   const poolPicks = {
@@ -490,6 +493,12 @@
       { player: 'ozzy_lusth', type: 'boomerang', label: 'Boomerang Idol' },
       { player: 'rizo_velovic', type: 'boomerang', label: 'Boomerang Idol' },
     ],
+    7: [
+      { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'ozzy_lusth', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'rizo_velovic', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'stephenie_lagrossa', type: 'steal-vote', label: 'Steal a Vote' },
+    ],
   };
 
   const alliances = {
@@ -526,6 +535,12 @@
       { name: 'Old Guard', color: '#10b981', members: ['stephenie_lagrossa', 'chrissy_hofbeck', 'jonathan_young'] },
       { name: 'Christian & Devens & Joe & Aubry', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens', 'joe_hunter', 'aubry_bracco'] },
       { name: 'Cirie & Dee & Emily', color: '#f472b6', members: ['cirie_fields', 'dee_valladares', 'emily_flippen'] },
+    ],
+    7: [
+      { name: 'The Throuple', color: '#22d3ee', members: ['cirie_fields', 'ozzy_lusth', 'rizo_velovic'] },
+      { name: 'Four Horsemen', color: '#10b981', members: ['coach_wade', 'jonathan_young', 'chrissy_hofbeck', 'stephenie_lagrossa'] },
+      { name: 'Christian & Devens & Joe & Aubry', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens', 'joe_hunter', 'aubry_bracco'] },
+      { name: 'Cirie & Emily', color: '#f472b6', members: ['cirie_fields', 'emily_flippen'] },
     ],
   };
 
