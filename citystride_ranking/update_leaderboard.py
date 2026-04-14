@@ -288,6 +288,55 @@ def get_history_files_for_js():
     return json.dumps(files, indent=4)
 
 
+def fetch_runner_above(city_id, rank, conor_pct, headers):
+    """Fetch the runner ranked one above Conor from the city leaderboard"""
+    page = max(1, (rank - 1) // 12 + 1)
+
+    lb_url = f"https://citystrides.com/users/search?context=city_users-{city_id}&page={page}"
+    resp = requests.get(lb_url, headers=headers)
+    if resp.status_code != 200:
+        return None
+
+    soup = BeautifulSoup(resp.content, "html.parser")
+    cards = soup.find_all("div", class_=lambda c: c and "col-span-1" in c)
+
+    conor_idx = None
+    runners = []
+    for i, card in enumerate(cards):
+        name_tag = card.find("h3")
+        name = name_tag.get_text(strip=True) if name_tag else "?"
+        text = card.get_text(separator=" ", strip=True)
+        pct = re.search(r'([\d.]+)%', text)
+        runners.append({"name": name, "pct": float(pct.group(1)) if pct else 0.0})
+        if "Conor" in name:
+            conor_idx = i
+
+    if conor_idx is None:
+        return None
+    if conor_idx > 0:
+        above = runners[conor_idx - 1]
+        if above["pct"] == conor_pct:
+            return None
+        return above
+    if page > 1:
+        prev_url = f"https://citystrides.com/users/search?context=city_users-{city_id}&page={page - 1}"
+        prev_resp = requests.get(prev_url, headers=headers)
+        if prev_resp.status_code == 200:
+            prev_soup = BeautifulSoup(prev_resp.content, "html.parser")
+            prev_cards = prev_soup.find_all("div", class_=lambda c: c and "col-span-1" in c)
+            if prev_cards:
+                last_card = prev_cards[-1]
+                name_tag = last_card.find("h3")
+                name = name_tag.get_text(strip=True) if name_tag else "?"
+                text = last_card.get_text(separator=" ", strip=True)
+                pct = re.search(r'([\d.]+)%', text)
+                above = {"name": name, "pct": float(pct.group(1)) if pct else 0.0}
+                if above["pct"] == conor_pct:
+                    return None
+                return above
+    return None
+
+
 def fetch_gta_cities():
     """Fetch GTA city data from Conor's CityStrides profile page"""
     url = f"https://citystrides.com/users/{CONOR_USER_ID}"
@@ -334,6 +383,10 @@ def fetch_gta_cities():
             badge = city_soup.find("span", title="Completed this city")
             was_100 = badge is not None
 
+        # Fetch the runner ranked directly above Conor
+        time.sleep(0.3)
+        above = fetch_runner_above(city_id, rank, percentage, headers)
+
         cities.append({
             "city_id": city_id,
             "name": city_name,
@@ -344,9 +397,11 @@ def fetch_gta_cities():
             "total_runners": total_runners,
             "city_url": city_full_url,
             "was_100": was_100,
+            "runner_above": above,
         })
+        above_str = f" | above: {above['name']} ({above['pct']}%)" if above else ""
         status = "💯" if was_100 else ""
-        print(f"  {city_name}: {percentage}% ({completed}/{total}), rank {rank} of {total_runners} {status}")
+        print(f"  {city_name}: {percentage}% ({completed}/{total}), rank {rank} of {total_runners} {status}{above_str}")
 
     cities.sort(key=lambda x: x["percentage"], reverse=True)
     print(f"Fetched {len(cities)} GTA cities")
@@ -403,12 +458,18 @@ def generate_html(runners, last_updated, gta_cities=None):
             hundred_emoji = "💯" if is_100 or was_100 else ""
             rank_str = f"{ordinal(city['rank'])} of {city['total_runners']:,}"
 
+            above = city.get("runner_above")
+            above_name = above["name"] if above else "-"
+            above_pct = f"{above['pct']:.2f}%" if above else ""
+
             gta_rows_html += f"""
                 <tr{row_class}>
                     <td><a href="{city['city_url']}" class="profile-link" target="_blank">{city['name']}</a></td>
                     <td>{city['completed']:,} / {city['total']:,}</td>
                     <td><strong>{city['percentage']:.2f}%</strong></td>
                     <td>{rank_str}</td>
+                    <td>{above_name}</td>
+                    <td>{above_pct}</td>
                     <td style="text-align:center; font-size:1.2em;">{hundred_emoji}</td>
                 </tr>"""
 
@@ -776,6 +837,8 @@ def generate_html(runners, last_updated, gta_cities=None):
                         <th>Progress</th>
                         <th>% Complete</th>
                         <th>Rank</th>
+                        <th>Next Target</th>
+                        <th>Their %</th>
                         <th style="text-align:center;">💯</th>
                     </tr>
                 </thead>
