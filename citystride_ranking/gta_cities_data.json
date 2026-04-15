@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-14 12:48:17",
+  "last_updated": "2026-04-15 14:46:40",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -8,9 +8,10 @@
       "total": 2710,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 1001,
+      "total_runners": 1002,
       "city_url": "https://citystrides.com/users/55228/cities/38108",
-      "was_100": true
+      "was_100": true,
+      "runner_above": null
     },
     "38114": {
       "city_id": "38114",
@@ -19,9 +20,10 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 744,
+      "total_runners": 745,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
-      "was_100": true
+      "was_100": true,
+      "runner_above": null
     },
     "38121": {
       "city_id": "38121",
@@ -30,9 +32,13 @@
       "total": 2464,
       "percentage": 99.68,
       "rank": 6,
-      "total_runners": 3436,
+      "total_runners": 3437,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
-      "was_100": true
+      "was_100": true,
+      "runner_above": {
+        "name": "Carlo De Lorenzi",
+        "pct": 99.76
+      }
     },
     "38102": {
       "city_id": "38102",
@@ -41,20 +47,28 @@
       "total": 588,
       "percentage": 98.81,
       "rank": 9,
-      "total_runners": 703,
+      "total_runners": 704,
       "city_url": "https://citystrides.com/users/55228/cities/38102",
-      "was_100": false
+      "was_100": false,
+      "runner_above": {
+        "name": "Susan",
+        "pct": 99.66
+      }
     },
     "131268": {
       "city_id": "131268",
       "name": "Toronto",
-      "completed": 8048,
+      "completed": 8072,
       "total": 10317,
-      "percentage": 78.01,
+      "percentage": 78.24,
       "rank": 7,
-      "total_runners": 3704,
+      "total_runners": 3707,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
-      "was_100": false
+      "was_100": false,
+      "runner_above": {
+        "name": "Brian Putre",
+        "pct": 81.39
+      }
     },
     "38014": {
       "city_id": "38014",
@@ -65,18 +79,26 @@
       "rank": 9,
       "total_runners": 889,
       "city_url": "https://citystrides.com/users/55228/cities/38014",
-      "was_100": false
+      "was_100": false,
+      "runner_above": {
+        "name": "Steve Jackson",
+        "pct": 98.65
+      }
     },
     "38007": {
       "city_id": "38007",
       "name": "Scarborough",
-      "completed": 1127,
+      "completed": 1151,
       "total": 2596,
-      "percentage": 43.41,
+      "percentage": 44.34,
       "rank": 8,
-      "total_runners": 564,
+      "total_runners": 565,
       "city_url": "https://citystrides.com/users/55228/cities/38007",
-      "was_100": false
+      "was_100": false,
+      "runner_above": {
+        "name": "Michael Lehotay",
+        "pct": 48.11
+      }
     },
     "37668": {
       "city_id": "37668",
@@ -87,7 +109,11 @@
       "rank": 6,
       "total_runners": 325,
       "city_url": "https://citystrides.com/users/55228/cities/37668",
-      "was_100": false
+      "was_100": false,
+      "runner_above": {
+        "name": "Ryan Albano",
+        "pct": 20.72
+      }
     },
     "37680": {
       "city_id": "37680",
@@ -98,7 +124,11 @@
       "rank": 9,
       "total_runners": 392,
       "city_url": "https://citystrides.com/users/55228/cities/37680",
-      "was_100": false
+      "was_100": false,
+      "runner_above": {
+        "name": "Gigi Goncalves",
+        "pct": 15.73
+      }
     }
   }
 }
