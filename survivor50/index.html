@@ -371,6 +371,7 @@
   <button class="ep-btn" data-ep="5">Episode 5</button>
   <button class="ep-btn" data-ep="6">Episode 6</button>
   <button class="ep-btn" data-ep="7">Episode 7</button>
+  <button class="ep-btn" data-ep="8">Episode 8</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -398,8 +399,8 @@
     kamilla_karthigesu:  { name: 'Kamilla Karthigesu',     season: 'S48',                    img: 'kamilla_karthigesu.jpg',  elimTag: 'Voted Out — Ep. 6' },
     charlie_davis:       { name: 'Charlie Davis',          season: 'S46',                    img: 'charlie_davis.jpg',       elimTag: 'Voted Out — Ep. 5' },
     tiffany_ervin:       { name: 'Tiffany Ervin',          season: 'S46',                    img: 'tiffany_ervin.jpg',       elimTag: '' },
-    coach_wade:          { name: '"Coach" Wade',           season: 'S18 / S20 / S23',       img: 'coach_wade.jpg',          elimTag: '' },
-    chrissy_hofbeck:     { name: 'Chrissy Hofbeck',        season: 'S35',                    img: 'chrissy_hofbeck.jpg',     elimTag: '' },
+    coach_wade:          { name: '"Coach" Wade',           season: 'S18 / S20 / S23',       img: 'coach_wade.jpg',          elimTag: 'Voted Out — Ep. 8' },
+    chrissy_hofbeck:     { name: 'Chrissy Hofbeck',        season: 'S35',                    img: 'chrissy_hofbeck.jpg',     elimTag: 'Voted Out — Ep. 8' },
     colby_donaldson:     { name: 'Colby Donaldson',        season: 'S2 / S8 / S20',         img: 'colby_donaldson.jpg',     elimTag: 'Voted Out — Ep. 6' },
     genevieve_mushaluk:  { name: 'Genevieve Mushaluk',     season: 'S47',                    img: 'genevieve_mushaluk.jpg',  elimTag: 'Voted Out — Ep. 6' },
     rizo_velovic:        { name: 'Rizo Velovic',           season: 'S49',                    img: 'rizo_velovic.jpg',        elimTag: '' },
@@ -444,6 +445,7 @@
     5: ['angelina_keeley', 'charlie_davis'],
     6: ['kamilla_karthigesu', 'genevieve_mushaluk', 'colby_donaldson'],
     7: ['dee_valladares'],
+    8: ['coach_wade', 'chrissy_hofbeck'],
   };
 
   const poolPicks = {
@@ -499,6 +501,12 @@
       { player: 'rizo_velovic', type: 'boomerang', label: 'Boomerang Idol' },
       { player: 'stephenie_lagrossa', type: 'steal-vote', label: 'Steal a Vote' },
     ],
+    8: [
+      { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'ozzy_lusth', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'rizo_velovic', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'stephenie_lagrossa', type: 'steal-vote', label: 'Steal a Vote' },
+    ],
   };
 
   const alliances = {
@@ -541,6 +549,12 @@
       { name: 'Four Horsemen', color: '#10b981', members: ['coach_wade', 'jonathan_young', 'chrissy_hofbeck', 'stephenie_lagrossa'] },
       { name: 'Christian & Devens & Joe & Aubry', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens', 'joe_hunter', 'aubry_bracco'] },
       { name: 'Cirie & Emily', color: '#f472b6', members: ['cirie_fields', 'emily_flippen'] },
+    ],
+    8: [
+      { name: 'The Throuple', color: '#22d3ee', members: ['cirie_fields', 'ozzy_lusth', 'rizo_velovic'] },
+      { name: 'Christian & Devens & Aubry', color: '#f59e0b', members: ['christian_hubicki', 'rick_devens', 'aubry_bracco'] },
+      { name: 'Cirie & Emily & Tiffany', color: '#f472b6', members: ['cirie_fields', 'emily_flippen', 'tiffany_ervin'] },
+      { name: 'Stephenie & Jonathan', color: '#10b981', members: ['stephenie_lagrossa', 'jonathan_young'] },
     ],
   };
 
