@@ -33,6 +33,9 @@ This means you want to pick players who are **safe this week** but **on borrowed
 | Ep. 4 | Colby Donaldson | SAFE |
 | Ep. 5 | Stephenie LaGrossa | SAFE |
 | Ep. 6 | "Coach" Wade | SAFE |
+| Ep. 7 | Ozzy Lusth | SAFE |
+| Ep. 8 | Rizo Velovic | SAFE |
+| Ep. 9 | Jonathan Young | SAFE |
 
 ## Players Already Used
 
@@ -41,3 +44,6 @@ This means you want to pick players who are **safe this week** but **on borrowed
 - [x] Colby Donaldson (Ep. 4)
 - [x] Stephenie LaGrossa (Ep. 5)
 - [x] "Coach" Wade (Ep. 6)
+- [x] Ozzy Lusth (Ep. 7)
+- [x] Rizo Velovic (Ep. 8)
+- [x] Jonathan Young (Ep. 9)
