@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-23 12:54:19",
+  "last_updated": "2026-04-26 17:10:15",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -8,7 +8,7 @@
       "total": 2710,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 1004,
+      "total_runners": 1007,
       "city_url": "https://citystrides.com/users/55228/cities/38108",
       "was_100": true,
       "runner_above": null
@@ -20,7 +20,7 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 747,
+      "total_runners": 749,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
       "was_100": true,
       "runner_above": null
@@ -32,7 +32,7 @@
       "total": 2464,
       "percentage": 99.72,
       "rank": 6,
-      "total_runners": 3455,
+      "total_runners": 3459,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": {
@@ -47,7 +47,7 @@
       "total": 588,
       "percentage": 98.81,
       "rank": 9,
-      "total_runners": 706,
+      "total_runners": 707,
       "city_url": "https://citystrides.com/users/55228/cities/38102",
       "was_100": false,
       "runner_above": {
@@ -58,16 +58,16 @@
     "131268": {
       "city_id": "131268",
       "name": "Toronto",
-      "completed": 8163,
+      "completed": 8191,
       "total": 10317,
-      "percentage": 79.12,
+      "percentage": 79.39,
       "rank": 7,
-      "total_runners": 3725,
+      "total_runners": 3727,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
         "name": "Brian Putre",
-        "pct": 81.39
+        "pct": 81.81
       }
     },
     "38014": {
@@ -88,16 +88,16 @@
     "38007": {
       "city_id": "38007",
       "name": "Scarborough",
-      "completed": 1242,
+      "completed": 1270,
       "total": 2596,
-      "percentage": 47.84,
-      "rank": 8,
-      "total_runners": 566,
+      "percentage": 48.92,
+      "rank": 7,
+      "total_runners": 570,
       "city_url": "https://citystrides.com/users/55228/cities/38007",
       "was_100": false,
       "runner_above": {
-        "name": "Michael Lehotay",
-        "pct": 48.11
+        "name": "Steve Jackson",
+        "pct": 89.87
       }
     },
     "37668": {
@@ -107,7 +107,7 @@
       "total": 2365,
       "percentage": 18.39,
       "rank": 6,
-      "total_runners": 326,
+      "total_runners": 327,
       "city_url": "https://citystrides.com/users/55228/cities/37668",
       "was_100": false,
       "runner_above": {
