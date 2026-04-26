@@ -288,8 +288,44 @@ def get_history_files_for_js():
     return json.dumps(files, indent=4)
 
 
+def parse_leaderboard_entries(soup):
+    """Parse all leaderboard entries from a page, including private striders."""
+    entries = []
+
+    cards = soup.find_all("div", class_=lambda c: c and "col-span-1" in c)
+    for card in cards:
+        name_tag = card.find("h3")
+        name = name_tag.get_text(strip=True) if name_tag else "?"
+        text = card.get_text(separator=" ", strip=True)
+        pct_match = re.search(r'([\d.]+)%', text)
+        rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+Place', text)
+        if pct_match and rank_match:
+            entries.append({
+                "name": name,
+                "pct": float(pct_match.group(1)),
+                "rank": int(rank_match.group(1)),
+            })
+
+    page_text = soup.get_text()
+    for m in re.finditer(
+        r'private\s+[Ss]trider\s+is\s+in\s+(\d+)(?:st|nd|rd|th)\s+Place\s+at\s+([\d.]+)%',
+        page_text,
+    ):
+        entries.append({
+            "name": "A private Strider",
+            "pct": float(m.group(2)),
+            "rank": int(m.group(1)),
+        })
+
+    entries.sort(key=lambda e: e["rank"])
+    return entries
+
+
 def fetch_runner_above(city_id, rank, conor_pct, headers):
     """Fetch the runner ranked one above Conor from the city leaderboard"""
+    if rank <= 1:
+        return None
+
     page = max(1, (rank - 1) // 12 + 1)
 
     lb_url = f"https://citystrides.com/users/search?context=city_users-{city_id}&page={page}"
@@ -298,42 +334,33 @@ def fetch_runner_above(city_id, rank, conor_pct, headers):
         return None
 
     soup = BeautifulSoup(resp.content, "html.parser")
-    cards = soup.find_all("div", class_=lambda c: c and "col-span-1" in c)
+    entries = parse_leaderboard_entries(soup)
 
     conor_idx = None
-    runners = []
-    for i, card in enumerate(cards):
-        name_tag = card.find("h3")
-        name = name_tag.get_text(strip=True) if name_tag else "?"
-        text = card.get_text(separator=" ", strip=True)
-        pct = re.search(r'([\d.]+)%', text)
-        runners.append({"name": name, "pct": float(pct.group(1)) if pct else 0.0})
-        if "Conor" in name:
+    for i, entry in enumerate(entries):
+        if "Conor" in entry["name"]:
             conor_idx = i
+            break
 
     if conor_idx is None:
         return None
     if conor_idx > 0:
-        above = runners[conor_idx - 1]
+        above = entries[conor_idx - 1]
         if above["pct"] == conor_pct:
             return None
-        return above
+        return {"name": above["name"], "pct": above["pct"]}
     if page > 1:
         prev_url = f"https://citystrides.com/users/search?context=city_users-{city_id}&page={page - 1}"
         prev_resp = requests.get(prev_url, headers=headers)
         if prev_resp.status_code == 200:
-            prev_soup = BeautifulSoup(prev_resp.content, "html.parser")
-            prev_cards = prev_soup.find_all("div", class_=lambda c: c and "col-span-1" in c)
-            if prev_cards:
-                last_card = prev_cards[-1]
-                name_tag = last_card.find("h3")
-                name = name_tag.get_text(strip=True) if name_tag else "?"
-                text = last_card.get_text(separator=" ", strip=True)
-                pct = re.search(r'([\d.]+)%', text)
-                above = {"name": name, "pct": float(pct.group(1)) if pct else 0.0}
+            prev_entries = parse_leaderboard_entries(
+                BeautifulSoup(prev_resp.content, "html.parser")
+            )
+            if prev_entries:
+                above = prev_entries[-1]
                 if above["pct"] == conor_pct:
                     return None
-                return above
+                return {"name": above["name"], "pct": above["pct"]}
     return None
 
 
