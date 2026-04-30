@@ -373,6 +373,7 @@
   <button class="ep-btn" data-ep="7">Episode 7</button>
   <button class="ep-btn" data-ep="8">Episode 8</button>
   <button class="ep-btn" data-ep="9">Episode 9</button>
+  <button class="ep-btn" data-ep="10">Episode 10</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -407,7 +408,7 @@
     rizo_velovic:        { name: 'Rizo Velovic',           season: 'S49',                    img: 'rizo_velovic.jpg',        elimTag: '' },
     angelina_keeley:     { name: 'Angelina Keeley',        season: 'S37',                    img: 'angelina_keeley.jpg',     elimTag: 'Voted Out — Ep. 5' },
     q_burdette:          { name: 'Q Burdette',             season: 'S46',                    img: 'q_burdette.jpg',          elimTag: 'Voted Out — Ep. 3' },
-    stephenie_lagrossa:  { name: 'Stephenie LaGrossa',     season: 'S10 / S11 / S20',       img: 'stephenie_lagrossa.jpg',  elimTag: '' },
+    stephenie_lagrossa:  { name: 'Stephenie LaGrossa',     season: 'S10 / S11 / S20',       img: 'stephenie_lagrossa.jpg',  elimTag: 'Voted Out — Ep. 10' },
     kyle_fraser:         { name: 'Kyle Fraser',            season: 'S48 Winner',             img: 'kyle_fraser.jpg',         elimTag: 'Med. Evac — Ep. 1' },
     aubry_bracco:        { name: 'Aubry Bracco',           season: 'S32 / S34 / S38',       img: 'aubry_bracco.jpg',        elimTag: '' },
   };
@@ -448,6 +449,7 @@
     7: ['dee_valladares'],
     8: ['coach_wade', 'chrissy_hofbeck'],
     9: ['christian_hubicki'],
+    10: ['stephenie_lagrossa'],
   };
 
   const poolPicks = {
@@ -459,6 +461,7 @@
     7: 'ozzy_lusth',
     8: 'rizo_velovic',
     9: 'jonathan_young',
+    10: 'joe_hunter',
   };
 
   const advantages = {
@@ -518,6 +521,12 @@
       { player: 'rizo_velovic', type: 'boomerang', label: 'Boomerang Idol' },
       { player: 'stephenie_lagrossa', type: 'steal-vote', label: 'Steal a Vote' },
     ],
+    10: [
+      { player: 'cirie_fields', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'ozzy_lusth', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'rizo_velovic', type: 'boomerang', label: 'Boomerang Idol' },
+      { player: 'rick_devens', type: 'idol', label: 'Immunity Idol' },
+    ],
   };
 
   const alliances = {
@@ -571,6 +580,12 @@
       { name: 'The Throuple', color: '#22d3ee', members: ['cirie_fields', 'ozzy_lusth', 'rizo_velovic'] },
       { name: "Cirie's Majority", color: '#f472b6', members: ['cirie_fields', 'tiffany_ervin', 'joe_hunter', 'aubry_bracco', 'rizo_velovic'] },
       { name: 'Jonathan & Stephenie', color: '#10b981', members: ['jonathan_young', 'stephenie_lagrossa'] },
+      { name: 'Emily & Rick', color: '#f59e0b', members: ['emily_flippen', 'rick_devens'] },
+    ],
+    10: [
+      { name: 'The Throuple', color: '#22d3ee', members: ['cirie_fields', 'ozzy_lusth', 'rizo_velovic'] },
+      { name: "Cirie's Majority", color: '#f472b6', members: ['cirie_fields', 'tiffany_ervin', 'joe_hunter', 'aubry_bracco', 'rizo_velovic'] },
+      { name: 'Aubry & Jonathan', color: '#10b981', members: ['aubry_bracco', 'jonathan_young'] },
       { name: 'Emily & Rick', color: '#f59e0b', members: ['emily_flippen', 'rick_devens'] },
     ],
   };

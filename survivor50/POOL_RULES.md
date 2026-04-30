@@ -36,6 +36,7 @@ This means you want to pick players who are **safe this week** but **on borrowed
 | Ep. 7 | Ozzy Lusth | SAFE |
 | Ep. 8 | Rizo Velovic | SAFE |
 | Ep. 9 | Jonathan Young | SAFE |
+| Ep. 10 | Joe Hunter | SAFE |
 
 ## Players Already Used
 
@@ -47,3 +48,4 @@ This means you want to pick players who are **safe this week** but **on borrowed
 - [x] Ozzy Lusth (Ep. 7)
 - [x] Rizo Velovic (Ep. 8)
 - [x] Jonathan Young (Ep. 9)
+- [x] Joe Hunter (Ep. 10)
