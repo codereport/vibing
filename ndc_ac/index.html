@@ -48,6 +48,7 @@
 
   .title-content .ampersand {
     color: #7b2ff2;
+    transition: color 0.3s;
   }
 
   .title-content .author {
@@ -87,10 +88,32 @@ const H = () => window.innerHeight;
 const RIBBON_COUNT = 3;
 const POINTS_PER_RIBBON = 5;
 const TRAIL_LENGTH = 40;
+const HUE_SPEED = 15;
 
-const PURPLES = [
-  { r: 123, g: 47, b: 242 },
-];
+const ampersand = document.querySelector('.ampersand');
+let globalHue = 270;
+
+function hslToRgb(h, s, l) {
+  h /= 360; s /= 100; l /= 100;
+  let r, g, b;
+  if (s === 0) { r = g = b = l; }
+  else {
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1/3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1/3);
+  }
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
 
 class Point {
   constructor() {
@@ -118,23 +141,24 @@ class Point {
 }
 
 class Ribbon {
-  constructor(colorIdx) {
+  constructor(hueOffset) {
     this.points = Array.from({ length: POINTS_PER_RIBBON }, () => new Point());
     this.trail = [];
-    this.color = PURPLES[colorIdx % PURPLES.length];
+    this.hueOffset = hueOffset;
   }
 
   update() {
     for (const p of this.points) p.update();
-    this.trail.push(this.points.map(p => ({ x: p.x, y: p.y })));
+    const hue = (globalHue + this.hueOffset) % 360;
+    const [r, g, b] = hslToRgb(hue, 80, 60);
+    this.trail.push({ positions: this.points.map(p => ({ x: p.x, y: p.y })), r, g, b });
     if (this.trail.length > TRAIL_LENGTH) this.trail.shift();
   }
 
   draw() {
     for (let t = 0; t < this.trail.length; t++) {
-      const positions = this.trail[t];
+      const { positions, r, g, b } = this.trail[t];
       const alpha = (t / this.trail.length) * 0.55;
-      const { r, g, b } = this.color;
 
       ctx.beginPath();
       ctx.moveTo(positions[0].x, positions[0].y);
@@ -149,11 +173,14 @@ class Ribbon {
   }
 }
 
-const ribbons = Array.from({ length: RIBBON_COUNT }, (_, i) => new Ribbon(i));
+const ribbons = Array.from({ length: RIBBON_COUNT }, () => new Ribbon(0));
 
 function animate() {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.92)';
   ctx.fillRect(0, 0, W(), H());
+
+  globalHue = (globalHue + HUE_SPEED / 60) % 360;
+  ampersand.style.color = `hsl(${globalHue}, 80%, 60%)`;
 
   for (const ribbon of ribbons) {
     ribbon.update();
