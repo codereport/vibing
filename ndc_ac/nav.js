@@ -1,6 +1,9 @@
 const pages = [
     'index.html',
     'linktree.html',
+    'bio.html',
+    'trilogies.html',
+    'drstrange.html',
     'poll.html',
 ];
 
