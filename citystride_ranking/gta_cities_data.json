@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-02 12:00:04",
+  "last_updated": "2026-05-06 11:03:12",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -8,7 +8,7 @@
       "total": 2710,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 1008,
+      "total_runners": 1038,
       "city_url": "https://citystrides.com/users/55228/cities/38108",
       "was_100": true,
       "runner_above": null
@@ -20,7 +20,7 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 749,
+      "total_runners": 751,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
       "was_100": true,
       "runner_above": null
@@ -32,7 +32,7 @@
       "total": 2464,
       "percentage": 99.72,
       "rank": 6,
-      "total_runners": 3469,
+      "total_runners": 3499,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": {
@@ -62,12 +62,12 @@
       "total": 10317,
       "percentage": 79.84,
       "rank": 7,
-      "total_runners": 3736,
+      "total_runners": 3766,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
         "name": "Brian Putre",
-        "pct": 81.81
+        "pct": 82.26
       }
     },
     "38014": {
@@ -76,13 +76,13 @@
       "completed": 1137,
       "total": 1931,
       "percentage": 58.88,
-      "rank": 9,
-      "total_runners": 893,
+      "rank": 10,
+      "total_runners": 907,
       "city_url": "https://citystrides.com/users/55228/cities/38014",
       "was_100": false,
       "runner_above": {
-        "name": "Steve Jackson",
-        "pct": 98.65
+        "name": "A private Strider",
+        "pct": 61.16
       }
     },
     "38007": {
@@ -92,7 +92,7 @@
       "total": 2596,
       "percentage": 50.69,
       "rank": 7,
-      "total_runners": 571,
+      "total_runners": 574,
       "city_url": "https://citystrides.com/users/55228/cities/38007",
       "was_100": false,
       "runner_above": {
@@ -103,11 +103,11 @@
     "37668": {
       "city_id": "37668",
       "name": "Vaughan",
-      "completed": 443,
+      "completed": 477,
       "total": 2365,
-      "percentage": 18.73,
+      "percentage": 20.17,
       "rank": 6,
-      "total_runners": 327,
+      "total_runners": 329,
       "city_url": "https://citystrides.com/users/55228/cities/37668",
       "was_100": false,
       "runner_above": {
@@ -122,7 +122,7 @@
       "total": 2308,
       "percentage": 15.64,
       "rank": 9,
-      "total_runners": 394,
+      "total_runners": 395,
       "city_url": "https://citystrides.com/users/55228/cities/37680",
       "was_100": false,
       "runner_above": {
