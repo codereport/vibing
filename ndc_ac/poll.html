@@ -133,8 +133,8 @@ const votersEl = document.getElementById('voters');
 const statusEl = document.getElementById('status');
 
 let globalHue = 270;
-let currentSlices = [];
 let targetSlices = [];
+let animatedFractions = {};
 let legendItems = {};
 
 function resize() {
@@ -245,18 +245,16 @@ function drawPie() {
     return;
   }
 
-  if (currentSlices.length !== targetSlices.length) {
-    currentSlices = targetSlices.map(s => ({ ...s, currentFraction: 0 }));
-  }
-
   let startAngle = -Math.PI / 2;
   for (let i = 0; i < targetSlices.length; i++) {
-    if (!currentSlices[i]) currentSlices[i] = { ...targetSlices[i], currentFraction: 0 };
-    currentSlices[i].currentFraction = lerp(currentSlices[i].currentFraction, targetSlices[i].fraction, 0.08);
+    const s = targetSlices[i];
+    if (!(s.lang in animatedFractions)) animatedFractions[s.lang] = 0;
+    animatedFractions[s.lang] = lerp(animatedFractions[s.lang], s.fraction, 0.08);
 
+    const curFrac = animatedFractions[s.lang];
     const hue = (globalHue + i * (360 / targetSlices.length)) % 360;
     const color = `hsl(${hue}, 70%, 55%)`;
-    const sweep = currentSlices[i].currentFraction * Math.PI * 2;
+    const sweep = curFrac * Math.PI * 2;
 
     ctx.beginPath();
     ctx.moveTo(cx, cy);
@@ -273,11 +271,11 @@ function drawPie() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    if (currentSlices[i].currentFraction > 0.05) {
+    if (curFrac > 0.05) {
       const midAngle = startAngle + sweep / 2;
       const tx = cx + Math.cos(midAngle) * r * 0.6;
       const ty = cy + Math.sin(midAngle) * r * 0.6;
-      const pct = Math.round(currentSlices[i].currentFraction * 100);
+      const pct = Math.round(curFrac * 100);
       ctx.fillStyle = '#fff';
       ctx.font = 'bold 1rem "Segoe UI", system-ui, sans-serif';
       ctx.textAlign = 'center';
@@ -288,8 +286,8 @@ function drawPie() {
       ctx.shadowBlur = 0;
     }
 
-    if (legendItems[targetSlices[i].lang]) {
-      legendItems[targetSlices[i].lang].swatch.style.background = color;
+    if (legendItems[s.lang]) {
+      legendItems[s.lang].swatch.style.background = color;
     }
 
     startAngle += sweep;
