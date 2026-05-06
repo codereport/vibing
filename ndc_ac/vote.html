@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vote - What languages do you code in?</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 40px;
+  }
+  h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .subtitle {
+    font-size: 0.85rem;
+    color: #999;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+  }
+  .lang-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #1a1a2e;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 12px 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  .lang-btn:active { transform: scale(0.95); }
+  .lang-btn.selected {
+    border-color: #7b2ff2;
+    background: #1e1040;
+    box-shadow: 0 0 12px rgba(123,47,242,0.3);
+  }
+  .lang-btn img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+  .lang-btn span {
+    font-size: 0.75rem;
+    color: #ccc;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .lang-btn.selected span { color: #fff; }
+  .other-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #888;
+  }
+  #status {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #666;
+  }
+  #status.connected { color: #4a4; }
+  #status.disconnected { color: #a44; }
+</style>
+</head>
+<body>
+<h1>What languages do you code in?</h1>
+<p class="subtitle">Tap all that apply</p>
+<div class="grid" id="grid"></div>
+<div id="status">Connecting...</div>
+
+<script>
+const LOGO_BASE = 'https://raw.githubusercontent.com/codereport/logos/main/';
+
+const LANGUAGES = [
+  { name: 'Python',     logo: 'python.png' },
+  { name: 'JavaScript', logo: 'javascript.png' },
+  { name: 'TypeScript', logo: 'ts.png' },
+  { name: 'Java',       logo: 'java.png' },
+  { name: 'C++',        logo: 'cpp.png' },
+  { name: 'C',          logo: 'c.png' },
+  { name: 'C#',         logo: 'csharp.png' },
+  { name: 'Go',         logo: 'go.png' },
+  { name: 'Rust',       logo: 'rust_darkmode.png' },
+  { name: 'Kotlin',     logo: 'kotlin.svg' },
+  { name: 'Swift',      logo: 'swift.png' },
+  { name: 'Ruby',       logo: 'ruby.png' },
+  { name: 'PHP',        logo: 'php.png' },
+  { name: 'Scala',      logo: 'scala.svg' },
+  { name: 'Haskell',    logo: 'haskell.svg' },
+  { name: 'R',          logo: 'r.png' },
+  { name: 'MATLAB',     logo: 'matlab.png' },
+  { name: 'APL',        logo: 'apl.png' },
+  { name: 'BQN',        logo: 'bqn.svg' },
+  { name: 'Other',      logo: null },
+];
+
+const grid = document.getElementById('grid');
+const statusEl = document.getElementById('status');
+const selected = new Set();
+
+LANGUAGES.forEach(({ name, logo }) => {
+  const btn = document.createElement('div');
+  btn.className = 'lang-btn';
+  btn.dataset.lang = name;
+
+  if (logo) {
+    const img = document.createElement('img');
+    img.src = LOGO_BASE + logo;
+    img.alt = name;
+    img.loading = 'lazy';
+    btn.appendChild(img);
+  } else {
+    const icon = document.createElement('div');
+    icon.className = 'other-icon';
+    icon.textContent = '...';
+    btn.appendChild(icon);
+  }
+
+  const span = document.createElement('span');
+  span.textContent = name;
+  btn.appendChild(span);
+
+  btn.addEventListener('click', () => toggle(name, btn));
+  grid.appendChild(btn);
+});
+
+function toggle(lang, btn) {
+  if (selected.has(lang)) {
+    selected.delete(lang);
+    btn.classList.remove('selected');
+    send({ type: 'vote', lang, delta: -1 });
+  } else {
+    selected.add(lang);
+    btn.classList.add('selected');
+    send({ type: 'vote', lang, delta: 1 });
+  }
+}
+
+const WS_HOST = location.host || 'localhost:3001';
+let ws;
+function connect() {
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  ws = new WebSocket(`${proto}://${WS_HOST}`);
+
+  ws.onopen = () => {
+    statusEl.textContent = 'Connected';
+    statusEl.className = 'connected';
+  };
+
+  ws.onclose = () => {
+    statusEl.textContent = 'Disconnected - reconnecting...';
+    statusEl.className = 'disconnected';
+    setTimeout(connect, 2000);
+  };
+
+  ws.onerror = () => ws.close();
+}
+
+function send(msg) {
+  if (ws && ws.readyState === 1) ws.send(JSON.stringify(msg));
+}
+
+connect();
+</script>
+</body>
+</html>

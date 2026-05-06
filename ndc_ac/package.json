@@ -1,0 +1,7 @@
+{
+  "name": "ndc-ac-poll",
+  "private": true,
+  "dependencies": {
+    "ws": "^8"
+  }
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Me - Algorithms &amp; Combinators</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+</style>
+</head>
+<body>
+<iframe src="https://conorshakory.com" title="About Me"></iframe>
+<script src="nav.js"></script>
+<script>
+document.addEventListener('keydown', (e) => {
+    if (e.key === 's' || e.key === 'S') {
+        const iframe = document.querySelector('iframe');
+        if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.postMessage('toggle-stats', '*');
+        }
+    }
+});
+</script>
+</body>
+</html>
