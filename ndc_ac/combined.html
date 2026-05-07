@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<title>Algorithm Families - Algorithms &amp; Combinators</title>
+<link href="https://fonts.googleapis.com/css2?family=Linux+Libertine&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.cdnfonts.com/css/linux-libertine');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Linux Libertine', 'Linux Libertine G', 'Linux Libertine O', Georgia, serif;
+    background: #000;
+    color: #fff;
+    overflow: hidden;
+  }
+  .slide {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  table {
+    border-collapse: collapse;
+    font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+  }
+  td, th {
+    padding: 0.5em 1.5em;
+    text-align: center;
+  }
+  td:first-child {
+    color: #aaa;
+  }
+  th {
+    font-weight: 700;
+    color: #ccc;
+    font-size: 1.15em;
+  }
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  sub {
+    font-size: 0.65em;
+    color: #999;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <h1>Algorithm Families</h1>
+  <table>
+    <tr><th></th><th>Copy</th><th>Chunk</th><th>Map</th></tr>
+    <tr><td>Unary</td><td class="mono">filter<br>copy_if</td><td class="mono">chunkByKey</td><td class="mono">map</td></tr>
+    <tr><td>Binary</td><td class="mono">adjacentFilter<br>unique</td><td class="mono">chunkBy</td><td class="mono">map2<br>adjacentMap</td></tr>
+    <tr><td>Integer</td><td class="mono">repeat</td><td class="mono">chunk</td><td></td></tr>
+    <tr><td>Mask<sub>Boolean</sub></td><td class="mono">compress</td><td class="mono">partition<br>partitionEnclose</td><td></td></tr>
+    <tr><td>Mask<sub>Integer</sub></td><td class="mono">replicate</td><td class="mono">group</td><td></td></tr>
+  </table>
+</div>
+<script src="nav.js"></script>
+</body>
+</html>
