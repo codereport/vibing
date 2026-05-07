@@ -18,6 +18,10 @@ const pages = [
     'copy3.html',
     'combgraphic.html',
     'copy4.html',
+    'map.html',
+    'hoogle3.html',
+    'hoogle4.html',
+    'hoogle5.html',
 ];
 
 function navigate(offset) {

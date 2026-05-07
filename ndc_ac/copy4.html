@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <title>Copy Family - Algorithms &amp; Combinators</title>
 <link href="https://fonts.googleapis.com/css2?family=Linux+Libertine&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
 <style>
   @import url('https://fonts.cdnfonts.com/css/linux-libertine');
 
@@ -58,6 +59,9 @@
   .tapl {
     font-family: 'TinyAPL', monospace;
   }
+  .mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
   sub {
     font-size: 0.65em;
     color: #999;
@@ -69,11 +73,11 @@
   <h1>Copy Family</h1>
   <table>
     <tr><th></th><th>Name</th><th><img src="https://raw.githubusercontent.com/codereport/logos/main/tinyapl.svg" alt="TinyAPL"></th><th>Combinator</th></tr>
-    <tr><td>Unary</td><td>Filter</td><td class="tapl">_{ ⍵⌿⍨⍶⍶⍵ }<br>_{ ⍶⍶⍛⌿⍵ }</td><td>C<br>Σ</td></tr>
+    <tr><td>Unary</td><td class="mono">filter</td><td class="tapl">_{ ⍵⌿⍨⍶⍶⍵ }<br>_{ ⍶⍶⍛⌿⍵ }</td><td>C<br>Σ</td></tr>
     <tr><td>Binary</td><td>?</td><td>?</td><td></td></tr>
-    <tr><td>Integer</td><td>Repeat</td><td class="tapl">⌿</td><td></td></tr>
-    <tr><td>Mask<sub>Boolean</sub></td><td>Compress</td><td class="tapl">⌿</td><td></td></tr>
-    <tr><td>Mask<sub>Integer</sub></td><td>Replicate</td><td class="tapl">⌿</td><td></td></tr>
+    <tr><td>Integer</td><td class="mono">repeat</td><td class="tapl">⌿</td><td></td></tr>
+    <tr><td>Mask<sub>Boolean</sub></td><td class="mono">compress</td><td class="tapl">⌿</td><td></td></tr>
+    <tr><td>Mask<sub>Integer</sub></td><td class="mono">replicate</td><td class="tapl">⌿</td><td></td></tr>
   </table>
 </div>
 <script src="nav.js"></script>
