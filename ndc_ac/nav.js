@@ -7,6 +7,17 @@ const pages = [
     'drstrange.html',
     'poll.html',
     'hoogle.html',
+    'tour.html',
+    'arraybox.html',
+    'copy.html',
+    'arraybox2.html',
+    'copy2.html',
+    'hoogle2.html',
+    'copy2.html',
+    'combgraphic.html',
+    'copy3.html',
+    'combgraphic.html',
+    'copy4.html',
 ];
 
 function navigate(offset) {

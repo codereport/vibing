@@ -1,0 +1,20 @@
+Check if there is a way to reduce boxing on TinyAPL
+
+Buy Candy
+
+* Then We Need to talk about Map Family
+ * Just show 3x hoogle (Map, Map2, AdjMap)
+* Then show AdjFilter
+* THen move on to chunks
+* MCO https://arraybox.dev/#cftS 
+* ChunkBy -> ChunkByKey -> Chunk https://arraybox.dev/#L3Pd 
+* Psi
+ 
+Kadanes
+Phi1
+LCIS
+
+Add CopyIf to HoogleTranslate
+Fix tinyapl infixes and friends
+Add the “top algorithm name” on hoogle translate
+Add a way to not animate arraybox link
