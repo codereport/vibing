@@ -169,6 +169,12 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowUp') window.location.href = 'title2.html';
   if (e.key === 'ArrowRight' || e.key === 'PageDown') window.location.href = 'qr.html';
 });
+let tsy = 0;
+document.addEventListener('touchstart', (e) => { tsy = e.changedTouches[0].screenY; }, { passive: true });
+document.addEventListener('touchend', (e) => {
+  const dy = e.changedTouches[0].screenY - tsy;
+  if (Math.abs(dy) > 50 && dy > 0) window.location.href = 'title2.html';
+}, { passive: true });
 </script>
 <script src="nav.js"></script>
 </body>

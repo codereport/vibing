@@ -265,6 +265,14 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowUp') window.location.href = 'index.html';
   if (e.key === 'ArrowDown') window.location.href = 'title3.html';
 });
+let tsy = 0;
+document.addEventListener('touchstart', (e) => { tsy = e.changedTouches[0].screenY; }, { passive: true });
+document.addEventListener('touchend', (e) => {
+  const dy = e.changedTouches[0].screenY - tsy;
+  if (Math.abs(dy) > 50) {
+    window.location.href = dy < 0 ? 'title3.html' : 'index.html';
+  }
+}, { passive: true });
 </script>
 <script src="nav.js"></script>
 </body>

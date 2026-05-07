@@ -18,10 +18,18 @@ const pages = [
     'copy3.html',
     'combgraphic.html',
     'copy4.html',
+    'copy4b.html',
     'map.html',
     'hoogle3.html',
     'hoogle4.html',
     'hoogle5.html',
+    'arraybox3.html',
+    'rangev3.html',
+    'copy5.html',
+    'copy6.html',
+    'hoogle6.html',
+    'copy6.html',
+    'map.html',
 ];
 
 function navigate(offset) {

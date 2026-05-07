@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoogle Translate - Algorithms &amp; Combinators</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; overflow: hidden; height: 100vh; width: 100vw; }
+  #warp { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+  iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 1; opacity: 0; transition: opacity 0.3s ease; }
+  iframe.ready { opacity: 1; }
+  iframe.locked { pointer-events: none; }
+  iframe.interactive { height: calc(100% - 12px); }
+</style>
+</head>
+<body>
+<canvas id="warp"></canvas>
+<iframe class="locked" src="https://hoogletranslate.com/?q=unique&type=by-algo&expr=false&libs=true" title="Hoogle Translate"></iframe>
+<script src="starfield.js"></script>
+<script src="nav.js"></script>
+</body>
+</html>
