@@ -1,10 +1,12 @@
 const pages = [
-    'index.html',
+    'title2.html',
+    'qr.html',
     'linktree.html',
     'bio.html',
     'trilogies.html',
     'drstrange.html',
     'poll.html',
+    'hoogle.html',
 ];
 
 function navigate(offset) {

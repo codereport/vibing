@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<title>Algorithms &amp; Combinators</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .slide {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  canvas#dvd {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .title-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .title-content h1 {
+    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-shadow: 0 0 40px rgba(0,0,0,0.95), 0 0 80px rgba(0,0,0,0.8);
+    transition: color 0.5s;
+  }
+
+  .title-content .author {
+    margin: 1.5rem auto 0;
+    width: fit-content;
+    font-size: clamp(1.1rem, 2.2vw, 2rem);
+    font-weight: 400;
+    color: #ccc;
+    letter-spacing: 0.04em;
+    text-shadow: 0 0 30px rgba(0,0,0,0.95), 0 0 60px rgba(0,0,0,0.8);
+    transition: color 0.5s;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <canvas id="dvd"></canvas>
+  <div class="title-content">
+    <h1>Algorithms <span class="ampersand">&amp;</span> Combinators</h1>
+    <p class="author">Conor Hoekstra</p>
+  </div>
+</div>
+
+<script>
+const LOGO_BASE = 'https://raw.githubusercontent.com/codereport/logos/main/';
+const LOGO_FILES = [
+  'python.png', 'haskell.svg', 'cpp.png', 'rust_darkmode.png',
+  'java.png', 'javascript.png', 'go.png', 'scala.svg',
+  'kotlin.svg', 'ruby.png', 'elixir.png', 'clojure.png',
+  'swift.png', 'julia_darkmode.png', 'apl.png', 'bqn.svg',
+  'fsharp.png', 'csharp.png', 'd.png', 'r.png',
+  'ocaml.jpg', 'erlang.png', 'lua.png', 'zig.svg',
+  'uiua.png', 'j.svg', 'tinyapl.svg',
+];
+
+const canvas = document.getElementById('dvd');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth * devicePixelRatio;
+  canvas.height = window.innerHeight * devicePixelRatio;
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+}
+window.addEventListener('resize', resize);
+resize();
+
+const W = () => window.innerWidth;
+const H = () => window.innerHeight;
+
+const ampersand = document.querySelector('.ampersand');
+const titleEl = document.querySelector('.title-content');
+
+const LOGO_COLORS = {
+  'python.png': '#3776AB',
+  'haskell.svg': '#5D4F85',
+  'cpp.png': '#00599C',
+  'rust_darkmode.png': '#DEA584',
+  'java.png': '#ED8B00',
+  'javascript.png': '#F7DF1E',
+  'go.png': '#00ADD8',
+  'scala.svg': '#DC322F',
+  'kotlin.svg': '#7F52FF',
+  'ruby.png': '#CC342D',
+  'elixir.png': '#6E4A7E',
+  'clojure.png': '#5881D8',
+  'swift.png': '#F05138',
+  'julia_darkmode.png': '#9558B2',
+  'apl.png': '#00AAAA',
+  'bqn.svg': '#2B7067',
+  'fsharp.png': '#378BBA',
+  'csharp.png': '#68217A',
+  'd.png': '#B03931',
+  'r.png': '#276DC3',
+  'ocaml.jpg': '#EC6813',
+  'erlang.png': '#A90533',
+  'lua.png': '#000080',
+  'zig.svg': '#F7A41D',
+  'uiua.png': '#3E99AB',
+  'j.svg': '#0050A0',
+  'tinyapl.svg': '#55BB55',
+};
+
+const h1El = document.querySelector('.title-content h1');
+const authorEl = document.querySelector('.title-content .author');
+
+const FIT = 104;
+const logos = [];
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+const shuffled = shuffleArray([...LOGO_FILES]);
+
+shuffled.forEach(f => {
+  const img = new Image();
+  img.src = LOGO_BASE + f;
+
+  const angle = Math.random() * Math.PI * 2;
+  const speed = 1.2 + Math.random() * 1.3;
+
+  const l = {
+    img,
+    file: f,
+    x: FIT + Math.random() * (W() - FIT * 2),
+    y: FIT + Math.random() * (H() - FIT * 2),
+    vx: Math.cos(angle) * speed,
+    vy: Math.sin(angle) * speed,
+    w: FIT,
+    h: FIT,
+    ready: false,
+  };
+
+  img.onload = () => {
+    const ratio = img.naturalWidth / img.naturalHeight;
+    if (ratio > 1) {
+      l.w = FIT;
+      l.h = FIT / ratio;
+    } else {
+      l.h = FIT;
+      l.w = FIT * ratio;
+    }
+    l.ready = true;
+  };
+
+  logos.push(l);
+});
+
+function boxOverlap(ax, ay, aw, ah, bx, by, bw, bh) {
+  return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+}
+
+function resolveBoxCollision(a, bx, by, bw, bh) {
+  const overlapLeft = (a.x + a.w) - bx;
+  const overlapRight = (bx + bw) - a.x;
+  const overlapTop = (a.y + a.h) - by;
+  const overlapBottom = (by + bh) - a.y;
+  const min = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+  if (min === overlapLeft) { a.vx = -Math.abs(a.vx); a.x = bx - a.w; }
+  else if (min === overlapRight) { a.vx = Math.abs(a.vx); a.x = bx + bw; }
+  else if (min === overlapTop) { a.vy = -Math.abs(a.vy); a.y = by - a.h; }
+  else { a.vy = Math.abs(a.vy); a.y = by + bh; }
+}
+
+function animate() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.92)';
+  ctx.fillRect(0, 0, W(), H());
+
+  const pad = 8;
+  const h1r = h1El.getBoundingClientRect();
+  const h1Box = { x: h1r.left - pad, y: h1r.top - pad,
+    w: h1r.width + pad * 2, h: h1r.height + pad * 2 };
+  const ar = authorEl.getBoundingClientRect();
+  const aBox = { x: ar.left - pad, y: ar.top - pad,
+    w: ar.width + pad * 2, h: ar.height + pad * 2 };
+
+  for (const l of logos) {
+    l.x += l.vx;
+    l.y += l.vy;
+
+    if (l.x <= 0) { l.vx = Math.abs(l.vx); l.x = 0; }
+    if (l.x + l.w >= W()) { l.vx = -Math.abs(l.vx); l.x = W() - l.w; }
+    if (l.y <= 0) { l.vy = Math.abs(l.vy); l.y = 0; }
+    if (l.y + l.h >= H()) { l.vy = -Math.abs(l.vy); l.y = H() - l.h; }
+
+    if (boxOverlap(l.x, l.y, l.w, l.h, h1Box.x, h1Box.y, h1Box.w, h1Box.h)) {
+      resolveBoxCollision(l, h1Box.x, h1Box.y, h1Box.w, h1Box.h);
+      const color = LOGO_COLORS[l.file];
+      if (color) h1El.style.color = color;
+    }
+
+    if (boxOverlap(l.x, l.y, l.w, l.h, aBox.x, aBox.y, aBox.w, aBox.h)) {
+      resolveBoxCollision(l, aBox.x, aBox.y, aBox.w, aBox.h);
+    }
+  }
+
+  for (let i = 0; i < logos.length; i++) {
+    const a = logos[i];
+    for (let j = i + 1; j < logos.length; j++) {
+      const b = logos[j];
+      if (!boxOverlap(a.x, a.y, a.w, a.h, b.x, b.y, b.w, b.h)) continue;
+
+      const acx = a.x + a.w / 2, acy = a.y + a.h / 2;
+      const bcx = b.x + b.w / 2, bcy = b.y + b.h / 2;
+
+      const oL = (a.x + a.w) - b.x;
+      const oR = (b.x + b.w) - a.x;
+      const oT = (a.y + a.h) - b.y;
+      const oB = (b.y + b.h) - a.y;
+      const min = Math.min(oL, oR, oT, oB);
+
+      if (min === oL || min === oR) {
+        const tmpVx = a.vx; a.vx = b.vx; b.vx = tmpVx;
+        if (acx < bcx) { a.x = b.x - a.w; } else { b.x = a.x - b.w; }
+      } else {
+        const tmpVy = a.vy; a.vy = b.vy; b.vy = tmpVy;
+        if (acy < bcy) { a.y = b.y - a.h; } else { b.y = a.y - b.h; }
+      }
+    }
+  }
+
+  for (const l of logos) {
+    if (!l.ready) continue;
+    ctx.drawImage(l.img, l.x, l.y, l.w, l.h);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowUp') window.location.href = 'index.html';
+  if (e.key === 'ArrowDown') window.location.href = 'title3.html';
+});
+</script>
+<script src="nav.js"></script>
+</body>
+</html>

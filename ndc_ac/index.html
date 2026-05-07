@@ -192,6 +192,12 @@ function animate() {
 
 animate();
 </script>
+<script>
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowDown') window.location.href = 'title2.html';
+  if (e.key === 'ArrowRight' || e.key === 'PageDown') window.location.href = 'qr.html';
+});
+</script>
 <script src="nav.js"></script>
 </body>
 </html>
