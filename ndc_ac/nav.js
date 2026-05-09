@@ -1,10 +1,10 @@
 const pages = [
-    'title2.html',
+    'title3.html',
     'qr.html',
     'linktree.html',
     'bio.html',
     'trilogies.html',
-    'drstrange.html',
+    // 'drstrange.html',
     'poll.html',
     'hoogle.html',
     'tour.html',
