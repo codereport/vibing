@@ -37,6 +37,7 @@ This means you want to pick players who are **safe this week** but **on borrowed
 | Ep. 8 | Rizo Velovic | SAFE |
 | Ep. 9 | Jonathan Young | SAFE |
 | Ep. 10 | Joe Hunter | SAFE |
+| Ep. 11 | Tiffany Ervin | SAFE |
 
 ## Players Already Used
 
@@ -49,3 +50,4 @@ This means you want to pick players who are **safe this week** but **on borrowed
 - [x] Rizo Velovic (Ep. 8)
 - [x] Jonathan Young (Ep. 9)
 - [x] Joe Hunter (Ep. 10)
+- [x] Tiffany Ervin (Ep. 11)
