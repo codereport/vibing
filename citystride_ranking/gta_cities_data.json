@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-13 11:23:56",
+  "last_updated": "2026-05-14 14:17:00",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -20,7 +20,7 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 752,
+      "total_runners": 751,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
       "was_100": true,
       "runner_above": null
@@ -32,7 +32,7 @@
       "total": 2464,
       "percentage": 99.72,
       "rank": 6,
-      "total_runners": 3512,
+      "total_runners": 3511,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": {
@@ -47,7 +47,7 @@
       "total": 588,
       "percentage": 98.81,
       "rank": 9,
-      "total_runners": 710,
+      "total_runners": 709,
       "city_url": "https://citystrides.com/users/55228/cities/38102",
       "was_100": false,
       "runner_above": {
@@ -62,7 +62,7 @@
       "total": 10317,
       "percentage": 79.94,
       "rank": 7,
-      "total_runners": 3779,
+      "total_runners": 3778,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
@@ -97,7 +97,7 @@
       "was_100": false,
       "runner_above": {
         "name": "A private Strider",
-        "pct": 82.78
+        "pct": 83.82
       }
     },
     "37668": {
