@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-24 16:20:32",
+  "last_updated": "2026-05-25 13:58:40",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -62,12 +62,12 @@
       "total": 10317,
       "percentage": 80.51,
       "rank": 7,
-      "total_runners": 3801,
+      "total_runners": 3802,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
         "name": "Brian Putre",
-        "pct": 83.29
+        "pct": 83.42
       }
     },
     "38014": {
@@ -92,7 +92,7 @@
       "total": 2596,
       "percentage": 53.39,
       "rank": 7,
-      "total_runners": 580,
+      "total_runners": 581,
       "city_url": "https://citystrides.com/users/55228/cities/38007",
       "was_100": false,
       "runner_above": {
@@ -107,7 +107,7 @@
       "total": 2365,
       "percentage": 20.17,
       "rank": 6,
-      "total_runners": 331,
+      "total_runners": 332,
       "city_url": "https://citystrides.com/users/55228/cities/37668",
       "was_100": false,
       "runner_above": {
@@ -118,16 +118,16 @@
     "37680": {
       "city_id": "37680",
       "name": "Markham",
-      "completed": 362,
+      "completed": 382,
       "total": 2308,
-      "percentage": 15.68,
-      "rank": 9,
+      "percentage": 16.55,
+      "rank": 8,
       "total_runners": 399,
       "city_url": "https://citystrides.com/users/55228/cities/37680",
       "was_100": false,
       "runner_above": {
-        "name": "Gigi Goncalves",
-        "pct": 15.73
+        "name": "Scott Devenport",
+        "pct": 27.43
       }
     }
   }
