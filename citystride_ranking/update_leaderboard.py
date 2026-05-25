@@ -28,6 +28,12 @@ GTA_CITIES = {
     "37878": "Richmond Hill",
 }
 
+EXTENDED_CITIES = {
+    "38936": "Tiny",
+    "38950": "Midland",
+    "38946": "Penetanguishene",
+}
+
 def clean_name(name):
     # Specific fix for James Salmon
     if "James Salmon" in name and "Purple Runner" in name:
@@ -479,6 +485,70 @@ def fetch_gta_cities():
     return cities
 
 
+def fetch_extended_cities():
+    """Fetch extended city data directly from each city page"""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+
+    print("Fetching extended cities data...")
+    cities = []
+
+    for city_id, city_name in EXTENDED_CITIES.items():
+        city_path = f"/users/{CONOR_USER_ID}/cities/{city_id}"
+        city_full_url = f"https://citystrides.com{city_path}"
+
+        time.sleep(0.5)
+        resp = requests.get(city_full_url, headers=headers)
+        if resp.status_code != 200:
+            print(f"  Could not fetch {city_name} (id={city_id})")
+            continue
+
+        soup = BeautifulSoup(resp.content, "html.parser")
+        text = soup.get_text(separator=" ")
+
+        pct_match = re.search(r'([\d.]+)%', text)
+        percentage = float(pct_match.group(1)) if pct_match else 0.0
+
+        rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+Place', text)
+        rank = int(rank_match.group(1)) if rank_match else 0
+
+        total_match = re.search(r'([\d,]+)\s+streets\s+[\d,.]+\s+miles', text)
+        total = int(total_match.group(1).replace(",", "")) if total_match else 0
+
+        completed_match = re.search(r'Place\s+(\d[\d,]*)\s+street', text)
+        completed = int(completed_match.group(1).replace(",", "")) if completed_match else 0
+
+        total_runners = fetch_total_runners(city_id, rank, headers) if rank > 0 else 0
+
+        was_100 = False
+        badge = soup.find("span", title="Completed this city")
+        was_100 = badge is not None
+
+        time.sleep(0.3)
+        above = fetch_runner_above(city_id, rank, percentage, headers)
+
+        cities.append({
+            "city_id": city_id,
+            "name": city_name,
+            "completed": completed,
+            "total": total,
+            "percentage": percentage,
+            "rank": rank,
+            "total_runners": total_runners,
+            "city_url": city_full_url,
+            "was_100": was_100,
+            "runner_above": above,
+        })
+        above_str = f" | above: {above['name']} ({above['pct']}%)" if above else ""
+        status = "💯" if was_100 else ""
+        print(f"  {city_name}: {percentage}% ({completed}/{total}), rank {rank} of {total_runners} {status}{above_str}")
+
+    cities.sort(key=lambda x: x["percentage"], reverse=True)
+    print(f"Fetched {len(cities)} extended cities")
+    return cities
+
+
 def load_gta_data():
     if os.path.exists(GTA_DATA_FILE):
         with open(GTA_DATA_FILE, "r") as f:
@@ -509,7 +579,7 @@ def ordinal(n):
     return f"{n}{suffix}"
 
 
-def generate_html(runners, last_updated, gta_cities=None):
+def generate_html(runners, last_updated, gta_cities=None, extended_cities=None):
     # Generate history files JSON for the frontend
     history_files_json = get_history_files_for_js()
 
@@ -534,6 +604,37 @@ def generate_html(runners, last_updated, gta_cities=None):
             above_pct = f"{above['pct']:.2f}%" if above else ""
 
             gta_rows_html += f"""
+                <tr{row_class}>
+                    <td><a href="{city['city_url']}" class="profile-link" target="_blank">{city['name']}</a></td>
+                    <td>{city['completed']:,} / {city['total']:,}</td>
+                    <td><strong>{city['percentage']:.2f}%</strong></td>
+                    <td>{rank_str}</td>
+                    <td>{above_name}</td>
+                    <td>{above_pct}</td>
+                    <td style="text-align:center; font-size:1.2em;">{hundred_emoji}</td>
+                </tr>"""
+
+    # Build extended cities table rows
+    extended_rows_html = ""
+    if extended_cities:
+        for city in extended_cities:
+            is_100 = city["percentage"] >= 100.0
+            was_100 = city.get("was_100", False)
+
+            row_class = ""
+            if is_100:
+                row_class = ' class="city-100"'
+            elif was_100:
+                row_class = ' class="city-was-100"'
+
+            hundred_emoji = "💯" if is_100 or was_100 else ""
+            rank_str = f"{ordinal(city['rank'])} of {city['total_runners']:,}" if city['total_runners'] > 0 else ordinal(city['rank'])
+
+            above = city.get("runner_above")
+            above_name = above["name"] if above else "-"
+            above_pct = f"{above['pct']:.2f}%" if above else ""
+
+            extended_rows_html += f"""
                 <tr{row_class}>
                     <td><a href="{city['city_url']}" class="profile-link" target="_blank">{city['name']}</a></td>
                     <td>{city['completed']:,} / {city['total']:,}</td>
@@ -917,6 +1018,24 @@ def generate_html(runners, last_updated, gta_cities=None):
                     {gta_rows_html}
                 </tbody>
             </table>
+
+            <h3 style="color: #4c1d95; margin-top: 40px;">Extended</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>Progress</th>
+                        <th>% Complete</th>
+                        <th>Rank</th>
+                        <th>Next Target</th>
+                        <th>Their %</th>
+                        <th style="text-align:center;">💯</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {extended_rows_html}
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -1133,8 +1252,10 @@ def main():
     gta_cities = fetch_gta_cities()
     if gta_cities:
         gta_cities = update_gta_tracking(gta_cities)
-    
-    generate_html(processed_runners, new_data["last_updated"], gta_cities)
+
+    extended_cities = fetch_extended_cities()
+
+    generate_html(processed_runners, new_data["last_updated"], gta_cities, extended_cities)
     print("Done!")
 
 if __name__ == "__main__":
