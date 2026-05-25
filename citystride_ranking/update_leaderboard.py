@@ -25,6 +25,7 @@ GTA_CITIES = {
     "37668": "Vaughan",
     "37680": "Markham",
     "38007": "Scarborough",
+    "37878": "Richmond Hill",
 }
 
 def clean_name(name):
@@ -288,6 +289,25 @@ def get_history_files_for_js():
     return json.dumps(files, indent=4)
 
 
+def fetch_total_runners(city_id, known_rank, headers):
+    """Get total runners for a city by scanning leaderboard pages past the known rank."""
+    max_rank = known_rank
+    page = (known_rank - 1) // 12 + 2
+    while page <= 200:
+        time.sleep(0.3)
+        url = f"https://citystrides.com/users/search?context=city_users-{city_id}&page={page}"
+        resp = requests.get(url, headers=headers)
+        if resp.status_code != 200:
+            break
+        soup = BeautifulSoup(resp.content, "html.parser")
+        entries = parse_leaderboard_entries(soup)
+        if not entries:
+            break
+        max_rank = max(e["rank"] for e in entries)
+        page += 1
+    return max_rank
+
+
 def parse_leaderboard_entries(soup):
     """Parse all leaderboard entries from a page, including private striders."""
     entries = []
@@ -382,32 +402,56 @@ def fetch_gta_cities():
 
     for city_id, city_name in GTA_CITIES.items():
         city_path = f"/users/{CONOR_USER_ID}/cities/{city_id}"
-        link = soup.find("a", href=lambda h: h and city_path in h)
-        if not link:
-            print(f"  Could not find link for {city_name} (id={city_id})")
-            continue
-
-        text = link.get_text(separator=" ")
-
-        streets_match = re.search(r'(\d[\d,]*)\s+of\s+(\d[\d,]*)\s+streets', text)
-        rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+of\s+([\d,]+)', text)
-        pct_match = re.search(r'([\d.]+)%', text)
-
-        completed = int(streets_match.group(1).replace(",", "")) if streets_match else 0
-        total = int(streets_match.group(2).replace(",", "")) if streets_match else 0
-        rank = int(rank_match.group(1).replace(",", "")) if rank_match else 0
-        total_runners = int(rank_match.group(2).replace(",", "")) if rank_match else 0
-        percentage = float(pct_match.group(1)) if pct_match else 0.0
-
         city_full_url = f"https://citystrides.com{city_path}"
+        link = soup.find("a", href=lambda h: h and city_path in h)
+        city_page_soup = None
 
-        # Fetch the individual city page to check for the 💯 badge
-        time.sleep(0.5)
-        city_resp = requests.get(city_full_url, headers=headers)
+        if link:
+            text = link.get_text(separator=" ")
+
+            streets_match = re.search(r'(\d[\d,]*)\s+of\s+(\d[\d,]*)\s+streets', text)
+            rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+of\s+([\d,]+)', text)
+            pct_match = re.search(r'([\d.]+)%', text)
+
+            completed = int(streets_match.group(1).replace(",", "")) if streets_match else 0
+            total = int(streets_match.group(2).replace(",", "")) if streets_match else 0
+            rank = int(rank_match.group(1).replace(",", "")) if rank_match else 0
+            total_runners = int(rank_match.group(2).replace(",", "")) if rank_match else 0
+            percentage = float(pct_match.group(1)) if pct_match else 0.0
+        else:
+            print(f"  {city_name} not on profile page, fetching directly...")
+            time.sleep(0.5)
+            direct_resp = requests.get(city_full_url, headers=headers)
+            if direct_resp.status_code != 200:
+                print(f"  Could not fetch {city_name} (id={city_id})")
+                continue
+
+            city_page_soup = BeautifulSoup(direct_resp.content, "html.parser")
+            direct_text = city_page_soup.get_text(separator=" ")
+
+            pct_match = re.search(r'([\d.]+)%', direct_text)
+            percentage = float(pct_match.group(1)) if pct_match else 0.0
+
+            rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+Place', direct_text)
+            rank = int(rank_match.group(1)) if rank_match else 0
+
+            total_match = re.search(r'([\d,]+)\s+streets\s+[\d,.]+\s+miles', direct_text)
+            total = int(total_match.group(1).replace(",", "")) if total_match else 0
+
+            completed_match = re.search(r'Place\s+(\d[\d,]*)\s+street', direct_text)
+            completed = int(completed_match.group(1).replace(",", "")) if completed_match else 0
+
+            total_runners = fetch_total_runners(city_id, rank, headers) if rank > 0 else 0
+
+        if city_page_soup is None:
+            time.sleep(0.5)
+            city_resp = requests.get(city_full_url, headers=headers)
+            if city_resp.status_code == 200:
+                city_page_soup = BeautifulSoup(city_resp.content, "html.parser")
+
         was_100 = False
-        if city_resp.status_code == 200:
-            city_soup = BeautifulSoup(city_resp.content, "html.parser")
-            badge = city_soup.find("span", title="Completed this city")
+        if city_page_soup:
+            badge = city_page_soup.find("span", title="Completed this city")
             was_100 = badge is not None
 
         # Fetch the runner ranked directly above Conor
@@ -483,7 +527,7 @@ def generate_html(runners, last_updated, gta_cities=None):
                 row_class = ' class="city-was-100"'
 
             hundred_emoji = "💯" if is_100 or was_100 else ""
-            rank_str = f"{ordinal(city['rank'])} of {city['total_runners']:,}"
+            rank_str = f"{ordinal(city['rank'])} of {city['total_runners']:,}" if city['total_runners'] > 0 else ordinal(city['rank'])
 
             above = city.get("runner_above")
             above_name = above["name"] if above else "-"
