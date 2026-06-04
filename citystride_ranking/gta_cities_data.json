@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-03 14:04:11",
+  "last_updated": "2026-06-04 12:35:16",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -20,7 +20,7 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 752,
+      "total_runners": 753,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
       "was_100": true,
       "runner_above": null
@@ -32,7 +32,7 @@
       "total": 2464,
       "percentage": 99.72,
       "rank": 6,
-      "total_runners": 3548,
+      "total_runners": 3551,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": {
@@ -62,7 +62,7 @@
       "total": 10267,
       "percentage": 81.8,
       "rank": 7,
-      "total_runners": 3821,
+      "total_runners": 3824,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
@@ -103,16 +103,16 @@
     "37668": {
       "city_id": "37668",
       "name": "Vaughan",
-      "completed": 477,
+      "completed": 521,
       "total": 2365,
-      "percentage": 20.17,
-      "rank": 6,
+      "percentage": 22.03,
+      "rank": 5,
       "total_runners": 332,
       "city_url": "https://citystrides.com/users/55228/cities/37668",
       "was_100": false,
       "runner_above": {
-        "name": "Ryan Albano",
-        "pct": 20.72
+        "name": "Amanda Natale",
+        "pct": 25.54
       }
     },
     "37680": {
