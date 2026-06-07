@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 import re
+import sys
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -32,6 +33,8 @@ EXTENDED_CITIES = {
     "38936": "Tiny",
     "38950": "Midland",
     "38946": "Penetanguishene",
+    "132377": "Barrie",
+    "132379": "Hamilton",
 }
 
 def clean_name(name):
@@ -390,7 +393,7 @@ def fetch_runner_above(city_id, rank, conor_pct, headers):
     return None
 
 
-def fetch_gta_cities():
+def fetch_gta_cities(city_filter=None):
     """Fetch GTA city data from Conor's CityStrides profile page"""
     url = f"https://citystrides.com/users/{CONOR_USER_ID}"
     headers = {
@@ -407,6 +410,8 @@ def fetch_gta_cities():
     cities = []
 
     for city_id, city_name in GTA_CITIES.items():
+        if city_filter and city_filter.lower() not in city_name.lower():
+            continue
         city_path = f"/users/{CONOR_USER_ID}/cities/{city_id}"
         city_full_url = f"https://citystrides.com{city_path}"
         link = soup.find("a", href=lambda h: h and city_path in h)
@@ -485,7 +490,7 @@ def fetch_gta_cities():
     return cities
 
 
-def fetch_extended_cities():
+def fetch_extended_cities(city_filter=None):
     """Fetch extended city data directly from each city page"""
     headers = {
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -495,6 +500,8 @@ def fetch_extended_cities():
     cities = []
 
     for city_id, city_name in EXTENDED_CITIES.items():
+        if city_filter and city_filter.lower() not in city_name.lower():
+            continue
         city_path = f"/users/{CONOR_USER_ID}/cities/{city_id}"
         city_full_url = f"https://citystrides.com{city_path}"
 
@@ -1234,6 +1241,18 @@ def generate_html(runners, last_updated, gta_cities=None, extended_cities=None):
     print(f"Generated {HTML_FILE}")
 
 def main():
+    city_filter = sys.argv[1] if len(sys.argv) > 1 else None
+
+    if city_filter:
+        print(f"Filtering cities matching: '{city_filter}'")
+        gta_cities = fetch_gta_cities(city_filter)
+        extended_cities = fetch_extended_cities(city_filter)
+        for city in gta_cities + extended_cities:
+            above = city.get("runner_above")
+            above_str = f" | above: {above['name']} ({above['pct']}%)" if above else ""
+            print(f"  {city['name']}: {city['percentage']}% ({city['completed']}/{city['total']}), rank {city['rank']} of {city['total_runners']}{above_str}")
+        return
+
     print("Starting leaderboard update...")
     
     previous_data = load_previous_data()
