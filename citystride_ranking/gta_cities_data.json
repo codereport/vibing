@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-07 11:37:17",
+  "last_updated": "2026-06-08 11:49:54",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -8,8 +8,20 @@
       "total": 2710,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 1050,
+      "total_runners": 1051,
       "city_url": "https://citystrides.com/users/55228/cities/38108",
+      "was_100": true,
+      "runner_above": null
+    },
+    "38102": {
+      "city_id": "38102",
+      "name": "York",
+      "completed": 588,
+      "total": 588,
+      "percentage": 100.0,
+      "rank": 1,
+      "total_runners": 715,
+      "city_url": "https://citystrides.com/users/55228/cities/38102",
       "was_100": true,
       "runner_above": null
     },
@@ -20,7 +32,7 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 753,
+      "total_runners": 754,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
       "was_100": true,
       "runner_above": null
@@ -28,41 +40,23 @@
     "38121": {
       "city_id": "38121",
       "name": "Old Toronto",
-      "completed": 2457,
+      "completed": 2458,
       "total": 2464,
-      "percentage": 99.72,
-      "rank": 6,
-      "total_runners": 3564,
+      "percentage": 99.76,
+      "rank": 5,
+      "total_runners": 3568,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
-      "runner_above": {
-        "name": "Carlo De Lorenzi",
-        "pct": 99.76
-      }
-    },
-    "38102": {
-      "city_id": "38102",
-      "name": "York",
-      "completed": 581,
-      "total": 588,
-      "percentage": 98.81,
-      "rank": 9,
-      "total_runners": 715,
-      "city_url": "https://citystrides.com/users/55228/cities/38102",
-      "was_100": false,
-      "runner_above": {
-        "name": "Susan",
-        "pct": 99.66
-      }
+      "runner_above": null
     },
     "131268": {
       "city_id": "131268",
       "name": "Toronto",
-      "completed": 8377,
+      "completed": 8405,
       "total": 10318,
-      "percentage": 81.19,
+      "percentage": 81.46,
       "rank": 7,
-      "total_runners": 3839,
+      "total_runners": 3843,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
@@ -73,9 +67,9 @@
     "38014": {
       "city_id": "38014",
       "name": "Etobicoke",
-      "completed": 1179,
+      "completed": 1198,
       "total": 1931,
-      "percentage": 61.06,
+      "percentage": 62.04,
       "rank": 10,
       "total_runners": 920,
       "city_url": "https://citystrides.com/users/55228/cities/38014",
@@ -89,10 +83,10 @@
       "city_id": "38007",
       "name": "Scarborough",
       "completed": 1489,
-      "total": 2596,
+      "total": 2583,
       "percentage": 57.36,
       "rank": 7,
-      "total_runners": 582,
+      "total_runners": 583,
       "city_url": "https://citystrides.com/users/55228/cities/38007",
       "was_100": false,
       "runner_above": {
