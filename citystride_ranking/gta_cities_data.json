@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-08 11:49:54",
+  "last_updated": "2026-06-09 11:07:23",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -8,7 +8,7 @@
       "total": 2710,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 1051,
+      "total_runners": 1052,
       "city_url": "https://citystrides.com/users/55228/cities/38108",
       "was_100": true,
       "runner_above": null
@@ -20,7 +20,7 @@
       "total": 588,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 715,
+      "total_runners": 717,
       "city_url": "https://citystrides.com/users/55228/cities/38102",
       "was_100": true,
       "runner_above": null
@@ -32,7 +32,7 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 754,
+      "total_runners": 755,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
       "was_100": true,
       "runner_above": null
@@ -44,7 +44,7 @@
       "total": 2464,
       "percentage": 99.76,
       "rank": 5,
-      "total_runners": 3568,
+      "total_runners": 3571,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": null
@@ -52,11 +52,11 @@
     "131268": {
       "city_id": "131268",
       "name": "Toronto",
-      "completed": 8405,
+      "completed": 8439,
       "total": 10318,
-      "percentage": 81.46,
+      "percentage": 81.79,
       "rank": 7,
-      "total_runners": 3843,
+      "total_runners": 3846,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
@@ -71,7 +71,7 @@
       "total": 1931,
       "percentage": 62.04,
       "rank": 10,
-      "total_runners": 920,
+      "total_runners": 921,
       "city_url": "https://citystrides.com/users/55228/cities/38014",
       "was_100": false,
       "runner_above": {
@@ -82,16 +82,16 @@
     "38007": {
       "city_id": "38007",
       "name": "Scarborough",
-      "completed": 1489,
-      "total": 2583,
-      "percentage": 57.36,
+      "completed": 1505,
+      "total": 2599,
+      "percentage": 57.91,
       "rank": 7,
       "total_runners": 583,
       "city_url": "https://citystrides.com/users/55228/cities/38007",
       "was_100": false,
       "runner_above": {
         "name": "A private Strider",
-        "pct": 84.9
+        "pct": 85.15
       }
     },
     "37668": {
@@ -116,7 +116,7 @@
       "total": 2308,
       "percentage": 16.64,
       "rank": 8,
-      "total_runners": 402,
+      "total_runners": 403,
       "city_url": "https://citystrides.com/users/55228/cities/37680",
       "was_100": false,
       "runner_above": {
