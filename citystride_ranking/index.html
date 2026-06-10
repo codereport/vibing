@@ -261,6 +261,56 @@
             width: 100%;
             margin-top: 20px;
         }
+
+        .forecast-chart-container {
+            position: relative;
+            height: 450px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .forecast-summary {
+            font-size: 0.85em;
+            color: #18181b;
+            background: #f8fafc;
+            border-left: 4px solid #4c1d95;
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin: 10px 0 0 0;
+            line-height: 1.5;
+        }
+
+        .forecast-summary strong {
+            color: #4c1d95;
+        }
+
+        .forecast-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 18px 0 6px 0;
+            flex-wrap: wrap;
+        }
+
+        .forecast-controls label {
+            font-size: 0.85em;
+            font-weight: 500;
+            color: #4c1d95;
+        }
+
+        .forecast-controls input[type="number"] {
+            width: 80px;
+            padding: 8px 10px;
+            font-size: 0.85em;
+            border: 2px solid #e4e4e7;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .forecast-controls input[type="number"]:focus {
+            outline: none;
+            border-color: #4c1d95;
+        }
     </style>
 </head>
 
@@ -1027,6 +1077,16 @@
                 </tr>
                 </tbody>
             </table>
+
+            <h3 style="color: #4c1d95; margin-top: 40px;">Toronto Completion Forecast</h3>
+            <div class="forecast-controls">
+                <label for="torontoRunsPerWeek">Runs per week in Toronto:</label>
+                <input type="number" id="torontoRunsPerWeek" value="5" min="1" max="21" step="1" oninput="renderTorontoForecast()">
+            </div>
+            <p id="torontoForecastSummary" class="forecast-summary"></p>
+            <div class="forecast-chart-container">
+                <canvas id="torontoForecastChart"></canvas>
+            </div>
         </div>
     </div>
 
@@ -1046,6 +1106,7 @@
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelector('[data-tab="' + tabId + '"]').classList.add('active');
             document.getElementById('tab-' + tabId).classList.add('active');
+            if (tabId === 'gta') renderTorontoForecast();
         }
 
         const historyFiles = [
@@ -1619,6 +1680,33 @@
     }
 ];
 
+        const torontoSeries = [
+            { "date": "2026-04-07 13:42:06", "completed": 7890, "total": 10317 },
+            { "date": "2026-04-08 12:23:11", "completed": 7924, "total": 10317 },
+            { "date": "2026-04-09 16:13:31", "completed": 7959, "total": 10317 },
+            { "date": "2026-04-11 19:58:30", "completed": 7993, "total": 10317 },
+            { "date": "2026-04-12 12:06:11", "completed": 8048, "total": 10317 },
+            { "date": "2026-04-15 14:46:40", "completed": 8072, "total": 10317 },
+            { "date": "2026-04-21 09:21:39", "completed": 8092, "total": 10317 },
+            { "date": "2026-04-22 15:38:01", "completed": 8125, "total": 10317 },
+            { "date": "2026-04-23 12:54:19", "completed": 8163, "total": 10317 },
+            { "date": "2026-04-26 17:10:15", "completed": 8191, "total": 10317 },
+            { "date": "2026-04-28 19:39:54", "completed": 8210, "total": 10317 },
+            { "date": "2026-04-29 10:43:52", "completed": 8237, "total": 10317 },
+            { "date": "2026-05-09 11:13:54", "completed": 8247, "total": 10317 },
+            { "date": "2026-05-23 10:52:01", "completed": 8272, "total": 10317 },
+            { "date": "2026-05-24 16:20:32", "completed": 8306, "total": 10317 },
+            { "date": "2026-05-26 12:00:07", "completed": 8317, "total": 10317 },
+            { "date": "2026-05-27 12:53:18", "completed": 8358, "total": 10317 },
+            { "date": "2026-05-28 11:22:43", "completed": 8390, "total": 10317 },
+            { "date": "2026-06-02 11:33:14", "completed": 8356, "total": 10267 },
+            { "date": "2026-06-03 14:04:11", "completed": 8398, "total": 10267 },
+            { "date": "2026-06-06 17:22:02", "completed": 8377, "total": 10318 },
+            { "date": "2026-06-08 11:49:54", "completed": 8405, "total": 10318 },
+            { "date": "2026-06-09 11:07:23", "completed": 8439, "total": 10318 },
+            { "date": "2026-06-10 11:15:18", "completed": 8469, "total": 10318 }
+        ];
+
         let historyCache = {};
 
         async function init() {
@@ -1778,6 +1866,126 @@
                             max: 30,
                             ticks: { stepSize: 5 }
                         }
+                    }
+                }
+            });
+        }
+
+        let torontoForecastChart = null;
+        function renderTorontoForecast() {
+            const summaryEl = document.getElementById('torontoForecastSummary');
+            const canvas = document.getElementById('torontoForecastChart');
+            if (!canvas) return;
+
+            const DAY = 86400000;
+            const pts = torontoSeries
+                .map(d => ({ t: new Date(d.date.replace(' ', 'T')).getTime(), completed: d.completed, total: d.total }))
+                .filter(p => !isNaN(p.t))
+                .sort((a, b) => a.t - b.t);
+
+            if (torontoForecastChart) {
+                torontoForecastChart.destroy();
+                torontoForecastChart = null;
+            }
+
+            if (pts.length < 2) {
+                summaryEl.innerHTML = 'Not enough history yet to estimate completion. Collecting data\u2026';
+                return;
+            }
+
+            const last = pts[pts.length - 1];
+            const total = last.total;
+            const remaining = total - last.completed;
+
+            // Average streets completed per recorded run (delta between snapshots).
+            // This ignores calendar gaps (e.g. weeks away), unlike a time-based pace.
+            const deltas = [];
+            for (let i = 1; i < pts.length; i++) deltas.push(pts[i].completed - pts[i - 1].completed);
+            const avgPerRun = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+
+            // Runs per week is a user assumption about future cadence (default 4).
+            const runsInput = document.getElementById('torontoRunsPerWeek');
+            let runsPerWeek = runsInput ? parseFloat(runsInput.value) : 5;
+            if (!isFinite(runsPerWeek) || runsPerWeek <= 0) runsPerWeek = 5;
+
+            const perWeek = avgPerRun * runsPerWeek;
+
+            const datasets = [{
+                label: 'Streets completed',
+                data: pts.map(p => ({ x: p.t, y: p.completed })),
+                borderColor: 'rgb(76, 29, 149)',
+                backgroundColor: 'rgb(76, 29, 149)',
+                borderWidth: 2.5,
+                pointRadius: 3,
+                tension: 0.1,
+                fill: false
+            }];
+
+            let projEndMs = last.t;
+            let summary;
+            if (perWeek > 0 && remaining > 0) {
+                const remainingWeeks = remaining / perWeek;
+                projEndMs = last.t + remainingWeeks * 7 * DAY;
+                const finishDate = new Date(projEndMs);
+                const fmt = finishDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                datasets.push({
+                    label: 'Projection',
+                    data: [{ x: last.t, y: last.completed }, { x: projEndMs, y: total }],
+                    borderColor: 'rgb(22, 163, 74)',
+                    borderWidth: 2,
+                    borderDash: [8, 5],
+                    pointRadius: 0,
+                    fill: false
+                });
+                summary = 'Averaging <strong>' + avgPerRun.toFixed(1) + ' streets/run</strong> over ' + deltas.length +
+                    ' recorded runs, at <strong>' + runsPerWeek + ' runs/week</strong> (\u2248' + perWeek.toFixed(0) +
+                    ' streets/week) the remaining <strong>' + remaining.toLocaleString() + '</strong> of ' +
+                    total.toLocaleString() + ' streets should be done around <strong>' + fmt + '</strong> (~' +
+                    Math.ceil(remainingWeeks) + ' weeks).';
+            } else {
+                summary = 'Average is <strong>' + avgPerRun.toFixed(1) + ' streets/run</strong> \u2014 not enough to project a completion date.';
+            }
+
+            const targetEndMs = projEndMs > last.t ? projEndMs : last.t;
+            datasets.push({
+                label: 'Total streets (' + total.toLocaleString() + ')',
+                data: [{ x: pts[0].t, y: total }, { x: targetEndMs, y: total }],
+                borderColor: 'rgba(220, 38, 38, 0.6)',
+                borderWidth: 1.5,
+                borderDash: [3, 3],
+                pointRadius: 0,
+                fill: false
+            });
+
+            summaryEl.innerHTML = summary;
+
+            const ctx = canvas.getContext('2d');
+            torontoForecastChart = new Chart(ctx, {
+                type: 'line',
+                data: { datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'nearest', intersect: false },
+                    plugins: {
+                        legend: { display: true, labels: { boxWidth: 20, font: { size: 13 } } },
+                        tooltip: {
+                            callbacks: {
+                                title: (items) => new Date(items[0].parsed.x).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+                                label: (item) => item.dataset.label + ': ' + Math.round(item.parsed.y).toLocaleString()
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                callback: (value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                            }
+                        },
+                        y: { title: { display: true, text: 'Streets completed' } }
                     }
                 }
             });

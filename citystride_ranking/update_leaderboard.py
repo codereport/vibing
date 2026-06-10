@@ -14,6 +14,8 @@ PAGES_TO_FETCH = 5 # 12 per page * 5 = 60 runners, enough for top 50
 HISTORY_DIR = "history"
 
 GTA_DATA_FILE = "gta_cities_data.json"
+GTA_HISTORY_FILE = "gta_history.json"
+TORONTO_CITY_ID = "131268"
 CONOR_USER_ID = "55228"
 
 GTA_CITIES = {
@@ -569,13 +571,71 @@ def save_gta_data(gta_data):
 
 
 def update_gta_tracking(cities):
-    """Save GTA data snapshot"""
+    """Save GTA data snapshot and append a record to the long-term history."""
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     gta_data = {
-        "last_updated": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "last_updated": now,
         "cities": {city["city_id"]: city for city in cities},
     }
     save_gta_data(gta_data)
+    append_gta_history(cities, now)
     return cities
+
+
+def append_gta_history(cities, now):
+    """Append a snapshot of city completion counts to gta_history.json.
+
+    Records are deduped by Toronto's completed count so the forecast chart only
+    gains a new point when streets are actually completed in Toronto.
+    """
+    if os.path.exists(GTA_HISTORY_FILE):
+        with open(GTA_HISTORY_FILE, "r") as f:
+            history = json.load(f)
+    else:
+        history = {"records": []}
+
+    records = history.setdefault("records", [])
+
+    city_map = {
+        c["city_id"]: {"completed": c["completed"], "total": c["total"]}
+        for c in cities
+    }
+    if not city_map:
+        return
+
+    new_toronto = city_map.get(TORONTO_CITY_ID, {}).get("completed")
+    if records:
+        last_toronto = records[-1].get("cities", {}).get(TORONTO_CITY_ID, {}).get("completed")
+        if new_toronto is not None and new_toronto == last_toronto:
+            # No change in Toronto completion; refresh the latest record in place
+            # (keeps totals current) instead of adding a duplicate point.
+            records[-1] = {"date": now, "cities": city_map}
+            with open(GTA_HISTORY_FILE, "w") as f:
+                json.dump(history, f, indent=2)
+            return
+
+    records.append({"date": now, "cities": city_map})
+    with open(GTA_HISTORY_FILE, "w") as f:
+        json.dump(history, f, indent=2)
+
+
+def get_toronto_series_for_js():
+    """Build the embedded Toronto completion series from gta_history.json."""
+    if not os.path.exists(GTA_HISTORY_FILE):
+        return "[]"
+    with open(GTA_HISTORY_FILE, "r") as f:
+        history = json.load(f)
+    series = []
+    for rec in history.get("records", []):
+        t = rec.get("cities", {}).get(TORONTO_CITY_ID)
+        if not t:
+            continue
+        series.append({
+            "date": rec["date"],
+            "completed": t["completed"],
+            "total": t["total"],
+        })
+    return json.dumps(series, indent=4)
 
 
 def ordinal(n):
@@ -589,6 +649,7 @@ def ordinal(n):
 def generate_html(runners, last_updated, gta_cities=None, extended_cities=None):
     # Generate history files JSON for the frontend
     history_files_json = get_history_files_for_js()
+    toronto_series_json = get_toronto_series_for_js()
 
     # Build GTA cities table rows
     gta_rows_html = ""
@@ -915,6 +976,56 @@ def generate_html(runners, last_updated, gta_cities=None, extended_cities=None):
             width: 100%;
             margin-top: 20px;
         }}
+
+        .forecast-chart-container {{
+            position: relative;
+            height: 450px;
+            width: 100%;
+            margin-top: 10px;
+        }}
+
+        .forecast-summary {{
+            font-size: 0.85em;
+            color: #18181b;
+            background: #f8fafc;
+            border-left: 4px solid #4c1d95;
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin: 10px 0 0 0;
+            line-height: 1.5;
+        }}
+
+        .forecast-summary strong {{
+            color: #4c1d95;
+        }}
+
+        .forecast-controls {{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 18px 0 6px 0;
+            flex-wrap: wrap;
+        }}
+
+        .forecast-controls label {{
+            font-size: 0.85em;
+            font-weight: 500;
+            color: #4c1d95;
+        }}
+
+        .forecast-controls input[type="number"] {{
+            width: 80px;
+            padding: 8px 10px;
+            font-size: 0.85em;
+            border: 2px solid #e4e4e7;
+            border-radius: 6px;
+            background: white;
+        }}
+
+        .forecast-controls input[type="number"]:focus {{
+            outline: none;
+            border-color: #4c1d95;
+        }}
     </style>
 </head>
 
@@ -1043,6 +1154,16 @@ def generate_html(runners, last_updated, gta_cities=None, extended_cities=None):
                     {extended_rows_html}
                 </tbody>
             </table>
+
+            <h3 style="color: #4c1d95; margin-top: 40px;">Toronto Completion Forecast</h3>
+            <div class="forecast-controls">
+                <label for="torontoRunsPerWeek">Runs per week in Toronto:</label>
+                <input type="number" id="torontoRunsPerWeek" value="5" min="1" max="21" step="1" oninput="renderTorontoForecast()">
+            </div>
+            <p id="torontoForecastSummary" class="forecast-summary"></p>
+            <div class="forecast-chart-container">
+                <canvas id="torontoForecastChart"></canvas>
+            </div>
         </div>
     </div>
 
@@ -1062,9 +1183,12 @@ def generate_html(runners, last_updated, gta_cities=None, extended_cities=None):
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelector('[data-tab="' + tabId + '"]').classList.add('active');
             document.getElementById('tab-' + tabId).classList.add('active');
+            if (tabId === 'gta') renderTorontoForecast();
         }}
 
         const historyFiles = {history_files_json};
+
+        const torontoSeries = {toronto_series_json};
 
         let historyCache = {{}};
 
@@ -1225,6 +1349,126 @@ def generate_html(runners, last_updated, gta_cities=None, extended_cities=None):
                             max: 30,
                             ticks: {{ stepSize: 5 }}
                         }}
+                    }}
+                }}
+            }});
+        }}
+
+        let torontoForecastChart = null;
+        function renderTorontoForecast() {{
+            const summaryEl = document.getElementById('torontoForecastSummary');
+            const canvas = document.getElementById('torontoForecastChart');
+            if (!canvas) return;
+
+            const DAY = 86400000;
+            const pts = torontoSeries
+                .map(d => ({{ t: new Date(d.date.replace(' ', 'T')).getTime(), completed: d.completed, total: d.total }}))
+                .filter(p => !isNaN(p.t))
+                .sort((a, b) => a.t - b.t);
+
+            if (torontoForecastChart) {{
+                torontoForecastChart.destroy();
+                torontoForecastChart = null;
+            }}
+
+            if (pts.length < 2) {{
+                summaryEl.innerHTML = 'Not enough history yet to estimate completion. Collecting data\u2026';
+                return;
+            }}
+
+            const last = pts[pts.length - 1];
+            const total = last.total;
+            const remaining = total - last.completed;
+
+            // Average streets completed per recorded run (delta between snapshots).
+            // This ignores calendar gaps (e.g. weeks away), unlike a time-based pace.
+            const deltas = [];
+            for (let i = 1; i < pts.length; i++) deltas.push(pts[i].completed - pts[i - 1].completed);
+            const avgPerRun = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+
+            // Runs per week is a user assumption about future cadence (default 4).
+            const runsInput = document.getElementById('torontoRunsPerWeek');
+            let runsPerWeek = runsInput ? parseFloat(runsInput.value) : 5;
+            if (!isFinite(runsPerWeek) || runsPerWeek <= 0) runsPerWeek = 5;
+
+            const perWeek = avgPerRun * runsPerWeek;
+
+            const datasets = [{{
+                label: 'Streets completed',
+                data: pts.map(p => ({{ x: p.t, y: p.completed }})),
+                borderColor: 'rgb(76, 29, 149)',
+                backgroundColor: 'rgb(76, 29, 149)',
+                borderWidth: 2.5,
+                pointRadius: 3,
+                tension: 0.1,
+                fill: false
+            }}];
+
+            let projEndMs = last.t;
+            let summary;
+            if (perWeek > 0 && remaining > 0) {{
+                const remainingWeeks = remaining / perWeek;
+                projEndMs = last.t + remainingWeeks * 7 * DAY;
+                const finishDate = new Date(projEndMs);
+                const fmt = finishDate.toLocaleDateString('en-US', {{ year: 'numeric', month: 'long', day: 'numeric' }});
+                datasets.push({{
+                    label: 'Projection',
+                    data: [{{ x: last.t, y: last.completed }}, {{ x: projEndMs, y: total }}],
+                    borderColor: 'rgb(22, 163, 74)',
+                    borderWidth: 2,
+                    borderDash: [8, 5],
+                    pointRadius: 0,
+                    fill: false
+                }});
+                summary = 'Averaging <strong>' + avgPerRun.toFixed(1) + ' streets/run</strong> over ' + deltas.length +
+                    ' recorded runs, at <strong>' + runsPerWeek + ' runs/week</strong> (\u2248' + perWeek.toFixed(0) +
+                    ' streets/week) the remaining <strong>' + remaining.toLocaleString() + '</strong> of ' +
+                    total.toLocaleString() + ' streets should be done around <strong>' + fmt + '</strong> (~' +
+                    Math.ceil(remainingWeeks) + ' weeks).';
+            }} else {{
+                summary = 'Average is <strong>' + avgPerRun.toFixed(1) + ' streets/run</strong> \u2014 not enough to project a completion date.';
+            }}
+
+            const targetEndMs = projEndMs > last.t ? projEndMs : last.t;
+            datasets.push({{
+                label: 'Total streets (' + total.toLocaleString() + ')',
+                data: [{{ x: pts[0].t, y: total }}, {{ x: targetEndMs, y: total }}],
+                borderColor: 'rgba(220, 38, 38, 0.6)',
+                borderWidth: 1.5,
+                borderDash: [3, 3],
+                pointRadius: 0,
+                fill: false
+            }});
+
+            summaryEl.innerHTML = summary;
+
+            const ctx = canvas.getContext('2d');
+            torontoForecastChart = new Chart(ctx, {{
+                type: 'line',
+                data: {{ datasets }},
+                options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {{ mode: 'nearest', intersect: false }},
+                    plugins: {{
+                        legend: {{ display: true, labels: {{ boxWidth: 20, font: {{ size: 13 }} }} }},
+                        tooltip: {{
+                            callbacks: {{
+                                title: (items) => new Date(items[0].parsed.x).toLocaleDateString('en-US', {{ year: 'numeric', month: 'short', day: 'numeric' }}),
+                                label: (item) => item.dataset.label + ': ' + Math.round(item.parsed.y).toLocaleString()
+                            }}
+                        }}
+                    }},
+                    scales: {{
+                        x: {{
+                            type: 'linear',
+                            ticks: {{
+                                maxRotation: 45,
+                                minRotation: 45,
+                                callback: (value) => new Date(value).toLocaleDateString('en-US', {{ month: 'short', day: 'numeric' }})
+                            }}
+                        }},
+                        y: {{ title: {{ display: true, text: 'Streets completed' }} }}
                     }}
                 }}
             }});
