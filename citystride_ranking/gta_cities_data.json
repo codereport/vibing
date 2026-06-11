@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-10 11:15:18",
+  "last_updated": "2026-06-11 12:49:12",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -32,7 +32,7 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 756,
+      "total_runners": 757,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
       "was_100": true,
       "runner_above": null
@@ -44,7 +44,7 @@
       "total": 2464,
       "percentage": 99.76,
       "rank": 5,
-      "total_runners": 3574,
+      "total_runners": 3575,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": null
@@ -56,7 +56,7 @@
       "total": 10318,
       "percentage": 82.08,
       "rank": 7,
-      "total_runners": 3849,
+      "total_runners": 3850,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
@@ -97,9 +97,9 @@
     "37668": {
       "city_id": "37668",
       "name": "Vaughan",
-      "completed": 521,
+      "completed": 543,
       "total": 2365,
-      "percentage": 22.03,
+      "percentage": 22.96,
       "rank": 5,
       "total_runners": 331,
       "city_url": "https://citystrides.com/users/55228/cities/37668",
