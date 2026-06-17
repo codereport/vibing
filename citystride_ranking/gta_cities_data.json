@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-16 12:39:34",
+  "last_updated": "2026-06-17 10:44:05",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -8,7 +8,7 @@
       "total": 2710,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 1062,
+      "total_runners": 1061,
       "city_url": "https://citystrides.com/users/55228/cities/38108",
       "was_100": true,
       "runner_above": null
@@ -32,7 +32,7 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 763,
+      "total_runners": 764,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
       "was_100": true,
       "runner_above": null
@@ -44,7 +44,7 @@
       "total": 2464,
       "percentage": 99.76,
       "rank": 5,
-      "total_runners": 3596,
+      "total_runners": 3598,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": null
@@ -56,7 +56,7 @@
       "total": 10318,
       "percentage": 82.75,
       "rank": 7,
-      "total_runners": 3874,
+      "total_runners": 3876,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
@@ -71,7 +71,7 @@
       "total": 1931,
       "percentage": 62.04,
       "rank": 10,
-      "total_runners": 932,
+      "total_runners": 931,
       "city_url": "https://citystrides.com/users/55228/cities/38014",
       "was_100": false,
       "runner_above": {
@@ -112,9 +112,9 @@
     "37680": {
       "city_id": "37680",
       "name": "Markham",
-      "completed": 384,
+      "completed": 393,
       "total": 2308,
-      "percentage": 16.64,
+      "percentage": 17.03,
       "rank": 8,
       "total_runners": 407,
       "city_url": "https://citystrides.com/users/55228/cities/37680",
