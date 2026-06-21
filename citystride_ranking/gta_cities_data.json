@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-20 04:03:40",
+  "last_updated": "2026-06-21 17:42:26",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -8,7 +8,7 @@
       "total": 2710,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 1065,
+      "total_runners": 1066,
       "city_url": "https://citystrides.com/users/55228/cities/38108",
       "was_100": true,
       "runner_above": null
@@ -20,7 +20,7 @@
       "total": 588,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 724,
+      "total_runners": 726,
       "city_url": "https://citystrides.com/users/55228/cities/38102",
       "was_100": true,
       "runner_above": null
@@ -32,7 +32,7 @@
       "total": 404,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 768,
+      "total_runners": 769,
       "city_url": "https://citystrides.com/users/55228/cities/38114",
       "was_100": true,
       "runner_above": null
@@ -44,10 +44,13 @@
       "total": 2464,
       "percentage": 99.76,
       "rank": 5,
-      "total_runners": 3607,
+      "total_runners": 3613,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
-      "runner_above": null
+      "runner_above": {
+        "name": "Matthew Stroh",
+        "pct": 99.8
+      }
     },
     "131268": {
       "city_id": "131268",
@@ -56,12 +59,12 @@
       "total": 10318,
       "percentage": 82.87,
       "rank": 7,
-      "total_runners": 3885,
+      "total_runners": 3891,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
         "name": "Brian Putre",
-        "pct": 83.58
+        "pct": 83.89
       }
     },
     "38007": {
@@ -71,7 +74,7 @@
       "total": 2599,
       "percentage": 62.18,
       "rank": 7,
-      "total_runners": 593,
+      "total_runners": 594,
       "city_url": "https://citystrides.com/users/55228/cities/38007",
       "was_100": false,
       "runner_above": {
@@ -86,7 +89,7 @@
       "total": 1931,
       "percentage": 62.04,
       "rank": 10,
-      "total_runners": 935,
+      "total_runners": 937,
       "city_url": "https://citystrides.com/users/55228/cities/38014",
       "was_100": false,
       "runner_above": {
