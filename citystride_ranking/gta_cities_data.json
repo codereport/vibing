@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-21 17:42:26",
+  "last_updated": "2026-06-22 11:18:04",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -20,7 +20,7 @@
       "total": 588,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 726,
+      "total_runners": 727,
       "city_url": "https://citystrides.com/users/55228/cities/38102",
       "was_100": true,
       "runner_above": null
@@ -44,7 +44,7 @@
       "total": 2464,
       "percentage": 99.76,
       "rank": 5,
-      "total_runners": 3613,
+      "total_runners": 3615,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": {
@@ -59,7 +59,7 @@
       "total": 10318,
       "percentage": 82.87,
       "rank": 7,
-      "total_runners": 3891,
+      "total_runners": 3893,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
@@ -134,7 +134,7 @@
       "total": 1377,
       "percentage": 2.61,
       "rank": 27,
-      "total_runners": 188,
+      "total_runners": 189,
       "city_url": "https://citystrides.com/users/55228/cities/37878",
       "was_100": false,
       "runner_above": {
