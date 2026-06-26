@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-25 06:41:26",
+  "last_updated": "2026-06-26 05:19:51",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -8,7 +8,7 @@
       "total": 2710,
       "percentage": 100.0,
       "rank": 1,
-      "total_runners": 1069,
+      "total_runners": 1070,
       "city_url": "https://citystrides.com/users/55228/cities/38108",
       "was_100": true,
       "runner_above": null
@@ -44,7 +44,7 @@
       "total": 2464,
       "percentage": 99.76,
       "rank": 5,
-      "total_runners": 3623,
+      "total_runners": 3624,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": {
@@ -59,12 +59,12 @@
       "total": 10318,
       "percentage": 82.87,
       "rank": 7,
-      "total_runners": 3902,
+      "total_runners": 3903,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
         "name": "Brian Putre",
-        "pct": 84.08
+        "pct": 84.22
       }
     },
     "38007": {
@@ -74,7 +74,7 @@
       "total": 2599,
       "percentage": 62.18,
       "rank": 7,
-      "total_runners": 594,
+      "total_runners": 595,
       "city_url": "https://citystrides.com/users/55228/cities/38007",
       "was_100": false,
       "runner_above": {
@@ -94,7 +94,7 @@
       "was_100": false,
       "runner_above": {
         "name": "A private Strider",
-        "pct": 67.79
+        "pct": 67.84
       }
     },
     "37668": {
@@ -119,7 +119,7 @@
       "total": 2308,
       "percentage": 17.03,
       "rank": 8,
-      "total_runners": 409,
+      "total_runners": 410,
       "city_url": "https://citystrides.com/users/55228/cities/37680",
       "was_100": false,
       "runner_above": {
