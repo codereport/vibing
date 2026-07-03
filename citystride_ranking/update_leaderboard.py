@@ -37,6 +37,7 @@ EXTENDED_CITIES = {
     "38946": "Penetanguishene",
     "132377": "Barrie",
     "132379": "Hamilton",
+    "37902": "Newmarket",
 }
 
 def clean_name(name):
