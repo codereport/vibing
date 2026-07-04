@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-03 12:14:42",
+  "last_updated": "2026-07-04 11:13:33",
   "cities": {
     "38108": {
       "city_id": "38108",
@@ -44,7 +44,7 @@
       "total": 2470,
       "percentage": 99.39,
       "rank": 6,
-      "total_runners": 3652,
+      "total_runners": 3653,
       "city_url": "https://citystrides.com/users/55228/cities/38121",
       "was_100": true,
       "runner_above": {
@@ -59,7 +59,7 @@
       "total": 10318,
       "percentage": 83.45,
       "rank": 7,
-      "total_runners": 3932,
+      "total_runners": 3933,
       "city_url": "https://citystrides.com/users/55228/cities/131268",
       "was_100": false,
       "runner_above": {
@@ -89,7 +89,7 @@
       "total": 1931,
       "percentage": 62.04,
       "rank": 10,
-      "total_runners": 943,
+      "total_runners": 944,
       "city_url": "https://citystrides.com/users/55228/cities/38014",
       "was_100": false,
       "runner_above": {
@@ -109,7 +109,7 @@
       "was_100": false,
       "runner_above": {
         "name": "Amanda Natale",
-        "pct": 25.54
+        "pct": 25.58
       }
     },
     "37680": {
