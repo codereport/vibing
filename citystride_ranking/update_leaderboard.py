@@ -2,11 +2,38 @@
 
 import re
 import sys
+import time
+import concurrent.futures
 import requests
 from bs4 import BeautifulSoup
 import json
 import os
 from datetime import datetime
+
+# Make progress output appear immediately even when concurrent workers are
+# printing (otherwise buffered stdout can hide updates until the end).
+try:
+    sys.stdout.reconfigure(line_buffering=True)
+except Exception:
+    pass
+
+# Number of worker threads used for the (network-bound) scraping work.
+MAX_WORKERS = 8
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+}
+
+# A shared, connection-pooled session. requests.Session is safe to use for
+# concurrent GETs from multiple threads.
+SESSION = requests.Session()
+SESSION.headers.update(HEADERS)
+# Allow enough pooled connections for our worker threads. The three top-level
+# phases can run concurrently, each with its own pool of MAX_WORKERS threads.
+_pool_size = MAX_WORKERS * 3 + 4
+_adapter = requests.adapters.HTTPAdapter(pool_connections=_pool_size, pool_maxsize=_pool_size)
+SESSION.mount("https://", _adapter)
+SESSION.mount("http://", _adapter)
 
 DATA_FILE = "leaderboard_data.json"
 HTML_FILE = "index.html"
@@ -46,8 +73,6 @@ def clean_name(name):
         return "James Salmon"
     return name
 
-import time
-
 def get_runner_location(profile_url):
     if not profile_url:
         return None
@@ -57,13 +82,8 @@ def get_runner_location(profile_url):
     # The profile page is /users/123.
     base_url = "https://citystrides.com" + profile_url.replace("/map", "")
     
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
-    
     try:
-        time.sleep(0.5) # Be nice to the server
-        response = requests.get(base_url, headers=headers)
+        response = SESSION.get(base_url)
         if response.status_code == 200:
             soup = BeautifulSoup(response.content, "html.parser")
             # Look for the location div we found
@@ -147,77 +167,90 @@ def country_to_flag(country):
     
     return mapping.get(country, country) # Return mapped flag or original text if not found
 
+def _fetch_leaderboard_page(page):
+    """Fetch and parse a single leaderboard page into a list of raw runner dicts."""
+    print(f"Fetching page {page}...")
+    url = f"https://citystrides.com/users/search?context=leaderboard&page={page}"
+    response = SESSION.get(url)
+    if response.status_code != 200:
+        print(f"Failed to fetch page {page}: {response.status_code}")
+        return []
+
+    soup = BeautifulSoup(response.content, "html.parser")
+    cards = soup.find_all("div", class_=lambda c: c and "col-span-1" in c and "bg-white" in c)
+
+    page_runners = []
+    for card in cards:
+        name_tag = card.find("h3")
+        raw_name = name_tag.get_text(strip=True) if name_tag else "Unknown"
+        name = clean_name(raw_name)
+
+        link = card.find("a", href=lambda h: h and "/users/" in h)
+        profile_url = link['href'] if link else ""
+        user_id = profile_url.split("/")[2] if len(profile_url.split("/")) > 2 else name
+
+        # Extract streets count. Text is like "36656 total streets".
+        text = card.get_text(separator=" ")
+        streets = 0
+        try:
+            match = re.search(r'([\d,]+)\s+total streets', text)
+            if match:
+                streets = int(match.group(1).replace(",", ""))
+        except Exception as e:
+            print(f"Error parsing streets for {name}: {e}")
+
+        page_runners.append({
+            "name": name,
+            "streets": streets,
+            "profile_url": profile_url,
+            "user_id": user_id,
+        })
+    return page_runners
+
+
 def fetch_leaderboard():
-    runners = []
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
-    
     location_cache = load_location_cache()
-    cache_updated = False
-    
-    for page in range(1, PAGES_TO_FETCH + 1):
-        print(f"Fetching page {page}...")
-        url = f"https://citystrides.com/users/search?context=leaderboard&page={page}"
-        response = requests.get(url, headers=headers)
-        if response.status_code != 200:
-            print(f"Failed to fetch page {page}: {response.status_code}")
+
+    # Fetch all leaderboard pages concurrently, preserving page order.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        pages = list(executor.map(_fetch_leaderboard_page, range(1, PAGES_TO_FETCH + 1)))
+
+    runners = [r for page_runners in pages for r in page_runners]
+
+    # Determine which runners still need a location lookup (cache miss + no flag).
+    to_lookup = {}  # user_id -> profile_url
+    for r in runners:
+        if has_flag(r["name"]):
             continue
-            
-        soup = BeautifulSoup(response.content, "html.parser")
-        cards = soup.find_all("div", class_=lambda c: c and "col-span-1" in c and "bg-white" in c)
-        
-        for card in cards:
-            name_tag = card.find("h3")
-            raw_name = name_tag.get_text(strip=True) if name_tag else "Unknown"
-            name = clean_name(raw_name)
-            
-            profile_url = card.find("a", href=lambda h: h and "/users/" in h)['href'] if card.find("a", href=lambda h: h and "/users/" in h) else ""
-            
-            # Check if we need to fetch location
-            # Use profile_url as cache key
-            user_id = profile_url.split("/")[2] if len(profile_url.split("/")) > 2 else name
-            
-            if not has_flag(name):
-                if user_id in location_cache:
-                    location_flag = location_cache[user_id]
-                    if location_flag:
-                        name = f"{name} {location_flag}"
-                else:
-                    print(f"Fetching location for {name}...")
-                    location = get_runner_location(profile_url)
-                    if location:
-                        flag = country_to_flag(location)
-                        location_cache[user_id] = flag
-                        cache_updated = True
-                        name = f"{name} {flag}"
-                    else:
-                        # Cache empty result to avoid re-fetching failed/empty locations
-                        location_cache[user_id] = ""
-                        cache_updated = True
-            
-            # Extract streets count
-            # Text is like "36656 total streets"
-            text = card.get_text(separator=" ")
-            streets = 0
-            try:
-                # Find the number before "total streets"
-                import re
-                match = re.search(r'([\d,]+)\s+total streets', text)
-                if match:
-                    streets = int(match.group(1).replace(",", ""))
-            except Exception as e:
-                print(f"Error parsing streets for {name}: {e}")
-                
-            runners.append({
-                "name": name,
-                "streets": streets,
-                "profile_url": profile_url
-            })
-            
+        if r["user_id"] in location_cache:
+            continue
+        to_lookup.setdefault(r["user_id"], r["profile_url"])
+
+    # Fetch the missing locations concurrently.
+    cache_updated = False
+    if to_lookup:
+        def lookup(item):
+            user_id, profile_url = item
+            print(f"Fetching location for user {user_id}...")
+            location = get_runner_location(profile_url)
+            return user_id, country_to_flag(location) if location else ""
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            for user_id, flag in executor.map(lookup, to_lookup.items()):
+                location_cache[user_id] = flag
+                cache_updated = True
+
+    # Apply flags to names now that the cache is fully populated.
+    for r in runners:
+        if not has_flag(r["name"]):
+            flag = location_cache.get(r["user_id"], "")
+            if flag:
+                r["name"] = f"{r['name']} {flag}"
+        r.pop("user_id", None)
+
     if cache_updated:
         save_location_cache(location_cache)
-        
+
     return runners[:50] # Return top 50
 
 def load_previous_data():
@@ -301,23 +334,33 @@ def get_history_files_for_js():
     return json.dumps(files, indent=4)
 
 
-def fetch_total_runners(city_id, known_rank, headers):
-    """Get total runners for a city by scanning leaderboard pages past the known rank."""
-    max_rank = known_rank
-    page = (known_rank - 1) // 12 + 2
-    while page <= 200:
-        time.sleep(0.3)
-        url = f"https://citystrides.com/users/search?context=city_users-{city_id}&page={page}"
-        resp = requests.get(url, headers=headers)
-        if resp.status_code != 200:
-            break
-        soup = BeautifulSoup(resp.content, "html.parser")
-        entries = parse_leaderboard_entries(soup)
-        if not entries:
-            break
-        max_rank = max(e["rank"] for e in entries)
-        page += 1
-    return max_rank
+def fetch_total_runners(city_id, known_rank=0, headers=None):
+    """Get total runners for a city (as listed on the city leaderboard).
+
+    The leaderboard pager exposes the total page count (``<input name="page"
+    max="N">``), so we read page 1 for that count then jump straight to the last
+    page to get its highest rank. That's just two requests regardless of how big
+    the city is, instead of scanning every page.
+    """
+    base = f"https://citystrides.com/users/search?context=city_users-{city_id}"
+
+    resp = SESSION.get(f"{base}&page=1")
+    if resp.status_code != 200:
+        return known_rank
+
+    html = resp.content.decode("utf-8", "ignore")
+    m = re.search(r'max="(\d+)"[^>]*name="page"', html)
+    last_page = int(m.group(1)) if m else 1
+
+    if last_page <= 1:
+        entries = parse_leaderboard_entries(BeautifulSoup(resp.content, "html.parser"))
+        return max((e["rank"] for e in entries), default=known_rank)
+
+    resp = SESSION.get(f"{base}&page={last_page}")
+    if resp.status_code != 200:
+        return known_rank
+    entries = parse_leaderboard_entries(BeautifulSoup(resp.content, "html.parser"))
+    return max((e["rank"] for e in entries), default=known_rank)
 
 
 def parse_leaderboard_entries(soup):
@@ -353,7 +396,7 @@ def parse_leaderboard_entries(soup):
     return entries
 
 
-def fetch_runner_above(city_id, rank, conor_pct, headers):
+def fetch_runner_above(city_id, rank, conor_pct, headers=None):
     """Fetch the runner ranked one above Conor from the city leaderboard"""
     if rank <= 1:
         return None
@@ -361,7 +404,7 @@ def fetch_runner_above(city_id, rank, conor_pct, headers):
     page = max(1, (rank - 1) // 12 + 1)
 
     lb_url = f"https://citystrides.com/users/search?context=city_users-{city_id}&page={page}"
-    resp = requests.get(lb_url, headers=headers)
+    resp = SESSION.get(lb_url)
     if resp.status_code != 200:
         return None
 
@@ -383,7 +426,7 @@ def fetch_runner_above(city_id, rank, conor_pct, headers):
         return {"name": above["name"], "pct": above["pct"]}
     if page > 1:
         prev_url = f"https://citystrides.com/users/search?context=city_users-{city_id}&page={page - 1}"
-        prev_resp = requests.get(prev_url, headers=headers)
+        prev_resp = SESSION.get(prev_url)
         if prev_resp.status_code == 200:
             prev_entries = parse_leaderboard_entries(
                 BeautifulSoup(prev_resp.content, "html.parser")
@@ -396,167 +439,92 @@ def fetch_runner_above(city_id, rank, conor_pct, headers):
     return None
 
 
-def fetch_gta_cities(city_filter=None):
-    """Fetch GTA city data from Conor's CityStrides profile page"""
-    url = f"https://citystrides.com/users/{CONOR_USER_ID}"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+def _process_city(city_id, city_name, label):
+    """Fetch/parse a single city directly from its city page. Thread-safe.
+
+    We deliberately hit the per-city page (which is fast) instead of scraping
+    the user's profile page, which is huge and can take 10s+ to render.
+    """
+    print(f"  ... {city_name} ({label}) started")
+    started = time.monotonic()
+    city_path = f"/users/{CONOR_USER_ID}/cities/{city_id}"
+    city_full_url = f"https://citystrides.com{city_path}"
+
+    resp = SESSION.get(city_full_url)
+    if resp.status_code != 200:
+        print(f"  Could not fetch {city_name} (id={city_id})")
+        return None
+
+    soup = BeautifulSoup(resp.content, "html.parser")
+    text = soup.get_text(separator=" ")
+
+    pct_match = re.search(r'([\d.]+)%', text)
+    percentage = float(pct_match.group(1)) if pct_match else 0.0
+
+    rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+Place', text)
+    rank = int(rank_match.group(1)) if rank_match else 0
+
+    total_match = re.search(r'([\d,]+)\s+streets\s+[\d,.]+\s+miles', text)
+    total = int(total_match.group(1).replace(",", "")) if total_match else 0
+
+    completed_match = re.search(r'Place\s+(\d[\d,]*)\s+street', text)
+    completed = int(completed_match.group(1).replace(",", "")) if completed_match else 0
+
+    total_runners = fetch_total_runners(city_id, rank) if rank > 0 else 0
+
+    badge = soup.find("span", title="Completed this city")
+    was_100 = badge is not None
+
+    above = fetch_runner_above(city_id, rank, percentage)
+
+    above_str = f" | above: {above['name']} ({above['pct']}%)" if above else ""
+    status = "💯" if was_100 else ""
+    elapsed = time.monotonic() - started
+    print(f"  ✓ {city_name}: {percentage}% ({completed}/{total}), rank {rank} of {total_runners} {status}{above_str} [{elapsed:.1f}s]")
+
+    return {
+        "city_id": city_id,
+        "name": city_name,
+        "completed": completed,
+        "total": total,
+        "percentage": percentage,
+        "rank": rank,
+        "total_runners": total_runners,
+        "city_url": city_full_url,
+        "was_100": was_100,
+        "runner_above": above,
     }
 
-    print("Fetching GTA cities data...")
-    response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        print(f"Failed to fetch profile: {response.status_code}")
-        return []
 
-    soup = BeautifulSoup(response.content, "html.parser")
-    cities = []
+def _fetch_cities(city_map, label, city_filter=None):
+    """Fetch a group of cities concurrently, one request per city page."""
+    print(f"Fetching {label} cities data...")
 
-    for city_id, city_name in GTA_CITIES.items():
-        if city_filter and city_filter.lower() not in city_name.lower():
-            continue
-        city_path = f"/users/{CONOR_USER_ID}/cities/{city_id}"
-        city_full_url = f"https://citystrides.com{city_path}"
-        link = soup.find("a", href=lambda h: h and city_path in h)
-        city_page_soup = None
+    targets = [
+        (city_id, city_name)
+        for city_id, city_name in city_map.items()
+        if not (city_filter and city_filter.lower() not in city_name.lower())
+    ]
 
-        if link:
-            text = link.get_text(separator=" ")
-
-            streets_match = re.search(r'(\d[\d,]*)\s+of\s+(\d[\d,]*)\s+streets', text)
-            rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+of\s+([\d,]+)', text)
-            pct_match = re.search(r'([\d.]+)%', text)
-
-            completed = int(streets_match.group(1).replace(",", "")) if streets_match else 0
-            total = int(streets_match.group(2).replace(",", "")) if streets_match else 0
-            rank = int(rank_match.group(1).replace(",", "")) if rank_match else 0
-            total_runners = int(rank_match.group(2).replace(",", "")) if rank_match else 0
-            percentage = float(pct_match.group(1)) if pct_match else 0.0
-        else:
-            print(f"  {city_name} not on profile page, fetching directly...")
-            time.sleep(0.5)
-            direct_resp = requests.get(city_full_url, headers=headers)
-            if direct_resp.status_code != 200:
-                print(f"  Could not fetch {city_name} (id={city_id})")
-                continue
-
-            city_page_soup = BeautifulSoup(direct_resp.content, "html.parser")
-            direct_text = city_page_soup.get_text(separator=" ")
-
-            pct_match = re.search(r'([\d.]+)%', direct_text)
-            percentage = float(pct_match.group(1)) if pct_match else 0.0
-
-            rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+Place', direct_text)
-            rank = int(rank_match.group(1)) if rank_match else 0
-
-            total_match = re.search(r'([\d,]+)\s+streets\s+[\d,.]+\s+miles', direct_text)
-            total = int(total_match.group(1).replace(",", "")) if total_match else 0
-
-            completed_match = re.search(r'Place\s+(\d[\d,]*)\s+street', direct_text)
-            completed = int(completed_match.group(1).replace(",", "")) if completed_match else 0
-
-            total_runners = fetch_total_runners(city_id, rank, headers) if rank > 0 else 0
-
-        if city_page_soup is None:
-            time.sleep(0.5)
-            city_resp = requests.get(city_full_url, headers=headers)
-            if city_resp.status_code == 200:
-                city_page_soup = BeautifulSoup(city_resp.content, "html.parser")
-
-        was_100 = False
-        if city_page_soup:
-            badge = city_page_soup.find("span", title="Completed this city")
-            was_100 = badge is not None
-
-        # Fetch the runner ranked directly above Conor
-        time.sleep(0.3)
-        above = fetch_runner_above(city_id, rank, percentage, headers)
-
-        cities.append({
-            "city_id": city_id,
-            "name": city_name,
-            "completed": completed,
-            "total": total,
-            "percentage": percentage,
-            "rank": rank,
-            "total_runners": total_runners,
-            "city_url": city_full_url,
-            "was_100": was_100,
-            "runner_above": above,
-        })
-        above_str = f" | above: {above['name']} ({above['pct']}%)" if above else ""
-        status = "💯" if was_100 else ""
-        print(f"  {city_name}: {percentage}% ({completed}/{total}), rank {rank} of {total_runners} {status}{above_str}")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        results = executor.map(
+            lambda t: _process_city(t[0], t[1], label), targets
+        )
+        cities = [c for c in results if c]
 
     cities.sort(key=lambda x: x["percentage"], reverse=True)
-    print(f"Fetched {len(cities)} GTA cities")
+    print(f"Fetched {len(cities)} {label} cities")
     return cities
+
+
+def fetch_gta_cities(city_filter=None):
+    """Fetch GTA city data, one direct request per city page (fast)."""
+    return _fetch_cities(GTA_CITIES, "GTA", city_filter)
 
 
 def fetch_extended_cities(city_filter=None):
-    """Fetch extended city data directly from each city page"""
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    }
-
-    print("Fetching extended cities data...")
-    cities = []
-
-    for city_id, city_name in EXTENDED_CITIES.items():
-        if city_filter and city_filter.lower() not in city_name.lower():
-            continue
-        city_path = f"/users/{CONOR_USER_ID}/cities/{city_id}"
-        city_full_url = f"https://citystrides.com{city_path}"
-
-        time.sleep(0.5)
-        resp = requests.get(city_full_url, headers=headers)
-        if resp.status_code != 200:
-            print(f"  Could not fetch {city_name} (id={city_id})")
-            continue
-
-        soup = BeautifulSoup(resp.content, "html.parser")
-        text = soup.get_text(separator=" ")
-
-        pct_match = re.search(r'([\d.]+)%', text)
-        percentage = float(pct_match.group(1)) if pct_match else 0.0
-
-        rank_match = re.search(r'(\d+)(?:st|nd|rd|th)\s+Place', text)
-        rank = int(rank_match.group(1)) if rank_match else 0
-
-        total_match = re.search(r'([\d,]+)\s+streets\s+[\d,.]+\s+miles', text)
-        total = int(total_match.group(1).replace(",", "")) if total_match else 0
-
-        completed_match = re.search(r'Place\s+(\d[\d,]*)\s+street', text)
-        completed = int(completed_match.group(1).replace(",", "")) if completed_match else 0
-
-        total_runners = fetch_total_runners(city_id, rank, headers) if rank > 0 else 0
-
-        was_100 = False
-        badge = soup.find("span", title="Completed this city")
-        was_100 = badge is not None
-
-        time.sleep(0.3)
-        above = fetch_runner_above(city_id, rank, percentage, headers)
-
-        cities.append({
-            "city_id": city_id,
-            "name": city_name,
-            "completed": completed,
-            "total": total,
-            "percentage": percentage,
-            "rank": rank,
-            "total_runners": total_runners,
-            "city_url": city_full_url,
-            "was_100": was_100,
-            "runner_above": above,
-        })
-        above_str = f" | above: {above['name']} ({above['pct']}%)" if above else ""
-        status = "💯" if was_100 else ""
-        print(f"  {city_name}: {percentage}% ({completed}/{total}), rank {rank} of {total_runners} {status}{above_str}")
-
-    cities.sort(key=lambda x: x["percentage"], reverse=True)
-    print(f"Fetched {len(cities)} extended cities")
-    return cities
+    """Fetch extended city data, one direct request per city page."""
+    return _fetch_cities(EXTENDED_CITIES, "extended", city_filter)
 
 
 def load_gta_data():
@@ -1499,12 +1467,22 @@ def main():
         return
 
     print("Starting leaderboard update...")
-    
+    overall_start = time.monotonic()
+
     previous_data = load_previous_data()
-    
-    current_runners = fetch_leaderboard()
+
+    # The three scraping phases are independent, so run them concurrently.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        leaderboard_future = executor.submit(fetch_leaderboard)
+        gta_future = executor.submit(fetch_gta_cities)
+        extended_future = executor.submit(fetch_extended_cities)
+
+        current_runners = leaderboard_future.result()
+        gta_cities = gta_future.result()
+        extended_cities = extended_future.result()
+
     print(f"Fetched {len(current_runners)} runners")
-    
+
     processed_runners = calculate_deltas(current_runners, previous_data)
     
     new_data = {
@@ -1513,14 +1491,11 @@ def main():
     }
     save_data(new_data)
     
-    gta_cities = fetch_gta_cities()
     if gta_cities:
         gta_cities = update_gta_tracking(gta_cities)
 
-    extended_cities = fetch_extended_cities()
-
     generate_html(processed_runners, new_data["last_updated"], gta_cities, extended_cities)
-    print("Done!")
+    print(f"Done in {time.monotonic() - overall_start:.1f}s")
 
 if __name__ == "__main__":
     main()
