@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>HVAC Efficiency Pro • Sales Rep Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .metric-value,
+        .tabular-nums {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .equipment-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .result-highlight {
+            background: linear-gradient(90deg, #0f172a, #1e2937);
+            color: white;
+        }
+
+        .step-dot {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .modern-shadow {
+            box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.08), 0 4px 6px -4px rgb(15 23 42 / 0.08);
+        }
+
+        .metric {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .calc-input {
+            transition: all 0.1s ease;
+        }
+
+        .calc-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+            border-color: #10b981;
+        }
+
+        /* Review pill for auto-estimated fields */
+        .review-pill {
+            display: none;
+            font-size: 0.6rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #b45309;
+            background: #fef3c7;
+            padding: 2px 7px;
+            border-radius: 9999px;
+            cursor: pointer;
+        }
+
+        .review-on .review-pill {
+            display: inline-block;
+        }
+
+        .review-on .calc-input {
+            border-color: #f59e0b !important;
+            background: #fffdf5;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+    <!-- Top Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-x-3">
+                <div class="w-10 h-10 bg-slate-900 rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-fire-flame-curved text-white text-xl"></i>
+                </div>
+                <div class="leading-none">
+                    <div>
+                        <span class="font-display text-xl font-semibold tracking-tight">HVAC</span>
+                        <span class="font-display text-xl font-semibold tracking-tight text-emerald-600">Efficiency</span>
+                        <span class="font-display text-xl font-semibold tracking-tight">Pro</span>
+                    </div>
+                    <div class="text-[10px] text-slate-400 font-medium mt-0.5">Sales Rep Edition</div>
+                </div>
+                <div
+                    class="hidden md:block px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full tracking-widest">
+                    LENNOX • ONTARIO</div>
+            </div>
+
+            <div class="flex items-center gap-x-2">
+                <div
+                    class="hidden lg:flex items-center gap-x-3 px-4 py-2 bg-white border border-slate-200 rounded-3xl text-sm">
+                    <i class="fa-solid fa-user-tie text-slate-400"></i>
+                    <span class="font-medium text-slate-700">Sales Rep</span>
+                    <div class="h-3 w-px bg-slate-200"></div>
+                    <span class="text-emerald-600 font-semibold">Limcan / Mersey</span>
+                </div>
+                <button onclick="resetAll()"
+                    class="flex items-center gap-x-2 px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-3xl transition-colors">
+                    <i class="fa-solid fa-rotate-left"></i><span class="hidden sm:inline">Reset</span>
+                </button>
+                <button onclick="exportToPDF()"
+                    class="flex items-center gap-x-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 transition-all text-white text-sm font-semibold rounded-3xl shadow-sm">
+                    <i class="fa-solid fa-file-pdf"></i><span class="hidden sm:inline">Export PDF</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-screen-2xl mx-auto px-4 md:px-8 pt-6 pb-16">
+
+        <!-- Hero -->
+        <div class="mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-y-3">
+            <div>
+                <h1 class="font-display text-3xl md:text-4xl tracking-tight font-semibold">Instant Savings Analysis</h1>
+                <p class="text-base md:text-lg text-slate-600 mt-1">Heat loss • Equipment comparison • Real energy costs •
+                    Monthly savings vs. payment</p>
+            </div>
+            <div class="flex items-center gap-x-2 text-sm">
+                <div
+                    class="px-3 py-1.5 bg-white border border-slate-200 rounded-3xl flex items-center gap-x-2 text-emerald-700">
+                    <i class="fa-solid fa-circle-check"></i><span class="font-medium">Ontario-optimized</span>
+                </div>
+                <div
+                    class="px-3 py-1.5 bg-white border border-slate-200 rounded-3xl text-slate-500 text-xs font-medium flex items-center gap-x-1.5">
+                    <i class="fa-solid fa-bolt text-emerald-500"></i> Live calculations
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+
+            <!-- ================= LEFT: INPUTS ================= -->
+            <div class="xl:col-span-7 space-y-6">
+
+                <!-- STEP 1: PROPERTY -->
+                <div class="bg-white rounded-3xl border border-slate-200 modern-shadow overflow-hidden">
+                    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center bg-slate-50 gap-3">
+                        <div class="flex items-center gap-x-3">
+                            <div class="step-dot bg-slate-900 text-white rounded-xl">1</div>
+                            <div>
+                                <span class="font-semibold text-lg">Property Details</span>
+                                <span
+                                    class="ml-2 text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full font-bold align-middle">HEAT
+                                    LOSS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4">
+                        <div class="md:col-span-2">
+                            <label class="label text-slate-500 mb-1.5 block">Full Address</label>
+                            <div class="relative">
+                                <i
+                                    class="fa-solid fa-location-dot absolute left-4 top-4 text-slate-400 pointer-events-none"></i>
+                                <input id="address" type="text" autocomplete="off"
+                                    placeholder="Start typing an address…"
+                                    class="calc-input w-full pl-10 pr-10 py-3 border border-slate-300 rounded-2xl text-base">
+                                <i id="addrSpinner"
+                                    class="fa-solid fa-spinner fa-spin absolute right-4 top-4 text-slate-300 hidden"></i>
+                                <div id="addrSuggest"
+                                    class="absolute z-40 left-0 right-0 top-full mt-1.5 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden hidden max-h-72 overflow-y-auto">
+                                </div>
+                            </div>
+                            <div class="text-[11px] text-slate-400 mt-1"><i class="fa-solid fa-circle-info mr-1"></i>Pick
+                                your address from the list to auto-estimate home details — all estimates flagged for your
+                                review.</div>
+                        </div>
+
+                        <div data-field>
+                            <label class="label text-slate-500 mb-1.5 flex items-center gap-2">Square Footage (above
+                                grade) <span class="review-pill" title="Auto-estimated — please confirm">Review</span></label>
+                            <div class="relative">
+                                <input id="sqft" type="number" value="2200"
+                                    class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base pr-12">
+                                <div class="absolute right-4 top-3.5 text-slate-400 text-sm">sq ft</div>
+                            </div>
+                        </div>
+
+                        <div data-field>
+                            <label class="label text-slate-500 mb-1.5 flex items-center gap-2">Year Built <span
+                                    class="review-pill">Review</span></label>
+                            <input id="yearBuilt" type="number" value="1995"
+                                class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base">
+                        </div>
+
+                        <div>
+                            <label class="label text-slate-500 mb-1.5 flex items-center gap-2">Insulation Quality <span
+                                    class="text-[9px] font-semibold text-slate-400 normal-case tracking-normal"><i
+                                        class="fa-solid fa-lock mr-0.5"></i>from year built</span></label>
+                            <select id="insulation" disabled
+                                class="w-full px-4 py-3 border border-emerald-200 bg-emerald-50/40 rounded-2xl text-base font-semibold text-emerald-700 cursor-not-allowed">
+                                <option value="excellent">Excellent (new / major reno)</option>
+                                <option value="good">Good (updated windows + insul.)</option>
+                                <option value="average" selected>Average (typical for age)</option>
+                                <option value="poor">Poor (original, drafty)</option>
+                            </select>
+                        </div>
+
+                        <div data-field>
+                            <label class="label text-slate-500 mb-1.5 flex items-center gap-2"># of Stories <span
+                                    class="review-pill">Review</span></label>
+                            <select id="stories"
+                                class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base bg-white">
+                                <option value="1">1 Story / Bungalow</option>
+                                <option value="2" selected>2 Stories</option>
+                                <option value="2.5">2.5 Stories</option>
+                                <option value="3">3+ Stories</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="label text-slate-500 mb-1.5 block">Property Type</label>
+                            <select id="propertyType"
+                                class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base bg-white">
+                                <option value="residential" selected>Residential (House / Townhouse)</option>
+                                <option value="multi">Multi-Residential / Apartment</option>
+                                <option value="commercial">Commercial / Light Industrial</option>
+                            </select>
+                        </div>
+
+                        <div class="md:col-span-2 pt-1">
+                            <div class="flex items-center justify-between text-xs text-slate-500 mb-1 px-1">
+                                <div>Estimated Peak Heat Loss</div>
+                                <div id="peakHeatLossDisplay" class="font-mono font-bold text-emerald-700 text-base">—
+                                    BTU/h</div>
+                            </div>
+                            <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div id="heatLossBar"
+                                    class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all"
+                                    style="width: 55%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: CURRENT SYSTEM -->
+                <div class="bg-white rounded-3xl border border-slate-200 modern-shadow overflow-hidden">
+                    <div
+                        class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between bg-slate-50 gap-3">
+                        <div class="flex items-center gap-x-3">
+                            <div class="step-dot bg-slate-900 text-white rounded-xl">2</div>
+                            <div>
+                                <span class="font-semibold text-lg">Current Forced Air System</span>
+                                <span
+                                    class="ml-2 text-[10px] px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-bold align-middle">FURNACE
+                                    + AC/HP</span>
+                            </div>
+                        </div>
+                        <button onclick="analyzeAllPhotos()"
+                            class="text-xs flex items-center gap-x-2 px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-3xl transition-all">
+                            <i class="fa-solid fa-robot"></i><span>AI Analyze</span>
+                        </button>
+                    </div>
+
+                    <div class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <!-- Furnace -->
+                        <div class="border border-slate-200 rounded-2xl p-4">
+                            <div class="flex items-center gap-x-2 mb-3">
+                                <i class="fa-solid fa-fire text-orange-500"></i><span class="font-bold">Current
+                                    Furnace</span>
+                            </div>
+                            <label for="furnacePhotoUpload"
+                                class="cursor-pointer border-2 border-dashed border-orange-200 hover:border-orange-400 transition-colors rounded-2xl p-4 flex flex-col items-center justify-center text-center min-h-[100px]">
+                                <i class="fa-solid fa-camera text-2xl text-orange-300 mb-1"></i>
+                                <div class="text-xs font-semibold text-orange-700">Rating plate + unit</div>
+                                <input type="file" id="furnacePhotoUpload" accept="image/*" capture="environment" multiple
+                                    class="hidden" onchange="handlePhotos(event,'furnace')">
+                            </label>
+                            <div id="furnacePhotoPreview" class="grid grid-cols-3 gap-2 mt-2"></div>
+
+                            <div class="grid grid-cols-2 gap-3 mt-3">
+                                <div>
+                                    <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Type</label>
+                                    <select id="furnaceType"
+                                        class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
+                                        <option value="gas_furnace">Gas Furnace</option>
+                                        <option value="high_eff_gas">High-Eff Condensing</option>
+                                        <option value="electric">Electric Furnace</option>
+                                    </select>
+                                </div>
+                                <div data-field>
+                                    <label
+                                        class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Age
+                                        (yrs) <span class="review-pill">R</span></label>
+                                    <input id="furnaceAge" type="number" value="17"
+                                        class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
+                                </div>
+                                <div class="col-span-2" data-field>
+                                    <label
+                                        class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">AFUE
+                                        % <span class="review-pill">R</span></label>
+                                    <input id="furnaceAFUE" type="number" step="0.5" value="80"
+                                        class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cooling -->
+                        <div class="border border-slate-200 rounded-2xl p-4">
+                            <div class="flex items-center gap-x-2 mb-3">
+                                <i class="fa-solid fa-snowflake text-sky-500"></i><span class="font-bold">Current Cooling
+                                    / Heat Pump</span>
+                            </div>
+                            <label for="coolingPhotoUpload"
+                                class="cursor-pointer border-2 border-dashed border-sky-200 hover:border-sky-400 transition-colors rounded-2xl p-4 flex flex-col items-center justify-center text-center min-h-[100px]">
+                                <i class="fa-solid fa-camera text-2xl text-sky-300 mb-1"></i>
+                                <div class="text-xs font-semibold text-sky-700">Rating plate + unit</div>
+                                <input type="file" id="coolingPhotoUpload" accept="image/*" capture="environment" multiple
+                                    class="hidden" onchange="handlePhotos(event,'cooling')">
+                            </label>
+                            <div id="coolingPhotoPreview" class="grid grid-cols-3 gap-2 mt-2"></div>
+
+                            <div class="grid grid-cols-2 gap-3 mt-3">
+                                <div>
+                                    <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Type</label>
+                                    <select id="coolingType"
+                                        class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
+                                        <option value="ac">Central AC</option>
+                                        <option value="heat_pump">Heat Pump</option>
+                                        <option value="old_hp">Older Heat Pump</option>
+                                    </select>
+                                </div>
+                                <div data-field>
+                                    <label
+                                        class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Age
+                                        (yrs) <span class="review-pill">R</span></label>
+                                    <input id="coolingAge" type="number" value="16"
+                                        class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
+                                </div>
+                                <div class="col-span-2" data-field>
+                                    <label
+                                        class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Efficiency
+                                        <span class="review-pill">R</span></label>
+                                    <div class="flex gap-2">
+                                        <input id="coolingEfficiency" type="number" step="0.1" value="12"
+                                            class="calc-input flex-1 px-3 py-2 text-sm border border-slate-300 rounded-xl">
+                                        <select id="coolingEffUnit"
+                                            class="calc-input w-24 px-2 py-2 text-xs border border-slate-300 rounded-xl bg-white">
+                                            <option value="SEER">SEER</option>
+                                            <option value="HSPF">HSPF</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thermostat + Filter -->
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Thermostat</label>
+                            <select id="thermostat"
+                                class="calc-input w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl bg-white">
+                                <option>Non-programmable</option>
+                                <option selected>Programmable</option>
+                                <option>Smart (Wi-Fi)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Filter</label>
+                            <select id="filter"
+                                class="calc-input w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl bg-white">
+                                <option>1" fiberglass (MERV 1-4)</option>
+                                <option selected>1" pleated (MERV 8)</option>
+                                <option>4-5" media (MERV 11-13)</option>
+                                <option>HEPA / electronic</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-4">
+                        <div id="sizingCheck"
+                            class="text-xs text-slate-500 bg-slate-50 rounded-xl px-3 py-2 flex items-start gap-2">
+                            <i class="fa-solid fa-ruler-combined mt-0.5"></i><span>Enter loads &amp; capacities to check
+                                sizing.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: REBATES, REPAIRS, PLANS -->
+                <div class="bg-white rounded-3xl border border-slate-200 modern-shadow overflow-hidden">
+                    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center gap-x-3 bg-slate-50">
+                        <div class="step-dot bg-slate-900 text-white rounded-xl">3</div>
+                        <span class="font-semibold text-lg">Rebates, Repairs &amp; Plans</span>
+                    </div>
+
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <div
+                                class="uppercase text-[11px] tracking-widest font-semibold text-slate-500 mb-2 flex items-center justify-between">
+                                <span><i class="fa-solid fa-gift mr-1.5"></i>Qualifying Rebates</span>
+                                <span id="rebateTotalBadge"
+                                    class="text-emerald-700 font-bold normal-case tracking-normal">$0</span>
+                            </div>
+                            <div id="rebateList" class="space-y-1"></div>
+                        </div>
+
+                        <div class="pt-5 border-t">
+                            <div class="uppercase text-[11px] tracking-widest font-semibold text-slate-500 mb-2">
+                                <i class="fa-solid fa-screwdriver-wrench mr-1.5"></i>Expected Repairs (aging equipment)
+                            </div>
+                            <div class="flex items-center justify-between bg-slate-50 rounded-2xl px-4 py-3">
+                                <div class="text-sm text-slate-600">Est. repairs/maintenance next 3 yrs on current
+                                    system</div>
+                                <div class="relative w-32">
+                                    <div class="absolute left-3 top-2.5 text-slate-400 text-sm">$</div>
+                                    <input id="repair3yr" type="number" value="0"
+                                        class="calc-input w-full pl-7 pr-2 py-2 border border-slate-300 rounded-xl text-sm text-right font-semibold">
+                                </div>
+                            </div>
+                            <div class="text-[11px] text-slate-400 mt-1">Auto-estimated from equipment age (e.g. 12-yr
+                                system ≈ $800 over 3 yrs). Editable.</div>
+                        </div>
+
+                        <div class="pt-5 border-t grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Current plan (other company)</label>
+                                <div class="relative">
+                                    <div class="absolute left-4 top-3.5 text-slate-400">$</div>
+                                    <input id="currentPlan" type="number" value="0"
+                                        class="calc-input w-full pl-8 pr-14 py-3 border border-slate-300 rounded-2xl text-base">
+                                    <div class="absolute right-4 top-3.5 text-xs text-slate-500">/mo</div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Our plan (included)</label>
+                                <div class="relative">
+                                    <div class="absolute left-4 top-3.5 text-slate-400">$</div>
+                                    <input id="ourPlan" type="number" value="0"
+                                        class="calc-input w-full pl-8 pr-14 py-3 border border-slate-300 rounded-2xl text-base">
+                                    <div class="absolute right-4 top-3.5 text-xs text-slate-500">/mo</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: PROPOSED -->
+                <div class="bg-white rounded-3xl border border-emerald-200 modern-shadow overflow-hidden">
+                    <div class="px-6 pt-5 pb-4 border-b border-emerald-100 flex items-center justify-between bg-emerald-50">
+                        <div class="flex items-center gap-x-3">
+                            <div class="step-dot bg-emerald-600 text-white rounded-xl">4</div>
+                            <div>
+                                <span class="font-semibold text-lg">Proposed Lennox System</span>
+                                <span
+                                    class="ml-2 text-[10px] px-2 py-0.5 bg-emerald-600 text-white rounded-full font-bold align-middle">RECOMMENDED</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">
+                            <div onclick="selectProposedOption(1)" id="option1Card"
+                                class="cursor-pointer border-2 border-emerald-300 hover:border-emerald-500 rounded-2xl p-4 transition-all">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="font-bold text-emerald-700">Option 1: Lennox SLP99</div>
+                                    <div class="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full font-bold">
+                                        GAS</div>
+                                </div>
+                                <div class="text-sm text-slate-600 mb-3">Ultra-high-eff furnace (99% AFUE) + new
+                                    high-efficiency AC</div>
+                                <div class="flex justify-between text-xs text-slate-500">
+                                    <div><span class="font-mono font-bold text-slate-800">99</span> AFUE</div>
+                                    <div><span class="font-mono font-bold text-slate-800">17-20</span> SEER</div>
+                                    <div>🔉 <span class="font-mono font-bold text-slate-800">59</span> dB</div>
+                                </div>
+                            </div>
+
+                            <div onclick="selectProposedOption(2)" id="option2Card"
+                                class="cursor-pointer border-2 border-emerald-500 bg-emerald-50 rounded-2xl p-4 transition-all">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="font-bold text-emerald-700">Option 2: Lennox Cold-Climate HP</div>
+                                    <div class="text-[10px] px-2 py-0.5 bg-emerald-600 text-white rounded-full font-bold">
+                                        ELECTRIC</div>
+                                </div>
+                                <div class="text-sm text-slate-600 mb-3">Cold-climate heat pump — replaces furnace + AC
+                                    (best long-term savings)</div>
+                                <div class="flex justify-between text-xs text-slate-500">
+                                    <div><span class="font-mono font-bold text-slate-800">10.5-12</span> HSPF</div>
+                                    <div><span class="font-mono font-bold text-slate-800">18-22</span> SEER2</div>
+                                    <div>🔉 <span class="font-mono font-bold text-slate-800">54</span> dB</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Selected Scenario</label>
+                                <select id="proposedType" disabled
+                                    class="w-full px-4 py-3 border border-emerald-200 bg-emerald-50/40 rounded-2xl text-sm font-semibold text-emerald-700 cursor-not-allowed">
+                                    <option value="lennox_slp99">Lennox SLP99 Furnace + AC</option>
+                                    <option value="lennox_cold_hp" selected>Lennox Cold-Climate Heat Pump</option>
+                                </select>
+                                <div class="text-[10px] text-slate-400 mt-1">Choose via the two options above</div>
+                            </div>
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Heating Eff</label>
+                                <div class="flex items-center gap-2">
+                                    <input id="proposedHeatingEff" type="number" step="0.1" value="11.5" readonly
+                                        class="flex-1 px-4 py-3 border border-emerald-200 bg-emerald-50/40 rounded-2xl text-base font-semibold text-emerald-700 cursor-not-allowed">
+                                    <div class="text-[10px] px-2 py-1 bg-emerald-50 text-emerald-700 rounded-lg font-bold w-16 text-center">
+                                        HSPF/AFUE</div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Cooling Eff</label>
+                                <div class="flex items-center gap-2">
+                                    <input id="proposedCoolingEff" type="number" step="0.1" value="20" readonly
+                                        class="flex-1 px-4 py-3 border border-emerald-200 bg-emerald-50/40 rounded-2xl text-base font-semibold text-emerald-700 cursor-not-allowed">
+                                    <div class="text-[10px] px-2 py-1 bg-emerald-50 text-emerald-700 rounded-lg font-bold w-16 text-center">
+                                        SEER2</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Install Cost (before incentives)</label>
+                                <div class="relative">
+                                    <div class="absolute left-4 top-3.5 text-emerald-500">$</div>
+                                    <input id="installCost" type="number" value="15800" readonly
+                                        class="w-full pl-8 pr-4 py-3 border border-emerald-200 bg-emerald-50/40 rounded-2xl text-base font-semibold text-emerald-700 cursor-not-allowed">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Rebates Applied (from checklist
+                                    above)</label>
+                                <div class="relative">
+                                    <div class="absolute left-4 top-3.5 text-emerald-500">$</div>
+                                    <input id="rebates" type="number" value="0" readonly
+                                        class="w-full pl-8 pr-4 py-3 border border-emerald-200 bg-emerald-50/40 rounded-2xl text-base font-semibold text-emerald-700">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 mt-2"><i class="fa-solid fa-circle-info mr-1"></i>Models,
+                            specs &amp; pricing are placeholders — swap in the real Lennox lineup &amp; financing later.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 5: ENERGY + FINANCING -->
+                <div class="bg-white rounded-3xl border border-slate-200 modern-shadow overflow-hidden">
+                    <div class="px-6 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                        <div class="flex items-center gap-x-3">
+                            <div class="step-dot bg-slate-900 text-white rounded-xl">5</div>
+                            <span class="font-semibold text-lg">Energy Prices + Financing</span>
+                        </div>
+                        <div class="text-[10px] px-2.5 py-1 bg-amber-100 text-amber-700 rounded-full font-bold">EDITABLE
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <div class="uppercase text-[11px] tracking-widest font-semibold text-slate-500 mb-3">Energy
+                                prices (Ontario)</div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4">
+                                <div data-field>
+                                    <label class="label text-slate-500 mb-1.5 flex items-center gap-2">Natural Gas Price
+                                        <span class="review-pill">Review</span></label>
+                                    <div class="relative">
+                                        <input id="gasPrice" type="number" step="0.01" value="0.43"
+                                            class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base pr-14">
+                                        <div class="absolute right-4 top-3.5 text-xs text-slate-500">$/m³</div>
+                                    </div>
+                                    <div class="text-[11px] text-slate-400 mt-1">Enbridge all-in (supply + delivery +
+                                        carbon)</div>
+                                </div>
+                                <div data-field>
+                                    <label class="label text-slate-500 mb-1.5 flex items-center gap-2">Electricity Price
+                                        <span class="review-pill">Review</span></label>
+                                    <div class="relative">
+                                        <input id="elecPrice" type="number" step="0.001" value="0.125"
+                                            class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base pr-14">
+                                        <div class="absolute right-4 top-3.5 text-xs text-slate-500">$/kWh</div>
+                                    </div>
+                                    <div class="text-[11px] text-slate-400 mt-1">Blended all-in (TOU avg / Tier 2)</div>
+                                </div>
+                                <div data-field>
+                                    <label class="label text-slate-500 mb-1.5 flex items-center gap-2">Hydro Provider
+                                        <span class="review-pill">Review</span></label>
+                                    <select id="hydroProvider"
+                                        class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base bg-white">
+                                        <option value="">Select provider…</option>
+                                        <option data-rate="0.128">Toronto Hydro</option>
+                                        <option data-rate="0.126">Hydro One</option>
+                                        <option data-rate="0.122">Alectra Utilities</option>
+                                        <option data-rate="0.121">Hydro Ottawa</option>
+                                        <option data-rate="0.119">Elexicon Energy</option>
+                                        <option data-rate="0.118">London Hydro</option>
+                                        <option data-rate="0.124">ENWIN (Windsor)</option>
+                                        <option data-rate="0.125">Other / Ontario avg</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="label text-slate-500 mb-1.5 block">Rate Plan</label>
+                                    <select id="ratePlan"
+                                        class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base bg-white">
+                                        <option>Tiered</option>
+                                        <option>Time-of-Use</option>
+                                        <option>ULO (Ultra-Low Overnight)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-5 border-t">
+                            <div
+                                class="uppercase text-[11px] tracking-widest font-semibold text-slate-500 mb-3 flex items-center gap-x-2">
+                                <i class="fa-solid fa-credit-card"></i> Financing (Right Time promo)
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="label text-slate-500 mb-1.5 block">Term</label>
+                                    <select id="term"
+                                        class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base bg-white">
+                                        <option value="60">60 months</option>
+                                        <option value="84">84 months</option>
+                                        <option value="120" selected>120 months</option>
+                                        <option value="180">180 months</option>
+                                        <option value="240">240 months</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="label text-slate-500 mb-1.5 block">APR %</label>
+                                    <input id="apr" type="number" step="0.01" value="7.99"
+                                        class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base">
+                                </div>
+                                <div>
+                                    <label class="label text-slate-500 mb-1.5 block">Down Payment</label>
+                                    <div class="relative">
+                                        <div class="absolute left-4 top-3.5 text-slate-400">$</div>
+                                        <input id="down" type="number" value="0"
+                                            class="calc-input w-full pl-8 pr-4 py-3 border border-slate-300 rounded-2xl text-base">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ================= RIGHT: RESULTS ================= -->
+            <div class="xl:col-span-5">
+                <div class="sticky top-20 space-y-6">
+
+                    <!-- Savings -->
+                    <div class="bg-white rounded-3xl border border-slate-200 modern-shadow p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="font-semibold text-lg">Projected Savings</span>
+                            <button onclick="updateCalculations()"
+                                class="text-xs px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold flex items-center gap-x-1.5">
+                                <i class="fa-solid fa-calculator"></i> Recalculate
+                            </button>
+                        </div>
+
+                        <div class="result-highlight rounded-3xl p-5 text-center mb-4">
+                            <div class="text-emerald-400 text-[10px] tracking-[2px] font-bold mb-1">CLIENT WILL SAVE
+                                (ENERGY)</div>
+                            <div id="annualSavings" class="metric text-white text-5xl font-bold tracking-tight">—</div>
+                            <div class="text-emerald-300 text-sm font-medium">per year</div>
+
+                            <div class="mt-4 pt-4 border-t border-white/20 grid grid-cols-3 gap-2 text-center">
+                                <div>
+                                    <div id="savingsPercent" class="font-bold text-xl text-white">—</div>
+                                    <div class="text-emerald-300 text-[10px]">REDUCTION</div>
+                                </div>
+                                <div>
+                                    <div id="paybackYears" class="font-bold text-xl text-white">—</div>
+                                    <div class="text-emerald-300 text-[10px]">PAYBACK (YRS)</div>
+                                </div>
+                                <div>
+                                    <div id="monthlySavings" class="font-bold text-xl text-white">—</div>
+                                    <div class="text-emerald-300 text-[10px]">ENERGY / MO</div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-4 border-t border-white/20 flex justify-between items-center bg-white/10 rounded-2xl p-4">
+                                <div class="text-center flex-1">
+                                    <div class="text-[10px] text-emerald-300">Total Monthly Benefit</div>
+                                    <div id="monthlyBenefitBig" class="font-bold text-2xl text-white tabular-nums">$—</div>
+                                </div>
+                                <div class="text-emerald-300 text-xl px-2">vs</div>
+                                <div class="text-center flex-1">
+                                    <div class="text-[10px] text-emerald-300">Monthly Payment</div>
+                                    <div id="monthlyPaymentBig" class="font-bold text-2xl text-white tabular-nums">$—</div>
+                                </div>
+                            </div>
+
+                            <div id="netMonthlyRow" class="mt-3 rounded-2xl p-3 bg-emerald-500/20">
+                                <span class="text-sm font-medium text-emerald-100">Net monthly</span>
+                                <span id="netMonthly" class="font-bold text-2xl ml-2">$—</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 rounded-2xl p-4">
+                                <div class="text-[11px] text-slate-500 mb-1">Current Annual Energy</div>
+                                <div id="currentCost" class="font-mono text-xl font-bold text-slate-800 tabular-nums">—
+                                </div>
+                            </div>
+                            <div class="bg-emerald-50 rounded-2xl p-4">
+                                <div class="text-[11px] text-emerald-600 mb-1">New Annual Energy</div>
+                                <div id="proposedCost" class="font-mono text-xl font-bold text-emerald-700 tabular-nums">
+                                    —</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparison: efficiency, noise, comfort, filter -->
+                    <div class="bg-white rounded-3xl border border-slate-200 modern-shadow p-5">
+                        <div class="font-semibold mb-4 flex items-center gap-x-2">
+                            <i class="fa-solid fa-scale-balanced text-emerald-600"></i><span>Current vs. New</span>
+                        </div>
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-wide text-slate-400 text-left">
+                                    <th class="pb-2">Category</th>
+                                    <th class="pb-2">Current</th>
+                                    <th class="pb-2">New</th>
+                                    <th class="pb-2"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="compareBody"></tbody>
+                        </table>
+                    </div>
+
+                    <!-- Key metrics -->
+                    <div class="bg-white rounded-3xl border border-slate-200 modern-shadow p-5">
+                        <div class="font-semibold mb-4">Key Metrics</div>
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div class="p-3 bg-slate-50 rounded-2xl">
+                                <div class="text-[11px] text-slate-500">Peak Heat Loss</div>
+                                <div id="peakHeatLossResult" class="font-mono text-lg font-bold tabular-nums">— BTU/h
+                                </div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-2xl">
+                                <div class="text-[11px] text-slate-500">Annual Heating Load</div>
+                                <div id="annualLoadResult" class="font-mono text-lg font-bold tabular-nums">— MMBTU</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-2xl">
+                                <div class="text-[11px] text-slate-500">CO₂ Reduction</div>
+                                <div id="co2Reduction" class="font-mono text-lg font-bold text-emerald-600 tabular-nums">
+                                    — kg/yr</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-2xl">
+                                <div class="text-[11px] text-slate-500">Net Investment</div>
+                                <div id="netInvestment" class="font-mono text-lg font-bold tabular-nums">$ —</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="bg-white rounded-3xl border border-slate-200 modern-shadow p-5">
+                        <div class="font-semibold mb-3 flex items-center justify-between">
+                            <span>Annual Cost Breakdown</span>
+                            <span class="text-[10px] px-2 py-0.5 bg-slate-100 text-slate-500 rounded-full">Heating +
+                                Cooling</span>
+                        </div>
+                        <div style="position:relative; height:170px;">
+                            <canvas id="costChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center gap-3">
+                        <button onclick="copySummaryToClipboard()"
+                            class="flex-1 px-4 py-3 text-sm font-semibold border border-slate-300 hover:bg-slate-50 rounded-3xl flex items-center justify-center gap-x-2 transition-colors bg-white">
+                            <i class="fa-solid fa-copy"></i><span>Copy Summary</span>
+                        </button>
+                        <button onclick="exportToPDF()"
+                            class="flex-1 px-4 py-3 bg-slate-900 hover:bg-black transition-all text-white font-semibold rounded-3xl flex items-center justify-center gap-x-2 text-sm">
+                            <i class="fa-solid fa-file-pdf"></i><span>PDF Report</span>
+                        </button>
+                    </div>
+
+                    <div class="text-[11px] text-slate-400 px-2 flex items-start gap-2">
+                        <i class="fa-solid fa-shield-halved mt-0.5 text-emerald-500"></i>
+                        <span>Estimates only. Confirm on site with a Manual J / CSA F280 load calculation before final
+                            quote.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const $ = (id) => document.getElementById(id);
+        let costChartInstance = null;
+        const photos = { furnace: [], cooling: [] };
+
+        /* ---------------- Review-flag helpers ---------------- */
+        function fieldWrap(id) { return $(id).closest('[data-field]'); }
+        function markReview(id, on) {
+            const w = fieldWrap(id);
+            if (w) w.classList.toggle('review-on', !!on);
+        }
+        // Editing an auto-estimated field clears its Review flag.
+        document.querySelectorAll('[data-field] input, [data-field] select').forEach(el => {
+            el.addEventListener('change', () => markReview(el.id, false));
+        });
+        // Clicking a Review pill also clears it.
+        document.querySelectorAll('.review-pill').forEach(p => {
+            p.addEventListener('click', () => p.closest('[data-field]').classList.remove('review-on'));
+        });
+
+        /* ---------------- Address auto-fill (estimated, no maps) ----------------
+         * Deterministic estimates seeded from the address string so the same
+         * address always yields the same numbers. Replace with a real property
+         * data source later (MPAC / ATTOM / CRM / scraper backend). */
+        function seeded(str) {
+            let h = 2166136261 >>> 0;
+            for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); }
+            return () => { h += 0x6D2B79F5; let t = Math.imul(h ^ h >>> 15, 1 | h); t ^= t + Math.imul(t ^ t >>> 7, 61 | t); return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+        }
+
+        function applyEstimates(addr, cityHint) {
+            if (!addr) return;
+            const rnd = seeded(addr.toUpperCase());
+
+            const year = Math.round(1955 + rnd() * 65);
+            const sqft = Math.round((1000 + rnd() * 2100) / 50) * 50;
+            const stories = sqft > 2000 ? '2' : (rnd() > 0.5 ? '2' : '1');
+
+            $('yearBuilt').value = year; markReview('yearBuilt', true);
+            $('sqft').value = sqft; markReview('sqft', true);
+            $('stories').value = stories; markReview('stories', true);
+            syncInsulation();
+
+            // Current equipment estimated from home age
+            const nowY = new Date().getFullYear();
+            const fAge = Math.min(28, Math.max(3, nowY - year - Math.round(rnd() * 12)));
+            const cAge = Math.max(2, fAge - Math.round(rnd() * 4));
+            const afue = fAge > 22 ? 62 : fAge > 14 ? 80 : fAge > 7 ? 92 : 96;
+            const seer = cAge > 18 ? 9 : cAge > 12 ? 11 : cAge > 6 ? 13 : 15;
+            $('furnaceAge').value = fAge; markReview('furnaceAge', true);
+            $('furnaceAFUE').value = afue; markReview('furnaceAFUE', true);
+            $('coolingAge').value = cAge; markReview('coolingAge', true);
+            $('coolingEfficiency').value = seer; markReview('coolingEfficiency', true);
+
+            // Rates + hydro provider by city keyword
+            $('gasPrice').value = '0.43'; markReview('gasPrice', true);
+            const up = ((cityHint || '') + ' ' + addr).toUpperCase();
+            const map = { 'TORONTO': 'Toronto Hydro', 'OTTAWA': 'Hydro Ottawa', 'LONDON': 'London Hydro', 'WINDSOR': 'ENWIN (Windsor)', 'VAUGHAN': 'Alectra Utilities', 'MISSISSAUGA': 'Alectra Utilities', 'HAMILTON': 'Alectra Utilities', 'BRAMPTON': 'Alectra Utilities' };
+            let prov = '';
+            for (const k in map) if (up.includes(k)) { prov = map[k]; break; }
+            const sel = $('hydroProvider');
+            sel.selectedIndex = 0;
+            if (prov) [...sel.options].forEach(o => { if (o.text === prov) o.selected = true; });
+            markReview('hydroProvider', true);
+            applyHydroRate(); markReview('elecPrice', true);
+
+            estimateRepairs();
+            updateCalculations();
+            toast('Auto-filled — amber fields need your review', 'emerald');
+        }
+
+        /* ---------------- Insulation auto-derived from year built (locked field) ---------------- */
+        function insulationFromYear(y) {
+            y = +y || 0;
+            if (y >= 2012) return 'excellent';   // modern building code / high-perf envelope
+            if (y >= 1995) return 'good';         // updated code era
+            if (y >= 1980) return 'average';      // typical for age
+            return 'poor';                        // older / drafty
+        }
+        function syncInsulation() {
+            $('insulation').value = insulationFromYear($('yearBuilt').value);
+        }
+        $('yearBuilt').addEventListener('input', () => { syncInsulation(); updateCalculations(); });
+
+        /* ---------------- Address autocomplete (Photon — free OSM typeahead, no key) ---------------- */
+        const addrInput = $('address');
+        const suggestBox = $('addrSuggest');
+        let acResults = [], acActive = -1, acTimer = null;
+
+        addrInput.addEventListener('input', () => {
+            clearTimeout(acTimer);
+            const q = addrInput.value.trim();
+            if (q.length < 3) { hideSuggest(); return; }
+            acTimer = setTimeout(() => geocode(q), 300);
+        });
+
+        addrInput.addEventListener('keydown', (e) => {
+            if (suggestBox.classList.contains('hidden')) return;
+            if (e.key === 'ArrowDown') { e.preventDefault(); acActive = Math.min(acActive + 1, acResults.length - 1); paintActive(); }
+            else if (e.key === 'ArrowUp') { e.preventDefault(); acActive = Math.max(acActive - 1, 0); paintActive(); }
+            else if (e.key === 'Enter') { e.preventDefault(); if (acActive >= 0) pickResult(acResults[acActive]); else if (acResults[0]) pickResult(acResults[0]); }
+            else if (e.key === 'Escape') hideSuggest();
+        });
+
+        document.addEventListener('click', (e) => { if (!e.target.closest('#address') && !e.target.closest('#addrSuggest')) hideSuggest(); });
+
+        function hideSuggest() { suggestBox.classList.add('hidden'); acActive = -1; }
+        function paintActive() {
+            [...suggestBox.children].forEach((c, i) => c.classList.toggle('bg-slate-100', i === acActive));
+        }
+
+        // Build a clean, tight address label from Photon properties (drops neighbourhood / region cruft).
+        function formatAddr(p) {
+            p = p || {};
+            const line1 = [p.housenumber, p.street || p.name].filter(Boolean).join(' ');
+            const city = p.city || p.town || p.county || p.district || '';
+            return [line1, city, p.postcode ? 'ON ' + p.postcode : 'ON'].filter(Boolean).join(', ');
+        }
+
+        async function geocode(q) {
+            $('addrSpinner').classList.remove('hidden');
+            try {
+                // Photon: free OSM typeahead geocoder (prefix matching). Biased + bounded to
+                // Ontario, then filtered to province = Ontario, then de-duplicated.
+                const url = 'https://photon.komoot.io/api/?limit=10&lang=en&lat=44.5&lon=-79.4&bbox=-95.2,41.6,-74.3,56.9&q=' + encodeURIComponent(q);
+                const res = await fetch(url);
+                const data = await res.json();
+                const seen = new Set();
+                acResults = (data.features || []).filter(f => {
+                    const p = f.properties || {};
+                    if (p.state !== 'Ontario' || p.countrycode !== 'CA') return false;
+                    const key = formatAddr(p);
+                    if (seen.has(key)) return false;
+                    seen.add(key);
+                    return true;
+                });
+                if (!acResults.length) {
+                    suggestBox.innerHTML = '<div class="px-4 py-3 text-sm text-slate-400">No Ontario matches yet — type a bit more of the street name</div>';
+                } else {
+                    suggestBox.innerHTML = acResults.map((f, i) =>
+                        `<div class="ac-item px-4 py-2.5 text-sm cursor-pointer border-b border-slate-100 last:border-0 hover:bg-slate-100 flex items-start gap-2" data-i="${i}">
+                            <i class="fa-solid fa-location-dot text-slate-300 mt-0.5"></i><span>${formatAddr(f.properties)}</span>
+                        </div>`).join('');
+                    suggestBox.querySelectorAll('.ac-item').forEach(el =>
+                        el.addEventListener('click', () => pickResult(acResults[el.dataset.i])));
+                }
+                suggestBox.classList.remove('hidden');
+                acActive = -1;
+            } catch (err) {
+                suggestBox.innerHTML = '<div class="px-4 py-3 text-sm text-slate-400">Lookup failed — check connection. You can still type the address and edit fields manually.</div>';
+                suggestBox.classList.remove('hidden');
+            } finally {
+                $('addrSpinner').classList.add('hidden');
+            }
+        }
+
+        function pickResult(f) {
+            hideSuggest();
+            const p = f.properties || {};
+            const clean = formatAddr(p);
+            addrInput.value = clean;
+            const city = p.city || p.town || p.county || '';
+            applyEstimates(clean, city);
+        }
+
+        /* ---------------- Hydro rate ---------------- */
+        function applyHydroRate() {
+            const opt = $('hydroProvider').selectedOptions[0];
+            if (opt && opt.dataset.rate) $('elecPrice').value = opt.dataset.rate;
+        }
+        $('hydroProvider').addEventListener('change', () => { applyHydroRate(); updateCalculations(); });
+
+        /* ---------------- Photos ---------------- */
+        function handlePhotos(event, kind) {
+            const container = $(kind + 'PhotoPreview');
+            container.innerHTML = '';
+            photos[kind] = [];
+            const border = kind === 'furnace' ? 'border-orange-200' : 'border-sky-200';
+            Array.from(event.target.files).forEach((file) => {
+                if (!file.type.startsWith('image/')) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photos[kind].push(e.target.result);
+                    const div = document.createElement('div');
+                    div.className = 'relative group';
+                    div.innerHTML = `<img src="${e.target.result}" class="w-full h-14 object-cover border ${border} rounded-xl">`;
+                    container.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        /* ---------------- AI analyze (mock) ---------------- */
+        function analyzeAllPhotos() {
+            toast('Analyzing equipment photos with AI…', 'slate', 1500);
+            setTimeout(() => {
+                const year = parseInt($('yearBuilt').value) || 2000;
+                const age = new Date().getFullYear() - year;
+                const fAge = Math.max(6, Math.min(26, age - 3));
+                const afue = age > 25 ? 78 : age > 15 ? 82 : 92;
+                const cAge = Math.max(5, Math.min(22, age - 2));
+                const seer = age > 20 ? 11 : age > 12 ? 13 : 15;
+                $('furnaceAge').value = fAge; markReview('furnaceAge', true);
+                $('furnaceAFUE').value = afue; markReview('furnaceAFUE', true);
+                $('coolingAge').value = cAge; markReview('coolingAge', true);
+                $('coolingEfficiency').value = seer; markReview('coolingEfficiency', true);
+                if (photos.furnace.length) $('thermostat').value = 'Smart (Wi-Fi)';
+                estimateRepairs();
+                updateCalculations();
+                toast('AI estimates applied — please confirm values', 'emerald');
+            }, 1550);
+        }
+
+        /* ---------------- Repairs estimate ---------------- */
+        function estimateRepairs() {
+            const f = +$('furnaceAge').value || 0, a = +$('coolingAge').value || 0;
+            const r = (f >= 15 ? 900 : f >= 10 ? 500 : f >= 7 ? 250 : 0)
+                + (a >= 15 ? 800 : a >= 10 ? 450 : a >= 7 ? 200 : 0);
+            $('repair3yr').value = r;
+        }
+        ['furnaceAge', 'coolingAge'].forEach(id => $(id).addEventListener('change', () => { estimateRepairs(); updateCalculations(); }));
+
+        /* ---------------- Rebates ---------------- */
+        const REBATES = [
+            { id: 'her', name: 'Home Efficiency Rebate+ (Enbridge)', desc: 'High-eff furnace / heat pump', amt: 2000, on: true },
+            { id: 'ghg', name: 'Canada Greener Homes', desc: 'Heat pump / envelope', amt: 5000, on: false },
+            { id: 'oer', name: 'Oil-to-Heat-Pump Affordability', desc: 'If replacing oil', amt: 0, on: false },
+            { id: 'mfg', name: 'Lennox seasonal promo', desc: 'Placeholder OEM rebate', amt: 800, on: true },
+        ];
+        function renderRebates() {
+            $('rebateList').innerHTML = REBATES.map(r => `
+                <label class="flex items-center gap-3 py-2 border-b border-dashed border-slate-100 last:border-0 cursor-pointer">
+                    <input type="checkbox" data-reb="${r.id}" ${r.on ? 'checked' : ''} class="w-5 h-5 accent-emerald-600">
+                    <span class="flex-1"><span class="text-sm font-medium block">${r.name}</span><span class="text-[11px] text-slate-400">${r.desc}</span></span>
+                    <span class="font-bold text-emerald-600 text-sm">$${r.amt.toLocaleString()}</span>
+                </label>`).join('');
+            $('rebateList').querySelectorAll('input').forEach(cb => cb.addEventListener('change', () => {
+                REBATES.find(x => x.id === cb.dataset.reb).on = cb.checked; updateCalculations();
+            }));
+        }
+        const rebateTotal = () => REBATES.filter(r => r.on).reduce((s, r) => s + r.amt, 0);
+
+        /* ---------------- Proposed options ---------------- */
+        function selectProposedOption(opt) {
+            $('proposedType').value = opt === 1 ? 'lennox_slp99' : 'lennox_cold_hp';
+            updateProposedDefaults(); updateCalculations();
+        }
+        function updateProposedDefaults() {
+            const t = $('proposedType').value;
+            const c1 = $('option1Card'), c2 = $('option2Card');
+            if (t === 'lennox_slp99') {
+                $('proposedHeatingEff').value = '99'; $('proposedCoolingEff').value = '18.5'; $('installCost').value = '11200';
+                c1.classList.add('border-emerald-500', 'bg-emerald-50'); c1.classList.remove('border-emerald-300');
+                c2.classList.remove('border-emerald-500', 'bg-emerald-50'); c2.classList.add('border-emerald-300');
+            } else {
+                $('proposedHeatingEff').value = '11.5'; $('proposedCoolingEff').value = '20'; $('installCost').value = '15800';
+                c2.classList.add('border-emerald-500', 'bg-emerald-50'); c2.classList.remove('border-emerald-300');
+                c1.classList.remove('border-emerald-500', 'bg-emerald-50'); c1.classList.add('border-emerald-300');
+            }
+        }
+        $('proposedType').addEventListener('change', () => { updateProposedDefaults(); updateCalculations(); });
+
+        /* ---------------- Financing ---------------- */
+        function monthlyPayment(principal) {
+            const term = +$('term').value || 120;
+            const apr = (+$('apr').value || 0) / 100 / 12;
+            const p = Math.max(0, principal - (+$('down').value || 0) - rebateTotal());
+            if (apr === 0) return p / term;
+            return p * apr / (1 - Math.pow(1 + apr, -term));
+        }
+
+        /* ---------------- Core calc engine ---------------- */
+        function calculateAll() {
+            const sqft = +$('sqft').value || 2200;
+            const yearBuilt = +$('yearBuilt').value || 2000;
+            const insulation = $('insulation').value;
+            const stories = +$('stories').value || 2;
+            const propertyType = $('propertyType').value;
+
+            const furnaceAFUE = +$('furnaceAFUE').value || 80;
+            const coolingEff = +$('coolingEfficiency').value || 12;
+            const coolingUnit = $('coolingEffUnit').value;
+
+            const proposedType = $('proposedType').value;
+            const pHeat = +$('proposedHeatingEff').value || 11.5;
+            const pCool = +$('proposedCoolingEff').value || 20;
+
+            const gasPrice = +$('gasPrice').value || 0.43;
+            const elecPrice = +$('elecPrice').value || 0.125;
+
+            const installCost = +$('installCost').value || 15800;
+            const rebates = rebateTotal();
+            $('rebates').value = rebates;
+            $('rebateTotalBadge').textContent = '$' + rebates.toLocaleString();
+
+            // Peak heat loss
+            let base = 29;
+            if (propertyType === 'commercial') base = 48; else if (propertyType === 'multi') base = 33;
+            const age = new Date().getFullYear() - yearBuilt;
+            let ageMult = age > 40 ? 1.35 : age > 30 ? 1.22 : age > 20 ? 1.08 : age > 10 ? 0.95 : 0.88;
+            let insulMult = insulation === 'excellent' ? 0.72 : insulation === 'good' ? 0.88 : insulation === 'poor' ? 1.32 : 1.0;
+            let volMult = stories >= 2.5 ? 1.12 : stories === 1 ? 0.92 : 1.0;
+            const peakHeatLoss = Math.round(sqft * base * ageMult * insulMult * volMult);
+
+            // Annual loads
+            const HDD = 3500, deltaF = 78;
+            const annualHeatBTU = peakHeatLoss * 24 * HDD / deltaF;
+            const annualCoolBTU = annualHeatBTU * 0.20;
+            const BTU_M3 = 35500;
+
+            // Current cost
+            let curHeat, curCool;
+            if ($('furnaceType').value === 'electric') {
+                curHeat = (annualHeatBTU / (furnaceAFUE / 100) / 3412) * elecPrice;
+            } else {
+                curHeat = (annualHeatBTU / (furnaceAFUE / 100) / BTU_M3) * gasPrice;
+            }
+            let curSEER = coolingUnit === 'HSPF' ? coolingEff * 3.2 : coolingEff;
+            curCool = (annualCoolBTU / (curSEER * 3.412)) * elecPrice;
+            const curCost = curHeat + curCool;
+
+            // Proposed cost
+            let newHeat, newCool;
+            if (proposedType === 'lennox_slp99') {
+                newHeat = (annualHeatBTU / (pHeat / 100) / BTU_M3) * gasPrice;
+            } else {
+                newHeat = (annualHeatBTU / (pHeat * 3.412)) * elecPrice; // HSPF
+            }
+            newCool = (annualCoolBTU / (pCool * 3.412)) * elecPrice;
+            const newCost = newHeat + newCool;
+
+            // Savings
+            const annualSavings = Math.max(0, curCost - newCost);
+            const savingsPct = curCost > 0 ? Math.round(annualSavings / curCost * 100) : 0;
+            const monthlyEnergy = annualSavings / 12;
+
+            const repairMo = (+$('repair3yr').value || 0) / 36;
+            const planMo = (+$('currentPlan').value || 0) - (+$('ourPlan').value || 0);
+            const monthlyBenefit = monthlyEnergy + repairMo + planMo;
+
+            const netInvestment = Math.max(0, installCost - rebates - (+$('down').value || 0));
+            const payMo = monthlyPayment(installCost);
+            const netMo = monthlyBenefit - payMo;
+            const payback = annualSavings > 50 ? (netInvestment / annualSavings).toFixed(1) : 'N/A';
+            const co2 = Math.round(annualSavings * 2.8);
+
+            const money = n => '$' + Math.round(n).toLocaleString();
+            const moneyS = n => (n < 0 ? '-$' : '$') + Math.abs(Math.round(n)).toLocaleString();
+
+            // Render
+            $('peakHeatLossDisplay').textContent = peakHeatLoss.toLocaleString() + ' BTU/h';
+            $('heatLossBar').style.width = Math.min(100, Math.max(20, peakHeatLoss / 120000 * 100)) + '%';
+            $('annualSavings').textContent = money(annualSavings);
+            $('savingsPercent').textContent = savingsPct + '%';
+            $('paybackYears').textContent = payback;
+            $('monthlySavings').textContent = money(monthlyEnergy);
+            $('monthlyBenefitBig').textContent = money(monthlyBenefit);
+            $('monthlyPaymentBig').textContent = money(payMo);
+            $('netMonthly').textContent = moneyS(netMo) + '/mo';
+            $('netMonthlyRow').className = 'mt-3 rounded-2xl p-3 ' + (netMo >= 0 ? 'bg-emerald-500/20' : 'bg-red-500/20');
+            $('netMonthly').classList.toggle('text-emerald-200', netMo >= 0);
+            $('netMonthly').classList.toggle('text-red-200', netMo < 0);
+            $('currentCost').textContent = money(curCost);
+            $('proposedCost').textContent = money(newCost);
+            $('peakHeatLossResult').textContent = peakHeatLoss.toLocaleString() + ' BTU/h';
+            $('annualLoadResult').textContent = (annualHeatBTU / 1e6).toFixed(1) + ' MMBTU';
+            $('co2Reduction').textContent = co2.toLocaleString() + ' kg/yr';
+            $('netInvestment').textContent = money(netInvestment);
+
+            renderCompare(furnaceAFUE, coolingEff, coolingUnit, proposedType, pHeat, pCool);
+            sizingCheck(peakHeatLoss, annualCoolBTU);
+            updateChart(curCost, newCost);
+
+            window.lastCalc = {
+                address: $('address').value, sqft, yearBuilt, insulation, peakHeatLoss,
+                annualSavings: Math.round(annualSavings), savingsPct, payback,
+                curCost: Math.round(curCost), newCost: Math.round(newCost),
+                monthlyBenefit: Math.round(monthlyBenefit), payMo: Math.round(payMo), netMo: Math.round(netMo),
+                installCost, rebates, netInvestment: Math.round(netInvestment),
+                proposedType: proposedType === 'lennox_slp99' ? 'Lennox SLP99 Furnace + AC' : 'Lennox Cold-Climate Heat Pump',
+                co2
+            };
+        }
+
+        function renderCompare(afue, coolEff, coolUnit, ptype, pHeat, pCool) {
+            const isHP = ptype === 'lennox_cold_hp';
+            const rows = [
+                ['Heating eff', afue + '% AFUE', isHP ? pHeat + ' HSPF' : pHeat + '% AFUE', true],
+                ['Cooling eff', coolEff + ' ' + coolUnit, pCool + ' SEER2', true],
+                ['Noise', '~75 dB', (isHP ? '54' : '59') + ' dB', true],
+                ['Comfort', 'Single-stage', isHP ? 'Modulating inverter' : 'Variable-speed 2-stage', true],
+                ['Filter', $('filter').value.split(' (')[0], 'MERV 16 media', true],
+            ];
+            $('compareBody').innerHTML = rows.map(r => `
+                <tr class="border-b border-slate-100 last:border-0">
+                    <td class="py-2.5 font-medium">${r[0]}</td>
+                    <td class="py-2.5 text-slate-500">${r[1]}</td>
+                    <td class="py-2.5 text-emerald-600 font-semibold">${r[2]}</td>
+                    <td class="py-2.5 text-right">${r[3] ? '✅' : '—'}</td>
+                </tr>`).join('');
+        }
+
+        function sizingCheck(heatLoss, coolBTU) {
+            const el = $('sizingCheck');
+            const tons = (coolBTU / (600 * 12000) * 24 * 3500 / 78 / 1000).toFixed(1);
+            const acTons = (heatLoss * 0.5 / 12000).toFixed(1);
+            el.innerHTML = `<i class="fa-solid fa-ruler-combined mt-0.5"></i><span>Design heat load ≈ <b>${heatLoss.toLocaleString()} BTU/h</b>; suggested cooling ≈ <b>${acTons} tons</b>. <b class="text-amber-600">HCA to confirm capacities from rating plates &amp; check for over/under-sizing.</b></span>`;
+        }
+
+        function updateChart(cur, prop) {
+            const data = [Math.round(cur), Math.round(prop)];
+            if (costChartInstance) {
+                costChartInstance.data.datasets[0].data = data;
+                costChartInstance.update('none');
+                return;
+            }
+            costChartInstance = new Chart($('costChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Current', 'Proposed'],
+                    datasets: [{ data, backgroundColor: ['#f59e0b', '#10b981'], borderRadius: 8, borderSkipped: false }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, animation: false,
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => '$' + c.raw.toLocaleString() } } },
+                    scales: { y: { beginAtZero: true, ticks: { callback: v => '$' + v.toLocaleString() }, grid: { color: '#eef2f7' } }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        let calcT;
+        function updateCalculations() { clearTimeout(calcT); calcT = setTimeout(calculateAll, 60); }
+        document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', updateCalculations));
+
+        /* ---------------- Toast ---------------- */
+        function toast(msg, color = 'emerald', ms = 2400) {
+            const bg = { emerald: 'bg-emerald-600', slate: 'bg-slate-900', amber: 'bg-amber-500' }[color] || 'bg-slate-900';
+            const t = document.createElement('div');
+            t.className = `fixed bottom-6 left-1/2 -translate-x-1/2 ${bg} text-white px-5 py-3 rounded-3xl shadow-2xl text-sm z-[200] flex items-center gap-2`;
+            t.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${msg}`;
+            document.body.appendChild(t);
+            setTimeout(() => { t.style.transition = 'opacity .3s'; t.style.opacity = '0'; setTimeout(() => t.remove(), 300); }, ms);
+        }
+
+        /* ---------------- Export PDF ---------------- */
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const c = window.lastCalc; if (!c) { calculateAll(); return exportToPDF(); }
+            const W = doc.internal.pageSize.getWidth();
+            doc.setFillColor(15, 23, 42); doc.rect(0, 0, W, 30, 'F');
+            doc.setTextColor(255); doc.setFontSize(18); doc.text('HVAC Efficiency Pro — Client Report', 14, 15);
+            doc.setFontSize(10); doc.text('Prepared for: ' + (c.address || 'Property'), 14, 23);
+            doc.setTextColor(0); let y = 42;
+            doc.setFontSize(13); doc.setFont(undefined, 'bold'); doc.text('Property Summary', 14, y); y += 7;
+            doc.setFont(undefined, 'normal'); doc.setFontSize(10);
+            doc.text(`Size: ${c.sqft} sq ft   •   Built: ${c.yearBuilt}   •   Insulation: ${c.insulation}`, 14, y); y += 6;
+            doc.text(`Peak Heat Loss: ${c.peakHeatLoss.toLocaleString()} BTU/h`, 14, y); y += 10;
+            doc.setFillColor(16, 185, 129); doc.roundedRect(14, y, W - 28, 26, 3, 3, 'F');
+            doc.setTextColor(255); doc.setFontSize(12);
+            doc.text(`Annual Energy Savings: $${c.annualSavings.toLocaleString()}  (${c.savingsPct}% reduction)`, 20, y + 10);
+            doc.setFontSize(10); doc.text(`Payback: ${c.payback} yrs   •   Monthly benefit: $${c.monthlyBenefit}   •   Payment: $${c.payMo}   •   Net: $${c.netMo}/mo`, 20, y + 19);
+            doc.setTextColor(0); y += 36;
+            doc.setFontSize(13); doc.setFont(undefined, 'bold'); doc.text('Systems & Costs', 14, y); y += 7;
+            doc.setFont(undefined, 'normal'); doc.setFontSize(10);
+            doc.text(`Proposed: ${c.proposedType}`, 14, y); y += 6;
+            doc.text(`Current annual energy: $${c.curCost.toLocaleString()}    New annual energy: $${c.newCost.toLocaleString()}`, 14, y); y += 6;
+            doc.text(`Install: $${c.installCost.toLocaleString()}   Rebates: -$${c.rebates.toLocaleString()}   Net investment: $${c.netInvestment.toLocaleString()}`, 14, y); y += 6;
+            doc.text(`Est. CO2 reduction: ${c.co2.toLocaleString()} kg/yr`, 14, y); y += 12;
+            doc.setFontSize(9); doc.setTextColor(120);
+            doc.text('Estimates based on typical Ontario weather (3,500 HDD) & rates. Confirm with Manual J / CSA F280.', 14, y);
+            doc.text('Generated by HVAC Efficiency Pro • ' + new Date().toLocaleDateString(), W / 2, 288, { align: 'center' });
+            doc.save(`HVAC_Report_${(c.address || 'Client').replace(/[^a-z0-9]/gi, '_').slice(0, 30)}.pdf`);
+        }
+
+        /* ---------------- Copy summary ---------------- */
+        function copySummaryToClipboard() {
+            const c = window.lastCalc || (calculateAll(), window.lastCalc);
+            const text = `HVAC Efficiency Pro Summary
+Property: ${c.address}
+Size: ${c.sqft} sq ft | Built: ${c.yearBuilt} | Peak heat loss: ${c.peakHeatLoss.toLocaleString()} BTU/h
+Proposed: ${c.proposedType}
+Annual energy savings: $${c.annualSavings} (${c.savingsPct}%)
+Monthly benefit: $${c.monthlyBenefit} vs payment $${c.payMo} → net $${c.netMo}/mo
+Net investment after rebates: $${c.netInvestment}`;
+            navigator.clipboard.writeText(text).then(() => toast('Summary copied', 'emerald')).catch(() => toast('Copy failed', 'amber'));
+        }
+
+        /* ---------------- Reset ---------------- */
+        function resetAll() {
+            if (!confirm('Reset all inputs?')) return;
+            location.reload();
+        }
+
+        /* ---------------- Init ---------------- */
+        renderRebates();
+        updateProposedDefaults();
+        estimateRepairs();
+        syncInsulation();
+        calculateAll();
+    </script>
+</body>
+
+</html>
