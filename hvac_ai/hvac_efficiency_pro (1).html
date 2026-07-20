@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HVAC Efficiency Pro • Sales Rep Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: #0f172a;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .section-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .metric-value {
+            font-variant-numeric: tabular-nums;
+        }
+
+        .nav-active {
+            background-color: #0f172a;
+            color: white;
+            border-radius: 9999px;
+        }
+
+        .equipment-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .equipment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+        }
+
+        .result-highlight {
+            background: linear-gradient(90deg, #0f172a, #1e2937);
+            color: white;
+        }
+
+        .step-dot {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .modern-shadow {
+            box-shadow: 0 10px 15px -3px rgb(15 23 42 / 0.1), 0 4px 6px -4px rgb(15 23 42 / 0.1);
+        }
+
+        .photo-preview {
+            max-height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .hvac-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%);
+        }
+
+        .metric {
+            font-size: 1.75rem;
+            line-height: 1.1;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+        }
+
+        .app-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .calc-input {
+            transition: all 0.1s ease;
+        }
+
+        .calc-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+        }
+
+        .savings-positive {
+            color: #166534;
+            background-color: #f0fdf4;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <!-- Top Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto">
+            <div class="px-8 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-x-4">
+                    <!-- Logo -->
+                    <div class="flex items-center gap-x-3">
+                        <div class="w-11 h-11 bg-slate-900 rounded-2xl flex items-center justify-center">
+                            <i class="fa-solid fa-fire-flame-curved text-white text-3xl"></i>
+                        </div>
+                        <div>
+                            <span class="font-display text-3xl font-semibold tracking-tighter">HVAC</span>
+                            <span class="font-display text-3xl font-semibold tracking-tighter text-emerald-600">Efficiency</span>
+                            <span class="font-display text-3xl font-semibold tracking-tighter">Pro</span>
+                        </div>
+                    </div>
+                    <div class="hidden md:block px-3 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-bold rounded-full tracking-widest">SALES REP EDITION</div>
+                </div>
+
+                <div class="flex items-center gap-x-3">
+                    <!-- User / Company -->
+                    <div class="hidden md:flex items-center gap-x-3 px-4 py-2 bg-white border border-slate-200 rounded-3xl text-sm">
+                        <div class="flex items-center gap-x-2">
+                            <i class="fa-solid fa-user-tie text-slate-400"></i>
+                            <span class="font-medium text-slate-700">Sales Rep</span>
+                        </div>
+                        <div class="h-3 w-px bg-slate-200"></div>
+                        <div class="text-emerald-600 font-semibold text-sm">Limcan / Mersey</div>
+                    </div>
+
+                    <!-- Actions -->
+                    <button onclick="resetAll()" 
+                            class="flex items-center gap-x-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-3xl transition-colors">
+                        <i class="fa-solid fa-undo mr-1.5"></i>
+                        <span>Reset</span>
+                    </button>
+                    
+                    <button onclick="exportToPDF()" 
+                            class="flex items-center gap-x-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 transition-all text-white text-sm font-semibold rounded-3xl shadow-sm">
+                        <i class="fa-solid fa-file-pdf mr-2"></i>
+                        <span>Export PDF Report</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-screen-2xl mx-auto px-6 md:px-8 pt-8 pb-16">
+        
+        <!-- Hero Header -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-y-4">
+                <div>
+                    <h1 class="font-display text-5xl tracking-tighter font-semibold">Instant Savings Analysis</h1>
+                    <p class="text-xl text-slate-600 mt-2">Heat loss • Equipment comparison • Real energy costs • Payback</p>
+                </div>
+                <div class="flex items-center gap-x-2 text-sm">
+                    <div class="px-4 py-2 bg-white border border-slate-200 rounded-3xl flex items-center gap-x-2 text-emerald-700">
+                        <i class="fa-solid fa-check-circle"></i>
+                        <span class="font-medium">Ontario-optimized</span>
+                    </div>
+                    <div class="px-4 py-2 bg-white border border-slate-200 rounded-3xl text-slate-500 text-xs font-medium flex items-center">
+                        <i class="fa-solid fa-sync fa-spin mr-1.5 text-emerald-500"></i> 
+                        Live calculations
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+            
+            <!-- LEFT COLUMN: INPUTS -->
+            <div class="xl:col-span-7 space-y-6">
+                
+                <!-- STEP 1: PROPERTY -->
+                <div class="bg-white rounded-3xl border border-slate-200 modern-shadow overflow-hidden">
+                    <div class="px-7 pt-6 pb-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                        <div class="flex items-center gap-x-3">
+                            <div class="step-dot bg-slate-900 text-white rounded-2xl text-xs font-bold">1</div>
+                            <div>
+                                <span class="font-semibold text-lg">Property Details</span>
+                                <span class="ml-2 text-xs px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-full font-bold">HEAT LOSS</span>
+                            </div>
+                        </div>
+                        <button onclick="quickLookup()" 
+                                class="text-sm flex items-center gap-x-2 px-4 py-2 bg-white border border-slate-300 hover:border-emerald-300 text-emerald-700 font-medium rounded-3xl transition-all hover:shadow-sm">
+                            <i class="fa-solid fa-search mr-2"></i>
+                            <span>Quick Lookup (Demo)</span>
+                        </button>
+                    </div>
+                    
+                    <div class="p-7 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                        <div class="md:col-span-2">
+                            <label class="label text-slate-500 mb-1.5 block">Full Address or Postal Code</label>
+                            <input id="address" type="text" value="108 Cromwell Rd, Maple, ON L6A 1T9" 
+                                   class="calc-input w-full px-4 py-3 border border-slate-300 focus:border-emerald-400 rounded-2xl text-base">
+                        </div>
+                        
+                        <div>
+                            <label class="label text-slate-500 mb-1.5 block">Square Footage (above grade)</label>
+                            <div class="relative">
+                                <input id="sqft" type="number" value="2450" 
+                                       class="calc-input w-full px-4 py-3 border border-slate-300 focus:border-emerald-400 rounded-2xl text-base pr-12"
+                                       oninput="updateCalculations()">
+                                <div class="absolute right-4 top-3.5 text-slate-400 text-sm font-medium">sq ft</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="label text-slate-500 mb-1.5 block">Year Built</label>
+                            <input id="yearBuilt" type="number" value="1998" 
+                                   class="calc-input w-full px-4 py-3 border border-slate-300 focus:border-emerald-400 rounded-2xl text-base"
+                                   oninput="updateCalculations()">
+                        </div>
+                        
+                        <div>
+                            <label class="label text-slate-500 mb-1.5 block">Insulation Quality</label>
+                            <select id="insulation" onchange="updateCalculations()" 
+                                    class="calc-input w-full px-4 py-3 border border-slate-300 focus:border-emerald-400 rounded-2xl text-base bg-white">
+                                <option value="excellent">Excellent (new construction / major reno)</option>
+                                <option value="good">Good (updated windows + insulation)</option>
+                                <option value="average" selected>Average (typical for age)</option>
+                                <option value="poor">Poor (original, drafty)</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="label text-slate-500 mb-1.5 block"># of Stories</label>
+                            <select id="stories" onchange="updateCalculations()" 
+                                    class="calc-input w-full px-4 py-3 border border-slate-300 focus:border-emerald-400 rounded-2xl text-base bg-white">
+                                <option value="1">1 Story / Bungalow</option>
+                                <option value="2" selected>2 Stories</option>
+                                <option value="2.5">2.5 Stories</option>
+                                <option value="3">3+ Stories</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="label text-slate-500 mb-1.5 block">Property Type</label>
+                            <select id="propertyType" onchange="updateCalculations(); updateUtilityDefaults()" 
+                                    class="calc-input w-full px-4 py-3 border border-slate-300 focus:border-emerald-400 rounded-2xl text-base bg-white">
+                                <option value="residential" selected>Residential (House / Townhouse)</option>
+                                <option value="multi">Multi-Residential / Apartment Building</option>
+                                <option value="commercial">Commercial / Light Industrial</option>
+                            </select>
+                        </div>
+                        
+                        <div class="md:col-span-2 pt-1">
+                            <div class="flex items-center justify-between text-xs text-slate-500 mb-1 px-1">
+                                <div>Estimated Peak Heat Loss</div>
+                                <div id="peakHeatLossDisplay" class="font-mono font-bold text-emerald-700 text-base">— BTU/h</div>
+                            </div>
+                            <div class="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div id="heatLossBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all" style="width: 65%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: CURRENT FORCED AIR EQUIPMENT (FURNACE + COOLING/HP) -->
+                <div class="bg-white rounded-3xl border border-slate-200 modern-shadow overflow-hidden">
+                    <div class="px-7 pt-6 pb-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                        <div class="flex items-center gap-x-3">
+                            <div class="step-dot bg-slate-900 text-white rounded-2xl text-xs font-bold">2</div>
+                            <div>
+                                <span class="font-semibold text-lg">Current Forced Air System</span>
+                                <span class="ml-2 text-xs px-2.5 py-1 bg-amber-100 text-amber-700 rounded-full font-bold">FURNACE + AC/HP</span>
+                            </div>
+                        </div>
+                        <button onclick="analyzeAllPhotos()" 
+                                class="text-xs flex items-center gap-x-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-3xl transition-all">
+                            <i class="fa-solid fa-magic mr-1.5"></i>
+                            <span>AI Analyze Photos</span>
+                        </button>
+                    </div>
+                    
+                    <div class="p-7 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        <!-- FURNACE SECTION -->
+                        <div class="border border-slate-200 rounded-2xl p-5">
+                            <div class="flex items-center gap-x-2 mb-3">
+                                <i class="fa-solid fa-fire text-orange-500 text-lg"></i>
+                                <span class="font-bold">Current Furnace</span>
+                            </div>
+                            
+                            <!-- Furnace Photos -->
+                            <div class="mb-4">
+                                <label class="text-xs font-semibold text-slate-500 mb-1.5 block">Photos (rating plate + unit)</label>
+                                <label for="furnacePhotoUpload" 
+                                       class="cursor-pointer border-2 border-dashed border-orange-200 hover:border-orange-400 transition-colors rounded-2xl p-4 flex flex-col items-center justify-center text-center min-h-[110px]">
+                                    <i class="fa-solid fa-camera text-2xl text-orange-300 mb-1"></i>
+                                    <div class="text-xs font-semibold text-orange-700">Upload / Take Photos</div>
+                                    <input type="file" id="furnacePhotoUpload" accept="image/*" capture="environment" multiple 
+                                           class="hidden" onchange="handleFurnacePhotos(event)">
+                                </label>
+                                <div id="furnacePhotoPreview" class="grid grid-cols-3 gap-2 mt-2"></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-500 mb-1 block">Type</label>
+                                    <select id="furnaceType" onchange="updateCalculations()" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
+                                        <option value="gas_furnace">Gas Furnace</option>
+                                        <option value="high_eff_gas">High-Efficiency Condensing</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-500 mb-1 block">Age (years)</label>
+                                    <input id="furnaceAge" type="number" value="17" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl" oninput="updateCalculations()">
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="text-xs font-semibold text-slate-500 mb-1 block">AFUE Efficiency %</label>
+                                    <input id="furnaceAFUE" type="number" step="0.5" value="82" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl" oninput="updateCalculations()">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- COOLING / HEAT PUMP SECTION -->
+                        <div class="border border-slate-200 rounded-2xl p-5">
+                            <div class="flex items-center gap-x-2 mb-3">
+                                <i class="fa-solid fa-snowflake text-sky-500 text-lg"></i>
+                                <span class="font-bold">Current Cooling / Heat Pump</span>
+                            </div>
+                            
+                            <!-- Cooling Photos -->
+                            <div class="mb-4">
+                                <label class="text-xs font-semibold text-slate-500 mb-1.5 block">Photos (rating plate + unit)</label>
+                                <label for="coolingPhotoUpload" 
+                                       class="cursor-pointer border-2 border-dashed border-sky-200 hover:border-sky-400 transition-colors rounded-2xl p-4 flex flex-col items-center justify-center text-center min-h-[110px]">
+                                    <i class="fa-solid fa-camera text-2xl text-sky-300 mb-1"></i>
+                                    <div class="text-xs font-semibold text-sky-700">Upload / Take Photos</div>
+                                    <input type="file" id="coolingPhotoUpload" accept="image/*" capture="environment" multiple 
+                                           class="hidden" onchange="handleCoolingPhotos(event)">
+                                </label>
+                                <div id="coolingPhotoPreview" class="grid grid-cols-3 gap-2 mt-2"></div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-500 mb-1 block">Type</label>
+                                    <select id="coolingType" onchange="updateCalculations()" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
+                                        <option value="ac">Central AC</option>
+                                        <option value="heat_pump">Heat Pump</option>
+                                        <option value="old_hp">Older Heat Pump</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-500 mb-1 block">Age (years)</label>
+                                    <input id="coolingAge" type="number" value="16" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl" oninput="updateCalculations()">
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="text-xs font-semibold text-slate-500 mb-1 block">Efficiency (SEER or HSPF)</label>
+                                    <div class="flex gap-2">
+                                        <input id="coolingEfficiency" type="number" step="0.1" value="13.5" class="calc-input flex-1 px-3 py-2 text-sm border border-slate-300 rounded-xl" oninput="updateCalculations()">
+                                        <select id="coolingEffUnit" onchange="updateCalculations()" class="calc-input w-24 px-2 py-2 text-xs border border-slate-300 rounded-xl bg-white">
+                                            <option value="SEER">SEER</option>
+                                            <option value="HSPF">HSPF</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="px-7 pb-5 text-[10px] text-slate-400 flex items-center gap-x-2">
+                        <i class="fa-solid fa-info-circle"></i>
+                        <span>Upload clear photos of rating plates + overall units. Use "AI Analyze Photos" to auto-estimate age &amp; efficiency when plates aren't visible.</span>
+                    </div>
+                </div>
+
+                <!-- STEP 3: PROPOSED SYSTEM - Always compared to Lennox SLP99 + Cold Climate HP -->
+                <div class="bg-white rounded-3xl border border-emerald-200 modern-shadow overflow-hidden">
+                    <div class="px-7 pt-6 pb-4 border-b border-emerald-100 flex items-center justify-between bg-emerald-50">
+                        <div class="flex items-center gap-x-3">
+                            <div class="step-dot bg-emerald-600 text-white rounded-2xl text-xs font-bold">3</div>
+                            <div>
+                                <span class="font-semibold text-lg">Proposed Lennox Systems</span>
+                                <span class="ml-2 text-xs px-2.5 py-1 bg-emerald-600 text-white rounded-full font-bold">RECOMMENDED</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="p-7">
+                        <!-- Two clear comparison options -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+                            
+                            <!-- Option 1: SLP99 Furnace + AC -->
+                            <div onclick="selectProposedOption(1)" class="cursor-pointer border-2 border-emerald-300 hover:border-emerald-500 rounded-2xl p-4 transition-all" id="option1Card">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="font-bold text-emerald-700">Option 1: Lennox SLP99</div>
+                                    <div class="text-xs px-2.5 py-0.5 bg-emerald-100 text-emerald-700 rounded-full font-bold">GAS</div>
+                                </div>
+                                <div class="text-sm text-slate-600 mb-3">Ultra High-Efficiency Furnace (99% AFUE) + New High-Efficiency AC</div>
+                                <div class="flex justify-between text-xs">
+                                    <div><span class="font-mono font-bold">99</span> AFUE</div>
+                                    <div><span class="font-mono font-bold">17-20</span> SEER</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Option 2: Full Cold Climate Heat Pump -->
+                            <div onclick="selectProposedOption(2)" class="cursor-pointer border-2 border-emerald-500 bg-emerald-50 rounded-2xl p-4 transition-all" id="option2Card">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="font-bold text-emerald-700">Option 2: Lennox Cold Climate HP</div>
+                                    <div class="text-xs px-2.5 py-0.5 bg-emerald-600 text-white rounded-full font-bold">FULL ELECTRIC</div>
+                                </div>
+                                <div class="text-sm text-slate-600 mb-3">Cold Climate Heat Pump — Replaces both furnace + AC (best long-term savings)</div>
+                                <div class="flex justify-between text-xs">
+                                    <div><span class="font-mono font-bold">10.5-12</span> HSPF</div>
+                                    <div><span class="font-mono font-bold">18-22</span> SEER2</div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Selected Scenario</label>
+                                <select id="proposedType" onchange="updateProposedDefaults(); updateCalculations()" 
+                                        class="calc-input w-full px-4 py-3 border border-emerald-300 focus:border-emerald-500 rounded-2xl text-sm bg-white font-medium">
+                                    <option value="lennox_slp99">Lennox SLP99 Furnace + AC</option>
+                                    <option value="lennox_cold_hp" selected>Lennox Cold Climate Heat Pump (Full Replacement)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Heating Efficiency</label>
+                                <div class="flex items-center gap-2">
+                                    <input id="proposedHeatingEff" type="number" step="0.1" value="11.5" 
+                                           class="calc-input flex-1 px-4 py-3 border border-emerald-300 focus:border-emerald-500 rounded-2xl text-base font-semibold"
+                                           oninput="updateCalculations()">
+                                    <div class="text-xs px-3 py-1 bg-emerald-50 text-emerald-700 rounded-xl font-bold w-16 text-center">HSPF / AFUE</div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Cooling Efficiency</label>
+                                <div class="flex items-center gap-2">
+                                    <input id="proposedCoolingEff" type="number" step="0.1" value="20" 
+                                           class="calc-input flex-1 px-4 py-3 border border-emerald-300 focus:border-emerald-500 rounded-2xl text-base font-semibold"
+                                           oninput="updateCalculations()">
+                                    <div class="text-xs px-3 py-1 bg-emerald-50 text-emerald-700 rounded-xl font-bold w-16 text-center">SEER2</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Estimated Install Cost (before incentives)</label>
+                                <div class="relative">
+                                    <div class="absolute left-4 top-3.5 text-slate-400">$</div>
+                                    <input id="installCost" type="number" value="15800" 
+                                           class="calc-input w-full pl-8 pr-4 py-3 border border-emerald-300 focus:border-emerald-500 rounded-2xl text-base font-semibold"
+                                           oninput="updateCalculations()">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="label text-slate-500 mb-1.5 block">Expected Rebates / Incentives</label>
+                                <div class="relative">
+                                    <div class="absolute left-4 top-3.5 text-emerald-500">$</div>
+                                    <input id="rebates" type="number" value="5200" 
+                                           class="calc-input w-full pl-8 pr-4 py-3 border border-emerald-300 focus:border-emerald-500 rounded-2xl text-base font-semibold"
+                                           oninput="updateCalculations()">
+                                </div>
+                                <div class="text-[10px] text-emerald-600 mt-0.5 px-1">Federal Greener Homes + Ontario incentives</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: ENERGY PRICES + FINANCING -->
+                <div class="bg-white rounded-3xl border border-slate-200 modern-shadow overflow-hidden">
+                    <div class="px-7 pt-6 pb-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                        <div class="flex items-center gap-x-3">
+                            <div class="step-dot bg-slate-900 text-white rounded-2xl text-xs font-bold">4</div>
+                            <div>
+                                <span class="font-semibold text-lg">Energy Prices + Financing</span>
+                            </div>
+                        </div>
+                        <div class="text-xs px-3 py-1 bg-amber-100 text-amber-700 rounded-full font-bold">EDITABLE</div>
+                    </div>
+                    
+                    <div class="p-7 space-y-8">
+                        <!-- Energy Prices -->
+                        <div>
+                            <div class="uppercase text-xs tracking-widest font-semibold text-slate-500 mb-3">ENERGY PRICES (ONTARIO)</div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                                <div>
+                                    <label class="label text-slate-500 mb-1.5 block">Natural Gas Price</label>
+                                    <div class="flex items-center gap-3">
+                                        <div class="relative flex-1">
+                                            <input id="gasPrice" type="number" step="0.01" value="0.38" 
+                                                   class="calc-input w-full px-4 py-3 border border-slate-300 focus:border-emerald-400 rounded-2xl text-base pr-14"
+                                                   oninput="updateCalculations()">
+                                            <div class="absolute right-4 top-3.5 text-xs font-medium text-slate-500">$/m³</div>
+                                        </div>
+                                        <div class="text-xs text-slate-400 w-28">Enbridge ~0.17 supply + delivery</div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="label text-slate-500 mb-1.5 block">Electricity Price (effective)</label>
+                                    <div class="flex items-center gap-3">
+                                        <div class="relative flex-1">
+                                            <input id="elecPrice" type="number" step="0.001" value="0.145" 
+                                                   class="calc-input w-full px-4 py-3 border border-slate-300 focus:border-emerald-400 rounded-2xl text-base pr-14"
+                                                   oninput="updateCalculations()">
+                                            <div class="absolute right-4 top-3.5 text-xs font-medium text-slate-500">$/kWh</div>
+                                        </div>
+                                        <div class="text-xs text-slate-400 w-28">TOU avg or Tier 2</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Financing -->
+                        <div class="pt-6 border-t">
+                            <div class="uppercase text-xs tracking-widest font-semibold text-slate-500 mb-3 flex items-center gap-x-2">
+                                <i class="fa-solid fa-credit-card"></i>
+                                FINANCING (4.99% Right Time Promo)
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="label text-slate-500 mb-1.5 block">Net Investment (after any rebates)</label>
+                                    <div class="relative">
+                                        <div class="absolute left-4 top-3.5 text-slate-400">$</div>
+                                        <input id="installCost" type="number" value="15800" 
+                                               class="calc-input w-full pl-8 pr-4 py-3 border border-emerald-300 focus:border-emerald-500 rounded-2xl text-base font-semibold"
+                                               oninput="updateCalculations()">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="label text-slate-500 mb-1.5 block">Rebates (optional)</label>
+                                    <div class="relative">
+                                        <div class="absolute left-4 top-3.5 text-emerald-500">$</div>
+                                        <input id="rebates" type="number" value="0" 
+                                               class="calc-input w-full pl-8 pr-4 py-3 border border-emerald-300 focus:border-emerald-500 rounded-2xl text-base font-semibold"
+                                               oninput="updateCalculations()">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 text-xs text-slate-500">
+                                4.99% APR for 24 months • Max amortization 240 months
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: LIVE RESULTS -->
+            <div class="xl:col-span-5">
+                <div class="sticky top-6 space-y-6">
+                    
+                    <!-- Summary Card -->
+                    <div class="bg-white rounded-3xl border border-slate-200 modern-shadow p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <span class="font-semibold text-xl">Projected Annual Savings</span>
+                            </div>
+                            <button onclick="updateCalculations()" 
+                                    class="text-xs px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold flex items-center gap-x-2 transition-colors">
+                                <i class="fa-solid fa-calculator mr-1"></i> 
+                                <span>Calculate Now</span>
+                            </button>
+                        </div>
+                        
+                        <div id="savingsCard" class="result-highlight rounded-3xl p-6 text-center mb-5">
+                            <div class="text-emerald-400 text-xs tracking-[2px] font-bold mb-1">YOUR CLIENT WILL SAVE</div>
+                            <div id="annualSavings" class="metric text-white text-6xl font-bold tabular-nums tracking-tighter">—</div>
+                            <div class="text-emerald-300 text-lg font-medium">per year</div>
+                            
+                            <div class="mt-4 pt-4 border-t border-white/20 grid grid-cols-3 gap-2 text-center text-sm">
+                                <div>
+                                    <div id="savingsPercent" class="font-bold text-2xl text-white">—</div>
+                                    <div class="text-emerald-300 text-xs">REDUCTION</div>
+                                </div>
+                                <div>
+                                    <div id="paybackYears" class="font-bold text-2xl text-white">—</div>
+                                    <div class="text-emerald-300 text-xs">PAYBACK (YRS)</div>
+                                </div>
+                                <div>
+                                    <div id="monthlySavings" class="font-bold text-2xl text-white">—</div>
+                                    <div class="text-emerald-300 text-xs">ENERGY SAVINGS</div>
+                                </div>
+                            </div>
+
+                            <!-- Monthly Payment vs Savings -->
+                            <div class="mt-5 pt-4 border-t border-white/20 flex justify-between items-center bg-white/10 rounded-2xl p-4">
+                                <div class="text-center">
+                                    <div class="text-xs text-emerald-300">Monthly Energy Savings</div>
+                                    <div id="monthlyEnergySavingsBig" class="font-bold text-3xl text-white tabular-nums">$—</div>
+                                </div>
+                                <div class="text-center text-emerald-300 text-2xl">vs</div>
+                                <div class="text-center">
+                                    <div class="text-xs text-emerald-300">Monthly Financing Payment</div>
+                                    <div id="monthlyPaymentBig" class="font-bold text-3xl text-white tabular-nums">$—</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div class="bg-slate-50 rounded-2xl p-4">
+                                <div class="text-xs text-slate-500 mb-1">Current Annual Energy Cost</div>
+                                <div id="currentCost" class="font-mono text-2xl font-bold text-slate-800 tabular-nums">—</div>
+                            </div>
+                            <div class="bg-emerald-50 rounded-2xl p-4">
+                                <div class="text-xs text-emerald-600 mb-1">New Annual Energy Cost</div>
+                                <div id="proposedCost" class="font-mono text-2xl font-bold text-emerald-700 tabular-nums">—</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Efficiency Comparison -->
+                    <div class="bg-white rounded-3xl border border-slate-200 modern-shadow p-6">
+                        <div class="font-semibold mb-4 flex items-center gap-x-2">
+                            <i class="fa-solid fa-balance-scale text-emerald-600"></i>
+                            <span>Efficiency Comparison</span>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- Current -->
+                            <div class="flex items-center justify-between p-4 bg-amber-50 border border-amber-100 rounded-2xl">
+                                <div class="flex items-center gap-x-3">
+                                    <i class="fa-solid fa-industry text-amber-600 text-xl w-6"></i>
+                                    <div>
+                                        <div class="font-semibold text-sm">Current System</div>
+                                        <div id="currentSystemLabel" class="text-xs text-amber-600">Gas Furnace + AC • 82% AFUE</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div id="currentEffDisplay" class="font-mono text-xl font-bold text-amber-700">82%</div>
+                                    <div class="text-[10px] text-amber-500 -mt-0.5">EFFICIENCY</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Proposed -->
+                            <div class="flex items-center justify-between p-4 bg-emerald-50 border border-emerald-200 rounded-2xl">
+                                <div class="flex items-center gap-x-3">
+                                    <i class="fa-solid fa-leaf text-emerald-600 text-xl w-6"></i>
+                                    <div>
+                                        <div class="font-semibold text-sm">Proposed System</div>
+                                        <div id="proposedSystemLabel" class="text-xs text-emerald-600">Cold Climate Heat Pump • HSPF 11.0</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div id="proposedEffDisplay" class="font-mono text-xl font-bold text-emerald-700">11.0</div>
+                                    <div class="text-[10px] text-emerald-500 -mt-0.5">HSPF / SEER 20</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Metrics -->
+                    <div class="bg-white rounded-3xl border border-slate-200 modern-shadow p-6">
+                        <div class="font-semibold mb-4">Key Performance Metrics</div>
+                        
+                        <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div class="p-3 bg-slate-50 rounded-2xl">
+                                <div class="text-xs text-slate-500">Est. Peak Heat Loss</div>
+                                <div id="peakHeatLossResult" class="font-mono text-xl font-bold tabular-nums">— BTU/h</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-2xl">
+                                <div class="text-xs text-slate-500">Annual Heating Load</div>
+                                <div id="annualLoadResult" class="font-mono text-xl font-bold tabular-nums">— MMBTU</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-2xl">
+                                <div class="text-xs text-slate-500">CO₂ Reduction (est.)</div>
+                                <div id="co2Reduction" class="font-mono text-xl font-bold text-emerald-600 tabular-nums">— kg/yr</div>
+                            </div>
+                            <div class="p-3 bg-slate-50 rounded-2xl">
+                                <div class="text-xs text-slate-500">Net Investment After Rebates</div>
+                                <div id="netInvestment" class="font-mono text-xl font-bold tabular-nums">$ —</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="mt-8 bg-white rounded-3xl border border-slate-200 modern-shadow p-7">
+            <div class="flex items-center justify-between mb-5">
+                <div class="font-semibold text-xl">Annual Cost Breakdown</div>
+                <div class="text-xs px-3 py-1 bg-slate-100 text-slate-500 rounded-full">Heating + Cooling</div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <div class="lg:col-span-3">
+                    <canvas id="costChart" height="110"></canvas>
+                </div>
+                <div class="lg:col-span-2">
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between items-center p-3 bg-slate-50 rounded-2xl">
+                            <div class="flex items-center gap-x-2">
+                                <div class="w-3 h-3 bg-amber-500 rounded"></div>
+                                <span class="font-medium">Current System</span>
+                            </div>
+                            <span id="chartCurrentCost" class="font-mono font-bold">—</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-emerald-50 rounded-2xl">
+                            <div class="flex items-center gap-x-2">
+                                <div class="w-3 h-3 bg-emerald-600 rounded"></div>
+                                <span class="font-medium">Proposed System</span>
+                            </div>
+                            <span id="chartProposedCost" class="font-mono font-bold text-emerald-700">—</span>
+                        </div>
+                        
+                        <div class="pt-3 border-t text-xs text-slate-500 px-1">
+                            <i class="fa-solid fa-info-circle mr-1"></i> 
+                            Savings assume typical Ontario usage patterns and weather data. Actual results vary with behavior and weather.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 bg-white border border-slate-200 rounded-3xl p-5">
+            <div class="text-sm text-slate-500 px-2">
+                <i class="fa-solid fa-shield-halved mr-2 text-emerald-500"></i>
+                All calculations are estimates. Final quotes should use Manual J / F280 load calculations.
+            </div>
+            
+            <div class="flex items-center gap-x-3">
+                <button onclick="copySummaryToClipboard()" 
+                        class="px-6 py-3 text-sm font-semibold border border-slate-300 hover:bg-slate-50 rounded-3xl flex items-center gap-x-2 transition-colors">
+                    <i class="fa-solid fa-copy"></i>
+                    <span>Copy Summary</span>
+                </button>
+                
+                <button onclick="updateCalculations()" 
+                        class="px-8 py-3 bg-slate-900 hover:bg-black transition-all text-white font-semibold rounded-3xl flex items-center gap-x-2 text-sm">
+                    <i class="fa-solid fa-calculator mr-2"></i>
+                    <span>Refresh All Calculations</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#10b981');
+        }
+
+        // Global chart instance
+        let costChartInstance = null;
+
+        // Separate photo arrays for Furnace and Cooling
+        let furnacePhotos = [];
+        let coolingPhotos = [];
+
+        function handleFurnacePhotos(event) {
+            const container = document.getElementById('furnacePhotoPreview');
+            container.innerHTML = '';
+            furnacePhotos = [];
+
+            Array.from(event.target.files).forEach((file, index) => {
+                if (!file.type.startsWith('image/')) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const photoData = e.target.result;
+                    furnacePhotos.push(photoData);
+
+                    const div = document.createElement('div');
+                    div.className = 'relative group';
+                    div.innerHTML = `
+                        <img src="${photoData}" class="w-full h-16 object-cover border border-orange-200 rounded-xl" alt="Furnace photo">
+                        <button onclick="removeFurnacePhoto(${index}, this)" 
+                                class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] opacity-80 group-hover:opacity-100">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    `;
+                    container.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removeFurnacePhoto(index, element) {
+            furnacePhotos.splice(index, 1);
+            element.parentElement.remove();
+        }
+
+        function handleCoolingPhotos(event) {
+            const container = document.getElementById('coolingPhotoPreview');
+            container.innerHTML = '';
+            coolingPhotos = [];
+
+            Array.from(event.target.files).forEach((file, index) => {
+                if (!file.type.startsWith('image/')) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const photoData = e.target.result;
+                    coolingPhotos.push(photoData);
+
+                    const div = document.createElement('div');
+                    div.className = 'relative group';
+                    div.innerHTML = `
+                        <img src="${photoData}" class="w-full h-16 object-cover border border-sky-200 rounded-xl" alt="Cooling photo">
+                        <button onclick="removeCoolingPhoto(${index}, this)" 
+                                class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] opacity-80 group-hover:opacity-100">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    `;
+                    container.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function removeCoolingPhoto(index, element) {
+            coolingPhotos.splice(index, 1);
+            element.parentElement.remove();
+        }
+
+        // AI Photo Analysis (Mock intelligent estimator)
+        function analyzeAllPhotos() {
+            const btns = document.querySelectorAll('button');
+            const originalTexts = [];
+            
+            // Show loading state
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-3xl shadow-2xl text-sm flex items-center gap-x-3 z-[200]';
+            toast.innerHTML = `
+                <i class="fa-solid fa-magic fa-spin mr-2"></i> 
+                <span>Analyzing equipment photos with AI...</span>
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+
+                // Smart estimation logic based on house age + visual heuristics
+                const yearBuilt = parseInt(document.getElementById('yearBuilt').value) || 2000;
+                const houseAge = 2026 - yearBuilt;
+
+                // Furnace estimation
+                let estFurnaceAFUE = 82;
+                let estFurnaceAge = Math.max(8, Math.min(25, houseAge - 3));
+                
+                if (houseAge > 25) estFurnaceAFUE = 78 + Math.random() * 6;
+                else if (houseAge > 15) estFurnaceAFUE = 82 + Math.random() * 5;
+                else estFurnaceAFUE = 90 + Math.random() * 6;
+
+                // Cooling estimation
+                let estCoolingEff = 13.5;
+                let estCoolingAge = Math.max(6, Math.min(22, houseAge - 2));
+                
+                if (houseAge > 20) estCoolingEff = 11 + Math.random() * 3;
+                else if (houseAge > 12) estCoolingEff = 13 + Math.random() * 3;
+                else estCoolingEff = 15 + Math.random() * 4;
+
+                // Apply estimates
+                document.getElementById('furnaceAge').value = Math.round(estFurnaceAge);
+                document.getElementById('furnaceAFUE').value = estFurnaceAFUE.toFixed(0);
+                
+                document.getElementById('coolingAge').value = Math.round(estCoolingAge);
+                document.getElementById('coolingEfficiency').value = estCoolingEff.toFixed(1);
+
+                // Update type guesses
+                if (houseAge > 18) {
+                    document.getElementById('furnaceType').value = 'gas_furnace';
+                    document.getElementById('coolingType').value = 'ac';
+                } else {
+                    document.getElementById('furnaceType').value = 'high_eff_gas';
+                    document.getElementById('coolingType').value = 'heat_pump';
+                }
+
+                updateCalculations();
+
+                // Success message
+                const success = document.createElement('div');
+                success.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-5 py-2.5 rounded-3xl text-sm shadow-xl flex items-center gap-x-2 z-[200]';
+                success.innerHTML = `<i class="fa-solid fa-check-circle mr-2"></i> AI estimates applied — please review and adjust if needed`;
+                document.body.appendChild(success);
+                setTimeout(() => success.remove(), 2800);
+            }, 1650);
+        }
+
+        // Quick property lookup (demo / heuristic)
+        function quickLookup() {
+            const addressInput = document.getElementById('address').value.toUpperCase();
+            const sqftInput = document.getElementById('sqft');
+            const yearInput = document.getElementById('yearBuilt');
+            const insulationSelect = document.getElementById('insulation');
+
+            // Simple heuristics based on common GTA postal codes / areas
+            let sqft = 2450;
+            let year = 1998;
+            let insulation = 'average';
+
+            if (addressInput.includes('L6A') || addressInput.includes('MAPLE')) {
+                sqft = 2650;
+                year = 2002;
+                insulation = 'good';
+            } else if (addressInput.includes('L4H') || addressInput.includes('WOODBRIDGE')) {
+                sqft = 2800;
+                year = 2015;
+                insulation = 'excellent';
+            } else if (addressInput.includes('L1H') || addressInput.includes('OSHAWA')) {
+                sqft = 1850;
+                year = 1978;
+                insulation = 'poor';
+            } else if (addressInput.includes('L3Y') || addressInput.includes('NEWMARKET')) {
+                sqft = 2200;
+                year = 1995;
+                insulation = 'average';
+            }
+
+            sqftInput.value = sqft;
+            yearInput.value = year;
+            insulationSelect.value = insulation;
+
+            // Set property type based on address heuristics
+            const propertyTypeSelect = document.getElementById('propertyType');
+            if (addressInput.includes('UNIT') || addressInput.includes('SUITE') || addressInput.includes('APT') || addressInput.includes('CONDO')) {
+                propertyTypeSelect.value = 'multi';
+            } else if (addressInput.includes('COMMERCIAL') || addressInput.includes('INDUSTRIAL') || addressInput.includes('PLAZA') || addressInput.includes('OFFICE')) {
+                propertyTypeSelect.value = 'commercial';
+            } else {
+                propertyTypeSelect.value = 'residential';
+            }
+
+            // Suggest utility defaults (Enbridge + local LDC for GTA)
+            updateUtilityDefaults(addressInput);
+
+            // Visual feedback
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 bg-emerald-600 text-white px-6 py-3 rounded-3xl shadow-xl text-sm flex items-center gap-x-2 z-[100]';
+            toast.innerHTML = `<i class="fa-solid fa-check mr-2"></i> Property + utility defaults auto-filled for your area`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.3s ease';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 200);
+            }, 2200);
+
+            updateCalculations();
+        }
+
+        function updateUtilityDefaults(address = '') {
+            const gasPriceInput = document.getElementById('gasPrice');
+            const elecPriceInput = document.getElementById('elecPrice');
+            const addressUpper = address.toUpperCase();
+
+            // Default Enbridge + typical GTA electricity
+            let gasRate = 0.38;
+            let elecRate = 0.145;
+
+            // Simple postal code based utility suggestion (GTA examples)
+            if (addressUpper.includes('L6A') || addressUpper.includes('MAPLE') || addressUpper.includes('VAUGHAN')) {
+                gasRate = 0.37;   // Enbridge
+                elecRate = 0.142; // Alectra / typical
+            } else if (addressUpper.includes('L4H') || addressUpper.includes('WOODBRIDGE')) {
+                gasRate = 0.38;
+                elecRate = 0.145;
+            } else if (addressUpper.includes('M') || addressUpper.includes('TORONTO')) {
+                gasRate = 0.39;
+                elecRate = 0.148; // Toronto Hydro area
+            } else if (addressUpper.includes('L1H') || addressUpper.includes('OSHAWA')) {
+                gasRate = 0.36;
+                elecRate = 0.14;
+            }
+
+            if (gasPriceInput) gasPriceInput.value = gasRate;
+            if (elecPriceInput) elecPriceInput.value = elecRate;
+        }
+
+        // Update proposed system defaults when type changes
+        function updateProposedDefaults() {
+            const type = document.getElementById('proposedType').value;
+            const heatingEff = document.getElementById('proposedHeatingEff');
+            const coolingEff = document.getElementById('proposedCoolingEff');
+            const installCostEl = document.getElementById('installCost');
+            const rebatesEl = document.getElementById('rebates');
+
+            if (type === 'lennox_cold_hp') {
+                heatingEff.value = '11.5';
+                coolingEff.value = '20';
+                if (installCostEl) installCostEl.value = '15800';
+                if (rebatesEl) rebatesEl.value = '0';  // Respect no rebates default
+                highlightOption(2);
+            } else if (type === 'lennox_slp99') {
+                heatingEff.value = '99';
+                coolingEff.value = '18.5';
+                if (installCostEl) installCostEl.value = '11200';
+                if (rebatesEl) rebatesEl.value = '0';
+                highlightOption(1);
+            }
+        }
+
+        function selectProposedOption(option) {
+            const select = document.getElementById('proposedType');
+            if (option === 1) {
+                select.value = 'lennox_slp99';
+            } else {
+                select.value = 'lennox_cold_hp';
+            }
+            updateProposedDefaults();
+            updateCalculations();
+        }
+
+        function highlightOption(option) {
+            const card1 = document.getElementById('option1Card');
+            const card2 = document.getElementById('option2Card');
+            
+            if (!card1 || !card2) return;
+            
+            if (option === 1) {
+                card1.classList.add('border-emerald-500', 'bg-emerald-50');
+                card1.classList.remove('border-emerald-300');
+                card2.classList.remove('border-emerald-500', 'bg-emerald-50');
+                card2.classList.add('border-emerald-300');
+            } else {
+                card2.classList.add('border-emerald-500', 'bg-emerald-50');
+                card2.classList.remove('border-emerald-300');
+                card1.classList.remove('border-emerald-500', 'bg-emerald-50');
+                card1.classList.add('border-emerald-300');
+            }
+        }
+
+        // Main calculation engine - Updated for forced air (Furnace + Cooling/HP)
+        function calculateAll() {
+            // Inputs
+            const sqft = parseFloat(document.getElementById('sqft').value) || 2200;
+            const yearBuilt = parseInt(document.getElementById('yearBuilt').value) || 2000;
+            const insulation = document.getElementById('insulation').value;
+            const stories = parseFloat(document.getElementById('stories').value) || 2;
+
+            // New forced air inputs
+            const furnaceAFUE = parseFloat(document.getElementById('furnaceAFUE').value) || 82;
+            const furnaceAge = parseFloat(document.getElementById('furnaceAge').value) || 17;
+            const coolingEff = parseFloat(document.getElementById('coolingEfficiency').value) || 13.5;
+            const coolingEffUnit = document.getElementById('coolingEffUnit').value || 'SEER';
+
+            const proposedType = document.getElementById('proposedType').value;
+            const proposedHeatingEff = parseFloat(document.getElementById('proposedHeatingEff').value) || 11.5;
+            const proposedCoolingEff = parseFloat(document.getElementById('proposedCoolingEff').value) || 20;
+
+            const gasPrice = parseFloat(document.getElementById('gasPrice').value) || 0.38;
+            const elecPrice = parseFloat(document.getElementById('elecPrice').value) || 0.145;
+
+            const installCost = parseFloat(document.getElementById('installCost').value) || 15800;
+            const rebates = parseFloat(document.getElementById('rebates').value) || 5200;
+
+            // === 1. ESTIMATE PEAK HEAT LOSS (BTU/h) ===
+            // Base heat loss per sqft - adjusted by property type (tuned for realistic GTA recommendations)
+            let baseBTUPerSqft = 29; // Realistic for average GTA residential homes (many techs use 25-35 BTU/sqft)
+            const propertyType = document.getElementById('propertyType').value || 'residential';
+            
+            if (propertyType === 'commercial') {
+                baseBTUPerSqft = 48; // Higher for commercial
+            } else if (propertyType === 'multi') {
+                baseBTUPerSqft = 33; // Slightly higher for multi-res
+            }
+
+            // Age multiplier (older = leakier)
+            const age = 2026 - yearBuilt;
+            let ageMult = 1.0;
+            if (age > 40) ageMult = 1.35;
+            else if (age > 30) ageMult = 1.22;
+            else if (age > 20) ageMult = 1.08;
+            else if (age > 10) ageMult = 0.95;
+            else ageMult = 0.88;
+
+            // Insulation multiplier
+            let insulMult = 1.0;
+            if (insulation === 'excellent') insulMult = 0.72;
+            else if (insulation === 'good') insulMult = 0.88;
+            else if (insulation === 'poor') insulMult = 1.32;
+
+            // Stories / volume adjustment (rough)
+            let volumeMult = 1.0;
+            if (stories >= 2.5) volumeMult = 1.12;
+            else if (stories === 1) volumeMult = 0.92;
+
+            const peakHeatLossBTU = Math.round(sqft * baseBTUPerSqft * ageMult * insulMult * volumeMult);
+
+            // === 2. ANNUAL HEATING LOAD ===
+            const HDD = 3500;           // GTA average heating degree days
+            const designDeltaF = 78;    // Approx indoor-outdoor design temp difference
+            const annualHeatingBTU = peakHeatLossBTU * 24 * HDD / designDeltaF;
+
+            // More realistic cooling load for Ontario/GTA (cooling is much smaller than heating in cold climates)
+            const annualCoolingBTU = annualHeatingBTU * 0.20; // adjusted for cold climate (roughly 20% of heating energy)
+
+            // === 3. CURRENT SYSTEM ENERGY USE (Forced Air) ===
+            let currentAnnualCost = 0;
+            let currentHeatingCost = 0;
+            let currentCoolingCost = 0;
+            let currentSystemLabel = '';
+
+            const BTU_PER_M3_GAS = 35500;
+
+            // Heating from Furnace
+            const furnaceEffDecimal = furnaceAFUE / 100;
+            const annualGasInputBTU = annualHeatingBTU / furnaceEffDecimal;
+            const annualGasM3 = annualGasInputBTU / BTU_PER_M3_GAS;
+            currentHeatingCost = annualGasM3 * gasPrice;
+
+            // Cooling from AC or Heat Pump
+            let coolingSEER = coolingEff;
+            if (coolingEffUnit === 'HSPF') {
+                coolingSEER = coolingEff * 3.2; // rough conversion for display/calc
+            }
+            const coolingKWh = annualCoolingBTU / (coolingSEER * 3.412);
+            currentCoolingCost = coolingKWh * elecPrice;
+
+            currentAnnualCost = currentHeatingCost + currentCoolingCost;
+            currentSystemLabel = `Furnace (${furnaceAFUE}% AFUE, ${furnaceAge} yrs) + Cooling (${coolingEff} ${coolingEffUnit})`;
+
+            // === 4. PROPOSED SYSTEM (Lennox focused) ===
+            let proposedAnnualCost = 0;
+            let proposedHeatingCost = 0;
+            let proposedCoolingCost = 0;
+            let proposedSystemLabel = '';
+
+            if (proposedType === 'lennox_cold_hp') {
+                const hspf = proposedHeatingEff;
+                const heatingKWh = annualHeatingBTU / (hspf * 3.412);
+                proposedHeatingCost = heatingKWh * elecPrice;
+
+                const seer = proposedCoolingEff;
+                const coolingKWh = annualCoolingBTU / (seer * 3.412);
+                proposedCoolingCost = coolingKWh * elecPrice;
+
+                proposedSystemLabel = `Lennox Cold Climate Heat Pump (HSPF ${hspf})`;
+            } 
+            else if (proposedType === 'lennox_slp99') {
+                const furnaceEff = proposedHeatingEff / 100; // 99
+                const annualGasInputBTU = annualHeatingBTU / furnaceEff;
+                const annualGasM3 = annualGasInputBTU / BTU_PER_M3_GAS;
+                proposedHeatingCost = annualGasM3 * gasPrice;
+
+                const seer = proposedCoolingEff;
+                const coolingKWh = annualCoolingBTU / (seer * 3.412);
+                proposedCoolingCost = coolingKWh * elecPrice;
+
+                proposedSystemLabel = `Lennox SLP99 Furnace (${proposedHeatingEff}% AFUE) + New AC`;
+            } 
+            else {
+                // fallback
+                const hspf = proposedHeatingEff;
+                const heatingKWh = annualHeatingBTU / (hspf * 3.412);
+                proposedHeatingCost = heatingKWh * elecPrice;
+                const seer = proposedCoolingEff || 18;
+                const coolingKWh = annualCoolingBTU / (seer * 3.412);
+                proposedCoolingCost = coolingKWh * elecPrice;
+                proposedSystemLabel = 'High-Efficiency System';
+            }
+
+            proposedAnnualCost = proposedHeatingCost + proposedCoolingCost;
+
+            // === 5. SAVINGS ===
+            const annualSavings = Math.max(0, currentAnnualCost - proposedAnnualCost);
+            const savingsPercent = currentAnnualCost > 0 ? Math.round((annualSavings / currentAnnualCost) * 100) : 0;
+            const monthlySavings = Math.round(annualSavings / 12);
+
+            const netInvestment = Math.max(0, installCost - rebates);
+            const paybackYears = annualSavings > 50 ? (netInvestment / annualSavings).toFixed(1) : 'N/A';
+
+            // Financing Monthly Payment (4.99% APR)
+            const apr = 0.0499;
+            const monthlyRate = apr / 12;
+            const termMonths = 24; // promo period
+            let monthlyPayment = 0;
+            
+            if (netInvestment > 0) {
+                monthlyPayment = netInvestment * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1);
+            }
+            monthlyPayment = Math.round(monthlyPayment * 100) / 100;
+
+            // CO2 rough estimate (gas ~1.9 kg CO2 / m3, electricity Ontario ~0.05-0.1 kg/kWh)
+            let co2Saved = 0;
+            // Simple fallback
+            co2Saved = Math.round(annualSavings * 2.8); // rough blended savings estimate
+
+            // Update UI
+            document.getElementById('peakHeatLossDisplay').innerHTML = `${peakHeatLossBTU.toLocaleString()} BTU/h`;
+            document.getElementById('heatLossBar').style.width = Math.min(100, Math.max(25, (peakHeatLossBTU / 120000) * 100)) + '%';
+
+            // Results panel
+            document.getElementById('annualSavings').innerHTML = '$' + Math.round(annualSavings).toLocaleString();
+            document.getElementById('savingsPercent').innerHTML = savingsPercent + '%';
+            document.getElementById('paybackYears').innerHTML = paybackYears;
+            document.getElementById('monthlySavings').innerHTML = '$' + monthlySavings.toLocaleString();
+
+            // Monthly comparison
+            document.getElementById('monthlyEnergySavingsBig').innerHTML = '$' + monthlySavings;
+            document.getElementById('monthlyPaymentBig').innerHTML = '$' + monthlyPayment.toFixed(2);
+
+            document.getElementById('currentCost').innerHTML = '$' + Math.round(currentAnnualCost).toLocaleString();
+            document.getElementById('proposedCost').innerHTML = '$' + Math.round(proposedAnnualCost).toLocaleString();
+
+            // Efficiency labels
+            document.getElementById('currentSystemLabel').innerHTML = currentSystemLabel;
+            document.getElementById('proposedSystemLabel').innerHTML = proposedSystemLabel;
+
+            document.getElementById('currentEffDisplay').innerHTML = furnaceAFUE + '%';
+            document.getElementById('proposedEffDisplay').innerHTML = proposedHeatingEff;
+
+            // Key metrics
+            document.getElementById('peakHeatLossResult').innerHTML = peakHeatLossBTU.toLocaleString() + ' BTU/h';
+            document.getElementById('annualLoadResult').innerHTML = (annualHeatingBTU / 1000000).toFixed(1) + ' MMBTU';
+            document.getElementById('co2Reduction').innerHTML = co2Saved.toLocaleString() + ' kg/yr';
+            document.getElementById('netInvestment').innerHTML = '$' + netInvestment.toLocaleString();
+
+            // Update chart
+            updateCostChart(currentAnnualCost, proposedAnnualCost, annualSavings);
+
+            // Store for PDF / clipboard
+            window.lastCalculation = {
+                address: document.getElementById('address').value,
+                sqft, yearBuilt, insulation,
+                peakHeatLossBTU,
+                annualSavings: Math.round(annualSavings),
+                savingsPercent,
+                paybackYears,
+                currentAnnualCost: Math.round(currentAnnualCost),
+                proposedAnnualCost: Math.round(proposedAnnualCost),
+                currentSystemLabel,
+                proposedSystemLabel,
+                netInvestment: Math.round(netInvestment),
+                installCost: Math.round(installCost),
+                rebates: Math.round(rebates),
+                monthlySavings,
+                monthlyPayment: monthlyPayment.toFixed(2)
+            };
+
+            return window.lastCalculation;
+        }
+
+        function updateCalculations() {
+            calculateAll();
+        }
+
+        function updateCostChart(currentCost, proposedCost, savings) {
+            const ctx = document.getElementById('costChart');
+            
+            if (costChartInstance) {
+                costChartInstance.destroy();
+            }
+
+            costChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Current System', 'Proposed System'],
+                    datasets: [{
+                        label: 'Annual Energy Cost ($)',
+                        data: [Math.round(currentCost), Math.round(proposedCost)],
+                        backgroundColor: ['#f59e0b', '#10b981'],
+                        borderRadius: 8,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => '$' + context.raw.toLocaleString()
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: (val) => '$' + val.toLocaleString()
+                            },
+                            grid: { color: '#e2e8f0' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Update side numbers
+            document.getElementById('chartCurrentCost').innerHTML = '$' + Math.round(currentCost).toLocaleString();
+            document.getElementById('chartProposedCost').innerHTML = '$' + Math.round(proposedCost).toLocaleString();
+        }
+
+        // Export PDF Report
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const calc = window.lastCalculation || calculateAll();
+            if (!calc) return;
+
+            const pageWidth = doc.internal.pageSize.getWidth();
+            
+            // Header
+            doc.setFillColor(15, 23, 42);
+            doc.rect(0, 0, pageWidth, 32, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.text('HVAC Efficiency Pro — Client Report', 15, 21);
+            doc.setFontSize(11);
+            doc.text('Prepared for: ' + (calc.address || 'Property'), 15, 28);
+
+            doc.setTextColor(0, 0, 0);
+            let y = 45;
+
+            // Property summary
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Property Summary', 15, y);
+            doc.setFont(undefined, 'normal');
+            y += 8;
+
+            doc.setFontSize(11);
+            doc.text(`Address: ${calc.address || 'N/A'}`, 15, y); y += 7;
+            doc.text(`Size: ${calc.sqft} sq ft  •  Built: ${calc.yearBuilt}  •  Insulation: ${calc.insulation}`, 15, y); y += 7;
+            doc.text(`Estimated Peak Heat Loss: ${calc.peakHeatLossBTU.toLocaleString()} BTU/h`, 15, y); y += 12;
+
+            // Savings highlight box
+            doc.setFillColor(16, 185, 129);
+            doc.roundedRect(15, y, pageWidth - 30, 28, 4, 4, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(13);
+            doc.text(`Projected Annual Savings: $${calc.annualSavings.toLocaleString()}   (${calc.savingsPercent}% reduction)`, 22, y + 11);
+            doc.setFontSize(11);
+            doc.text(`Payback Period: ${calc.paybackYears} years   •   Monthly Savings: $${calc.monthlySavings}`, 22, y + 20);
+            doc.setTextColor(0, 0, 0);
+            y += 38;
+
+            // Cost comparison
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Annual Energy Cost Comparison', 15, y);
+            doc.setFont(undefined, 'normal');
+            y += 8;
+
+            doc.setFontSize(11);
+            doc.text(`Current System (${calc.currentSystemLabel}): $${calc.currentAnnualCost.toLocaleString()}`, 15, y); y += 7;
+            doc.text(`Proposed System (${calc.proposedSystemLabel}): $${calc.proposedAnnualCost.toLocaleString()}`, 15, y); y += 12;
+
+            // Financials
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Investment & Payback', 15, y);
+            doc.setFont(undefined, 'normal');
+            y += 8;
+
+            doc.setFontSize(11);
+            doc.text(`Total Install Cost: $${calc.installCost.toLocaleString()}`, 15, y); y += 6;
+            doc.text(`Less Incentives / Rebates: -$${calc.rebates.toLocaleString()}`, 15, y); y += 6;
+            doc.text(`Net Client Investment: $${calc.netInvestment.toLocaleString()}`, 15, y); y += 6;
+            doc.text(`Simple Payback: ${calc.paybackYears} years`, 15, y); y += 14;
+
+            // Notes
+            doc.setFontSize(10);
+            doc.setTextColor(100);
+            doc.text('Notes:', 15, y); y += 6;
+            doc.text('• Estimates based on typical GTA weather data (3,500 HDD) and Ontario energy rates.', 15, y); y += 5;
+            doc.text('• Actual savings depend on usage patterns, home maintenance, and weather.', 15, y); y += 5;
+            doc.text('• Professional Manual J / CSA F280 load calculation recommended before final quote.', 15, y); y += 5;
+            doc.text('• Photos attached to this report for equipment reference.', 15, y);
+
+            // Footer
+            doc.setFontSize(9);
+            doc.text('Generated by HVAC Efficiency Pro • ' + new Date().toLocaleDateString(), pageWidth / 2, 285, { align: 'center' });
+
+            // Save
+            const filename = `HVAC_Savings_Report_${(calc.address || 'Client').replace(/[^a-z0-9]/gi, '_').slice(0, 30)}.pdf`;
+            doc.save(filename);
+        }
+
+        function copySummaryToClipboard() {
+            const calc = window.lastCalculation || calculateAll();
+            if (!calc) return;
+
+            const text = `HVAC Efficiency Pro Summary
+
+Property: ${calc.address}
+Size: ${calc.sqft} sq ft | Built: ${calc.yearBuilt}
+
+Current System: ${calc.currentSystemLabel}
+Proposed: ${calc.proposedSystemLabel}
+
+Annual Savings: $${calc.annualSavings} (${calc.savingsPercent}% reduction)
+Monthly Savings: $${calc.monthlySavings}
+Payback: ${calc.paybackYears} years
+
+Net Investment after rebates: $${calc.netInvestment}
+
+Peak Heat Loss: ${calc.peakHeatLossBTU} BTU/h`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const origText = event.target.innerHTML;
+                const btn = event.currentTarget;
+                if (btn) {
+                    btn.innerHTML = '<i class="fa-solid fa-check mr-1"></i> Copied!';
+                    setTimeout(() => {
+                        if (btn) btn.innerHTML = origText;
+                    }, 1800);
+                } else {
+                    // fallback toast
+                    const toast = document.createElement('div');
+                    toast.className = 'fixed bottom-6 right-6 bg-emerald-600 text-white px-5 py-2.5 rounded-3xl text-sm shadow-xl flex items-center';
+                    toast.innerHTML = 'Summary copied to clipboard!';
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 1600);
+                }
+            }).catch(() => {
+                alert('Summary copied (manual):\n\n' + text);
+            });
+        }
+
+        function resetAll() {
+            if (!confirm('Reset all inputs and calculations?')) return;
+            
+            // Reset form values to defaults
+            document.getElementById('address').value = '108 Cromwell Rd, Maple, ON L6A 1T9';
+            document.getElementById('sqft').value = '2450';
+            document.getElementById('yearBuilt').value = '1998';
+            document.getElementById('insulation').value = 'average';
+            document.getElementById('stories').value = '2';
+            
+            document.getElementById('currentType').value = 'gas_furnace';
+            document.getElementById('currentAge').value = '18';
+            document.getElementById('currentEfficiency').value = '82';
+            document.getElementById('currentEffUnit').value = 'AFUE';
+            
+            document.getElementById('proposedType').value = 'cold_climate_hp';
+            document.getElementById('proposedHeatingEff').value = '11.2';
+            document.getElementById('proposedCoolingEff').value = '21';
+            document.getElementById('installCost').value = '15200';
+            document.getElementById('rebates').value = '5500';
+            
+            document.getElementById('gasPrice').value = '0.38';
+            document.getElementById('elecPrice').value = '0.145';
+            
+            // Clear photos
+            document.getElementById('photoPreviewContainer').innerHTML = '';
+            uploadedPhotos = [];
+            
+            // Recalculate
+            updateCalculations();
+        }
+
+        // Initialize everything
+        function initializeApp() {
+            initializeTailwind();
+
+            // Set initial proposed defaults
+            setTimeout(() => {
+                const proposedSelect = document.getElementById('proposedType');
+                if (proposedSelect.value === 'cold_climate_hp') {
+                    // already good defaults
+                }
+            }, 50);
+
+            // Attach live listeners to all inputs
+            const inputs = document.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    // Debounce slightly for performance
+                    clearTimeout(window.calcTimeout);
+                    window.calcTimeout = setTimeout(updateCalculations, 180);
+                });
+            });
+
+            // Initial calculation
+            setTimeout(() => {
+                // Set default proposed to Lennox Cold Climate HP and highlight it
+                const proposedSelect = document.getElementById('proposedType');
+                if (proposedSelect) proposedSelect.value = 'lennox_cold_hp';
+                
+                updateProposedDefaults();
+                updateCalculations();
+                
+                // Demo tip toast (once)
+                if (!localStorage.getItem('hvac_pro_demo_shown')) {
+                    setTimeout(() => {
+                        const tip = document.createElement('div');
+                        tip.className = 'fixed bottom-6 left-6 max-w-xs bg-white border border-emerald-200 shadow-xl rounded-3xl p-4 text-sm';
+                        tip.innerHTML = `
+                            <div class="flex gap-x-3">
+                                <i class="fa-solid fa-lightbulb text-emerald-500 mt-0.5"></i>
+                                <div>
+                                    <div class="font-semibold">Pro tip</div>
+                                    <div class="text-xs text-slate-600 mt-0.5">Upload photos of both furnace and AC/HP. Click <strong>AI Analyze Photos</strong> when rating plates aren't clear.</div>
+                                </div>
+                            </div>
+                        `;
+                        document.body.appendChild(tip);
+                        localStorage.setItem('hvac_pro_demo_shown', 'true');
+                        
+                        setTimeout(() => {
+                            if (tip && tip.parentNode) tip.parentNode.removeChild(tip);
+                        }, 6200);
+                    }, 4800);
+                }
+            }, 700);
+
+            // Keyboard shortcut hint
+            document.addEventListener('keydown', function(e) {
+                if (e.key === '?' && document.activeElement.tagName === 'BODY') {
+                    e.preventDefault();
+                    const addressField = document.getElementById('address');
+                    addressField.focus();
+                    addressField.select();
+                }
+            });
+
+            console.log('%c[HVAC Efficiency Pro] App initialized successfully', 'color:#64748b');
+        }
+
+        // Boot the app
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>

@@ -1,77 +1,26 @@
-# HVAC Efficiency Pro — Sales Rep Tool
+# HVAC Efficiency Pro — HCA Sales + Operations Tool
 
-A single-file web app for HVAC sales reps (HCAs) to build an on-the-spot upgrade
-estimate for **forced-air systems** and show the customer **monthly savings vs.
-monthly financing payment**. Ontario/GTA-tuned (Enbridge gas, local hydro rates,
-Lennox equipment placeholders).
+Single-file Ontario HVAC assessment prototype. Open `index.html` directly in a browser; no build step or API keys are required. It is optimized for iPad/phone field use and uses browser camera capture.
 
-Open `index.html` in any browser — no build step, no server, no API keys.
-Optimized for iPad/phone field use (large tap targets, camera photo capture).
+## Updated workflow
 
-## Layout (single scrolling page, no maps)
+1. Property details: debounced/cancellable Ontario address search, second-source Canadian postal-code cross-check, address-assisted property type, documented square-footage source, heating distribution type, and preliminary heat loss plus heat gain in BTU/h and tons.
+2. Current equipment: separate unit/rating-plate fields, filter and thermostat photos, current capacity matching, and explicit HCA confirmation.
+3. Rebates, repairs and plan: HRS heat-pump incentive only, based on tonnage and fuel/meter eligibility; separate age-based furnace and cooling repair risks; routine maintenance excluded; current customer plan entered by the HCA.
+4. Proposed equipment: three manufacturer-neutral packages—Optimum Furnace, Optimum System Heat Pump and Basic Heat Pump. Only the first two use communicating controls; Basic Heat Pump uses ecobee.
+5. Energy and financing: geography/weather proxy, entered utility prices, oversizing/cycling adjustment, heat-pump fuel switching, equipment-specific avoided repairs, current plan and automatically selected lowest monthly payment term.
+6. Customer view: concise projected monthly benefit and comfort/noise/air-quality/thermostat expectations. Comparison metrics and reconciliation live in the separate Savings Details view.
+7. Post-agreement operations handoff: electrical panel, outdoor/indoor wide photos, line-set length, plenums/return, media-filter space, mounting and wall construction, notes, placement concept and an internal PDF.
 
-**Left column — inputs (5 steps):**
-1. **Property Details** — address + one-tap **Auto-fill**, sq ft, year built,
-   insulation, stories, property type, live peak-heat-loss bar.
-2. **Current Forced Air System** — furnace & cooling/HP photo capture, type, age,
-   AFUE / SEER / HSPF, thermostat, filter, plus an **AI Analyze** button and a
-   sizing (over/under-sized) check.
-3. **Proposed Lennox System** — SLP99 furnace+AC or Cold-Climate Heat Pump
-   (placeholders), editable efficiencies, install cost, applied rebates.
-4. **Energy Prices + Financing** — gas/electricity rates, hydro provider, term,
-   APR, down payment.
-5. **Rebates, Repairs & Plans** — rebate checklist, expected 3-yr repair cost on
-   aging equipment, and service/protection plan comparison (ours vs. competitor).
+## Important production integrations
 
-**Right column — sticky results:** annual + monthly savings, **total monthly
-benefit vs. payment → net monthly**, current vs. new annual cost, a
-current-vs-new comparison (efficiency, noise, comfort, filter), key metrics
-(peak heat loss, load, CO₂, net investment), a Chart.js cost bar chart, and
-**Copy Summary** / **PDF Report** actions.
+- Replace the free address estimate with licensed MPAC/propertyline or approved CRM/property data. Exact Ontario residential square-footage data is not exposed by the current free geocoder.
+- Replace the geography proxy with weather-normal data for the exact address and, where available, interval utility history.
+- Connect rating-plate photos to a secured vision/backend workflow. The prototype deliberately does not fabricate OCR values; the HCA must confirm every plate field.
+- Validate rebate amounts and equipment eligibility against the live Home Renovation Savings rules at quote time.
+- Configure the sales manager phone number on first use of the call button.
+- Confirm the 5-inch media cabinet dimensions and front service/pull-out clearance from the selected product instructions. The 7.5-inch value is only a planning target, not a universal installation requirement.
 
-## "Review" flags (auto-estimated fields)
+## Estimate disclaimer
 
-Tapping **Auto-fill** populates home & equipment fields with plausible,
-*deterministic* estimates seeded from the address, each marked with an amber
-**Review** pill (turns the field amber). Editing the field — or tapping the pill —
-clears the flag once the rep confirms it on site.
-
-### Why property data is estimated
-
-There is **no free, nationwide API** for year-built / square-footage (in Ontario
-that data lives with **MPAC**, which isn't open). So those fields are estimated
-and flagged. To make them real later, replace `autoFillFromAddress()` with a call
-to a property data source: MPAC / municipal open data, your CRM, a paid API
-(ATTOM / Estated / HouseCanary), or a scraper backend.
-
-## AI photo read (placeholder)
-
-Furnace/cooling photo tiles use `capture="environment"` (opens the camera on
-mobile). **AI Analyze** currently simulates a vision read and fills review-flagged
-fields. Wire it to a real vision model (Gemini/Groq free tier, or OpenAI/Anthropic)
-via a small backend proxy — see the parent chat notes.
-
-## Savings model (transparent, all editable)
-
-- **Energy savings** = current annual HVAC cost − new annual cost (heating scaled
-  by AFUE/HSPF, cooling by SEER; Ontario 3,500 HDD).
-- **Repairs avoided** = 3-yr expected repair cost (age-based), spread monthly.
-- **Plan difference** = competitor plan − our included plan.
-- **Monthly payment** = amortized `(install − down − rebates)` at term/APR.
-- **Net monthly** = energy savings + repairs avoided + plan diff − payment.
-
-Constants (rates, HDD, repair tables, financing, CO₂ factor) live at the top of
-the calc engine — tune to your market.
-
-## Placeholders to swap later
-
-- `SYSTEMS` / proposed options — real Lennox lineup, specs, pricing.
-- `REBATES[]` — current government/utility programs and amounts.
-- Hydro provider rate table + gas rate defaults.
-- Property + vision data sources (see above).
-
-## Tech
-
-Tailwind (CDN), Font Awesome, Chart.js, jsPDF — all via CDN. Styled to match the
-team's existing "HVAC Efficiency Pro" look. Reference file Frank started from is
-kept as `hvac_efficiency_pro (1).html`.
+The generated report explains that projections are estimates rather than guaranteed savings. Final system sizing requires a CSA F280 / Manual J calculation, and operations must verify site conditions and manufacturer clearances before installation.
