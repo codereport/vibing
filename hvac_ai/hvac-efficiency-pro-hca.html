@@ -295,8 +295,8 @@
                             <div class="text-[10px] text-slate-400 mt-1"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>Detected automatically from address data</div>
                         </div>
 
-                        <div class="md:col-span-2">
-                            <label class="label text-slate-500 mb-1.5 block">Existing Heating Distribution</label>
+                        <div class="md:col-span-2" data-field>
+                            <label class="label text-slate-500 mb-1.5 flex items-center gap-2">Existing Heating Distribution <span class="review-pill">Review</span></label>
                             <select id="systemType"
                                 class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base bg-white">
                                 <option value="forced_air" selected>Forced air</option>
@@ -359,12 +359,13 @@
                             <div id="furnacePhotoPreview" class="grid grid-cols-3 gap-2 mt-2"></div>
 
                             <div class="grid grid-cols-2 gap-3 mt-3">
-                                <div>
-                                    <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Type</label>
+                                <div data-field>
+                                    <label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Type <span class="review-pill">R</span></label>
                                     <select id="furnaceType"
                                         class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
                                         <option value="gas_furnace">Gas Furnace</option>
                                         <option value="high_eff_gas">High-Eff Condensing</option>
+                                        <option value="oil_furnace">Oil Furnace</option>
                                         <option value="electric">Electric Furnace</option>
                                     </select>
                                 </div>
@@ -375,6 +376,8 @@
                                     <input id="furnaceAge" type="number" value="17"
                                         class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
                                 </div>
+                                <div data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Manufacturer <span class="review-pill">R</span></label><input id="furnaceManufacturer" placeholder="From logo / model" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
+                                <div data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Observed venting <span class="review-pill">R</span></label><input id="furnaceVenting" placeholder="PVC, metal B-vent…" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
                                 <div class="col-span-2" data-field>
                                     <label
                                         class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">AFUE
@@ -405,8 +408,8 @@
                             <div id="coolingPhotoPreview" class="grid grid-cols-3 gap-2 mt-2"></div>
 
                             <div class="grid grid-cols-2 gap-3 mt-3">
-                                <div>
-                                    <label class="text-[11px] font-semibold text-slate-500 mb-1 block">Type</label>
+                                <div data-field>
+                                    <label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Type <span class="review-pill">R</span></label>
                                     <select id="coolingType"
                                         class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white">
                                         <option value="ac">Central AC</option>
@@ -421,6 +424,7 @@
                                     <input id="coolingAge" type="number" value="16"
                                         class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
                                 </div>
+                                <div class="col-span-2" data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Manufacturer <span class="review-pill">R</span></label><input id="coolingManufacturer" placeholder="From logo / model" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
                                 <div class="col-span-2" data-field>
                                     <label
                                         class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Efficiency
@@ -431,6 +435,8 @@
                                         <select id="coolingEffUnit"
                                             class="calc-input w-24 px-2 py-2 text-xs border border-slate-300 rounded-xl bg-white">
                                             <option value="SEER">SEER</option>
+                                            <option value="SEER2">SEER2</option>
+                                            <option value="EER">EER</option>
                                             <option value="HSPF">HSPF</option>
                                         </select>
                                     </div>
@@ -490,7 +496,7 @@
                     <div class="p-6 space-y-6">
                         <div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div><label class="label text-slate-500 mb-1.5 block">Current primary heating fuel</label><select id="currentFuel" class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl bg-white"><option value="gas" selected>Natural gas</option><option value="electric">Electricity</option><option value="oil">Oil</option><option value="wood">Wood</option></select></div>
+                                <div data-field><label class="label text-slate-500 mb-1.5 flex items-center gap-2">Current primary heating fuel <span class="review-pill">Review</span></label><select id="currentFuel" class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl bg-white"><option value="gas" selected>Natural gas</option><option value="electric">Electricity</option><option value="oil">Oil</option><option value="wood">Wood</option></select></div>
                                 <div><label class="label text-slate-500 mb-1.5 block">Natural gas meter at home?</label><select id="hasGasMeter" class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl bg-white"><option value="yes" selected>Yes — Enbridge customer</option><option value="no">No natural gas meter</option></select></div>
                             </div>
                             <div
@@ -1300,7 +1306,8 @@
             }
             return endpoint;
         }
-        async function requestGeminiAnalysis(jobs, label) {
+        async function requestGeminiAnalysis(jobs, known, label) {
+            const endpoint = getAiAnalyzeEndpoint();
             const prepared = [];
             for (let index = 0; index < jobs.length; index++) {
                 label.textContent = 'Preparing ' + (index + 1) + '/' + jobs.length;
@@ -1311,15 +1318,15 @@
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), timeoutMs);
             try {
-                const response = await fetch(getAiAnalyzeEndpoint(), {
+                const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ images: prepared }),
+                    body: JSON.stringify({ images: prepared, known }),
                     signal: controller.signal
                 });
                 const body = await response.json().catch(() => ({}));
                 if (!response.ok) throw new Error(body.error || 'The photo analyzer returned an error');
-                if (!body || (!body.furnace && !body.cooling)) throw new Error('No equipment result was returned');
+                if (!body || !Object.prototype.hasOwnProperty.call(body, 'furnace') || !Object.prototype.hasOwnProperty.call(body, 'cooling')) throw new Error('No equipment result was returned');
                 return body;
             } catch (error) {
                 if (error.name === 'AbortError') throw new Error('The photo analysis timed out');
@@ -1525,10 +1532,23 @@
             markReview(id, true);
             applied.push(label);
         }
+        function applyAiChoice(id, value, label, applied, reviewNotes) {
+            if (value === null || value === undefined || value === '') return;
+            const field = $(id);
+            if (!Array.from(field.options || []).some(option => option.value === value)) return;
+            const previousLabel = field.options[field.selectedIndex]?.text || field.value;
+            const nextLabel = Array.from(field.options).find(option => option.value === value)?.text || value;
+            applyAiField(id, value, label, applied);
+            if (previousLabel !== nextLabel) reviewNotes.push(label + ' changed from ' + previousLabel + ' to ' + nextLabel + ' based on the equipment identification.');
+        }
         async function analyzeAllPhotos() {
-            if (!photos.furnace.length && !photos.cooling.length) {
-                setPhotoAnalysisStatus('<b>No rating-plate photos attached.</b> Add a close, square-on photo of the furnace or outdoor-unit plate first.', 'amber');
-                return toast('Add clear rating-plate photos first', 'amber');
+            const known = {
+                furnaceModel: $('furnaceModel').value.trim(),
+                coolingModel: $('coolingModel').value.trim()
+            };
+            if (!photos.furnace.length && !photos.cooling.length && !known.furnaceModel && !known.coolingModel) {
+                setPhotoAnalysisStatus('<b>No equipment photos or model numbers provided.</b> Add a full-unit or rating-plate photo, or enter a model number first.', 'amber');
+                return toast('Add equipment photos or a model number first', 'amber');
             }
 
             const button = $('analyzePhotosBtn');
@@ -1536,21 +1556,29 @@
             button.disabled = true;
             button.classList.add('opacity-60', 'cursor-wait');
             label.textContent = 'Preparing…';
-            setPhotoAnalysisStatus('<b>Preparing rating-plate photos for secure AI analysis…</b>', 'violet');
+            setPhotoAnalysisStatus('<b>Preparing equipment information for secure AI analysis…</b>', 'violet');
 
             try {
                 const jobs = [
                     ...photos.furnace.slice(0, 2).map(photo => ({ kind: 'furnace', photo })),
                     ...photos.cooling.slice(0, 2).map(photo => ({ kind: 'cooling', photo }))
                 ];
-                const result = await requestGeminiAnalysis(jobs, label);
-                const furnace = result.furnace ? { ...result.furnace } : null;
-                const cooling = result.cooling ? { ...result.cooling } : null;
+                const result = await requestGeminiAnalysis(jobs, known, label);
+                const hasFurnaceEvidence = photos.furnace.length > 0 || Boolean(known.furnaceModel);
+                const hasCoolingEvidence = photos.cooling.length > 0 || Boolean(known.coolingModel);
+                const furnace = hasFurnaceEvidence ? (result.furnace ? { ...result.furnace } : {}) : null;
+                const cooling = hasCoolingEvidence ? (result.cooling ? { ...result.cooling } : {}) : null;
                 const reviewNotes = Array.isArray(result.warnings) ? [...result.warnings] : [];
                 const applied = [];
                 const missing = [];
 
                 if (furnace) {
+                    if (!furnace.fuel) {
+                        if (['gas_furnace', 'high_eff_gas'].includes(furnace.type)) furnace.fuel = 'gas';
+                        if (furnace.type === 'oil_furnace') furnace.fuel = 'oil';
+                        if (furnace.type === 'electric') furnace.fuel = 'electric';
+                    }
+                    if (!furnace.distribution && ['gas_furnace', 'high_eff_gas', 'oil_furnace', 'electric'].includes(furnace.type)) furnace.distribution = 'forced_air';
                     if (!furnace.inputBtu && furnace.model) {
                         furnace.inputBtu = furnaceInputFromModel(furnace.model) || null;
                         if (furnace.inputBtu) reviewNotes.push('Furnace input capacity was decoded locally from the model number.');
@@ -1563,15 +1591,21 @@
                         furnace.afue = Math.round(furnace.outputBtu / furnace.inputBtu * 1000) / 10;
                         reviewNotes.push('AFUE was calculated from the input and output ratings.');
                     }
+                    if (furnace.afueIsEstimate) reviewNotes.push('Furnace AFUE is a visual estimate' + (furnace.efficiencyRange ? ' (' + furnace.efficiencyRange + ')' : '') + ', not a nameplate rating.');
+                    applyAiField('furnaceManufacturer', furnace.manufacturer, 'furnace manufacturer', applied);
+                    applyAiField('furnaceVenting', furnace.venting, 'observed furnace venting', applied);
                     applyAiField('furnaceModel', furnace.model, 'furnace model', applied);
                     applyAiField('furnaceSerial', furnace.serial, 'furnace serial', applied);
                     applyAiField('furnaceInputBTU', furnace.inputBtu, 'furnace input', applied);
                     applyAiField('furnaceOutputBTU', furnace.outputBtu, 'furnace output', applied);
                     applyAiField('furnaceAFUE', furnace.afue, 'AFUE', applied);
-                    applyAiField('furnaceType', furnace.type, 'furnace type', applied);
+                    applyAiChoice('furnaceType', furnace.type, 'furnace type', applied, reviewNotes);
+                    applyAiChoice('currentFuel', furnace.fuel, 'primary heating fuel', applied, reviewNotes);
+                    applyAiChoice('systemType', furnace.distribution, 'heating distribution', applied, reviewNotes);
                     if (!furnace.model) missing.push('furnace model');
                     if (!furnace.serial) missing.push('furnace serial');
                     if (!furnace.inputBtu || !furnace.outputBtu) missing.push('furnace input/output');
+                    if (furnace.identificationBasis) reviewNotes.push('Heating identification: ' + furnace.identificationBasis);
                     if (furnace.notes) reviewNotes.push(furnace.notes);
                 }
                 if (cooling) {
@@ -1579,14 +1613,24 @@
                         cooling.tons = coolingTonsFromModel(cooling.model);
                         if (cooling.tons) reviewNotes.push('Cooling capacity was decoded locally from the model number.');
                     }
+                    if (!cooling.tons) {
+                        const homeEstimate = estimateResidentialLoads($('sqft').value, $('yearBuilt').value, $('insulation').value);
+                        cooling.tons = homeEstimate.coolingTons;
+                        cooling.tonsFromHomeEstimate = true;
+                        reviewNotes.push('Installed cooling capacity was unavailable, so ' + cooling.tons.toFixed(1) + ' tons was filled from the home estimate using ' + (+$('sqft').value || 2200).toLocaleString() + ' sq ft, year built ' + (+$('yearBuilt').value || 2000) + ', and the selected envelope. This is not the outdoor unit\'s verified capacity.');
+                    }
+                    if (cooling.efficiencyIsEstimate) reviewNotes.push('Cooling efficiency is a visual estimate' + (cooling.efficiencyRange ? ' (' + cooling.efficiencyRange + ')' : '') + ', not a nameplate rating.');
+                    applyAiField('coolingManufacturer', cooling.manufacturer, 'cooling manufacturer', applied);
                     applyAiField('coolingModel', cooling.model, 'cooling model', applied);
                     applyAiField('coolingSerial', cooling.serial, 'cooling serial', applied);
-                    applyAiField('currentCoolingTons', cooling.tons, 'cooling capacity', applied);
+                    applyAiField('currentCoolingTons', cooling.tons, cooling.tonsFromHomeEstimate ? 'cooling capacity (home estimate)' : 'cooling capacity', applied);
                     applyAiField('coolingEfficiency', cooling.efficiency, 'cooling efficiency', applied);
-                    applyAiField('coolingType', cooling.type, 'cooling type', applied);
+                    applyAiChoice('coolingEffUnit', cooling.efficiencyUnit, 'cooling efficiency unit', applied, reviewNotes);
+                    applyAiChoice('coolingType', cooling.type, 'cooling type', applied, reviewNotes);
                     if (!cooling.model) missing.push('cooling model');
                     if (!cooling.serial) missing.push('cooling serial');
                     if (!cooling.tons) missing.push('cooling capacity');
+                    if (cooling.identificationBasis) reviewNotes.push('Cooling identification: ' + cooling.identificationBasis);
                     if (cooling.notes) reviewNotes.push(cooling.notes);
                 }
 
@@ -1598,7 +1642,7 @@
                 const averageConfidence = confidence.length ? Math.round(confidence.reduce((sum, item) => sum + item, 0) / confidence.length) : null;
                 const resultMessage = applied.length
                     ? '<b>Analysis complete:</b> filled ' + escapeHtml(applied.join(', ')) + '.'
-                    : '<b>No plate values could be read reliably.</b>';
+                    : '<b>No equipment details could be identified reliably.</b>';
                 const missingMessage = missing.length
                     ? '<div class="mt-1"><b>Check manually:</b> ' + escapeHtml([...new Set(missing)].join(', ')) + '.</div>'
                     : '';
@@ -1611,14 +1655,14 @@
                     : '';
                 const details = missingMessage
                     + notesMessage
-                    + '<div class="mt-1">' + (averageConfidence === null ? '' : 'Gemini confidence: ' + averageConfidence + '%. ') + 'All filled fields remain amber until the HCA verifies the physical plate.</div>'
+                    + '<div class="mt-1">' + (averageConfidence === null ? '' : 'Gemini confidence: ' + averageConfidence + '%. ') + 'All filled fields remain amber until the HCA verifies the equipment and any physical plate.</div>'
                     + textDetails;
                 setPhotoAnalysisStatus(resultMessage, applied.length ? 'emerald' : 'amber', details);
-                toast(applied.length ? 'Rating-plate fields filled — verify amber values' : 'Could not read the plate; see analysis details', applied.length ? 'emerald' : 'amber', 4500);
+                toast(applied.length ? 'Equipment fields filled — verify amber values' : 'Could not identify the equipment; see analysis details', applied.length ? 'emerald' : 'amber', 4500);
             } catch (error) {
-                console.error('Gemini rating-plate analysis failed', error);
-                setPhotoAnalysisStatus('<b>Analysis failed:</b> ' + escapeHtml(error.message) + '. You can still enter the plate values manually.', 'red');
-                toast('Plate analysis failed — see the message above', 'amber', 4200);
+                console.error('Gemini equipment analysis failed', error);
+                setPhotoAnalysisStatus('<b>Analysis failed:</b> ' + escapeHtml(error.message) + '. You can still enter the equipment values manually.', 'red');
+                toast('Equipment analysis failed — see the message above', 'amber', 4200);
             } finally {
                 button.disabled = false;
                 button.classList.remove('opacity-60', 'cursor-wait');
