@@ -1,4 +1,4 @@
-const MODEL = 'gemini-2.5-flash-lite';
+const MODEL = 'gemini-3.1-flash-lite';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 const MAX_REQUEST_BYTES = 12 * 1024 * 1024;
 const MAX_TOTAL_IMAGE_BYTES = 8 * 1024 * 1024;
@@ -22,54 +22,46 @@ Rules:
 - Mention uncertainty, conflicting plates, or derived capacity in notes.
 - A human must verify every result before it is used.`;
 
-const nullableString = description => ({ type: ['string', 'null'], description });
-const nullableNumber = description => ({ type: ['number', 'null'], description });
+const nullableString = description => ({ type: 'STRING', nullable: true, description });
+const nullableNumber = description => ({ type: 'NUMBER', nullable: true, description });
 
 const EQUIPMENT_SCHEMA = {
-    type: 'object',
+    type: 'OBJECT',
     properties: {
         furnace: {
-            anyOf: [
-                { type: 'null' },
-                {
-                    type: 'object',
-                    properties: {
-                        model: nullableString('Exact furnace model number or null.'),
-                        serial: nullableString('Exact furnace serial number or null.'),
-                        inputBtu: nullableNumber('High-fire input capacity in BTU/h or null.'),
-                        outputBtu: nullableNumber('High-fire output capacity in BTU/h or null.'),
-                        afue: nullableNumber('AFUE percentage or null.'),
-                        type: nullableString('gas_furnace, high_eff_gas, electric, or null.'),
-                        confidence: nullableNumber('Confidence from 0 to 100.'),
-                        plateText: nullableString('Short supporting plate transcription.'),
-                        notes: nullableString('Uncertainty or derivation note.')
-                    },
-                    required: ['model', 'serial', 'inputBtu', 'outputBtu', 'afue', 'type', 'confidence', 'plateText', 'notes']
-                }
-            ]
+            type: 'OBJECT',
+            nullable: true,
+            properties: {
+                model: nullableString('Exact furnace model number or null.'),
+                serial: nullableString('Exact furnace serial number or null.'),
+                inputBtu: nullableNumber('High-fire input capacity in BTU/h or null.'),
+                outputBtu: nullableNumber('High-fire output capacity in BTU/h or null.'),
+                afue: nullableNumber('AFUE percentage or null.'),
+                type: nullableString('gas_furnace, high_eff_gas, electric, or null.'),
+                confidence: nullableNumber('Confidence from 0 to 100.'),
+                plateText: nullableString('Short supporting plate transcription.'),
+                notes: nullableString('Uncertainty or derivation note.')
+            },
+            required: ['model', 'serial', 'inputBtu', 'outputBtu', 'afue', 'type', 'confidence', 'plateText', 'notes']
         },
         cooling: {
-            anyOf: [
-                { type: 'null' },
-                {
-                    type: 'object',
-                    properties: {
-                        model: nullableString('Exact outdoor-unit model number or null.'),
-                        serial: nullableString('Exact outdoor-unit serial number or null.'),
-                        tons: nullableNumber('Nominal cooling capacity in tons or null.'),
-                        efficiency: nullableNumber('SEER, SEER2, or EER shown on the plate, or null.'),
-                        type: nullableString('ac, heat_pump, old_hp, or null.'),
-                        confidence: nullableNumber('Confidence from 0 to 100.'),
-                        plateText: nullableString('Short supporting plate transcription.'),
-                        notes: nullableString('Uncertainty or derivation note.')
-                    },
-                    required: ['model', 'serial', 'tons', 'efficiency', 'type', 'confidence', 'plateText', 'notes']
-                }
-            ]
+            type: 'OBJECT',
+            nullable: true,
+            properties: {
+                model: nullableString('Exact outdoor-unit model number or null.'),
+                serial: nullableString('Exact outdoor-unit serial number or null.'),
+                tons: nullableNumber('Nominal cooling capacity in tons or null.'),
+                efficiency: nullableNumber('SEER, SEER2, or EER shown on the plate, or null.'),
+                type: nullableString('ac, heat_pump, old_hp, or null.'),
+                confidence: nullableNumber('Confidence from 0 to 100.'),
+                plateText: nullableString('Short supporting plate transcription.'),
+                notes: nullableString('Uncertainty or derivation note.')
+            },
+            required: ['model', 'serial', 'tons', 'efficiency', 'type', 'confidence', 'plateText', 'notes']
         },
         warnings: {
-            type: 'array',
-            items: { type: 'string' },
+            type: 'ARRAY',
+            items: { type: 'STRING' },
             description: 'Important human-review warnings.'
         }
     },
@@ -214,7 +206,8 @@ async function analyze(request, env, origin) {
                 generationConfig: {
                     temperature: 0,
                     maxOutputTokens: 1400,
-                    responseFormat: { text: { mimeType: 'application/json', schema: EQUIPMENT_SCHEMA } }
+                    responseMimeType: 'application/json',
+                    responseSchema: EQUIPMENT_SCHEMA
                 }
             })
         });
@@ -229,7 +222,12 @@ async function analyze(request, env, origin) {
         return json({ error: 'Gemini returned an unreadable response.' }, 502, origin);
     }
     if (!upstream.ok) {
-        console.error('Gemini request failed', upstream.status, upstreamBody && upstreamBody.error && upstreamBody.error.status);
+        console.error(
+            'Gemini request failed',
+            upstream.status,
+            upstreamBody && upstreamBody.error && upstreamBody.error.status,
+            upstreamBody && upstreamBody.error && upstreamBody.error.message
+        );
         const status = upstream.status === 429 ? 429 : 502;
         return json({ error: status === 429 ? 'Gemini is temporarily rate limited. Please retry shortly.' : 'Gemini could not analyze these photos.' }, status, origin);
     }

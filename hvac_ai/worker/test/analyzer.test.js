@@ -30,10 +30,13 @@ test('sanitizes model data and rejects implausible values', () => {
 test('Worker proxies a valid request and returns CORS-safe structured data', async () => {
     const originalFetch = globalThis.fetch;
     globalThis.fetch = async (url, options) => {
-        assert.match(String(url), /gemini-2\.5-flash-lite:generateContent$/);
+        assert.match(String(url), /gemini-3\.1-flash-lite:generateContent$/);
         assert.equal(options.headers['x-goog-api-key'], 'test-secret');
         const request = JSON.parse(options.body);
         assert.equal(request.contents[0].parts[2].inline_data.mime_type, 'image/jpeg');
+        assert.equal(request.generationConfig.responseMimeType, 'application/json');
+        assert.equal(request.generationConfig.responseSchema.type, 'OBJECT');
+        assert.equal(request.generationConfig.responseFormat, undefined);
         return new Response(JSON.stringify({
             candidates: [{ content: { parts: [{ text: JSON.stringify({
                 furnace: { model: 'EL296UH070XV36B', serial: '1234A56789', inputBtu: 70000, outputBtu: 67000, afue: 96, type: 'high_eff_gas', confidence: 94, plateText: 'MODEL EL296UH070XV36B', notes: null },
@@ -55,7 +58,7 @@ test('Worker proxies a valid request and returns CORS-safe structured data', asy
         assert.equal(response.status, 200);
         assert.equal(response.headers.get('Access-Control-Allow-Origin'), 'https://example.github.io');
         assert.equal(body.furnace.inputBtu, 70000);
-        assert.equal(body.model, 'gemini-2.5-flash-lite');
+        assert.equal(body.model, 'gemini-3.1-flash-lite');
         assert.equal(JSON.stringify(body).includes('test-secret'), false);
     } finally {
         globalThis.fetch = originalFetch;

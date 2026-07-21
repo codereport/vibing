@@ -6,7 +6,7 @@ The two browser apps call one Cloudflare Worker. The Worker holds the Gemini key
 
 - `hvac-efficiency-pro-hca.html` and `hvac-efficiency-pro-customer.html` send up to two furnace and two cooling rating-plate photos.
 - The browser resizes each image to a maximum 1,800-pixel edge, converts it to JPEG, and thereby strips normal image metadata before upload.
-- `worker/src/index.js` calls `gemini-2.5-flash-lite` and accepts only a fixed JSON schema.
+- `worker/src/index.js` calls `gemini-3.1-flash-lite` and accepts only a fixed JSON schema.
 - Model numbers, serial numbers, capacities, efficiencies, equipment types, notes, and confidence are validated before they return to the browser.
 - AI-filled fields stay amber and the HCA verification checkbox is reset. AI output is never treated as verified sizing data.
 - `config.js` contains only the public Worker URL. No secret belongs there.
@@ -20,7 +20,7 @@ The two browser apps call one Cloudflare Worker. The Worker holds the Gemini key
 5. In AI Studio, confirm the key is restricted to the Gemini API. If it is an older unrestricted standard key, replace it with a new authorization key.
 6. For real customer photos, enable the Gemini paid tier and configure a Google Cloud budget alert. The paid tier currently marks submitted data as not used to improve Google's products; the free tier does not. Google may still retain prompts/context/output for 55 days for abuse monitoring.
 
-The configured model is `gemini-2.5-flash-lite`. Current paid standard pricing is $0.10 per million input tokens and $0.40 per million output tokens. Image token usage depends on image dimensions, so use the Google usage dashboard to establish the real per-analysis cost from your first 50–100 jobs.
+The configured model is `gemini-3.1-flash-lite`. Current paid standard pricing is $0.25 per million text/image/video input tokens and $1.50 per million output tokens. Image token usage depends on image dimensions, so use the Google usage dashboard to establish the real per-analysis cost from your first 50–100 jobs.
 
 ## 2. Create and deploy the Cloudflare Worker
 
@@ -67,7 +67,7 @@ https://hvac-equipment-analyzer.YOUR-SUBDOMAIN.workers.dev/health
 The expected response is:
 
 ```json
-{"ok":true,"model":"gemini-2.5-flash-lite"}
+{"ok":true,"model":"gemini-3.1-flash-lite"}
 ```
 
 ## 3. Connect the GitHub Pages apps

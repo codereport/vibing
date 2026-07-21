@@ -16,7 +16,7 @@ Static Ontario HVAC assessment prototype with separate HCA and customer versions
 
 - Replace the free address estimate with licensed MPAC/propertyline or approved CRM/property data. Exact Ontario residential square-footage data is not exposed by the current free geocoder.
 - Replace the geography proxy with weather-normal data for the exact address and, where available, interval utility history.
-- Deploy and configure the included Cloudflare Worker before using AI Analyze. It calls Gemini 2.5 Flash-Lite without exposing the key and leaves all returned plate fields unverified. See `GEMINI_CLOUDFLARE_SETUP.md`.
+- Deploy and configure the included Cloudflare Worker before using AI Analyze. It calls Gemini 3.1 Flash-Lite without exposing the key and leaves all returned plate fields unverified. See `GEMINI_CLOUDFLARE_SETUP.md`.
 - Validate rebate amounts and equipment eligibility against the live Home Renovation Savings rules at quote time.
 - Configure the sales manager phone number on first use of the call button.
 - Confirm the 5-inch media cabinet dimensions and front service/pull-out clearance from the selected product instructions. The 7.5-inch value is only a planning target, not a universal installation requirement.
