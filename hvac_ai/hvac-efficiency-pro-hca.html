@@ -799,7 +799,7 @@
                             </div>
 
                             <div id="netMonthlyRow" class="mt-3 rounded-2xl p-3 bg-emerald-500/20">
-                                <span class="text-sm font-medium text-emerald-100">Estimated monthly position after payment</span>
+                                <span id="netMonthlyLabel" class="text-sm font-medium text-emerald-100">Estimated monthly savings after payment</span>
                                 <span id="netMonthly" class="font-bold text-2xl ml-2">$—</span>
                             </div>
                         </div>
@@ -1994,8 +1994,12 @@
             $('monthlySavings').textContent = money(monthlyEnergy);
             $('monthlyBenefitBig').textContent = money(monthlyBenefit);
             $('monthlyPaymentBig').textContent = money(payMo);
-            $('netMonthly').textContent = moneyS(netMo) + '/mo';
+            const netMonthlyLabel = netMo >= 0 ? 'Estimated monthly savings after payment' : 'Estimated additional monthly cost';
+            $('netMonthlyLabel').textContent = netMonthlyLabel;
+            $('netMonthly').textContent = money(Math.abs(netMo)) + '/mo';
             $('netMonthlyRow').className = 'mt-3 rounded-2xl p-3 ' + (netMo >= 0 ? 'bg-emerald-500/20' : 'bg-red-500/20');
+            $('netMonthlyLabel').classList.toggle('text-emerald-100', netMo >= 0);
+            $('netMonthlyLabel').classList.toggle('text-red-100', netMo < 0);
             $('netMonthly').classList.toggle('text-emerald-200', netMo >= 0);
             $('netMonthly').classList.toggle('text-red-200', netMo < 0);
             $('currentCost').textContent = money(curCost);
@@ -2011,7 +2015,7 @@
                 ['Current protection plan no longer required', planMo],
                 ['Estimated monthly benefit', monthlyBenefit],
                 ['Lowest offered monthly payment', -payMo],
-                ['Estimated monthly position', netMo]
+                [netMonthlyLabel, Math.abs(netMo)]
             ].map((r, i) => `<div class="flex justify-between ${i >= 3 ? 'font-bold border-t pt-2' : ''}"><span>${r[0]}</span><span>${moneyS(r[1])}</span></div>`).join('');
 
             renderCompare(furnaceAFUE, coolingEff, coolingUnit, proposedType, pHeat, pCool);
@@ -2158,7 +2162,7 @@
             doc.setFillColor(16, 185, 129); doc.roundedRect(14, y, W - 28, 26, 3, 3, 'F');
             doc.setTextColor(255); doc.setFontSize(12);
             doc.text(`Estimated monthly benefit: $${c.monthlyBenefit}  (${c.savingsPct}% energy reduction)`, 20, y + 10);
-            doc.setFontSize(10); doc.text(`Energy $${c.monthlyEnergy} + repairs $${c.repairMo} + plan $${c.planMo} - payment $${c.payMo} = $${c.netMo}/mo`, 20, y + 19);
+            doc.setFontSize(10); doc.text(`Energy $${c.monthlyEnergy} + repairs $${c.repairMo} + plan $${c.planMo} - payment $${c.payMo} = ${c.netMo >= 0 ? 'savings after payment' : 'additional monthly cost'} $${Math.abs(c.netMo)}/mo`, 20, y + 19);
             doc.setTextColor(0); y += 36;
             doc.setFontSize(13); doc.setFont(undefined, 'bold'); doc.text('Systems & Costs', 14, y); y += 7;
             doc.setFont(undefined, 'normal'); doc.setFontSize(10);
@@ -2212,7 +2216,7 @@ Peak heat loss: ${c.peakHeatLoss.toLocaleString()} BTU/h
 Proposed: ${c.proposedType}
 Sized capacity: ${c.capacity}
 Estimated monthly benefit: $${c.monthlyBenefit} (energy $${c.monthlyEnergy} + repairs $${c.repairMo} + current plan $${c.planMo})
-Lowest monthly payment: $${c.payMo} → estimated position $${c.netMo}/mo
+Lowest monthly payment: $${c.payMo} → ${c.netMo >= 0 ? 'savings after payment' : 'additional monthly cost'} $${Math.abs(c.netMo)}/mo
 Net investment after rebates: $${c.netInvestment}`;
             navigator.clipboard.writeText(text).then(() => toast('Summary copied', 'emerald')).catch(() => toast('Copy failed', 'amber'));
         }
