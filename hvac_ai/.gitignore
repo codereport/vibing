@@ -1,9 +1,0 @@
-.cache/
-output/
-*.xls
-*.xlsx
-*.xlsm
-*.xlsb
-worker/.dev.vars
-worker/.wrangler/
-worker/node_modules/
