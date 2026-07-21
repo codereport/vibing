@@ -51,6 +51,14 @@ test('sanitizes visual identification and oil-furnace classifications', () => {
     assert.equal(result.cooling.efficiencyUnit, 'SEER');
 });
 
+test('preserves a supported propane-furnace fuel classification', () => {
+    const result = sanitizeGeminiResult({
+        furnace: { type: 'gas_furnace', fuel: 'propane', distribution: 'forced_air' }
+    });
+    assert.equal(result.furnace.fuel, 'propane');
+    assert.equal(result.furnace.distribution, 'forced_air');
+});
+
 test('Worker proxies a valid request and returns CORS-safe structured data', async () => {
     const originalFetch = globalThis.fetch;
     globalThis.fetch = async (url, options) => {

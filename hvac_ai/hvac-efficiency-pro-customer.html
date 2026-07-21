@@ -299,7 +299,9 @@
                             <label class="label text-slate-500 mb-1.5 flex items-center gap-2">Existing Heating Distribution <span class="review-pill">Review</span></label>
                             <select id="systemType"
                                 class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl text-base bg-white">
-                                <option value="forced_air" selected>Forced air</option>
+                                <option value="forced_air_gas" selected>Forced air — natural gas</option>
+                                <option value="forced_air_propane">Forced air — propane</option>
+                                <option value="forced_air_oil">Forced air — oil</option>
                                 <option value="boiler">Boiler / hydronic</option>
                                 <option value="baseboard">Electric baseboard</option>
                             </select>
@@ -496,7 +498,7 @@
                     <div class="p-6 space-y-6">
                         <div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div data-field><label class="label text-slate-500 mb-1.5 flex items-center gap-2">Current primary heating fuel <span class="review-pill">Review</span></label><select id="currentFuel" class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl bg-white"><option value="gas" selected>Natural gas</option><option value="electric">Electricity</option><option value="oil">Oil</option><option value="wood">Wood</option></select></div>
+                                <div data-field><label class="label text-slate-500 mb-1.5 flex items-center gap-2">Current primary heating fuel <span class="review-pill">Review</span></label><select id="currentFuel" class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl bg-white"><option value="gas" selected>Natural gas</option><option value="propane">Propane</option><option value="electric">Electricity</option><option value="oil">Oil</option><option value="wood">Wood</option></select></div>
                                 <div><label class="label text-slate-500 mb-1.5 block">Natural gas meter at home?</label><select id="hasGasMeter" class="calc-input w-full px-4 py-3 border border-slate-300 rounded-2xl bg-white"><option value="yes" selected>Yes — Enbridge customer</option><option value="no">No natural gas meter</option></select></div>
                             </div>
                             <div
@@ -1541,6 +1543,10 @@
             applyAiField(id, value, label, applied);
             if (previousLabel !== nextLabel) reviewNotes.push(label + ' changed from ' + previousLabel + ' to ' + nextLabel + ' based on the equipment identification.');
         }
+        function heatingSystemChoice(distribution, fuel) {
+            if (distribution !== 'forced_air') return distribution;
+            return ({ gas: 'forced_air_gas', propane: 'forced_air_propane', oil: 'forced_air_oil' })[fuel] || null;
+        }
         async function analyzeAllPhotos() {
             const known = {
                 furnaceModel: $('furnaceModel').value.trim(),
@@ -1601,7 +1607,7 @@
                     applyAiField('furnaceAFUE', furnace.afue, 'AFUE', applied);
                     applyAiChoice('furnaceType', furnace.type, 'furnace type', applied, reviewNotes);
                     applyAiChoice('currentFuel', furnace.fuel, 'primary heating fuel', applied, reviewNotes);
-                    applyAiChoice('systemType', furnace.distribution, 'heating distribution', applied, reviewNotes);
+                    applyAiChoice('systemType', heatingSystemChoice(furnace.distribution, furnace.fuel), 'heating distribution', applied, reviewNotes);
                     if (!furnace.model) missing.push('furnace model');
                     if (!furnace.serial) missing.push('furnace serial');
                     if (!furnace.inputBtu || !furnace.outputBtu) missing.push('furnace input/output');
@@ -1917,6 +1923,7 @@
             const effectiveAFUE = Math.max(50, furnaceAFUE * (oversizeRatio > 1.8 ? .90 : oversizeRatio > 1.4 ? .95 : 1));
             const fuel = $('currentFuel').value;
             let curHeat = fuel === 'electric' ? (annualHeatBTU / (effectiveAFUE / 100) / 3412) * elecPrice
+                : fuel === 'propane' ? (annualHeatBTU / (effectiveAFUE / 100) / 25300) * 0.95
                 : fuel === 'oil' ? (annualHeatBTU / (effectiveAFUE / 100) / 36500) * 1.65
                 : fuel === 'wood' ? (annualHeatBTU / .65 / 20000000) * 450
                 : (annualHeatBTU / (effectiveAFUE / 100) / BTU_M3) * gasPrice;
@@ -2062,6 +2069,19 @@
         let calcT;
         function updateCalculations() { clearTimeout(calcT); calcT = setTimeout(calculateAll, 60); }
         document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', updateCalculations));
+        $('systemType').addEventListener('change', () => {
+            const fuel = ({ forced_air_gas: 'gas', forced_air_propane: 'propane', forced_air_oil: 'oil' })[$('systemType').value];
+            if (fuel) {
+                $('currentFuel').value = fuel;
+                updateCalculations();
+            }
+        });
+        $('currentFuel').addEventListener('change', () => {
+            if ($('systemType').value.startsWith('forced_air_')) {
+                const choice = heatingSystemChoice('forced_air', $('currentFuel').value);
+                if (choice) $('systemType').value = choice;
+            }
+        });
 
         function showSavingsDetails(show) {
             $('savingsDetails').classList.toggle('screen-hidden', !show);

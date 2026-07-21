@@ -13,13 +13,13 @@ Rules:
 - Prefer exact rating-plate/model-number data. Transcribe model and serial exactly using uppercase letters, digits, and hyphens.
 - Without a readable plate, inspect logos, cabinet styling, burner/coil layout, fuel piping, flue material, venting path, condensate drain, electrical connections, refrigerant lines, and labels.
 - A distinctive logo or model family may identify the manufacturer. Cabinet colour alone is not enough. Return null when it is not reasonably identifiable.
-- Identify heating fuel and distribution only when supported by visible equipment or the model. Gas, oil, and electric furnaces normally use forced_air; boilers use boiler; electric baseboards use baseboard.
+- Identify heating fuel and distribution only when supported by visible equipment or the model. Natural gas, propane, oil, and electric furnaces normally use forced_air; boilers use boiler; electric baseboards use baseboard. Only distinguish propane from natural gas when a label, regulator, tank connection, conversion marking, or model documentation supports it.
 - White PVC/CPVC intake or exhaust plus condensate drainage usually indicates a condensing high-efficiency gas furnace. Metal chimney/B-vent usually indicates non-condensing equipment. An oil burner/gun, oil line/filter, or oil-specific model indicates oil. Record visible venting evidence.
 - Exact AFUE/SEER/SEER2/EER values require a plate, model decode, or distinctive series. Otherwise, if visual evidence supports a broad efficiency class, return a conservative numeric estimate, mark it as estimated, provide a range, and explain the basis. Never present a visual estimate as an exact rating.
 - inputBtu and outputBtu are high-fire values in BTU/h, not low-fire values.
 - tons is installed nominal cooling capacity. Decode standard model codes (018=1.5, 024=2, 030=2.5, 036=3, 042=3.5, 048=4, 060=5), but never infer tonnage from cabinet size alone. The app supplies a house-based fallback when installed capacity is unknown.
 - furnace.type must be gas_furnace, high_eff_gas, oil_furnace, electric, or null.
-- furnace.fuel must be gas, oil, electric, wood, or null. furnace.distribution must be forced_air, boiler, baseboard, or null.
+- furnace.fuel must be gas, propane, oil, electric, wood, or null. furnace.distribution must be forced_air, boiler, baseboard, or null.
 - cooling.type must be ac, heat_pump, old_hp, or null. cooling.efficiencyUnit must be SEER, SEER2, EER, HSPF, or null.
 - confidence is 0-100. Reduce it for blur, glare, obstruction, visual-only estimates, or ambiguous branding.
 - plateText is a short transcription of lines supporting extracted values. identificationBasis states the visual, logo, plate, or model evidence used.
@@ -46,7 +46,7 @@ const EQUIPMENT_SCHEMA = {
                 afueIsEstimate: nullableBoolean('True when AFUE is visually estimated.'),
                 efficiencyRange: nullableString('Broad AFUE range for a visual estimate; otherwise null.'),
                 type: nullableString('gas_furnace, high_eff_gas, oil_furnace, electric, or null.'),
-                fuel: nullableString('gas, oil, electric, wood, or null.'),
+                fuel: nullableString('gas, propane, oil, electric, wood, or null.'),
                 distribution: nullableString('forced_air, boiler, baseboard, or null.'),
                 venting: nullableString('Short description of visible flue/intake/venting evidence or null.'),
                 confidence: nullableNumber('Confidence from 0 to 100.'),
@@ -166,7 +166,7 @@ export function sanitizeGeminiResult(raw) {
     const cooling = raw && raw.cooling && typeof raw.cooling === 'object' ? raw.cooling : null;
     const furnaceTypes = new Set(['gas_furnace', 'high_eff_gas', 'oil_furnace', 'electric']);
     const coolingTypes = new Set(['ac', 'heat_pump', 'old_hp']);
-    const furnaceFuels = new Set(['gas', 'oil', 'electric', 'wood']);
+    const furnaceFuels = new Set(['gas', 'propane', 'oil', 'electric', 'wood']);
     const distributions = new Set(['forced_air', 'boiler', 'baseboard']);
     const efficiencyUnits = new Set(['SEER', 'SEER2', 'EER', 'HSPF']);
     return {
