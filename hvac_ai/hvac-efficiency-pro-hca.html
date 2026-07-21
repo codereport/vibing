@@ -387,10 +387,10 @@
                                     <input id="furnaceAFUE" type="number" step="0.5" value="80"
                                         class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
                                 </div>
-                                <div><label class="text-[11px] font-semibold text-slate-500 mb-1 block">Model #</label><input id="furnaceModel" placeholder="From plate" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
-                                <div><label class="text-[11px] font-semibold text-slate-500 mb-1 block">Serial #</label><input id="furnaceSerial" placeholder="From plate" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
-                                <div><label class="text-[11px] font-semibold text-slate-500 mb-1 block">High-fire input BTU/h</label><input id="furnaceInputBTU" type="number" value="80000" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
-                                <div><label class="text-[11px] font-semibold text-slate-500 mb-1 block">High-fire output BTU/h</label><input id="furnaceOutputBTU" type="number" value="64000" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
+                                <div data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Model # <span class="review-pill">R</span></label><input id="furnaceModel" placeholder="From plate" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
+                                <div data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Serial # <span class="review-pill">R</span></label><input id="furnaceSerial" placeholder="From plate" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
+                                <div data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">High-fire input BTU/h <span class="review-pill">R</span></label><input id="furnaceInputBTU" type="number" value="80000" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
+                                <div data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">High-fire output BTU/h <span class="review-pill">R</span></label><input id="furnaceOutputBTU" type="number" value="64000" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
                             </div>
                         </div>
 
@@ -443,9 +443,9 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div><label class="text-[11px] font-semibold text-slate-500 mb-1 block">Model #</label><input id="coolingModel" placeholder="From plate" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
-                                <div><label class="text-[11px] font-semibold text-slate-500 mb-1 block">Serial #</label><input id="coolingSerial" placeholder="From plate" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
-                                <div class="col-span-2"><label class="text-[11px] font-semibold text-slate-500 mb-1 block">Nominal capacity</label><div class="flex gap-2"><input id="currentCoolingTons" type="number" step="0.5" value="3" class="calc-input flex-1 px-3 py-2 text-sm border border-slate-300 rounded-xl"><span class="self-center text-xs text-slate-500">tons / <span id="currentCoolingBTU">36,000 BTU/h</span></span></div></div>
+                                <div data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Model # <span class="review-pill">R</span></label><input id="coolingModel" placeholder="From plate" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
+                                <div data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Serial # <span class="review-pill">R</span></label><input id="coolingSerial" placeholder="From plate" class="calc-input w-full px-3 py-2 text-sm border border-slate-300 rounded-xl"></div>
+                                <div class="col-span-2" data-field><label class="text-[11px] font-semibold text-slate-500 mb-1 flex items-center gap-1.5">Nominal capacity <span class="review-pill">R</span></label><div class="flex gap-2"><input id="currentCoolingTons" type="number" step="0.5" value="3" class="calc-input flex-1 px-3 py-2 text-sm border border-slate-300 rounded-xl"><span class="self-center text-xs text-slate-500">tons / <span id="currentCoolingBTU">36,000 BTU/h</span></span></div></div>
                             </div>
                         </div>
 
@@ -1593,17 +1593,33 @@
                         furnace.outputBtu = Math.round(furnace.inputBtu * furnace.afue / 100 / 100) * 100;
                         reviewNotes.push('Furnace output was calculated from input capacity and AFUE.');
                     }
+                    if (!furnace.inputBtu && furnace.outputBtu && furnace.afue) {
+                        furnace.inputBtu = Math.round(furnace.outputBtu / (furnace.afue / 100) / 100) * 100;
+                        reviewNotes.push('Furnace input was calculated from output capacity and AFUE.');
+                    }
                     if (!furnace.afue && furnace.inputBtu && furnace.outputBtu) {
                         furnace.afue = Math.round(furnace.outputBtu / furnace.inputBtu * 1000) / 10;
                         reviewNotes.push('AFUE was calculated from the input and output ratings.');
+                    }
+                    if (!furnace.inputBtu) {
+                        const homeEstimate = estimateResidentialLoads($('sqft').value, $('yearBuilt').value, $('insulation').value);
+                        furnace.inputBtu = homeEstimate.heatingInputBtu;
+                        furnace.inputBtuFromHomeEstimate = true;
+                        if (!furnace.outputBtu) {
+                            furnace.outputBtu = furnace.afue
+                                ? Math.round(furnace.inputBtu * furnace.afue / 100 / 100) * 100
+                                : homeEstimate.peakHeatLoss;
+                            furnace.outputBtuFromHomeEstimate = true;
+                        }
+                        reviewNotes.push('Installed furnace capacity was unavailable, so the input and output fields were filled from the home estimate using ' + (+$('sqft').value || 2200).toLocaleString() + ' sq ft, year built ' + (+$('yearBuilt').value || 2000) + ', and the selected envelope. These are sizing estimates, not the furnace\'s verified ratings.');
                     }
                     if (furnace.afueIsEstimate) reviewNotes.push('Furnace AFUE is a visual estimate' + (furnace.efficiencyRange ? ' (' + furnace.efficiencyRange + ')' : '') + ', not a nameplate rating.');
                     applyAiField('furnaceManufacturer', furnace.manufacturer, 'furnace manufacturer', applied);
                     applyAiField('furnaceVenting', furnace.venting, 'observed furnace venting', applied);
                     applyAiField('furnaceModel', furnace.model, 'furnace model', applied);
                     applyAiField('furnaceSerial', furnace.serial, 'furnace serial', applied);
-                    applyAiField('furnaceInputBTU', furnace.inputBtu, 'furnace input', applied);
-                    applyAiField('furnaceOutputBTU', furnace.outputBtu, 'furnace output', applied);
+                    applyAiField('furnaceInputBTU', furnace.inputBtu, furnace.inputBtuFromHomeEstimate ? 'furnace input (home estimate)' : 'furnace input', applied);
+                    applyAiField('furnaceOutputBTU', furnace.outputBtu, furnace.outputBtuFromHomeEstimate ? 'furnace output (home estimate)' : 'furnace output', applied);
                     applyAiField('furnaceAFUE', furnace.afue, 'AFUE', applied);
                     applyAiChoice('furnaceType', furnace.type, 'furnace type', applied, reviewNotes);
                     applyAiChoice('currentFuel', furnace.fuel, 'primary heating fuel', applied, reviewNotes);
