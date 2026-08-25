@@ -220,6 +220,39 @@ const BOOKS = [
     accent: "#636b69",
   },
   {
+    id: "neuromancer",
+    title: "Neuromancer",
+    author: "William Gibson",
+    readDate: null,
+    series: "sprawl",
+    seriesOrder: 1,
+    cover: "isbn:9781473217386",
+    work: "OL27258W",
+    accent: "#c52e88",
+  },
+  {
+    id: "count-zero",
+    title: "Count Zero",
+    author: "William Gibson",
+    readDate: null,
+    series: "sprawl",
+    seriesOrder: 2,
+    cover: "isbn:9781473217409",
+    work: "OL27256W",
+    accent: "#249d68",
+  },
+  {
+    id: "mona-lisa-overdrive",
+    title: "Mona Lisa Overdrive",
+    author: "William Gibson",
+    readDate: null,
+    series: "sprawl",
+    seriesOrder: 3,
+    cover: "isbn:9781473217423",
+    work: "OL27253W",
+    accent: "#307db2",
+  },
+  {
     id: "the-peripheral",
     title: "The Peripheral",
     author: "William Gibson",
@@ -389,6 +422,11 @@ const SERIES = {
     author: "William Gibson",
     description: "Interleaved futures, telepresence and power across timelines.",
   },
+  sprawl: {
+    name: "Sprawl Trilogy",
+    author: "William Gibson",
+    description: "Cyberspace, artificial intelligence and high-tech lives at the edge of the matrix.",
+  },
   "egan-trilogy": {
     name: "The Greg Egan Trilogy",
     author: "Greg Egan · Unofficial sequence",
@@ -462,6 +500,7 @@ const VIEW_META = {
 
 const storageKey = "ai-fi-ratings-v2";
 const legacyStorageKey = "ai-fi-ratings-v1";
+const readDatesStorageKey = "ai-fi-read-dates-v1";
 const editableHosts = new Set(["localhost", "127.0.0.1", "[::1]", "::1", "0.0.0.0"]);
 const canEditRatings = editableHosts.has(window.location.hostname) || window.location.hostname.endsWith(".localhost");
 const viewRoot = document.querySelector("#viewRoot");
@@ -476,6 +515,10 @@ const ratingForm = document.querySelector("#ratingForm");
 const dialogBook = document.querySelector("#dialogBook");
 const ratingInput = document.querySelector("#ratingInput");
 const ratingOutput = document.querySelector("#ratingOutput");
+const finishDateEditor = document.querySelector("#finishDateEditor");
+const finishDateInput = document.querySelector("#finishDateInput");
+const previousDayButton = document.querySelector("#previousDayButton");
+const saveRatingButton = document.querySelector("#saveRating");
 const removeRating = document.querySelector("#removeRating");
 const aboutDialog = document.querySelector("#aboutDialog");
 const exportRatingsButton = document.querySelector("#exportRatings");
@@ -483,20 +526,80 @@ const importRatingsButton = document.querySelector("#importRatings");
 const importRatingsInput = document.querySelector("#importRatingsInput");
 const transferStatus = document.querySelector("#transferStatus");
 const ratingTransferCopy = document.querySelector("#ratingTransferCopy");
+const canonicalReadDates = Object.fromEntries(
+  BOOKS.filter((book) => book.readDate).map((book) => [book.id, book.readDate]),
+);
 
 let activeBookId = null;
+let activeBookWasUnread = false;
 let currentView = getInitialView();
+let readDateOverrides = loadReadDates();
+applyReadDates(readDateOverrides);
 let ratings = loadRatings();
 
 document.body.classList.toggle("is-readonly", !canEditRatings);
 importRatingsButton.hidden = !canEditRatings;
 ratingTransferCopy.textContent = canEditRatings
-  ? "Move your ranking between browsers or domains with a small JSON file."
-  : "The published ranking is read-only. Download a JSON snapshot for safekeeping.";
+  ? "Move your ranking and locally recorded finish dates between browsers with a small JSON file."
+  : "The published reading record is read-only. Download a JSON snapshot for safekeeping.";
 
 function getInitialView() {
   const hashView = window.location.hash.replace("#", "");
   return VIEW_META[hashView] ? hashView : "ranking";
+}
+
+function normalizeDateValue(value) {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const date = new Date(`${value}T12:00:00`);
+  return Number.isNaN(date.getTime()) ? null : value;
+}
+
+function localDateValue(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function normalizeReadDates(candidate) {
+  if (!candidate || typeof candidate !== "object") return {};
+
+  return Object.fromEntries(
+    Object.entries(candidate)
+      .filter(([id, date]) => BOOKS.some((book) => book.id === id) && normalizeDateValue(date))
+      .map(([id, date]) => [id, date]),
+  );
+}
+
+function loadReadDates() {
+  if (!canEditRatings) return {};
+
+  try {
+    return normalizeReadDates(JSON.parse(localStorage.getItem(readDatesStorageKey)));
+  } catch {
+    return {};
+  }
+}
+
+function applyReadDates(overrides) {
+  BOOKS.forEach((book) => {
+    book.readDate = canonicalReadDates[book.id] || null;
+  });
+
+  Object.entries(overrides).forEach(([id, date]) => {
+    const book = BOOKS.find((item) => item.id === id);
+    if (book) book.readDate = date;
+  });
+}
+
+function saveReadDates() {
+  if (!canEditRatings) return;
+
+  try {
+    localStorage.setItem(readDatesStorageKey, JSON.stringify(readDateOverrides));
+  } catch {
+    // The shelf still works for the current session when storage is unavailable.
+  }
 }
 
 function loadRatings() {
@@ -595,7 +698,16 @@ function bookCard(book, { rank = null, index = 0, todo = false, context = "defau
     </div>`;
 
   if (todo) {
-    return `<article class="book-card is-todo" style="--index:${index}">${inner}</article>`;
+    if (!canEditRatings) {
+      return `<article class="book-card is-todo is-readonly" style="--index:${index}">${inner}</article>`;
+    }
+
+    return `
+      <article class="book-card is-todo" style="--index:${index}">
+        <button class="book-trigger" type="button" data-rate-book="${book.id}" aria-label="Mark ${escapeHtml(book.title)} finished and rate it">
+          ${inner}
+        </button>
+      </article>`;
   }
 
   if (!canEditRatings) {
@@ -785,17 +897,21 @@ function hydrateCoverImages(root = document) {
 }
 
 function render() {
-  const isRanking = currentView === "ranking";
   const readCount = BOOKS.filter((book) => book.readDate && book.status !== "finishing").length;
   const ratedCount = Object.keys(ratings).length;
+  const todoCount = BOOKS.filter((book) => !book.readDate).length;
 
-  hero.classList.toggle("is-collapsed", isRanking);
-  viewRoot.classList.toggle("is-ranking-view", isRanking);
-  brandView.hidden = !isRanking;
-  headerStats.hidden = !isRanking;
-  if (isRanking) {
-    headerStats.innerHTML = `<strong>${ratedCount}</strong> ranked <i>·</i> <strong>${readCount}</strong> read`;
-  }
+  hero.classList.add("is-collapsed");
+  viewRoot.classList.add("is-compact-view");
+  brandView.hidden = false;
+  headerStats.hidden = false;
+  brandView.textContent = VIEW_META[currentView].title;
+  headerStats.innerHTML =
+    currentView === "series"
+      ? `<strong>${Object.keys(SERIES).length}</strong> series <i>·</i> <strong>${todoCount}</strong> to read <i>·</i> <strong>${readCount}</strong> read`
+      : currentView === "date"
+        ? `<strong>${readCount}</strong> finished <i>·</i> <strong>2.8</strong> yr span <i>·</i> <strong>1</strong> now`
+        : `<strong>${ratedCount}</strong> ranked <i>·</i> <strong>${readCount}</strong> read`;
 
   document.querySelectorAll(".view-button").forEach((button) => {
     const isActive = button.dataset.view === currentView;
@@ -818,12 +934,26 @@ function openRating(bookId) {
   if (!canEditRatings) return;
 
   const book = BOOKS.find((item) => item.id === bookId);
-  if (!book || !book.readDate) return;
+  if (!book) return;
   activeBookId = book.id;
+  activeBookWasUnread = !book.readDate;
   const currentRating = ratings[book.id];
   ratingInput.value = currentRating || 8;
   ratingOutput.value = Number(ratingInput.value).toFixed(1);
-  removeRating.hidden = !currentRating;
+  removeRating.hidden = activeBookWasUnread || !currentRating;
+  finishDateEditor.hidden = !activeBookWasUnread;
+  finishDateInput.disabled = !activeBookWasUnread;
+  finishDateInput.required = activeBookWasUnread;
+  finishDateInput.value = activeBookWasUnread ? localDateValue() : book.readDate;
+  finishDateInput.setCustomValidity("");
+  saveRatingButton.textContent = activeBookWasUnread ? "Finish + add to ranking" : "Save to ranking";
+
+  const series = SERIES[book.series];
+  const readingStatus = activeBookWasUnread
+    ? `Ready to finish · ${series ? series.name : "Unread"}`
+    : book.status === "finishing"
+      ? "Finishing Aug 26, 2026"
+      : `Read ${displayDate(book.readDate, { long: true })}`;
 
   dialogBook.innerHTML = `
     <div class="cover-fallback" style="--fallback-accent:${book.accent}" aria-hidden="true">
@@ -832,7 +962,7 @@ function openRating(bookId) {
     <img data-cover src="${coverUrl(book)}" alt="Cover of ${escapeHtml(book.title)}" />
     <div class="dialog-book-copy">
       <h2>${escapeHtml(book.title)}</h2>
-      <p>${escapeHtml(book.author)} · ${book.status === "finishing" ? "Finishing Aug 26, 2026" : `Read ${displayDate(book.readDate, { long: true })}`}</p>
+      <p>${escapeHtml(book.author)} · ${escapeHtml(readingStatus)}</p>
     </div>`;
 
   hydrateCoverImages(dialogBook);
@@ -857,6 +987,16 @@ ratingInput.addEventListener("input", () => {
   ratingOutput.value = Number(ratingInput.value).toFixed(1);
 });
 
+finishDateInput.addEventListener("input", () => finishDateInput.setCustomValidity(""));
+
+previousDayButton.addEventListener("click", () => {
+  const selectedDate = normalizeDateValue(finishDateInput.value) || localDateValue();
+  const previousDate = new Date(`${selectedDate}T12:00:00`);
+  previousDate.setDate(previousDate.getDate() - 1);
+  finishDateInput.value = localDateValue(previousDate);
+  finishDateInput.setCustomValidity("");
+});
+
 ratingForm.addEventListener("submit", (event) => {
   if (!canEditRatings) return;
 
@@ -865,7 +1005,23 @@ ratingForm.addEventListener("submit", (event) => {
 
   event.preventDefault();
   if (action === "remove") delete ratings[activeBookId];
-  else ratings[activeBookId] = Number(Number(ratingInput.value).toFixed(1));
+  else {
+    if (activeBookWasUnread) {
+      const finishDate = normalizeDateValue(finishDateInput.value);
+      if (!finishDate) {
+        finishDateInput.setCustomValidity("Choose a valid finish date.");
+        finishDateInput.reportValidity();
+        return;
+      }
+
+      const book = BOOKS.find((item) => item.id === activeBookId);
+      readDateOverrides[activeBookId] = finishDate;
+      if (book) book.readDate = finishDate;
+      saveReadDates();
+    }
+
+    ratings[activeBookId] = Number(Number(ratingInput.value).toFixed(1));
+  }
 
   saveRatings();
   ratingDialog.close(action);
@@ -877,9 +1033,12 @@ document.querySelector("#aboutButton").addEventListener("click", () => aboutDial
 exportRatingsButton.addEventListener("click", () => {
   const payload = {
     app: "AI-FI",
-    version: 1,
+    version: 2,
     exportedAt: new Date().toISOString(),
     ratings,
+    readDates: Object.fromEntries(
+      BOOKS.filter((book) => book.readDate).map((book) => [book.id, book.readDate]),
+    ),
   };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -906,11 +1065,21 @@ importRatingsInput.addEventListener("change", async () => {
   try {
     const payload = JSON.parse(await file.text());
     const imported = normalizeRatings(payload.ratings || payload);
-    if (!Object.keys(imported).length) throw new Error("No valid ratings found");
+    const hasReadDates = payload.readDates && typeof payload.readDates === "object";
+    const importedReadDates = normalizeReadDates(payload.readDates);
+    if (!Object.keys(imported).length && !Object.keys(importedReadDates).length) {
+      throw new Error("No valid reading data found");
+    }
+
     ratings = imported;
+    if (hasReadDates) {
+      readDateOverrides = importedReadDates;
+      applyReadDates(readDateOverrides);
+      saveReadDates();
+    }
     saveRatings();
     render();
-    transferStatus.textContent = `${Object.keys(imported).length} ratings imported.`;
+    transferStatus.textContent = `${Object.keys(imported).length} ratings and ${Object.keys(importedReadDates).length} finish dates imported.`;
   } catch {
     transferStatus.textContent = "That file does not contain a valid AI-FI ratings backup.";
   } finally {

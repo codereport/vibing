@@ -96,11 +96,19 @@
             aria-label="Rating out of ten"
           />
           <div class="range-labels" aria-hidden="true"><span>1</span><span>Essential</span><span>10</span></div>
+          <div class="finish-date-editor" id="finishDateEditor" hidden>
+            <div class="finish-date-heading">
+              <label for="finishDateInput">Finish date</label>
+              <button class="previous-day" id="previousDayButton" type="button">← 1 day</button>
+            </div>
+            <input id="finishDateInput" name="finishDate" type="date" />
+            <p>Defaults to today. Adjust it before adding the book to your ranking.</p>
+          </div>
           <div class="dialog-actions">
             <button class="save-rating" id="saveRating" value="save" type="submit">Save to ranking</button>
             <button class="remove-rating" id="removeRating" value="remove" type="submit">Remove rating</button>
           </div>
-          <p class="save-note">Ratings live in this browser. Export a portable backup from About.</p>
+          <p class="save-note">Ratings and newly finished books live in this browser. Export a portable backup from About.</p>
         </div>
       </form>
     </dialog>
