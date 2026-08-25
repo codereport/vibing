@@ -100,7 +100,7 @@
             <button class="save-rating" id="saveRating" value="save" type="submit">Save to ranking</button>
             <button class="remove-rating" id="removeRating" value="remove" type="submit">Remove rating</button>
           </div>
-          <p class="save-note">Ratings live in this browser, so this static shelf stays yours.</p>
+          <p class="save-note">Ratings live in this browser. Export a portable backup from About.</p>
         </div>
       </form>
     </dialog>
@@ -118,6 +118,16 @@
           This leaves the AI industry nonfiction on the other shelf. Space opera makes the cut when
           its ideas about intelligence, identity, or technology are doing real work.
         </p>
+        <div class="rating-transfer">
+          <p class="eyebrow">Ratings backup</p>
+          <p id="ratingTransferCopy">Move your ranking between browsers or domains with a small JSON file.</p>
+          <div class="transfer-actions">
+            <button class="transfer-button" id="exportRatings" type="button">Export ratings</button>
+            <button class="transfer-button" id="importRatings" type="button">Import ratings</button>
+            <input id="importRatingsInput" type="file" accept="application/json,.json" hidden />
+          </div>
+          <p class="transfer-status" id="transferStatus" aria-live="polite"></p>
+        </div>
         <button class="about-done" value="close" type="submit">Return to the shelf</button>
       </form>
     </dialog>

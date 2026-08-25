@@ -417,8 +417,29 @@ const SERIES = {
 };
 
 const DEFAULT_RATINGS = {
-  "three-body-problem": 10,
-  "permutation-city": 9.5,
+  "dark-forest": 10,
+  "three-body-problem": 9.8,
+  "ready-player-one": 9.6,
+  "ready-player-two": 9.5,
+  "permutation-city": 9.4,
+  "deaths-end": 9.2,
+  "prime-intellect": 9.2,
+  "all-these-worlds": 9,
+  daemon: 9,
+  "freedom-tm": 9,
+  "heavens-river": 9,
+  "we-are-legion": 9,
+  "for-we-are-many": 8.8,
+  "not-till-lost": 8.8,
+  "memory-called-empire": 8.6,
+  "altered-carbon": 7.8,
+  "redemption-of-time": 7.2,
+  diaspora: 7,
+  "the-peripheral": 7,
+  "children-of-time": 6.4,
+  "fire-upon-deep": 6,
+  "schilds-ladder": 5.2,
+  accelerando: 4.4,
 };
 
 const VIEW_META = {
@@ -439,7 +460,10 @@ const VIEW_META = {
   },
 };
 
-const storageKey = "ai-fi-ratings-v1";
+const storageKey = "ai-fi-ratings-v2";
+const legacyStorageKey = "ai-fi-ratings-v1";
+const editableHosts = new Set(["localhost", "127.0.0.1", "[::1]", "::1", "0.0.0.0"]);
+const canEditRatings = editableHosts.has(window.location.hostname) || window.location.hostname.endsWith(".localhost");
 const viewRoot = document.querySelector("#viewRoot");
 const pageTitle = document.querySelector("#pageTitle");
 const viewDescription = document.querySelector("#viewDescription");
@@ -454,10 +478,21 @@ const ratingInput = document.querySelector("#ratingInput");
 const ratingOutput = document.querySelector("#ratingOutput");
 const removeRating = document.querySelector("#removeRating");
 const aboutDialog = document.querySelector("#aboutDialog");
+const exportRatingsButton = document.querySelector("#exportRatings");
+const importRatingsButton = document.querySelector("#importRatings");
+const importRatingsInput = document.querySelector("#importRatingsInput");
+const transferStatus = document.querySelector("#transferStatus");
+const ratingTransferCopy = document.querySelector("#ratingTransferCopy");
 
 let activeBookId = null;
 let currentView = getInitialView();
 let ratings = loadRatings();
+
+document.body.classList.toggle("is-readonly", !canEditRatings);
+importRatingsButton.hidden = !canEditRatings;
+ratingTransferCopy.textContent = canEditRatings
+  ? "Move your ranking between browsers or domains with a small JSON file."
+  : "The published ranking is read-only. Download a JSON snapshot for safekeeping.";
 
 function getInitialView() {
   const hashView = window.location.hash.replace("#", "");
@@ -465,20 +500,35 @@ function getInitialView() {
 }
 
 function loadRatings() {
+  if (!canEditRatings) return { ...DEFAULT_RATINGS };
+
   try {
     const stored = JSON.parse(localStorage.getItem(storageKey));
-    if (!stored || typeof stored !== "object") return { ...DEFAULT_RATINGS };
-    return Object.fromEntries(
-      Object.entries(stored).filter(
-        ([id, rating]) => BOOKS.some((book) => book.id === id) && Number(rating) >= 1 && Number(rating) <= 10,
-      ),
-    );
+    if (stored && typeof stored === "object") return normalizeRatings(stored);
+
+    const legacy = JSON.parse(localStorage.getItem(legacyStorageKey));
+    const migrated = {
+      ...DEFAULT_RATINGS,
+      ...(legacy && typeof legacy === "object" ? normalizeRatings(legacy) : {}),
+    };
+    localStorage.setItem(storageKey, JSON.stringify(migrated));
+    return migrated;
   } catch {
     return { ...DEFAULT_RATINGS };
   }
 }
 
+function normalizeRatings(candidate) {
+  return Object.fromEntries(
+    Object.entries(candidate)
+      .filter(([id, rating]) => BOOKS.some((book) => book.id === id) && Number(rating) >= 1 && Number(rating) <= 10)
+      .map(([id, rating]) => [id, Number(Number(rating).toFixed(1))]),
+  );
+}
+
 function saveRatings() {
+  if (!canEditRatings) return;
+
   try {
     localStorage.setItem(storageKey, JSON.stringify(ratings));
   } catch {
@@ -546,6 +596,10 @@ function bookCard(book, { rank = null, index = 0, todo = false, context = "defau
 
   if (todo) {
     return `<article class="book-card is-todo" style="--index:${index}">${inner}</article>`;
+  }
+
+  if (!canEditRatings) {
+    return `<article class="book-card is-readonly" style="--index:${index}">${inner}</article>`;
   }
 
   return `
@@ -624,7 +678,7 @@ function renderRanking() {
       <h2 class="section-label">Rated transmission</h2>
       <span class="sort-note">Highest signal first</span>
     </div>
-    <div class="ranking-layout ${queue.length ? "" : "is-complete"}">
+    <div class="ranking-layout ${canEditRatings && queue.length ? "" : "is-complete"}">
       <div class="ranked-grid">
         ${
           ranked.length
@@ -633,7 +687,7 @@ function renderRanking() {
         }
       </div>
       ${
-        queue.length
+        canEditRatings && queue.length
           ? `<aside class="queue-panel">
               <div class="queue-heading"><h2>Waiting for a score</h2><span>${queue.length}</span></div>
               <p class="queue-intro">Read, remembered, not yet ranked. Choose a title to give it a score out of ten.</p>
@@ -761,6 +815,8 @@ function render() {
 }
 
 function openRating(bookId) {
+  if (!canEditRatings) return;
+
   const book = BOOKS.find((item) => item.id === bookId);
   if (!book || !book.readDate) return;
   activeBookId = book.id;
@@ -802,6 +858,8 @@ ratingInput.addEventListener("input", () => {
 });
 
 ratingForm.addEventListener("submit", (event) => {
+  if (!canEditRatings) return;
+
   const action = event.submitter?.value;
   if (!activeBookId || !["save", "remove"].includes(action)) return;
 
@@ -815,6 +873,50 @@ ratingForm.addEventListener("submit", (event) => {
 });
 
 document.querySelector("#aboutButton").addEventListener("click", () => aboutDialog.showModal());
+
+exportRatingsButton.addEventListener("click", () => {
+  const payload = {
+    app: "AI-FI",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    ratings,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `ai-fi-ratings-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 0);
+  transferStatus.textContent = `${Object.keys(ratings).length} ratings exported.`;
+});
+
+importRatingsButton.addEventListener("click", () => {
+  if (canEditRatings) importRatingsInput.click();
+});
+
+importRatingsInput.addEventListener("change", async () => {
+  if (!canEditRatings) return;
+
+  const [file] = importRatingsInput.files;
+  if (!file) return;
+
+  try {
+    const payload = JSON.parse(await file.text());
+    const imported = normalizeRatings(payload.ratings || payload);
+    if (!Object.keys(imported).length) throw new Error("No valid ratings found");
+    ratings = imported;
+    saveRatings();
+    render();
+    transferStatus.textContent = `${Object.keys(imported).length} ratings imported.`;
+  } catch {
+    transferStatus.textContent = "That file does not contain a valid AI-FI ratings backup.";
+  } finally {
+    importRatingsInput.value = "";
+  }
+});
 
 [ratingDialog, aboutDialog].forEach((dialog) => {
   dialog.addEventListener("click", (event) => {
