@@ -50,6 +50,12 @@ Thumbs.db
 logs/
 *.log
 
+# Resumable generated-data checkpoints
+data/.cupy_repos_checkpoint.json
+data/.cupy_repos_checkpoint.json.tmp
+data/.cupy_analysis_checkpoint.json
+data/.cupy_analysis_checkpoint.json.tmp
+
 # Testing
 .pytest_cache/
 .coverage
@@ -57,4 +63,3 @@ htmlcov/
 
 # UV
 uv.lock
-

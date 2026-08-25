@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Search - Thrust Analysis</title>
+    <title>GitHub Search - GPU Repository Analysis</title>
     <style>
         * {
             margin: 0;
@@ -22,7 +22,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1180px;
             padding: 40px;
             text-align: center;
         }
@@ -46,10 +46,10 @@
 
         .dashboards {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             margin-top: 40px;
-            max-width: 900px;
+            max-width: 1100px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -178,7 +178,7 @@
     <div class="container">
         <div class="header">
             <h1>🔍 GitHub Search</h1>
-            <p>Comprehensive analysis and exploration of NVIDIA Thrust usage across GitHub repositories</p>
+            <p>Explore how open-source projects use GPU computing tools across GitHub</p>
         </div>
 
         <div class="dashboards">
@@ -215,12 +215,29 @@
                 </ul>
                 <span class="launch-btn">Launch Dashboard</span>
             </a>
+
+            <a href="cupy_repos.html" class="dashboard-card">
+                <span class="dashboard-icon">⚡</span>
+                <div class="status-badge">Static Viewer</div>
+                <h2 class="dashboard-title">CuPy Repos</h2>
+                <p class="dashboard-description">
+                    Browse GitHub repositories that declare a CuPy package dependency, ranked by stars
+                </p>
+                <ul class="dashboard-features">
+                    <li>7,170 repositories discovered</li>
+                    <li>Star and fork rankings</li>
+                    <li>Fast search and filtering</li>
+                    <li>Import-aware CuPy pattern counts</li>
+                    <li>CuPy coverage metrics</li>
+                </ul>
+                <span class="launch-btn">Browse Repositories</span>
+            </a>
         </div>
 
         <div class="footer">
             <p>🌐 For full functionality, serve with: <code>python serve.py</code></p>
             <p>📁 Data files organized in the <code>data/</code> directory</p>
-            <p>✨ Both dashboards are now fully static and GitHub Pages compatible!</p>
+            <p>✨ All viewers are fully static and GitHub Pages compatible!</p>
         </div>
     </div>
 

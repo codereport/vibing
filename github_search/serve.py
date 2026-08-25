@@ -33,6 +33,7 @@ def main():
         print(f"🔗 GitHub Search Hub: http://localhost:{PORT}/index.html")
         print(f"🚀 Thrust Repositories: http://localhost:{PORT}/thrust_repos.html")
         print(f"📊 Analysis Dashboard: http://localhost:{PORT}/thrust_usage.html")
+        print(f"⚡ CuPy Repositories: http://localhost:{PORT}/cupy_repos.html")
         print(f"\n💡 Press Ctrl+C to stop the server")
 
         # Try to open the main page in browser
