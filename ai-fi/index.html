@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="AI-FI — a personal canon of books about artificial minds, virtual worlds, and intelligence among the stars."
+    />
+    <meta name="theme-color" content="#090a0c" />
+    <title>AI-FI — A Personal Canon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="brand-lockup">
+        <a class="brand" href="#" aria-label="AI-FI home">
+          <span>AI</span><i></i><span>FI</span>
+        </a>
+        <span class="brand-view" id="brandView" hidden>The Ranking</span>
+        <span class="header-stats" id="headerStats" hidden></span>
+      </div>
+
+      <nav class="view-switcher" aria-label="Choose a bookshelf view">
+        <button class="view-button is-active" data-view="ranking" type="button">
+          <span>01</span> By book
+        </button>
+        <button class="view-button" data-view="series" type="button">
+          <span>02</span> By series
+        </button>
+        <button class="view-button" data-view="date" type="button">
+          <span>03</span> By date
+        </button>
+      </nav>
+
+      <button class="about-button" id="aboutButton" type="button" aria-label="About this collection">
+        About <span aria-hidden="true">↗</span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="pageTitle">
+        <div class="hero-kicker">
+          <span class="signal-dot"></span>
+          Personal canon · Updated Aug 2026
+        </div>
+        <div class="hero-grid">
+          <h1 id="pageTitle">THE<br />RANKING</h1>
+          <div class="hero-note">
+            <p id="viewDescription">
+              Artificial minds, uploaded selves, virtual worlds and intelligence among the stars—ordered by impact.
+            </p>
+            <div class="collection-stats" id="collectionStats" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="hero-orbit" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </section>
+
+      <section class="view-shell" id="viewRoot" aria-live="polite"></section>
+    </main>
+
+    <footer class="site-footer">
+      <p>AI-FI <span>© 2026</span></p>
+      <p>A reading record by a human, about what comes after.</p>
+      <a href="https://openlibrary.org/dev/docs/api/covers" target="_blank" rel="noreferrer">
+        Cover art via Open Library ↗
+      </a>
+    </footer>
+
+    <dialog class="rating-dialog" id="ratingDialog">
+      <form method="dialog" id="ratingForm">
+        <button class="dialog-close" value="cancel" aria-label="Close rating panel" type="submit">×</button>
+        <div class="dialog-book" id="dialogBook"></div>
+        <div class="rating-editor">
+          <p class="eyebrow">Your verdict</p>
+          <output id="ratingOutput" for="ratingInput">8.0</output>
+          <span class="out-of">/ 10</span>
+          <input
+            type="range"
+            id="ratingInput"
+            name="rating"
+            min="1"
+            max="10"
+            step="0.1"
+            value="8"
+            aria-label="Rating out of ten"
+          />
+          <div class="range-labels" aria-hidden="true"><span>1</span><span>Essential</span><span>10</span></div>
+          <div class="dialog-actions">
+            <button class="save-rating" id="saveRating" value="save" type="submit">Save to ranking</button>
+            <button class="remove-rating" id="removeRating" value="remove" type="submit">Remove rating</button>
+          </div>
+          <p class="save-note">Ratings live in this browser, so this static shelf stays yours.</p>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="about-dialog" id="aboutDialog">
+      <form method="dialog">
+        <button class="dialog-close" value="close" aria-label="Close about panel" type="submit">×</button>
+        <p class="eyebrow">A working definition</p>
+        <h2>What counts as<br /><em>AI-FI?</em></h2>
+        <p>
+          Fiction where computation changes the shape of being: artificial minds, uploaded people,
+          simulated worlds, posthuman evolution, and civilizations rewritten by technology.
+        </p>
+        <p>
+          This leaves the AI industry nonfiction on the other shelf. Space opera makes the cut when
+          its ideas about intelligence, identity, or technology are doing real work.
+        </p>
+        <button class="about-done" value="close" type="submit">Return to the shelf</button>
+      </form>
+    </dialog>
+
+    <noscript>This bookshelf needs JavaScript to sort views and save ratings.</noscript>
+    <script src="app.js"></script>
+  </body>
+</html>
