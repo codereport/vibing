@@ -388,7 +388,7 @@ const BOOKS = [
 
 const SERIES = {
   remembrance: {
-    name: "Remembrance of Earth’s Past",
+    name: "Thre Three-Body Trilogy",
     author: "Cixin Liu · with Baoshu’s coda",
     description: "Cosmic first contact on a scale that keeps widening.",
   },
@@ -690,9 +690,9 @@ function bookCard(book, { rank = null, index = 0, todo = false, context = "defau
     ${todo ? '<span class="todo-stamp">To read</span>' : ""}
     <div class="book-meta">
       <div>
-        <h3 class="book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</h3>
-        <p class="book-author">${escapeHtml(book.author)}</p>
-        <p class="book-date">${meta}</p>
+        ${context === "series" ? "" : `<h3 class="book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</h3>`}
+        ${context === "series" ? "" : `<p class="book-author">${escapeHtml(book.author)}</p>`}
+        ${context === "series" ? "" : `<p class="book-date">${meta}</p>`}
       </div>
       ${rating ? `<span class="rating-chip">${Number(rating).toFixed(1)}<small>/10</small></span>` : ""}
     </div>`;
@@ -846,7 +846,7 @@ function renderSeries() {
               </div>
             </div>
             <div class="series-books ${group.books.length > 3 ? "is-long" : ""}" style="--book-count:${group.books.length}">
-              ${group.books.map((book, index) => bookCard(book, { index, todo: !book.readDate })).join("")}
+              ${group.books.map((book, index) => bookCard(book, { index, todo: !book.readDate, context: "series" })).join("")}
             </div>
           </section>`,
         )
