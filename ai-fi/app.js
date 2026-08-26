@@ -379,7 +379,6 @@ const BOOKS = [
     readDate: "2026-08-26",
     series: "accelerando",
     seriesOrder: 1,
-    status: "finishing",
     cover: "isbn:9780441014156",
     work: "OL2465670W",
     accent: "#3e6987",
