@@ -383,6 +383,94 @@ const BOOKS = [
     work: "OL2465670W",
     accent: "#3e6987",
   },
+  {
+    id: "all-systems-red",
+    title: "All Systems Red",
+    author: "Martha Wells",
+    readDate: "2026-09-07",
+    series: "murderbot-diaries",
+    seriesOrder: 1,
+    cover: "id:9157148",
+    work: "OL17914663W",
+    accent: "#9a4b32",
+  },
+  {
+    id: "artificial-condition",
+    title: "Artificial Condition",
+    author: "Martha Wells",
+    readDate: "2026-09-08",
+    series: "murderbot-diaries",
+    seriesOrder: 2,
+    cover: "id:10537139",
+    work: "OL19747311W",
+    accent: "#47758b",
+  },
+  {
+    id: "rogue-protocol",
+    title: "Rogue Protocol",
+    author: "Martha Wells",
+    readDate: "2026-09-19",
+    series: "murderbot-diaries",
+    seriesOrder: 3,
+    cover: "id:12013488",
+    work: "OL19753589W",
+    accent: "#8c6538",
+  },
+  {
+    id: "exit-strategy",
+    title: "Exit Strategy",
+    author: "Martha Wells",
+    readDate: null,
+    series: "murderbot-diaries",
+    seriesOrder: 4,
+    cover: "id:10692785",
+    work: "OL19763338W",
+    accent: "#76503e",
+  },
+  {
+    id: "network-effect",
+    title: "Network Effect",
+    author: "Martha Wells",
+    readDate: null,
+    series: "murderbot-diaries",
+    seriesOrder: 5,
+    cover: "id:9426689",
+    work: "OL20735675W",
+    accent: "#476e78",
+  },
+  {
+    id: "fugitive-telemetry",
+    title: "Fugitive Telemetry",
+    author: "Martha Wells",
+    readDate: null,
+    series: "murderbot-diaries",
+    seriesOrder: 6,
+    cover: "id:10104879",
+    work: "OL20805971W",
+    accent: "#7f3e46",
+  },
+  {
+    id: "system-collapse",
+    title: "System Collapse",
+    author: "Martha Wells",
+    readDate: null,
+    series: "murderbot-diaries",
+    seriesOrder: 7,
+    cover: "id:13127133",
+    work: "OL33402895W",
+    accent: "#b36634",
+  },
+  {
+    id: "platform-decay",
+    title: "Platform Decay",
+    author: "Martha Wells",
+    readDate: null,
+    series: "murderbot-diaries",
+    seriesOrder: 8,
+    cover: "id:15154430",
+    work: "OL44660267W",
+    accent: "#5b6578",
+  },
 ];
 
 const SERIES = {
@@ -451,6 +539,11 @@ const SERIES = {
     author: "Charles Stross · Standalone",
     description: "Three generations cross the singularity and keep accelerating.",
   },
+  "murderbot-diaries": {
+    name: "The Murderbot Diaries",
+    author: "Martha Wells",
+    description: "A self-hacked security construct would rather watch serials than navigate humans, corporations and inconvenient feelings.",
+  },
 };
 
 const DEFAULT_RATINGS = {
@@ -462,21 +555,24 @@ const DEFAULT_RATINGS = {
   "deaths-end": 9.2,
   "prime-intellect": 9.2,
   "all-these-worlds": 9,
-  daemon: 9,
+  "daemon": 9,
   "freedom-tm": 9,
   "heavens-river": 9,
   "we-are-legion": 9,
   "for-we-are-many": 8.8,
   "not-till-lost": 8.8,
   "memory-called-empire": 8.6,
+  "all-systems-red": 8.5,
+  "artificial-condition": 8.4,
+  "rogue-protocol": 7.9,
   "altered-carbon": 7.8,
   "redemption-of-time": 7.2,
-  diaspora: 7,
+  "diaspora": 7,
   "the-peripheral": 7,
   "children-of-time": 6.4,
   "fire-upon-deep": 6,
   "schilds-ladder": 5.2,
-  accelerando: 4.4,
+  "accelerando": 4.4,
 };
 
 const VIEW_META = {
@@ -539,7 +635,7 @@ let ratings = loadRatings();
 document.body.classList.toggle("is-readonly", !canEditRatings);
 importRatingsButton.hidden = !canEditRatings;
 ratingTransferCopy.textContent = canEditRatings
-  ? "Move your ranking and locally recorded finish dates between browsers with a small JSON file."
+  ? "Save local ratings and finish dates directly to app.js when using the AI-FI development server."
   : "The published reading record is read-only. Download a JSON snapshot for safekeeping.";
 
 function getInitialView() {
@@ -565,8 +661,22 @@ function normalizeReadDates(candidate) {
 
   return Object.fromEntries(
     Object.entries(candidate)
-      .filter(([id, date]) => BOOKS.some((book) => book.id === id) && normalizeDateValue(date))
-      .map(([id, date]) => [id, date]),
+      .filter(
+        ([id, date]) => BOOKS.some((book) => book.id === id) && (date === null || normalizeDateValue(date)),
+      )
+      .map(([id, date]) => [id, date === null ? null : normalizeDateValue(date)]),
+  );
+}
+
+function readDateOverridesFromSnapshot(snapshot) {
+  return Object.fromEntries(
+    BOOKS.map((book) => {
+      const importedDate = snapshot[book.id] || null;
+      const canonicalDate = canonicalReadDates[book.id] || null;
+      return [book.id, importedDate, canonicalDate];
+    })
+      .filter(([, importedDate, canonicalDate]) => importedDate !== canonicalDate)
+      .map(([id, importedDate]) => [id, importedDate]),
   );
 }
 
@@ -1003,8 +1113,13 @@ ratingForm.addEventListener("submit", (event) => {
   if (!activeBookId || !["save", "remove"].includes(action)) return;
 
   event.preventDefault();
-  if (action === "remove") delete ratings[activeBookId];
-  else {
+  if (action === "remove") {
+    ratings = Object.fromEntries(Object.entries(ratings).filter(([id]) => id !== activeBookId));
+    readDateOverrides[activeBookId] = null;
+    const book = BOOKS.find((item) => item.id === activeBookId);
+    if (book) book.readDate = null;
+    saveReadDates();
+  } else {
     if (activeBookWasUnread) {
       const finishDate = normalizeDateValue(finishDateInput.value);
       if (!finishDate) {
@@ -1029,8 +1144,8 @@ ratingForm.addEventListener("submit", (event) => {
 
 document.querySelector("#aboutButton").addEventListener("click", () => aboutDialog.showModal());
 
-exportRatingsButton.addEventListener("click", () => {
-  const payload = {
+function readingDataPayload() {
+  return {
     app: "AI-FI",
     version: 2,
     exportedAt: new Date().toISOString(),
@@ -1039,16 +1154,47 @@ exportRatingsButton.addEventListener("click", () => {
       BOOKS.filter((book) => book.readDate).map((book) => [book.id, book.readDate]),
     ),
   };
+}
+
+function downloadReadingData(payload) {
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `ai-fi-ratings-${new Date().toISOString().slice(0, 10)}.json`;
+  link.download = `ai-fi-reading-data-${new Date().toISOString().slice(0, 10)}.json`;
   document.body.append(link);
   link.click();
   link.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 0);
-  transferStatus.textContent = `${Object.keys(ratings).length} ratings exported.`;
+}
+
+exportRatingsButton.addEventListener("click", async () => {
+  const payload = readingDataPayload();
+
+  if (canEditRatings) {
+    exportRatingsButton.disabled = true;
+    transferStatus.textContent = "Saving to app.js…";
+
+    try {
+      const response = await fetch("/api/reading-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Could not update app.js");
+      transferStatus.textContent = result.message;
+      return;
+    } catch {
+      downloadReadingData(payload);
+      transferStatus.textContent = "Local save server unavailable; JSON downloaded instead.";
+    } finally {
+      exportRatingsButton.disabled = false;
+    }
+  } else {
+    downloadReadingData(payload);
+    transferStatus.textContent = `${Object.keys(ratings).length} ratings and ${Object.keys(payload.readDates).length} finish dates exported.`;
+  }
 });
 
 importRatingsButton.addEventListener("click", () => {
@@ -1066,13 +1212,14 @@ importRatingsInput.addEventListener("change", async () => {
     const imported = normalizeRatings(payload.ratings || payload);
     const hasReadDates = payload.readDates && typeof payload.readDates === "object";
     const importedReadDates = normalizeReadDates(payload.readDates);
-    if (!Object.keys(imported).length && !Object.keys(importedReadDates).length) {
+    const isStructuredExport = Object.hasOwn(payload, "ratings") || Object.hasOwn(payload, "readDates");
+    if (!isStructuredExport && !Object.keys(imported).length && !Object.keys(importedReadDates).length) {
       throw new Error("No valid reading data found");
     }
 
     ratings = imported;
     if (hasReadDates) {
-      readDateOverrides = importedReadDates;
+      readDateOverrides = readDateOverridesFromSnapshot(importedReadDates);
       applyReadDates(readDateOverrides);
       saveReadDates();
     }

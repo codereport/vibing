@@ -1331,6 +1331,11 @@ dialog::backdrop {
   color: var(--acid);
 }
 
+.transfer-button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
 .rating-transfer .transfer-status {
   min-height: 16px;
   margin-top: 10px;
