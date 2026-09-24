@@ -223,7 +223,7 @@ const BOOKS = [
     id: "neuromancer",
     title: "Neuromancer",
     author: "William Gibson",
-    readDate: null,
+    readDate: "2026-09-23",
     series: "sprawl",
     seriesOrder: 1,
     cover: "isbn:9781473217386",
@@ -574,6 +574,7 @@ const DEFAULT_RATINGS = {
   "fire-upon-deep": 6,
   "schilds-ladder": 5.2,
   "accelerando": 4.4,
+  "neuromancer": 3.5,
 };
 
 const VIEW_META = {
