@@ -368,6 +368,7 @@
 <nav class="episode-bar">
   <button class="ep-btn active" data-ep="0">Pre-Game</button>
   <button class="ep-btn" data-ep="1">Episode 1</button>
+  <button class="ep-btn" data-ep="2">Episode 2</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -375,9 +376,9 @@
 <main class="tribes-container" id="tribes-container"></main>
 
 <footer class="legend">
-  Survivor 51: The Open Era &mdash; through Episode 1, September 23, 2026 &middot;
+  Survivor 51: The Open Era &mdash; through Episode 2, September 30, 2026 &middot;
   <a href="https://www.paramountpressexpress.com/cbs-entertainment/shows/survivor/releases/?view=113157-survivor-reveals-the-21-new-castaways-competing-on-the-51st-edition-the-first-in-the-series-new-open-era-with-a-two-hour-season-premiere-on-wednesday">Cast photos: Robert Voets/CBS</a> &middot;
-  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-1-recap/">Episode recap</a>
+  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-2-recap/">Episode recap</a>
 </footer>
 
 <script>
@@ -386,7 +387,7 @@
     aaliyah_puglia:      { name: 'Aaliyah Puglia',   season: 'Toka',          img: 'aaliyah_puglia.jpg',      elimTag: 'Voted Out — Ep. 1' },
     alexis_levine:       { name: 'Alexis Levine',    season: 'Savu',          img: 'alexis_levine.jpg',       elimTag: '' },
     an_nguyen:           { name: 'Thien An Nguyen',  season: 'Toka',          img: 'an_nguyen.jpg',           elimTag: '' },
-    ana_sani:            { name: 'Ana Sani',         season: 'Savu',          img: 'ana_sani.jpg',            elimTag: '' },
+    ana_sani:            { name: 'Ana Sani',         season: 'Savu',          img: 'ana_sani.jpg',            elimTag: 'Voted Out — Ep. 2' },
     angelica_loblack:    { name: 'Jelly Loblack',    season: 'Toka',          img: 'angelica_loblack.jpg',    elimTag: '' },
     brady_booker:        { name: 'Brady Booker',     season: 'Toka',          img: 'brady_booker.jpg',        elimTag: '' },
     carter_krull:        { name: 'Carter Krull',     season: 'Savu',          img: 'carter_krull.jpg',        elimTag: '' },
@@ -419,18 +420,29 @@
       Savu: ['alexis_levine','ana_sani','carter_krull','cristian_chavez','eric_macksoud','kristin_flickinger','linnea_capobianco','ori_jean_charles','rob_antonson','sharonda_cox'],
       Exile: ['lewis_kelly'],
     },
+    2: {
+      Toka: ['aaliyah_puglia','an_nguyen','angelica_loblack','brady_booker','danny_kilby','devin_way','jenna_doore','lewis_kelly','maggie_nestor','mike_pinsky','patt_cannaday'],
+      Savu: ['alexis_levine','ana_sani','carter_krull','cristian_chavez','eric_macksoud','kristin_flickinger','linnea_capobianco','ori_jean_charles','rob_antonson','sharonda_cox'],
+    },
   };
 
   // === GAME DATA ===
   const eliminations = {
     1: ['aaliyah_puglia'],
+    2: ['ana_sani'],
   };
 
   // Add personal picks here as episodes air.
-  const poolPicks = {};
+  const poolPicks = {
+    2: 'linnea_capobianco',
+  };
 
   const advantages = {
     1: [{ player: 'rob_antonson', type: 'idol', label: 'Immunity Idol' }],
+    2: [
+      { player: 'rob_antonson', type: 'idol', label: 'Immunity Idol' },
+      { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
+    ],
   };
 
   const alliances = {
@@ -439,6 +451,12 @@
       { name: 'Patt & Jenna', color: '#f472b6', members: ['patt_cannaday','jenna_doore'] },
       { name: 'Eric / Ana / Carter', color: '#34d399', members: ['eric_macksoud','ana_sani','carter_krull'] },
     ],
+    2: [
+      { name: 'Toka 5', color: '#22d3ee', members: ['angelica_loblack','patt_cannaday','devin_way','brady_booker','mike_pinsky'] },
+      { name: 'Alexis / Linnea / Sharonda', color: '#34d399', members: ['alexis_levine','linnea_capobianco','sharonda_cox'] },
+      { name: 'Ori & Sharonda', color: '#f59e0b', members: ['ori_jean_charles','sharonda_cox'] },
+      { name: 'Rob & Eric', color: '#f472b6', members: ['rob_antonson','eric_macksoud'] },
+    ],
   };
 
   // === RENDERING ===
@@ -446,7 +464,7 @@
   const xSvg = `<svg viewBox="0 0 100 100"><line x1="15" y1="15" x2="85" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/><line x1="85" y1="15" x2="15" y2="85" stroke="#ef4444" stroke-width="10" stroke-linecap="round"/></svg>`;
   const poolSvg = `<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="white"/></svg>`;
 
-  function buildCard(id) {
+  function buildCard(id, tribeName = players[id].season) {
     const p = players[id];
     return `<div class="player-card" data-player="${id}">
       <div class="pool-pick">${poolSvg}</div>
@@ -457,7 +475,7 @@
         </div>
         <div class="player-info">
           <div class="player-name">${p.name}</div>
-          <div class="player-season">${p.season}</div>
+          <div class="player-season">${tribeName}</div>
           <div class="elim-tag">${p.elimTag}</div>
         </div>
         <div class="badges"></div>
@@ -479,7 +497,7 @@
         </div>
       </div>
       <div class="players-grid${single ? ' single-player-grid' : ''}" style="grid-template-columns:${gridColumns}">
-        ${memberIds.map(id => buildCard(id)).join('')}
+        ${memberIds.map(id => buildCard(id, tribeName)).join('')}
       </div>
     </section>`;
   }
