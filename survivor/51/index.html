@@ -369,6 +369,7 @@
   <button class="ep-btn active" data-ep="0">Pre-Game</button>
   <button class="ep-btn" data-ep="1">Episode 1</button>
   <button class="ep-btn" data-ep="2">Episode 2</button>
+  <button class="ep-btn" data-ep="3">Episode 3</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -376,9 +377,9 @@
 <main class="tribes-container" id="tribes-container"></main>
 
 <footer class="legend">
-  Survivor 51: The Open Era &mdash; through Episode 2, September 30, 2026 &middot;
+  Survivor 51: The Open Era &mdash; through Episode 3, October 7, 2026 &middot;
   <a href="https://www.paramountpressexpress.com/cbs-entertainment/shows/survivor/releases/?view=113157-survivor-reveals-the-21-new-castaways-competing-on-the-51st-edition-the-first-in-the-series-new-open-era-with-a-two-hour-season-premiere-on-wednesday">Cast photos: Robert Voets/CBS</a> &middot;
-  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-2-recap/">Episode recap</a>
+  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-3-recap/">Episode recap</a>
 </footer>
 
 <script>
@@ -402,8 +403,8 @@
     maggie_nestor:       { name: 'Maggie Nestor',    season: 'Toka',          img: 'maggie_nestor.jpg',       elimTag: '' },
     mike_pinsky:         { name: 'Mike Pinsky',      season: 'Toka',          img: 'mike_pinsky.jpg',         elimTag: '' },
     ori_jean_charles:    { name: 'Ori Jean-Charles', season: 'Savu',          img: 'ori_jean_charles.jpg',    elimTag: '' },
-    patt_cannaday:       { name: 'Patt Cannaday',    season: 'Toka',          img: 'patt_cannaday.jpg',       elimTag: '' },
-    rob_antonson:        { name: 'Rob Antonson',     season: 'Savu',          img: 'rob_antonson.jpg',        elimTag: '' },
+    patt_cannaday:       { name: 'Patt Cannaday',    season: 'Toka',          img: 'patt_cannaday.jpg',       elimTag: 'Voted Out — Ep. 3' },
+    rob_antonson:        { name: 'Rob Antonson',     season: 'Savu',          img: 'rob_antonson.jpg',        elimTag: 'Quit — Ep. 3' },
     sharonda_cox:        { name: 'Sharonda Cox',     season: 'Savu',          img: 'sharonda_cox.jpg',        elimTag: '' },
   };
 
@@ -424,17 +425,23 @@
       Toka: ['aaliyah_puglia','an_nguyen','angelica_loblack','brady_booker','danny_kilby','devin_way','jenna_doore','lewis_kelly','maggie_nestor','mike_pinsky','patt_cannaday'],
       Savu: ['alexis_levine','ana_sani','carter_krull','cristian_chavez','eric_macksoud','kristin_flickinger','linnea_capobianco','ori_jean_charles','rob_antonson','sharonda_cox'],
     },
+    3: {
+      Toka: ['aaliyah_puglia','an_nguyen','angelica_loblack','brady_booker','carter_krull','danny_kilby','devin_way','jenna_doore','lewis_kelly','maggie_nestor','mike_pinsky','patt_cannaday'],
+      Savu: ['alexis_levine','ana_sani','cristian_chavez','eric_macksoud','kristin_flickinger','linnea_capobianco','ori_jean_charles','rob_antonson','sharonda_cox'],
+    },
   };
 
   // === GAME DATA ===
   const eliminations = {
     1: ['aaliyah_puglia'],
     2: ['ana_sani'],
+    3: ['rob_antonson','patt_cannaday'],
   };
 
   // Add personal picks here as episodes air.
   const poolPicks = {
     2: 'linnea_capobianco',
+    3: 'mike_pinsky',
   };
 
   const advantages = {
@@ -442,6 +449,12 @@
     2: [
       { player: 'rob_antonson', type: 'idol', label: 'Immunity Idol' },
       { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
+    ],
+    3: [
+      { player: 'carter_krull', type: 'idol', label: 'Immunity Idol' },
+      { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
+      { player: 'devin_way', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'maggie_nestor', type: 'extra-vote', label: 'Extra Vote' },
     ],
   };
 
@@ -456,6 +469,14 @@
       { name: 'Alexis / Linnea / Sharonda', color: '#34d399', members: ['alexis_levine','linnea_capobianco','sharonda_cox'] },
       { name: 'Ori & Sharonda', color: '#f59e0b', members: ['ori_jean_charles','sharonda_cox'] },
       { name: 'Rob & Eric', color: '#f472b6', members: ['rob_antonson','eric_macksoud'] },
+    ],
+    3: [
+      // The six who voted out Patt; their long-term loyalty is still uncertain.
+      { name: 'Toka 6 (Patt Vote)', color: '#f472b6', members: ['an_nguyen','carter_krull','danny_kilby','jenna_doore','lewis_kelly','maggie_nestor'] },
+      { name: 'Toka 4', color: '#22d3ee', members: ['angelica_loblack','devin_way','brady_booker','mike_pinsky'] },
+      { name: 'Alexis / Linnea / Sharonda', color: '#34d399', members: ['alexis_levine','linnea_capobianco','sharonda_cox'] },
+      { name: 'Ori & Sharonda', color: '#f59e0b', members: ['ori_jean_charles','sharonda_cox'] },
+      { name: 'Devin & Sharonda', color: '#60a5fa', members: ['devin_way','sharonda_cox'] },
     ],
   };
 
