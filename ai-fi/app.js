@@ -456,7 +456,7 @@ const BOOKS = [
     readDate: "2026-10-08",
     series: "murderbot-diaries",
     seriesOrder: 7,
-    cover: "id:13127133",
+    cover: "id:14538949",
     work: "OL33402895W",
     accent: "#b36634",
   },
