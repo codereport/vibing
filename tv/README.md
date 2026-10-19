@@ -27,6 +27,8 @@ The Bear starts Ready at season 3, with seasons 1–2 marked finished and a note
 
 Million Dollar Secret, The Traitors UK, and Ted Lasso start Waiting, caught up through seasons 2, 4, and 4 respectively. The UK Traitors uses its own BBC listing, separate from New Blood. Mad Men starts Ready at season 1 with nothing watched.
 
+Reacher starts Waiting for season 5, with seasons 1–4 marked finished.
+
 The footer’s **Export** downloads a full `shows.json` backup. **Import** restores progress for matching shows on another browser; it does not alter show identities or add shows. Progress in a browser is private to that browser and does not automatically sync to the repository. To share updated defaults across devices, replace `tv/shows.json` with the export and commit it. A browser’s existing saved progress takes priority over repository defaults.
 
 ## Weekly release updates

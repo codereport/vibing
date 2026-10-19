@@ -23,6 +23,7 @@
     { "id": "severance", "title": "Severance", "tvmazeId": 44933, "watching": false, "watchedThrough": 2 },
     { "id": "million-dollar-secret", "title": "Million Dollar Secret", "tvmazeId": 82873, "watching": false, "watchedThrough": 2 },
     { "id": "the-traitors-uk", "title": "The Traitors UK", "tvmazeId": 58174, "watching": false, "watchedThrough": 4 },
-    { "id": "ted-lasso", "title": "Ted Lasso", "tvmazeId": 44458, "watching": false, "watchedThrough": 4 }
+    { "id": "ted-lasso", "title": "Ted Lasso", "tvmazeId": 44458, "watching": false, "watchedThrough": 4 },
+    { "id": "reacher", "title": "Reacher", "tvmazeId": 43031, "watching": false, "watchedThrough": 4 }
   ]
 }

@@ -894,6 +894,51 @@
           "episodeCount": 10
         }
       ]
+    },
+    "reacher": {
+      "tvmazeId": 43031,
+      "status": "Running",
+      "network": "Prime Video",
+      "url": "https://www.tvmaze.com/shows/43031/reacher",
+      "checkedAt": "2026-10-19T22:25:23+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2022-02-04",
+          "endDate": "2022-02-04",
+          "episodeCount": 8
+        },
+        {
+          "number": 2,
+          "premiereDate": "2023-12-15",
+          "endDate": "2024-01-19",
+          "episodeCount": 8
+        },
+        {
+          "number": 3,
+          "premiereDate": "2025-02-20",
+          "endDate": "2025-03-27",
+          "episodeCount": 8
+        },
+        {
+          "number": 4,
+          "premiereDate": "2026-08-12",
+          "endDate": "2026-09-16",
+          "episodeCount": 8
+        },
+        {
+          "number": 5,
+          "premiereDate": null,
+          "endDate": null,
+          "episodeCount": 8
+        },
+        {
+          "number": 6,
+          "premiereDate": null,
+          "endDate": null,
+          "episodeCount": null
+        }
+      ]
     }
   }
 }

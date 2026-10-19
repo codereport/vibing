@@ -74,11 +74,11 @@ test('waiting shows sort by the nearest premiere, with unknown dates last', () =
   assert.deepEqual(unsorted.toSorted(compareEntries).map(e => e.show.id), ['watching', 'ready', 'near', 'same-date', 'far', 'unknown-a', 'unknown-b']);
 });
 
-test('the seeded list includes all 23 shows and the three watching markers', () => {
+test('the seeded list includes all 24 shows and the three watching markers', () => {
   const config = JSON.parse(readFileSync(new URL('../shows.json', import.meta.url)));
-  assert.equal(config.shows.length, 23);
-  assert.equal(new Set(config.shows.map(show => show.id)).size, 23);
-  assert.equal(new Set(config.shows.map(show => show.tvmazeId)).size, 23);
+  assert.equal(config.shows.length, 24);
+  assert.equal(new Set(config.shows.map(show => show.id)).size, 24);
+  assert.equal(new Set(config.shows.map(show => show.tvmazeId)).size, 24);
   assert.deepEqual(config.shows.filter(show => show.watching).map(show => show.id).toSorted(), ['dark-matter', 'the-wire', 'visionquest']);
   assert.ok(config.shows.every(validProgress));
   const bear = config.shows.find(show => show.id === 'the-bear');
