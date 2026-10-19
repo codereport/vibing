@@ -370,6 +370,7 @@
   <button class="ep-btn" data-ep="1">Episode 1</button>
   <button class="ep-btn" data-ep="2">Episode 2</button>
   <button class="ep-btn" data-ep="3">Episode 3</button>
+  <button class="ep-btn" data-ep="4">Episode 4</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -377,9 +378,9 @@
 <main class="tribes-container" id="tribes-container"></main>
 
 <footer class="legend">
-  Survivor 51: The Open Era &mdash; through Episode 3, October 7, 2026 &middot;
+  Survivor 51: The Open Era &mdash; through Episode 4, October 14, 2026 &middot;
   <a href="https://www.paramountpressexpress.com/cbs-entertainment/shows/survivor/releases/?view=113157-survivor-reveals-the-21-new-castaways-competing-on-the-51st-edition-the-first-in-the-series-new-open-era-with-a-two-hour-season-premiere-on-wednesday">Cast photos: Robert Voets/CBS</a> &middot;
-  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-3-recap/">Episode recap</a>
+  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-4-recap/">Episode recap</a>
 </footer>
 
 <script>
@@ -396,7 +397,7 @@
     danny_kilby:         { name: 'Danny Kilby',      season: 'Toka',          img: 'danny_kilby.jpg',         elimTag: '' },
     devin_way:           { name: 'Devin Way',        season: 'Toka',          img: 'devin_way.jpg',           elimTag: '' },
     eric_macksoud:       { name: 'Eric Macksoud',    season: 'Savu',          img: 'eric_macksoud.jpg',       elimTag: '' },
-    jenna_doore:         { name: 'Jenna Doore',      season: 'Toka',          img: 'jenna_doore.jpg',         elimTag: '' },
+    jenna_doore:         { name: 'Jenna Doore',      season: 'Toka',          img: 'jenna_doore.jpg',         elimTag: 'Voted Out — Ep. 4' },
     kristin_flickinger:  { name: 'Kristin Flickinger',season: 'Savu',         img: 'kristin_flickinger.jpg',  elimTag: '' },
     lewis_kelly:         { name: 'Lewis Kelly',      season: 'Exile',         img: 'lewis_kelly.jpg',         elimTag: '' },
     linnea_capobianco:   { name: 'Linnea Capobianco',season: 'Savu',          img: 'linnea_capobianco.jpg',   elimTag: '' },
@@ -412,6 +413,7 @@
   const tribeColors = {
     Toka:  { color: '#facc15', label: 'Yellow Tribe' },
     Savu:  { color: '#a855f7', label: 'Purple Tribe' },
+    Dina:  { color: '#ef4444', label: 'Red Tribe' },
     Exile: { color: '#64748b', label: 'No Starting Tribe' },
   };
 
@@ -429,6 +431,11 @@
       Toka: ['aaliyah_puglia','an_nguyen','angelica_loblack','brady_booker','carter_krull','danny_kilby','devin_way','jenna_doore','lewis_kelly','maggie_nestor','mike_pinsky','patt_cannaday'],
       Savu: ['alexis_levine','ana_sani','cristian_chavez','eric_macksoud','kristin_flickinger','linnea_capobianco','ori_jean_charles','rob_antonson','sharonda_cox'],
     },
+    4: {
+      Toka: ['an_nguyen','brady_booker','carter_krull','kristin_flickinger','maggie_nestor','mike_pinsky'],
+      Savu: ['alexis_levine','angelica_loblack','devin_way','jenna_doore','ori_jean_charles'],
+      Dina: ['cristian_chavez','danny_kilby','eric_macksoud','linnea_capobianco','lewis_kelly','sharonda_cox'],
+    },
   };
 
   // === GAME DATA ===
@@ -436,12 +443,14 @@
     1: ['aaliyah_puglia'],
     2: ['ana_sani'],
     3: ['rob_antonson','patt_cannaday'],
+    4: ['jenna_doore'],
   };
 
   // Add personal picks here as episodes air.
   const poolPicks = {
     2: 'linnea_capobianco',
     3: 'mike_pinsky',
+    4: 'brady_booker',
   };
 
   const advantages = {
@@ -451,6 +460,12 @@
       { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
     ],
     3: [
+      { player: 'carter_krull', type: 'idol', label: 'Immunity Idol' },
+      { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
+      { player: 'devin_way', type: 'extra-vote', label: 'Extra Vote' },
+      { player: 'maggie_nestor', type: 'extra-vote', label: 'Extra Vote' },
+    ],
+    4: [
       { player: 'carter_krull', type: 'idol', label: 'Immunity Idol' },
       { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
       { player: 'devin_way', type: 'extra-vote', label: 'Extra Vote' },
@@ -477,6 +492,13 @@
       { name: 'Alexis / Linnea / Sharonda', color: '#34d399', members: ['alexis_levine','linnea_capobianco','sharonda_cox'] },
       { name: 'Ori & Sharonda', color: '#f59e0b', members: ['ori_jean_charles','sharonda_cox'] },
       { name: 'Devin & Sharonda', color: '#60a5fa', members: ['devin_way','sharonda_cox'] },
+    ],
+    4: [
+      // Post-swap bonds: https://insidesurvivor.com/survivor-51-episode-4-recap-revenge-with-a-side-of-chicken-61880
+      { name: 'Thien An / Carter / Maggie', color: '#f472b6', members: ['an_nguyen','carter_krull','maggie_nestor'] },
+      { name: 'Helicopter Alliance', color: '#22d3ee', members: ['angelica_loblack','devin_way','ori_jean_charles','sharonda_cox'] },
+      { name: 'The Loverboys', color: '#f59e0b', members: ['danny_kilby','eric_macksoud'] },
+      { name: 'Linnea & Sharonda', color: '#34d399', members: ['linnea_capobianco','sharonda_cox'] },
     ],
   };
 
