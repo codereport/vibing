@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111410">
+  <meta name="description" content="A personal TV watchlist. What’s playing, what’s ready, and what’s coming next.">
+  <title>The watchlist.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%2325352d'/%3E%3Cpath d='M16 12l12 8-12 8z' fill='%23d6e7b1'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <div class="page">
+    <main>
+      <h1 class="sr-only">TV watchlist</h1>
+
+      <div id="notice" class="notice" role="status" hidden></div>
+      <div class="workspace">
+        <div class="collection">
+          <div class="collection-toolbar">
+            <div class="tabs" role="tablist" aria-label="Show collection">
+              <button id="active-tab" class="tab selected" role="tab" aria-selected="true" aria-controls="collection-panel" data-tab="active">Active <span id="active-count">—</span></button>
+              <button id="done-tab" class="tab" role="tab" aria-selected="false" aria-controls="collection-panel" tabindex="-1" data-tab="done">Done <span id="done-count">—</span></button>
+            </div>
+            <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><span class="sr-only">Search shows</span><input id="search" type="search" placeholder="Find a show…" autocomplete="off"></label>
+          </div>
+
+          <div id="collection-panel" role="tabpanel" aria-labelledby="active-tab">
+            <div class="filters" id="filters" aria-label="Filter active shows">
+              <button class="filter selected" data-filter="all" aria-pressed="true">All shows <span id="all-count">—</span></button>
+              <button class="filter" data-filter="watching" aria-pressed="false"><i class="dot watching-dot" aria-hidden="true"></i>Watching <span id="watching-count">—</span></button>
+              <button class="filter" data-filter="ready" aria-pressed="false"><i class="dot ready-dot" aria-hidden="true"></i>Ready <span id="ready-count">—</span></button>
+              <button class="filter" data-filter="waiting" aria-pressed="false"><i class="dot waiting-dot" aria-hidden="true"></i>Waiting <span id="waiting-count">—</span></button>
+            </div>
+            <div class="list-heading" aria-hidden="true"><span>SERIES</span><span>UP NEXT</span><span>STATUS</span><span></span></div>
+            <div id="show-list" class="show-list" aria-live="polite" aria-busy="true"><p class="empty-state">Getting the watchlist ready…</p></div>
+            <noscript><p class="empty-state">Enable JavaScript to view and update your watchlist.</p></noscript>
+            <div class="list-bottom"><span id="list-summary"></span></div>
+          </div>
+        </div>
+
+        <aside class="sidebar" aria-label="Upcoming premieres">
+          <section class="upcoming-card">
+            <div class="aside-topline"><span class="eyebrow">ON THE HORIZON</span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 2v6m8-6v6M4 11h16"/></svg></div>
+            <h2>Coming soon<span>↗</span></h2>
+            <p class="aside-description">A few dates to look forward to.</p>
+            <div id="upcoming-list"><p class="muted">Checking the calendar…</p></div>
+            <p class="calendar-note">Premiere dates appear here as they’re announced.</p>
+          </section>
+          <div class="legend"><span class="legend-title">A QUICK GUIDE</span><p><i class="dot watching-dot" aria-hidden="true"></i><span><strong>Watching</strong>In the middle of a good thing.</span></p><p><i class="dot ready-dot" aria-hidden="true"></i><span><strong>Ready to watch</strong>A season is out. Press play.</span></p><p><i class="dot waiting-dot" aria-hidden="true"></i><span><strong>Waiting</strong>Caught up, or coming soon.</span></p></div>
+          <p class="done-explanation">The credits roll for good?<br>Finished, ended shows live in <button id="view-done" class="text-button">Done ↗</button>.</p>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      <div><span id="last-checked">Loading latest check…</span><span>Dates via <a href="https://www.tvmaze.com/" target="_blank" rel="noopener noreferrer">TVmaze ↗</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA</a></span></div>
+      <div class="progress-tools"><span>Progress saved in this browser</span><div><button id="export" class="text-button" disabled>Export ↓</button><span class="tool-divider">/</span><button id="import" class="text-button" disabled>Import ↑</button><input type="file" id="import-file" accept="application/json,.json" hidden></div></div>
+    </footer>
+  </div>
+
+  <dialog id="progress-dialog" aria-labelledby="dialog-title">
+    <form id="progress-form">
+      <div class="dialog-heading"><p class="eyebrow">PROGRESS</p><button type="button" id="close-dialog" class="icon-button" aria-label="Close progress editor">×</button></div>
+      <h2 id="dialog-title">Update progress</h2>
+      <p id="dialog-meta" class="muted"></p>
+      <p id="dialog-note" class="show-note" hidden></p>
+      <label class="field-label" for="watched-through">Last season finished</label>
+      <select id="watched-through" name="watchedThrough"></select>
+      <label class="watching-checkbox"><input id="currently-watching" name="watching" type="checkbox"><span>I’m watching the next season</span></label>
+      <p class="dialog-hint">Unwatched seasons turn yellow when they premiere. Ended shows move to Done once you’ve finished every season.</p>
+      <div class="dialog-actions"><a id="show-source" target="_blank" rel="noopener noreferrer">Show details ↗</a><button class="primary-button" type="submit">Save progress</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

@@ -1,0 +1,899 @@
+{
+  "source": "TVmaze",
+  "sourceUrl": "https://www.tvmaze.com/api",
+  "checkedAt": "2026-10-19T12:15:08+00:00",
+  "errors": [],
+  "shows": {
+    "the-wire": {
+      "tvmazeId": 179,
+      "status": "Ended",
+      "network": "HBO",
+      "url": "https://www.tvmaze.com/shows/179/the-wire",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2002-06-02",
+          "endDate": "2002-09-08",
+          "episodeCount": 13
+        },
+        {
+          "number": 2,
+          "premiereDate": "2003-06-01",
+          "endDate": "2003-08-24",
+          "episodeCount": 12
+        },
+        {
+          "number": 3,
+          "premiereDate": "2004-09-19",
+          "endDate": "2004-12-19",
+          "episodeCount": 12
+        },
+        {
+          "number": 4,
+          "premiereDate": "2006-09-10",
+          "endDate": "2006-12-10",
+          "episodeCount": 13
+        },
+        {
+          "number": 5,
+          "premiereDate": "2008-01-06",
+          "endDate": "2008-03-09",
+          "episodeCount": 10
+        }
+      ]
+    },
+    "veep": {
+      "tvmazeId": 142,
+      "status": "Ended",
+      "network": "HBO",
+      "url": "https://www.tvmaze.com/shows/142/veep",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2012-04-22",
+          "endDate": "2012-06-10",
+          "episodeCount": 8
+        },
+        {
+          "number": 2,
+          "premiereDate": "2013-04-14",
+          "endDate": "2013-06-23",
+          "episodeCount": 10
+        },
+        {
+          "number": 3,
+          "premiereDate": "2014-04-06",
+          "endDate": "2014-06-08",
+          "episodeCount": 10
+        },
+        {
+          "number": 4,
+          "premiereDate": "2015-04-12",
+          "endDate": "2015-06-14",
+          "episodeCount": 10
+        },
+        {
+          "number": 5,
+          "premiereDate": "2016-04-24",
+          "endDate": "2016-06-26",
+          "episodeCount": 10
+        },
+        {
+          "number": 6,
+          "premiereDate": "2017-04-16",
+          "endDate": "2017-06-25",
+          "episodeCount": 10
+        },
+        {
+          "number": 7,
+          "premiereDate": "2019-03-31",
+          "endDate": "2019-05-12",
+          "episodeCount": 7
+        }
+      ]
+    },
+    "curb": {
+      "tvmazeId": 551,
+      "status": "Ended",
+      "network": "HBO",
+      "url": "https://www.tvmaze.com/shows/551/curb-your-enthusiasm",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2000-10-15",
+          "endDate": "2000-12-17",
+          "episodeCount": 10
+        },
+        {
+          "number": 2,
+          "premiereDate": "2001-09-23",
+          "endDate": "2001-11-25",
+          "episodeCount": 10
+        },
+        {
+          "number": 3,
+          "premiereDate": "2002-09-15",
+          "endDate": "2002-11-17",
+          "episodeCount": 10
+        },
+        {
+          "number": 4,
+          "premiereDate": "2004-01-04",
+          "endDate": "2004-03-14",
+          "episodeCount": 10
+        },
+        {
+          "number": 5,
+          "premiereDate": "2005-09-25",
+          "endDate": "2005-12-04",
+          "episodeCount": 10
+        },
+        {
+          "number": 6,
+          "premiereDate": "2007-09-09",
+          "endDate": "2007-11-11",
+          "episodeCount": 10
+        },
+        {
+          "number": 7,
+          "premiereDate": "2009-09-20",
+          "endDate": "2009-11-22",
+          "episodeCount": 10
+        },
+        {
+          "number": 8,
+          "premiereDate": "2011-07-10",
+          "endDate": "2011-09-11",
+          "episodeCount": 10
+        },
+        {
+          "number": 9,
+          "premiereDate": "2017-10-01",
+          "endDate": "2017-12-03",
+          "episodeCount": 10
+        },
+        {
+          "number": 10,
+          "premiereDate": "2020-01-19",
+          "endDate": "2020-03-22",
+          "episodeCount": 10
+        },
+        {
+          "number": 11,
+          "premiereDate": "2021-10-24",
+          "endDate": "2021-12-26",
+          "episodeCount": 10
+        },
+        {
+          "number": 12,
+          "premiereDate": "2024-02-04",
+          "endDate": "2024-04-07",
+          "episodeCount": 10
+        }
+      ]
+    },
+    "star-trek-tng": {
+      "tvmazeId": 491,
+      "status": "Ended",
+      "network": "Syndication",
+      "url": "https://www.tvmaze.com/shows/491/star-trek-the-next-generation",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "1987-09-28",
+          "endDate": "1988-05-16",
+          "episodeCount": 26
+        },
+        {
+          "number": 2,
+          "premiereDate": "1988-11-21",
+          "endDate": "1989-07-17",
+          "episodeCount": 22
+        },
+        {
+          "number": 3,
+          "premiereDate": "1989-09-25",
+          "endDate": "1990-06-18",
+          "episodeCount": 26
+        },
+        {
+          "number": 4,
+          "premiereDate": "1990-09-24",
+          "endDate": "1991-06-17",
+          "episodeCount": 26
+        },
+        {
+          "number": 5,
+          "premiereDate": "1991-09-23",
+          "endDate": "1992-06-15",
+          "episodeCount": 26
+        },
+        {
+          "number": 6,
+          "premiereDate": "1992-09-21",
+          "endDate": "1993-06-21",
+          "episodeCount": 26
+        },
+        {
+          "number": 7,
+          "premiereDate": "1993-09-20",
+          "endDate": "1994-05-23",
+          "episodeCount": 26
+        }
+      ]
+    },
+    "doctor-who": {
+      "tvmazeId": 210,
+      "status": "Ended",
+      "network": "BBC One",
+      "url": "https://www.tvmaze.com/shows/210/doctor-who",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2005-03-26",
+          "endDate": "2005-12-25",
+          "episodeCount": 13
+        },
+        {
+          "number": 2,
+          "premiereDate": "2006-04-15",
+          "endDate": "2006-12-25",
+          "episodeCount": 13
+        },
+        {
+          "number": 3,
+          "premiereDate": "2007-03-31",
+          "endDate": "2007-12-25",
+          "episodeCount": 13
+        },
+        {
+          "number": 4,
+          "premiereDate": "2008-04-05",
+          "endDate": "2010-01-01",
+          "episodeCount": 13
+        },
+        {
+          "number": 5,
+          "premiereDate": "2010-04-03",
+          "endDate": "2010-12-25",
+          "episodeCount": 13
+        },
+        {
+          "number": 6,
+          "premiereDate": "2011-03-25",
+          "endDate": "2011-12-25",
+          "episodeCount": 13
+        },
+        {
+          "number": 7,
+          "premiereDate": "2012-09-01",
+          "endDate": "2013-12-25",
+          "episodeCount": 13
+        },
+        {
+          "number": 8,
+          "premiereDate": "2014-08-23",
+          "endDate": "2014-12-25",
+          "episodeCount": 12
+        },
+        {
+          "number": 9,
+          "premiereDate": "2015-09-11",
+          "endDate": "2015-12-25",
+          "episodeCount": 12
+        },
+        {
+          "number": 10,
+          "premiereDate": "2016-04-23",
+          "endDate": "2017-12-25",
+          "episodeCount": 12
+        },
+        {
+          "number": 11,
+          "premiereDate": "2018-10-07",
+          "endDate": "2019-01-01",
+          "episodeCount": 10
+        },
+        {
+          "number": 12,
+          "premiereDate": "2020-01-01",
+          "endDate": "2021-01-01",
+          "episodeCount": 10
+        },
+        {
+          "number": 13,
+          "premiereDate": "2021-10-31",
+          "endDate": "2022-10-23",
+          "episodeCount": null
+        }
+      ]
+    },
+    "stranger-things": {
+      "tvmazeId": 2993,
+      "status": "Ended",
+      "network": "Netflix",
+      "url": "https://www.tvmaze.com/shows/2993/stranger-things",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2016-07-15",
+          "endDate": "2016-07-15",
+          "episodeCount": 8
+        },
+        {
+          "number": 2,
+          "premiereDate": "2017-10-27",
+          "endDate": "2017-10-27",
+          "episodeCount": 9
+        },
+        {
+          "number": 3,
+          "premiereDate": "2019-07-04",
+          "endDate": "2019-07-04",
+          "episodeCount": 8
+        },
+        {
+          "number": 4,
+          "premiereDate": "2022-05-27",
+          "endDate": "2022-07-01",
+          "episodeCount": 9
+        },
+        {
+          "number": 5,
+          "premiereDate": "2025-11-26",
+          "endDate": "2025-12-31",
+          "episodeCount": 8
+        }
+      ]
+    },
+    "the-altruists": {
+      "tvmazeId": 85058,
+      "status": "In Development",
+      "network": "Netflix",
+      "url": "https://www.tvmaze.com/shows/85058/the-altruists",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2026-11-19",
+          "endDate": "2026-11-19",
+          "episodeCount": 8
+        }
+      ]
+    },
+    "dark-matter": {
+      "tvmazeId": 61315,
+      "status": "Running",
+      "network": "Apple TV",
+      "url": "https://www.tvmaze.com/shows/61315/dark-matter",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2024-05-08",
+          "endDate": "2024-06-26",
+          "episodeCount": 9
+        },
+        {
+          "number": 2,
+          "premiereDate": "2026-08-28",
+          "endDate": "2026-10-30",
+          "episodeCount": 10
+        }
+      ]
+    },
+    "neuromancer": {
+      "tvmazeId": 75029,
+      "status": "In Development",
+      "network": "Apple TV",
+      "url": "https://www.tvmaze.com/shows/75029/neuromancer",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2027-01-22",
+          "endDate": "2027-01-22",
+          "episodeCount": 10
+        }
+      ]
+    },
+    "the-traitors": {
+      "tvmazeId": 58177,
+      "status": "Running",
+      "network": "NBC",
+      "url": "https://www.tvmaze.com/shows/58177/the-traitors",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2023-01-12",
+          "endDate": "2023-02-28",
+          "episodeCount": 11
+        },
+        {
+          "number": 2,
+          "premiereDate": "2024-01-12",
+          "endDate": "2024-03-07",
+          "episodeCount": 11
+        },
+        {
+          "number": 3,
+          "premiereDate": "2025-01-09",
+          "endDate": "2025-03-06",
+          "episodeCount": 12
+        },
+        {
+          "number": 4,
+          "premiereDate": "2026-01-08",
+          "endDate": "2026-02-26",
+          "episodeCount": 12
+        },
+        {
+          "number": 5,
+          "premiereDate": "2026-09-17",
+          "endDate": "2026-11-19",
+          "episodeCount": null
+        },
+        {
+          "number": 6,
+          "premiereDate": null,
+          "endDate": null,
+          "episodeCount": null
+        }
+      ]
+    },
+    "blade-runner-2099": {
+      "tvmazeId": 60458,
+      "status": "In Development",
+      "network": "Prime Video",
+      "url": "https://www.tvmaze.com/shows/60458/blade-runner-2099",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2026-11-25",
+          "endDate": "2026-11-25",
+          "episodeCount": 8
+        }
+      ]
+    },
+    "stick": {
+      "tvmazeId": 82227,
+      "status": "Running",
+      "network": "Apple TV",
+      "url": "https://www.tvmaze.com/shows/82227/stick",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2025-06-04",
+          "endDate": "2025-07-23",
+          "episodeCount": 10
+        },
+        {
+          "number": 2,
+          "premiereDate": "2026-11-04",
+          "endDate": "2026-12-30",
+          "episodeCount": 10
+        }
+      ]
+    },
+    "visionquest": {
+      "tvmazeId": 64950,
+      "status": "Running",
+      "network": "Disney+",
+      "url": "https://www.tvmaze.com/shows/64950/visionquest",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2026-10-13",
+          "endDate": "2026-11-10",
+          "episodeCount": 8
+        }
+      ]
+    },
+    "love-is-blind": {
+      "tvmazeId": 46167,
+      "status": "Running",
+      "network": "Netflix",
+      "url": "https://www.tvmaze.com/shows/46167/love-is-blind",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2020-02-13",
+          "endDate": "2021-07-28",
+          "episodeCount": 14
+        },
+        {
+          "number": 2,
+          "premiereDate": "2022-02-11",
+          "endDate": "2022-09-16",
+          "episodeCount": 14
+        },
+        {
+          "number": 3,
+          "premiereDate": "2022-10-19",
+          "endDate": "2023-02-10",
+          "episodeCount": 15
+        },
+        {
+          "number": 4,
+          "premiereDate": "2023-03-24",
+          "endDate": "2023-09-01",
+          "episodeCount": 16
+        },
+        {
+          "number": 5,
+          "premiereDate": "2023-09-22",
+          "endDate": "2023-10-15",
+          "episodeCount": 11
+        },
+        {
+          "number": 6,
+          "premiereDate": "2024-02-14",
+          "endDate": "2024-03-13",
+          "episodeCount": 13
+        },
+        {
+          "number": 7,
+          "premiereDate": "2024-10-02",
+          "endDate": "2024-10-30",
+          "episodeCount": 13
+        },
+        {
+          "number": 8,
+          "premiereDate": "2025-02-14",
+          "endDate": "2025-03-09",
+          "episodeCount": 14
+        },
+        {
+          "number": 9,
+          "premiereDate": "2025-10-01",
+          "endDate": "2025-10-29",
+          "episodeCount": 13
+        },
+        {
+          "number": 10,
+          "premiereDate": "2026-02-11",
+          "endDate": "2026-03-11",
+          "episodeCount": 13
+        },
+        {
+          "number": 11,
+          "premiereDate": "2026-10-14",
+          "endDate": "2026-11-09",
+          "episodeCount": 13
+        }
+      ]
+    },
+    "black-mirror": {
+      "tvmazeId": 305,
+      "status": "Running",
+      "network": "Netflix",
+      "url": "https://www.tvmaze.com/shows/305/black-mirror",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2011-12-04",
+          "endDate": "2011-12-18",
+          "episodeCount": 3
+        },
+        {
+          "number": 2,
+          "premiereDate": "2013-02-11",
+          "endDate": "2014-12-16",
+          "episodeCount": 3
+        },
+        {
+          "number": 3,
+          "premiereDate": "2016-10-21",
+          "endDate": "2016-10-21",
+          "episodeCount": 6
+        },
+        {
+          "number": 4,
+          "premiereDate": "2017-12-29",
+          "endDate": "2018-12-28",
+          "episodeCount": 6
+        },
+        {
+          "number": 5,
+          "premiereDate": "2019-06-05",
+          "endDate": "2019-06-05",
+          "episodeCount": 3
+        },
+        {
+          "number": 6,
+          "premiereDate": "2023-06-15",
+          "endDate": "2023-06-15",
+          "episodeCount": 5
+        },
+        {
+          "number": 7,
+          "premiereDate": "2025-04-10",
+          "endDate": "2025-04-10",
+          "episodeCount": 6
+        },
+        {
+          "number": 8,
+          "premiereDate": null,
+          "endDate": null,
+          "episodeCount": null
+        }
+      ]
+    },
+    "3-body-problem": {
+      "tvmazeId": 53277,
+      "status": "Running",
+      "network": "Netflix",
+      "url": "https://www.tvmaze.com/shows/53277/3-body-problem",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2024-03-21",
+          "endDate": "2024-03-21",
+          "episodeCount": 8
+        },
+        {
+          "number": 2,
+          "premiereDate": null,
+          "endDate": null,
+          "episodeCount": null
+        }
+      ]
+    },
+    "silo": {
+      "tvmazeId": 38052,
+      "status": "Running",
+      "network": "Apple TV",
+      "url": "https://www.tvmaze.com/shows/38052/silo",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2023-05-05",
+          "endDate": "2023-06-30",
+          "episodeCount": 10
+        },
+        {
+          "number": 2,
+          "premiereDate": "2024-11-15",
+          "endDate": "2025-01-17",
+          "episodeCount": 10
+        },
+        {
+          "number": 3,
+          "premiereDate": "2026-07-03",
+          "endDate": "2026-09-04",
+          "episodeCount": 10
+        },
+        {
+          "number": 4,
+          "premiereDate": "2027-07-09",
+          "endDate": "2027-07-09",
+          "episodeCount": 10
+        }
+      ]
+    },
+    "severance": {
+      "tvmazeId": 44933,
+      "status": "Running",
+      "network": "Apple TV",
+      "url": "https://www.tvmaze.com/shows/44933/severance",
+      "checkedAt": "2026-10-19T12:15:08+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2022-02-18",
+          "endDate": "2022-04-08",
+          "episodeCount": 9
+        },
+        {
+          "number": 2,
+          "premiereDate": "2025-01-17",
+          "endDate": "2025-03-21",
+          "episodeCount": 10
+        },
+        {
+          "number": 3,
+          "premiereDate": null,
+          "endDate": null,
+          "episodeCount": null
+        }
+      ]
+    },
+    "the-bear": {
+      "tvmazeId": 54198,
+      "status": "Ended",
+      "network": "Hulu",
+      "url": "https://www.tvmaze.com/shows/54198/the-bear",
+      "checkedAt": "2026-10-19T12:34:03+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2022-06-23",
+          "endDate": "2022-06-23",
+          "episodeCount": 8
+        },
+        {
+          "number": 2,
+          "premiereDate": "2023-06-22",
+          "endDate": "2023-06-22",
+          "episodeCount": 10
+        },
+        {
+          "number": 3,
+          "premiereDate": "2024-06-26",
+          "endDate": "2024-06-26",
+          "episodeCount": 10
+        },
+        {
+          "number": 4,
+          "premiereDate": "2025-06-25",
+          "endDate": "2025-06-25",
+          "episodeCount": 10
+        },
+        {
+          "number": 5,
+          "premiereDate": "2026-05-05",
+          "endDate": "2026-06-25",
+          "episodeCount": 8
+        }
+      ]
+    },
+    "million-dollar-secret": {
+      "tvmazeId": 82873,
+      "status": "Running",
+      "network": "Netflix",
+      "url": "https://www.tvmaze.com/shows/82873/million-dollar-secret",
+      "checkedAt": "2026-10-19T12:45:52+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2025-03-26",
+          "endDate": "2025-04-09",
+          "episodeCount": 8
+        },
+        {
+          "number": 2,
+          "premiereDate": "2026-04-15",
+          "endDate": "2026-04-29",
+          "episodeCount": 8
+        }
+      ]
+    },
+    "the-traitors-uk": {
+      "tvmazeId": 58174,
+      "status": "Running",
+      "network": "BBC One",
+      "url": "https://www.tvmaze.com/shows/58174/the-traitors",
+      "checkedAt": "2026-10-19T12:45:53+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2022-11-29",
+          "endDate": "2022-12-22",
+          "episodeCount": 12
+        },
+        {
+          "number": 2,
+          "premiereDate": "2024-01-03",
+          "endDate": "2024-01-26",
+          "episodeCount": 12
+        },
+        {
+          "number": 3,
+          "premiereDate": "2025-01-01",
+          "endDate": "2025-01-24",
+          "episodeCount": 12
+        },
+        {
+          "number": 4,
+          "premiereDate": "2026-01-01",
+          "endDate": "2026-01-23",
+          "episodeCount": 12
+        },
+        {
+          "number": 5,
+          "premiereDate": null,
+          "endDate": null,
+          "episodeCount": 12
+        }
+      ]
+    },
+    "ted-lasso": {
+      "tvmazeId": 44458,
+      "status": "To Be Determined",
+      "network": "Apple TV",
+      "url": "https://www.tvmaze.com/shows/44458/ted-lasso",
+      "checkedAt": "2026-10-19T12:45:54+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2020-08-14",
+          "endDate": "2020-10-02",
+          "episodeCount": 10
+        },
+        {
+          "number": 2,
+          "premiereDate": "2021-07-23",
+          "endDate": "2021-10-08",
+          "episodeCount": 12
+        },
+        {
+          "number": 3,
+          "premiereDate": "2023-03-15",
+          "endDate": "2023-05-31",
+          "episodeCount": 12
+        },
+        {
+          "number": 4,
+          "premiereDate": "2026-08-05",
+          "endDate": "2026-10-07",
+          "episodeCount": 10
+        }
+      ]
+    },
+    "mad-men": {
+      "tvmazeId": 385,
+      "status": "Ended",
+      "network": "AMC",
+      "url": "https://www.tvmaze.com/shows/385/mad-men",
+      "checkedAt": "2026-10-19T12:45:55+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2007-07-19",
+          "endDate": "2007-10-18",
+          "episodeCount": 13
+        },
+        {
+          "number": 2,
+          "premiereDate": "2008-07-27",
+          "endDate": "2008-10-26",
+          "episodeCount": 13
+        },
+        {
+          "number": 3,
+          "premiereDate": "2009-08-16",
+          "endDate": "2009-11-08",
+          "episodeCount": 13
+        },
+        {
+          "number": 4,
+          "premiereDate": "2010-07-25",
+          "endDate": "2010-10-17",
+          "episodeCount": 13
+        },
+        {
+          "number": 5,
+          "premiereDate": "2012-03-25",
+          "endDate": "2012-06-10",
+          "episodeCount": 13
+        },
+        {
+          "number": 6,
+          "premiereDate": "2013-04-07",
+          "endDate": "2013-06-23",
+          "episodeCount": 13
+        },
+        {
+          "number": 7,
+          "premiereDate": "2014-04-13",
+          "endDate": "2015-05-17",
+          "episodeCount": 14
+        }
+      ]
+    }
+  }
+}
