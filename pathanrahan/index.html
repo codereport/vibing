@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f2e9" />
+    <meta name="description" content="A reading guide to Pat Hanrahan’s On Notation: the talk, Stanford DSL courses, lecture slides, and related readings." />
+    <title>On Notation — A Pat Hanrahan Reading Guide</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2385362f'/%3E%3Ctext x='32' y='47' text-anchor='middle' font-family='Georgia,serif' font-size='48' fill='%23f5f2e9'%3E∑%3C/text%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+      <header class="masthead">
+        <a class="wordmark" href="./"><span class="wordmark-symbol" aria-hidden="true">∑</span> A study in notation</a>
+        <nav aria-label="Main navigation">
+          <a href="#lectures">Lectures</a>
+          <a href="#courses">Courses</a>
+          <a href="#readings">Readings</a>
+        </nav>
+        <a class="back-link" href="../">Vibing <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <main id="main">
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="small-rule" aria-hidden="true"></span> Pat Hanrahan · A reading guide</p>
+            <h1 id="page-title">On<br /><em>Notation.</em></h1>
+            <p class="lede">How the way we write changes<br class="desktop-break" /> the way we think.</p>
+            <p class="hero-description">Follow the talk into the classroom: lecture slides, domain-specific languages, and the ideas behind expressive, executable mathematics.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="https://cs343d.github.io/archive/winter2023/lectures/lecture17.notation.pdf">Read the notation slides <span aria-hidden="true">↗</span></a>
+              <a class="text-link" href="https://www.youtube.com/watch?v=pIoogidKxOU">Watch the talk <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+
+          <figure class="notation-plate" aria-label="The sum of the first n odd numbers equals n squared, expressed in mathematics, Haskell, and a square diagram.">
+            <div class="plate-heading"><span>One idea, several representations</span><span aria-hidden="true">Fig. 01</span></div>
+            <div class="math-expression" aria-hidden="true"><span class="sum"><span>n</span><b>∑</b><span>k = 1</span></span><span>(2k − 1) = n<sup>2</sup></span></div>
+            <div class="plate-code"><span class="code-label">Haskell</span><code>sum [1, 3 .. 2*n - 1] == n*n</code></div>
+            <div class="visual-proof" aria-hidden="true">
+              <div class="square-grid">
+                <i class="layer-1"></i><i class="layer-2"></i><i class="layer-3"></i><i class="layer-4"></i><i class="layer-5"></i>
+                <i class="layer-2"></i><i class="layer-2"></i><i class="layer-3"></i><i class="layer-4"></i><i class="layer-5"></i>
+                <i class="layer-3"></i><i class="layer-3"></i><i class="layer-3"></i><i class="layer-4"></i><i class="layer-5"></i>
+                <i class="layer-4"></i><i class="layer-4"></i><i class="layer-4"></i><i class="layer-4"></i><i class="layer-5"></i>
+                <i class="layer-5"></i><i class="layer-5"></i><i class="layer-5"></i><i class="layer-5"></i><i class="layer-5"></i>
+              </div>
+              <div class="proof-caption"><span>1 + 3 + 5 + 7 + 9</span><span class="proof-result">= 5<sup>2</sup></span></div>
+            </div>
+            <figcaption>An example from the notation lectures: algebra, executable code, and a visual proof.</figcaption>
+          </figure>
+        </section>
+
+        <aside class="course-note" aria-labelledby="course-note-title">
+          <span class="note-mark" aria-hidden="true">↳</span>
+          <div>
+            <h2 id="course-note-title">Which course was he referring to?</h2>
+            <p>The strongest match is <a href="https://cs343d.github.io/archive/fall2021/index.html">Stanford CS343D: Domain-Specific Programming Models and Compilers</a>. Its Fall 2021 schedule lists Hanrahan’s “Notation” lecture on November 11; later offerings include it too. Fred Kjolstad was the main instructor. The connection to the talk is an inference, since Hanrahan’s introduction doesn’t name the course.</p>
+          </div>
+        </aside>
+
+        <section class="resource-section" id="lectures" aria-labelledby="lectures-title">
+          <div class="section-heading"><div><span class="section-number">01</span><h2 id="lectures-title">The lectures</h2></div><p>Start with the ideas.</p></div>
+          <div class="lecture-grid">
+            <a class="resource-card featured-card" href="https://cs343d.github.io/archive/winter2023/lectures/lecture17.notation.pdf">
+              <div class="card-top"><span class="pill">Start here</span><span class="card-arrow" aria-hidden="true">↗</span></div>
+              <p class="resource-meta">CS343D · Winter 2023 · PDF · 62 pages</p>
+              <h3>Notation</h3>
+              <p class="card-description">Representations and cognition, SETL, Iverson’s APL/K, mathematical notation, Haskell, and Agda.</p>
+              <span class="card-action">Open lecture slides <span aria-hidden="true">↗</span></span>
+            </a>
+            <a class="resource-card" href="https://www.youtube.com/watch?v=pIoogidKxOU">
+              <div class="card-top"><span class="format-label">Video</span><span class="card-arrow" aria-hidden="true">↗</span></div>
+              <p class="resource-meta">RacketCon · 2026 · Pat Hanrahan</p>
+              <h3>On Notation</h3>
+              <p class="card-description">The talk that prompted this collection. Explore the relationship between mathematical notation and programming languages.</p>
+              <span class="card-action">Watch on YouTube <span aria-hidden="true">↗</span></span>
+            </a>
+            <a class="resource-card" href="https://cs343d.github.io/archive/fall2021/lectures/lecture15-notation.pdf">
+              <div class="card-top"><span class="format-label">Earlier edition</span><span class="card-arrow" aria-hidden="true">↗</span></div>
+              <p class="resource-meta">CS343D · Fall 2021 · PDF · 53 pages</p>
+              <h3>Notation <span class="title-year">/ 2021</span></h3>
+              <p class="card-description">An earlier version of the lecture, from representation effects and number scrabble to executable mathematics.</p>
+              <span class="card-action">Open lecture slides <span aria-hidden="true">↗</span></span>
+            </a>
+            <a class="resource-card" href="https://cs343d.github.io/archive/fall2021/lectures/lecture13.build2.pdf">
+              <div class="card-top"><span class="format-label">Implementation</span><span class="card-arrow" aria-hidden="true">↗</span></div>
+              <p class="resource-meta">CS343D · Fall 2021 · PDF</p>
+              <h3>Building DSLs II</h3>
+              <p class="card-description">Hanrahan on macros, staged programming with Terra, functors, and dependent types. The companion lecture on building languages.</p>
+              <span class="card-action">Open lecture slides <span aria-hidden="true">↗</span></span>
+            </a>
+          </div>
+          <p class="section-footnote">The classroom reference begins at <a href="https://www.youtube.com/watch?v=pIoogidKxOU&amp;t=311">5:11 in the talk <span aria-hidden="true">↗</span></a>. Video source: <a href="https://con.racket-lang.org/2026/">the RacketCon 2026 program</a>.</p>
+        </section>
+
+        <section class="resource-section" id="courses" aria-labelledby="courses-title">
+          <div class="section-heading"><div><span class="section-number">02</span><h2 id="courses-title">Back to the classroom</h2></div><p>The wider context.</p></div>
+          <article class="course-row">
+            <div class="course-id"><span>Stanford</span><h3>CS343D</h3><span>2021–2025 archives</span></div>
+            <div class="course-details">
+              <h4>Domain-Specific Programming<br class="desktop-break" /> Models and Compilers</h4>
+              <p>Programming models for scientific computing, data science, and machine learning. Topics include dense and sparse computation, the separation of algorithms from schedules, and compiler construction.</p>
+              <div class="link-group" aria-label="CS343D course offerings">
+                <a href="https://cs343d.github.io/archive/fall2021/index.html">Fall 2021 <span aria-hidden="true">↗</span></a>
+                <a href="https://cs343d.github.io/archive/winter2023/index.html">Winter 2023 <span aria-hidden="true">↗</span></a>
+                <a href="https://cs343d.github.io/archive/winter2024/index.html">Winter 2024 <span aria-hidden="true">↗</span></a>
+                <a href="https://cs343d.github.io/archive/winter2025/index.html">Winter 2025 <span aria-hidden="true">↗</span></a>
+                <a href="https://cs343d.github.io/">Current course <span aria-hidden="true">↗</span></a>
+              </div>
+            </div>
+          </article>
+          <article class="course-row">
+            <div class="course-id"><span>Stanford</span><h3>CS448H</h3><span>Fall 2015</span></div>
+            <div class="course-details">
+              <h4>Domain-Specific Languages for<br class="desktop-break" /> Graphics, Imaging, and Beyond</h4>
+              <p>An earlier DSL course taught by Pat Hanrahan, Jonathan Ragan-Kelley, and Zach DeVito, with Gilbert Bernstein as TA. Public materials include slides, example code, readings, and assignment descriptions covering Lua, Terra, Halide, intermediate representations, and macros.</p>
+              <div class="link-group" aria-label="CS448H resources">
+                <a href="https://cs448h.stanford.edu/">Course &amp; materials <span aria-hidden="true">↗</span></a>
+                <a href="https://cs448h.stanford.edu/intro.pdf">Introduction slides <span class="inline-format">PDF</span> <span aria-hidden="true">↗</span></a>
+                <a href="https://cs448h.stanford.edu/macro.pdf">Macros slides <span class="inline-format">PDF</span> <span aria-hidden="true">↗</span></a>
+                <a href="https://cs448h.stanford.edu/projects.html">Project guidance <span aria-hidden="true">↗</span></a>
+              </div>
+              <p class="availability-note">Some assignment repositories and reference solutions require course access.</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="resource-section readings-section" id="readings" aria-labelledby="readings-title">
+          <div class="section-heading"><div><span class="section-number">03</span><h2 id="readings-title">On the reading list</h2></div><p>Two readings assigned with “Notation.”</p></div>
+          <a class="reading-row" href="https://www.jsoftware.com/papers/tot.htm">
+            <span class="reading-number" aria-hidden="true">I.</span>
+            <div><p class="resource-meta">Kenneth E. Iverson</p><h3>Notation as a Tool of Thought</h3><p>The case for combining the strengths of mathematical notation with executable programming languages.</p></div>
+            <span class="reading-source">Free text <span aria-hidden="true">↗</span></span>
+          </a>
+          <a class="reading-row" href="https://www.stephenwolfram.com/publications/mathematical-notation-past-future/">
+            <span class="reading-number" aria-hidden="true">II.</span>
+            <div><p class="resource-meta">Stephen Wolfram</p><h3>Mathematical Notation: Past and Future</h3><p>A history of mathematical notation and a discussion of its possibilities in computational systems.</p></div>
+            <span class="reading-source">Article <span aria-hidden="true">↗</span></span>
+          </a>
+          <p class="section-footnote">Iverson’s paper: <a href="https://www.jsoftware.com/papers/tot.htm">free HTML edition at Jsoftware</a> · <a href="https://dl.acm.org/doi/10.1145/1283920.1283935">ACM publication record <span aria-hidden="true">↗</span></a>.</p>
+        </section>
+
+        <aside class="reading-route" aria-labelledby="route-title">
+          <p class="eyebrow">A suggested route</p>
+          <h2 id="route-title">Watch. Read. Build.</h2>
+          <p>Start with <a href="https://www.youtube.com/watch?v=pIoogidKxOU">the talk</a>, follow along with <a href="https://cs343d.github.io/archive/winter2023/lectures/lecture17.notation.pdf">the 2023 notation slides</a>, then turn to <a href="https://cs343d.github.io/archive/fall2021/lectures/lecture13.build2.pdf">Building DSLs II</a> and <a href="https://cs448h.stanford.edu/">CS448H</a> to explore implementation.</p>
+        </aside>
+      </main>
+
+      <footer class="site-footer">
+        <p><span aria-hidden="true">∑</span> A study in notation <span class="footer-divider">/</span> An independent reading guide</p>
+        <p>Collected October 2026 <span class="footer-divider">·</span> <a href="#page-title">Back to top ↑</a></p>
+      </footer>
+    </div>
+  </body>
+</html>
