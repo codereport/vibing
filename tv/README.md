@@ -1,14 +1,35 @@
 # The watchlist
 
-A compact, dark-mode static TV tracker at `/tv/`. Plain HTML, CSS, and JavaScript; no build, backend, API keys, or runtime API requests. `releases.json` is a checked-in snapshot from the [TVmaze API](https://www.tvmaze.com/api).
+A compact, dark-mode static TV tracker at `/tv/`. Plain HTML, CSS, and JavaScript; no build, production backend, API keys, or runtime API requests. `releases.json` is a checked-in snapshot from the [TVmaze API](https://www.tvmaze.com/api). Like AI-FI, the published watchlist is read-only; editing and saving are available on localhost.
 
-Run from the repository root:
+Run from this `tv` directory:
 
 ```sh
-python -m http.server 8000
+node scripts/dev-server.mjs
 ```
 
-Open <http://localhost:8000/tv/>. Use an HTTP server; browsers block JSON fetches when opening the HTML directly from disk.
+Open <http://localhost:8766/> (or <http://localhost:8766/tv/>). The server binds to loopback and serves only this site's assets plus its local save endpoint. Use an HTTP server; browsers block JSON fetches when opening the HTML directly from disk.
+
+## Save and publish progress
+
+1. Start the local server above and edit progress by clicking a title or pencil.
+2. Click **Save to repository** in the footer. This writes your current progress directly to `tv/shows.json`, preserving show identities, TVmaze IDs, titles, and notes.
+3. Review `git diff -- tv/shows.json` from the repository root, then commit and push normally.
+
+Progress edits are also kept in browser `localStorage` until you save them to the repository. Browser storage belongs to the exact host and port. To keep progress previously entered at `http://localhost:8000/tv/`, stop the old server and run `node scripts/dev-server.mjs 8000`, then open that same URL. You can also set `TV_PORT`.
+
+**Export** downloads a `shows.json` backup. **Import** restores progress for matching shows locally; click **Save to repository** afterward to persist it to disk. Imports cannot add shows or replace catalog metadata.
+
+If you use a different static preview server, **Save to repository** downloads JSON instead. Apply the downloaded file from this `tv` directory:
+
+```sh
+node scripts/import-progress.mjs --check ~/Downloads/shows.json
+node scripts/import-progress.mjs ~/Downloads/shows.json
+```
+
+The importer also accepts JSON on stdin with `-`. It validates the entire export before writing, merges only progress for known shows, and replaces the file atomically. `--check` validates without writing.
+
+On a published hostname, titles are plain text and the pencils, import, and repository-save controls are unavailable. The page always uses repository progress, ignores old browser overrides, and never writes progress to browser storage. Search, filters, tabs, the calendar, and JSON export still work. Publishing requires only the static files; the local server is never used in production.
 
 ## Progress and colors
 
@@ -19,7 +40,7 @@ Open <http://localhost:8000/tv/>. Use an HTTP server; browsers block JSON fetche
 
 Active shows are grouped Watching, Ready, then Waiting. Waiting shows are sorted by premiere date, nearest first, with unannounced dates at the bottom.
 
-Click a show title or pencil to set the last season finished and whether you’re watching the next one. Changing the finished season clears the watching checkbox; check it again if you’ve already started the following season. State updates immediately and is saved in local storage. A season becomes Ready on its premiere date using the viewer’s local calendar, including between weekly updates. Release dates describe the original premiere, not availability on a particular Canadian streaming service.
+Locally, click a show title or pencil to set the last season finished and whether you’re watching the next one. Changing the finished season clears the watching checkbox; check it again if you’ve already started the following season. State updates immediately and is saved in local storage. A season becomes Ready on its premiere date using the viewer’s local calendar, including between weekly updates. Release dates describe the original premiere, not availability on a particular Canadian streaming service.
 
 `watchedThrough` means full seasons finished, not the season currently being watched. The Wire starts at season 1 because its current season wasn’t supplied; adjust it in the editor. All three emoji-marked shows start Watching, including VisionQuest. The four shows described as waiting start caught up to their latest aired season at setup (Black Mirror 7, 3 Body Problem 1, Silo 3, Severance 2). Doctor Who uses the 2005 series containing **Blink, S3 E10**. The US Traitors listing numbers New Blood as season 5; Love Is Blind starts at season 11.
 
@@ -29,7 +50,7 @@ Million Dollar Secret, The Traitors UK, and Ted Lasso start Waiting, caught up t
 
 Reacher starts Waiting for season 5, with seasons 1–4 marked finished.
 
-The footer’s **Export** downloads a full `shows.json` backup. **Import** restores progress for matching shows on another browser; it does not alter show identities or add shows. Progress in a browser is private to that browser and does not automatically sync to the repository. To share updated defaults across devices, replace `tv/shows.json` with the export and commit it. A browser’s existing saved progress takes priority over repository defaults.
+On localhost, existing browser progress takes priority over repository defaults. Save it to the repository to share updated progress across devices; published pages always show that committed snapshot.
 
 ## Weekly release updates
 
@@ -55,10 +76,10 @@ Requires Python 3.10+ and Node.js 22+. Production hosting requires neither.
 
 ```sh
 python -m unittest discover -s tv/tests -p 'test_*.py'
-node --test tv/tests/model.test.mjs
+node --test tv/tests/*.test.mjs
 node --check tv/app.mjs
 ```
 
-The checks cover status transitions, revival of ended shows, local-date boundaries, progress validation, response normalization, rate-limit retries, partial failure recovery, and the initial snapshot. `.github/workflows/tv-checks.yml` runs them on tracker pull requests and pushes.
+The checks cover status transitions, revival of ended shows, local-date boundaries, progress validation, atomic repository imports, local server saves and request restrictions, response normalization, rate-limit retries, partial failure recovery, and the initial snapshot. `.github/workflows/tv-checks.yml` runs them on tracker pull requests and pushes.
 
 TVmaze-derived metadata in `releases.json` is attributed to [TVmaze](https://www.tvmaze.com/) and available under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The site links to the source and license in its footer.

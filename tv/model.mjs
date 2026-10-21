@@ -24,6 +24,24 @@ export function mergedShow(show, saved) {
   return validProgress(saved) ? { ...show, watching: saved.watching, watchedThrough: saved.watchedThrough } : { ...show };
 }
 
+export function importedProgress(config, imported) {
+  if (!imported || imported.version !== 1 || !Array.isArray(imported.shows) || !imported.shows.length) {
+    throw new Error('Choose a watchlist JSON export.');
+  }
+  const updates = {};
+  const known = new Set(config.shows.map(show => show.id));
+  const seen = new Set();
+  for (const show of imported.shows) {
+    if (!show || typeof show.id !== 'string' || seen.has(show.id) || !validProgress(show)) {
+      throw new Error('The file contains invalid progress.');
+    }
+    seen.add(show.id);
+    if (known.has(show.id)) updates[show.id] = { watching: show.watching, watchedThrough: show.watchedThrough };
+  }
+  if (!Object.keys(updates).length) throw new Error('This file has no shows from your watchlist.');
+  return updates;
+}
+
 export function compareEntries(a, b) {
   const rank = { watching: 0, ready: 1, waiting: 2, done: 3 };
   const groupOrder = rank[a.state.status] - rank[b.state.status];

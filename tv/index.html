@@ -33,9 +33,9 @@
               <button class="filter" data-filter="ready" aria-pressed="false"><i class="dot ready-dot" aria-hidden="true"></i>Ready <span id="ready-count">—</span></button>
               <button class="filter" data-filter="waiting" aria-pressed="false"><i class="dot waiting-dot" aria-hidden="true"></i>Waiting <span id="waiting-count">—</span></button>
             </div>
-            <div class="list-heading" aria-hidden="true"><span>SERIES</span><span>UP NEXT</span><span>STATUS</span><span></span></div>
+            <div class="list-heading" aria-hidden="true"><span>SERIES</span><span>UP NEXT</span><span>STATUS</span><span id="edit-heading" hidden></span></div>
             <div id="show-list" class="show-list" aria-live="polite" aria-busy="true"><p class="empty-state">Getting the watchlist ready…</p></div>
-            <noscript><p class="empty-state">Enable JavaScript to view and update your watchlist.</p></noscript>
+            <noscript><p class="empty-state">Enable JavaScript to view the watchlist.</p></noscript>
             <div class="list-bottom"><span id="list-summary"></span></div>
           </div>
         </div>
@@ -56,7 +56,7 @@
 
     <footer>
       <div><span id="last-checked">Loading latest check…</span><span>Dates via <a href="https://www.tvmaze.com/" target="_blank" rel="noopener noreferrer">TVmaze ↗</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA</a></span></div>
-      <div class="progress-tools"><span>Progress saved in this browser</span><div><button id="export" class="text-button" disabled>Export ↓</button><span class="tool-divider">/</span><button id="import" class="text-button" disabled>Import ↑</button><input type="file" id="import-file" accept="application/json,.json" hidden></div></div>
+      <div class="progress-tools"><span id="progress-status">Published watchlist · read-only</span><div><span id="local-tools" hidden><button id="save-repository" class="text-button" disabled>Save to repository</button><span class="tool-divider">/</span><button id="import" class="text-button" disabled>Import ↑</button><span class="tool-divider">/</span></span><button id="export" class="text-button" disabled>Export ↓</button><input type="file" id="import-file" accept="application/json,.json" hidden disabled></div></div>
     </footer>
   </div>
 
@@ -67,10 +67,10 @@
       <p id="dialog-meta" class="muted"></p>
       <p id="dialog-note" class="show-note" hidden></p>
       <label class="field-label" for="watched-through">Last season finished</label>
-      <select id="watched-through" name="watchedThrough"></select>
-      <label class="watching-checkbox"><input id="currently-watching" name="watching" type="checkbox"><span>I’m watching the next season</span></label>
+      <select id="watched-through" name="watchedThrough" disabled></select>
+      <label class="watching-checkbox"><input id="currently-watching" name="watching" type="checkbox" disabled><span>I’m watching the next season</span></label>
       <p class="dialog-hint">Unwatched seasons turn yellow when they premiere. Ended shows move to Done once you’ve finished every season.</p>
-      <div class="dialog-actions"><a id="show-source" target="_blank" rel="noopener noreferrer">Show details ↗</a><button class="primary-button" type="submit">Save progress</button></div>
+      <div class="dialog-actions"><a id="show-source" target="_blank" rel="noopener noreferrer">Show details ↗</a><button class="primary-button" type="submit" disabled>Save progress</button></div>
     </form>
   </dialog>
   <div id="toast" class="toast" role="status" hidden></div>

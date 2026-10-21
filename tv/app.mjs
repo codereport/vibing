@@ -1,7 +1,9 @@
-import { compareEntries, localDate, mergedShow, showState, validProgress } from './model.mjs';
+import { compareEntries, importedProgress, localDate, mergedShow, showState, validProgress } from './model.mjs';
 
 const $ = selector => document.querySelector(selector);
 const STORAGE_KEY = 'vibing.tv.progress.v1';
+const editableHosts = new Set(['localhost', '127.0.0.1', '[::1]', '::1', '0.0.0.0']);
+const canEditProgress = editableHosts.has(location.hostname) || location.hostname.endsWith('.localhost');
 const statusNames = { watching: 'Watching', ready: 'Ready to watch', waiting: 'Waiting', done: 'Finished' };
 let config;
 let releases = { shows: {} };
@@ -11,6 +13,8 @@ let filter = 'all';
 let editingId;
 let toastTimer;
 let storageWarning = false;
+
+document.body.classList.toggle('is-editable', canEditProgress);
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -32,6 +36,7 @@ function notice(message) {
 }
 
 function readProgress() {
+  if (!canEditProgress) return;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
@@ -45,6 +50,7 @@ function readProgress() {
 }
 
 function persist() {
+  if (!canEditProgress) return false;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
     storageWarning = false;
@@ -75,10 +81,12 @@ function makeRow({ show, release, state }) {
   row.dataset.show = show.id;
   const series = element('div', 'series-cell');
   const title = element('h3', 'show-title');
-  const titleButton = element('button', 'show-title-button', show.title);
-  titleButton.type = 'button';
-  titleButton.addEventListener('click', () => edit(show.id));
-  title.append(titleButton);
+  if (canEditProgress) {
+    const titleButton = element('button', 'show-title-button', show.title);
+    titleButton.type = 'button';
+    titleButton.addEventListener('click', () => edit(show.id));
+    title.append(titleButton);
+  } else title.textContent = show.title;
   series.append(title, element('span', 'show-network', [release?.network, release?.status === 'Ended' ? 'Series ended' : null].filter(Boolean).join(' · ') || 'Release details pending'));
 
   const season = element('div', 'season-cell');
@@ -97,14 +105,17 @@ function makeRow({ show, release, state }) {
   pill.append(symbol, document.createTextNode(statusNames[state.status]));
   status.append(pill);
 
-  const editButton = element('button', 'icon-button edit-button');
-  editButton.type = 'button';
-  editButton.setAttribute('aria-label', `Edit progress for ${show.title}`);
-  editButton.title = 'Update progress';
-  // Constant, decorative SVG; show data is always inserted as text.
-  editButton.innerHTML = '<svg class="edit-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 5 5M3 21l5-1L21 7a2 2 0 0 0-5-5L3 15z"/></svg>';
-  editButton.addEventListener('click', () => edit(show.id));
-  row.append(series, season, status, editButton);
+  row.append(series, season, status);
+  if (canEditProgress) {
+    const editButton = element('button', 'icon-button edit-button');
+    editButton.type = 'button';
+    editButton.setAttribute('aria-label', `Edit progress for ${show.title}`);
+    editButton.title = 'Update progress';
+    // Constant, decorative SVG; show data is always inserted as text.
+    editButton.innerHTML = '<svg class="edit-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 5 5M3 21l5-1L21 7a2 2 0 0 0-5-5L3 15z"/></svg>';
+    editButton.addEventListener('click', () => edit(show.id));
+    row.append(editButton);
+  }
   return row;
 }
 
@@ -173,6 +184,7 @@ function setTab(value) {
 }
 
 function edit(id) {
+  if (!canEditProgress || !config) return;
   editingId = id;
   const { show, release, state } = entries().find(entry => entry.show.id === id);
   $('#dialog-title').textContent = show.title;
@@ -204,13 +216,15 @@ $('#watched-through').addEventListener('change', () => {
 
 $('#progress-form').addEventListener('submit', event => {
   event.preventDefault();
+  if (!canEditProgress || !config || !editingId) return;
   progress[editingId] = { watchedThrough: Number($('#watched-through').value), watching: $('#currently-watching').checked };
   const saved = persist();
   const entry = config.shows.find(show => show.id === editingId);
   const state = showState(mergedShow(entry, progress[editingId]), releases.shows[editingId]);
   $('#progress-dialog').close();
   render();
-  notify(saved ? (state.status === 'done' ? `${entry.title} moved to Done. That’s a wrap.` : 'Progress saved. Enjoy the next episode.') : 'Progress updated for this visit. Export to keep it.');
+  $('#progress-status').textContent = 'Local changes · Save to repository to publish';
+  notify(saved ? (state.status === 'done' ? `${entry.title} moved to Done. That’s a wrap.` : 'Progress saved in this browser. Save to repository when ready.') : 'Progress updated for this visit. Save to repository or Export to keep it.');
 });
 $('#close-dialog').addEventListener('click', () => $('#progress-dialog').close());
 $('#progress-dialog').addEventListener('click', event => {
@@ -231,36 +245,75 @@ document.querySelectorAll('[data-filter]').forEach(button => button.addEventList
 $('#search').addEventListener('input', () => { if (config) render(); });
 $('#view-done').addEventListener('click', () => { if (config) { setTab('done'); $('#done-tab').focus(); } });
 
-$('#export').addEventListener('click', () => {
-  const data = { ...config, shows: config.shows.map(show => mergedShow(show, progress[show.id])) };
+function watchlistData() {
+  return { ...config, shows: config.shows.map(show => mergedShow(show, progress[show.id])) };
+}
+
+function downloadWatchlist(data) {
   const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2) + '\n'], { type: 'application/json' }));
   const link = element('a');
   link.href = url;
   link.download = 'shows.json';
+  document.body.append(link);
   link.click();
+  link.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+$('#export').addEventListener('click', () => {
+  if (!config) return;
+  downloadWatchlist(watchlistData());
   notify('Exported your list and progress. Keep it for backup or import it on another device.');
 });
-$('#import').addEventListener('click', () => $('#import-file').click());
+
+$('#save-repository').addEventListener('click', async () => {
+  if (!canEditProgress || !config) return;
+  const data = watchlistData();
+  $('#save-repository').disabled = true;
+  $('#progress-status').textContent = 'Saving to repository…';
+  try {
+    const response = await fetch('api/progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    // A static preview server has no save endpoint. Preserve edits as a download.
+    if (response.status === 404 || response.status === 405 || response.status === 501) {
+      throw new TypeError('Local save server unavailable.');
+    }
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || 'Could not save progress.');
+    $('#progress-status').textContent = JSON.stringify(watchlistData()) === JSON.stringify(data)
+      ? 'Saved to repository · ready to commit'
+      : 'New local changes · Save to repository again';
+    notify(result.message);
+  } catch (error) {
+    if (error instanceof TypeError || error instanceof SyntaxError) {
+      downloadWatchlist(data);
+      $('#progress-status').textContent = 'JSON downloaded · apply it with the import script';
+      notify('Local save server unavailable. Downloaded shows.json; apply it with scripts/import-progress.mjs.');
+    } else {
+      $('#progress-status').textContent = 'Save failed · local progress kept';
+      notify(`Could not save to repository. ${error.message}`);
+    }
+  } finally {
+    $('#save-repository').disabled = false;
+  }
+});
+
+$('#import').addEventListener('click', () => { if (canEditProgress && config) $('#import-file').click(); });
 $('#import-file').addEventListener('change', async event => {
+  if (!canEditProgress || !config) return;
   const file = event.target.files[0];
   if (!file) return;
   try {
     if (file.size > 1_000_000) throw new Error('File is too large.');
     const imported = JSON.parse(await file.text());
-    if (imported.version !== 1 || !Array.isArray(imported.shows) || !imported.shows.length) throw new Error('Choose a watchlist JSON export.');
-    const updates = {};
-    const known = new Set(config.shows.map(show => show.id));
-    const seen = new Set();
-    for (const show of imported.shows) {
-      if (!show || typeof show.id !== 'string' || seen.has(show.id) || !validProgress(show)) throw new Error('The file contains invalid progress.');
-      seen.add(show.id);
-      if (known.has(show.id)) updates[show.id] = { watching: show.watching, watchedThrough: show.watchedThrough };
-    }
-    if (!Object.keys(updates).length) throw new Error('This file has no shows from your watchlist.');
+    const updates = importedProgress(config, imported);
     progress = { ...progress, ...updates };
     const saved = persist();
     render();
+    $('#progress-status').textContent = 'Local changes · Save to repository to publish';
     notify(saved ? `Imported progress for ${Object.keys(updates).length} shows.` : 'Progress imported for this visit. Export to keep it.');
   } catch (error) {
     notify(`Could not import. ${error instanceof SyntaxError ? 'Choose a valid JSON export.' : error.message}`);
@@ -270,7 +323,12 @@ $('#import-file').addEventListener('change', async event => {
 });
 
 window.addEventListener('storage', event => {
-  if (config && event.key === STORAGE_KEY) { progress = {}; readProgress(); render(); }
+  if (canEditProgress && config && (event.key === STORAGE_KEY || event.key === null)) {
+    progress = {};
+    readProgress();
+    render();
+    $('#progress-status').textContent = 'Local progress · Save to repository when ready';
+  }
 });
 document.addEventListener('visibilitychange', () => { if (config && !document.hidden) render(); });
 setInterval(() => { if (config && !document.hidden) render(); }, 60_000);
@@ -288,7 +346,7 @@ async function init() {
     $('#show-list').setAttribute('aria-busy', 'false');
     $('#last-checked').textContent = 'Unable to load';
     $('#upcoming-list').textContent = 'Calendar unavailable.';
-    notice(location.protocol === 'file:' ? 'Preview this site with a local web server: python -m http.server 8000, then open http://localhost:8000/tv/.' : 'The show list is unavailable. Check your connection and try again.');
+    notice(location.protocol === 'file:' ? 'Preview this site with the local server: node scripts/dev-server.mjs, then open http://localhost:8766/.' : 'The show list is unavailable. Check your connection and try again.');
     return;
   }
   config = listResult.value;
@@ -303,7 +361,15 @@ async function init() {
   if (releases.errors?.length && !storageWarning) notice(`${releases.errors.length} show(s) could not be checked in the latest update. Their last known dates are shown.`);
   render();
   $('#export').disabled = false;
-  $('#import').disabled = false;
+  if (canEditProgress) {
+    $('#local-tools').hidden = false;
+    $('#edit-heading').hidden = false;
+    $('#import').disabled = false;
+    $('#import-file').disabled = false;
+    $('#save-repository').disabled = false;
+    $('#progress-form').querySelectorAll('input, select, button[type="submit"]').forEach(input => { input.disabled = false; });
+    $('#progress-status').textContent = 'Local progress · Save to repository when ready';
+  }
 }
 
 init().catch(error => {

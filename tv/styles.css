@@ -49,7 +49,8 @@ a { color: inherit; text-underline-offset: 3px; }
 .watching-dot { background: #a4c97c; }
 .ready-dot { background: #dcbb65; }
 .waiting-dot { background: transparent; border: 1px solid #a0aa96; }
-.list-heading, .show-row { display: grid; grid-template-columns: minmax(0, 1fr) 148px 115px 28px; gap: 10px; align-items: center; }
+.list-heading, .show-row { display: grid; grid-template-columns: minmax(0, 1fr) 148px 115px; gap: 10px; align-items: center; }
+.is-editable .list-heading, .is-editable .show-row { grid-template-columns: minmax(0, 1fr) 148px 115px 28px; }
 .list-heading { padding: 0 12px 9px 15px; font-size: 8px; letter-spacing: 1.3px; color: var(--muted); }
 .show-list { display: flex; flex-direction: column; gap: 4px; }
 .show-row { padding: 9px 10px 9px 14px; min-height: 52px; border-radius: 5px; border: 1px solid var(--line); border-left: 3px solid var(--line); background: transparent; }
@@ -127,7 +128,8 @@ select { width: 100%; padding: 10px; border: 1px solid #445037; border-radius: 5
 @media (max-width: 1050px) {
   .page { padding: 24px 24px 0; }
   .workspace { grid-template-columns: minmax(0, 1fr) 225px; gap: 20px; }
-  .list-heading, .show-row { grid-template-columns: minmax(0, 1fr) 120px 99px 26px; gap: 8px; }
+  .list-heading, .show-row { grid-template-columns: minmax(0, 1fr) 120px 99px; gap: 8px; }
+  .is-editable .list-heading, .is-editable .show-row { grid-template-columns: minmax(0, 1fr) 120px 99px 26px; }
   .show-row { padding-left: 11px; padding-right: 7px; }
   .upcoming-card { padding: 18px 15px; }
 }
@@ -137,7 +139,8 @@ select { width: 100%; padding: 10px; border: 1px solid #445037; border-radius: 5
   .upcoming-card { grid-row: span 2; }
   .legend { margin-top: 6px; }
   .done-explanation { margin-top: 0; }
-  .list-heading, .show-row { grid-template-columns: minmax(0, 1fr) 148px 110px 28px; }
+  .list-heading, .show-row { grid-template-columns: minmax(0, 1fr) 148px 110px; }
+  .is-editable .list-heading, .is-editable .show-row { grid-template-columns: minmax(0, 1fr) 148px 110px 28px; }
 }
 @media (max-width: 520px) {
   .page { padding: 15px 14px 0; }
@@ -149,7 +152,8 @@ select { width: 100%; padding: 10px; border: 1px solid #445037; border-radius: 5
   .filter { font-size: 9px; padding: 5px 7px; gap: 5px; }
   .filter span { font-size: 8px; margin-left: 0; }
   .list-heading { display: none; }
-  .show-row { grid-template-columns: minmax(0, 1fr) 103px 26px; gap: 3px 6px; padding: 7px 6px 7px 10px; min-height: 66px; }
+  .show-row { grid-template-columns: minmax(0, 1fr) 103px; gap: 3px 6px; padding: 7px 6px 7px 10px; min-height: 66px; }
+  .is-editable .show-row { grid-template-columns: minmax(0, 1fr) 103px 26px; }
   .series-cell { grid-column: 1; grid-row: 1; }
   .season-cell { grid-column: 2; grid-row: 1 / span 2; }
   .status-cell { grid-column: 1; grid-row: 2; }
