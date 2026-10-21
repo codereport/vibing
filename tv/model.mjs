@@ -2,8 +2,12 @@ export function localDate(now = new Date()) {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 }
 
+function listedSeasons(show, release) {
+  return (release?.seasons ?? []).filter(season => season.number > 0 && season.number <= (show.seasonLimit ?? Infinity));
+}
+
 export function showState(show, release, today = localDate()) {
-  const seasons = (release?.seasons ?? []).filter(s => s.number > 0).toSorted((a, b) => a.number - b.number);
+  const seasons = listedSeasons(show, release).toSorted((a, b) => a.number - b.number);
   const latest = seasons.at(-1)?.number ?? 0;
   const next = seasons.find(s => s.number > show.watchedThrough);
   const season = next?.number ?? show.watchedThrough + 1;
@@ -11,7 +15,7 @@ export function showState(show, release, today = localDate()) {
   const available = Boolean(premiere && premiere <= today);
   let status = 'waiting';
   if (release?.status === 'Ended' && latest > 0 && show.watchedThrough >= latest) status = 'done';
-  else if (show.watching) status = 'watching';
+  else if (show.watching && season <= (show.seasonLimit ?? Infinity)) status = 'watching';
   else if (available) status = 'ready';
   return { status, season, premiere, latest, available, endDate: next?.endDate ?? null };
 }
@@ -25,11 +29,11 @@ export function mergedShow(show, saved) {
 }
 
 export function seasonBoxes(show, release) {
-  const known = (release?.seasons ?? []).map(season => season.number).filter(number => Number.isSafeInteger(number) && number > 0 && number <= 1000);
+  const known = listedSeasons(show, release).map(season => season.number).filter(number => Number.isSafeInteger(number) && number <= 1000);
   const state = showState(show, release);
   const watching = state.status === 'watching' ? state.season : null;
   // Keep recorded progress visible even if a release check temporarily omits it.
-  const total = Math.max(...known, show.watchedThrough, watching ?? 0, known.length ? 0 : 5);
+  const total = Math.min(show.seasonLimit ?? Infinity, Math.max(...known, show.watchedThrough, watching ?? 0, known.length ? 0 : 5));
   const first = show.watchedThrough > 0 ? Math.max(1, total - 4) : 1;
   return Array.from({ length: Math.min(5, total - first + 1) }, (_, index) => {
     const number = first + index;

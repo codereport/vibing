@@ -1,10 +1,25 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { cycleSeason, seasonBoxes, showState, validProgress } from '../model.mjs';
 
 const show = { id: 'example', watchedThrough: 0, watching: false };
 const release = (count, status = 'Running') => ({ status, seasons: Array.from({ length: count }, (_, index) => ({ number: index + 1 })) });
 const numbers = boxes => boxes.map(box => box.number);
+
+test('Reacher and The Traitors: New Blood stop at S5 even when snapshots contain S6', () => {
+  const config = JSON.parse(readFileSync(new URL('../shows.json', import.meta.url)));
+  const snapshot = JSON.parse(readFileSync(new URL('../releases.json', import.meta.url)));
+  for (const id of ['reacher', 'the-traitors']) {
+    const entry = config.shows.find(show => show.id === id);
+    const metadata = snapshot.shows[id];
+    assert.deepEqual(numbers(seasonBoxes(entry, metadata)), [1, 2, 3, 4, 5]);
+    assert.equal(showState(entry, metadata).latest, 5);
+    assert.throws(() => cycleSeason(entry, metadata, 6), /visible season/);
+    assert.deepEqual(numbers(seasonBoxes({ ...entry, watchedThrough: 5, watching: true }, metadata)), [1, 2, 3, 4, 5]);
+    assert.equal(showState({ ...entry, watchedThrough: 5, watching: true }, metadata).status, 'waiting');
+  }
+});
 
 test('unstarted shows show S1–S5, including while watching the first season', () => {
   assert.deepEqual(numbers(seasonBoxes(show, release(12))), [1, 2, 3, 4, 5]);

@@ -50,7 +50,6 @@ a { color: inherit; text-underline-offset: 3px; }
 .ready-dot { background: #dcbb65; }
 .waiting-dot { background: transparent; border: 1px solid #a0aa96; }
 .list-heading, .show-row { display: grid; grid-template-columns: minmax(0, 1fr) 115px 184px; gap: 10px; align-items: center; }
-.is-editable .list-heading, .is-editable .show-row { grid-template-columns: minmax(0, 1fr) 115px 184px 28px; }
 .list-heading { padding: 0 12px 9px 15px; font-size: 8px; letter-spacing: 1.3px; color: var(--muted); }
 .show-list { display: flex; flex-direction: column; gap: 4px; }
 .show-row { padding: 9px 10px 9px 14px; min-height: 52px; border-radius: 5px; border: 1px solid var(--line); border-left: 3px solid var(--line); background: transparent; }
@@ -79,7 +78,6 @@ button.season-box:hover { filter: brightness(1.25); border-color: currentColor; 
 .play-icon { font-size: 8px; }
 .icon-button { border: 0; background: transparent; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 4px; color: var(--muted); font-size: 20px; line-height: 1; }
 .icon-button:hover { background: #ffffff0d; color: var(--ink); }
-.edit-icon { height: 14px; width: 14px; }
 .list-bottom { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 9px; color: var(--muted); }
 .season-key { display: flex; gap: 12px; margin-left: auto; }
 .season-key span { white-space: nowrap; }
@@ -142,7 +140,6 @@ select { width: 100%; padding: 10px; border: 1px solid #445037; border-radius: 5
   .page { padding: 24px 24px 0; }
   .workspace { grid-template-columns: minmax(0, 1fr) 225px; gap: 20px; }
   .list-heading, .show-row { grid-template-columns: minmax(0, 1fr) 99px 176px; gap: 8px; }
-  .is-editable .list-heading, .is-editable .show-row { grid-template-columns: minmax(0, 1fr) 99px 176px 26px; }
   .show-row { padding-left: 11px; padding-right: 7px; }
   .upcoming-card { padding: 18px 15px; }
 }
@@ -153,7 +150,6 @@ select { width: 100%; padding: 10px; border: 1px solid #445037; border-radius: 5
   .legend { margin-top: 6px; }
   .done-explanation { margin-top: 0; }
   .list-heading, .show-row { grid-template-columns: minmax(0, 1fr) 110px 184px; }
-  .is-editable .list-heading, .is-editable .show-row { grid-template-columns: minmax(0, 1fr) 110px 184px 28px; }
 }
 @media (max-width: 520px) {
   .page { padding: 15px 14px 0; }
@@ -166,11 +162,9 @@ select { width: 100%; padding: 10px; border: 1px solid #445037; border-radius: 5
   .filter span { font-size: 8px; margin-left: 0; }
   .list-heading { display: none; }
   .show-row { grid-template-columns: minmax(0, 1fr) 152px; gap: 3px 6px; padding: 7px 6px 7px 10px; min-height: 66px; }
-  .is-editable .show-row { grid-template-columns: minmax(0, 1fr) 152px 26px; }
   .series-cell { grid-column: 1; grid-row: 1; }
   .season-cell { grid-column: 2; grid-row: 1 / span 2; }
   .status-cell { grid-column: 1; grid-row: 2; }
-  .edit-button { grid-column: 3; grid-row: 1 / span 2; }
   .show-title { font-size: 11px; }
   .show-network { font-size: 8px; margin-top: 1px; }
   .status-pill { font-size: 8px; padding: 2px 5px; }

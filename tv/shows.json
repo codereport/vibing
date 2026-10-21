@@ -69,6 +69,7 @@
       "id": "the-traitors",
       "title": "The Traitors: New Blood",
       "tvmazeId": 58177,
+      "seasonLimit": 5,
       "watching": false,
       "watchedThrough": 4,
       "note": "New Blood is season 5 in TVmaze's US series listing."
@@ -169,6 +170,7 @@
       "id": "reacher",
       "title": "Reacher",
       "tvmazeId": 43031,
+      "seasonLimit": 5,
       "watching": false,
       "watchedThrough": 4
     }

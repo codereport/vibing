@@ -17,8 +17,6 @@ let editingId;
 let toastTimer;
 let storageWarning = false;
 
-document.body.classList.toggle('is-editable', canEditProgress);
-
 function element(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -126,16 +124,6 @@ function makeRow({ show, release, state }) {
   status.append(pill);
 
   row.append(series, status, season);
-  if (canEditProgress) {
-    const editButton = element('button', 'icon-button edit-button');
-    editButton.type = 'button';
-    editButton.setAttribute('aria-label', `Edit progress for ${show.title}`);
-    editButton.title = 'Update progress';
-    // Constant, decorative SVG; show data is always inserted as text.
-    editButton.innerHTML = '<svg class="edit-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 5 5M3 21l5-1L21 7a2 2 0 0 0-5-5L3 15z"/></svg>';
-    editButton.addEventListener('click', () => edit(show.id));
-    row.append(editButton);
-  }
   return row;
 }
 
@@ -234,9 +222,9 @@ function edit(id) {
   $('#dialog-meta').textContent = [release?.network, release?.status === 'Ended' ? 'Series ended' : null].filter(Boolean).join(' · ');
   $('#dialog-note').textContent = show.note ?? '';
   $('#dialog-note').hidden = !show.note;
-  const airedSeasons = (release?.seasons ?? []).filter(s => s.premiereDate && s.premiereDate <= localDate());
+  const airedSeasons = (release?.seasons ?? []).filter(s => s.number <= (show.seasonLimit ?? Infinity) && s.premiereDate && s.premiereDate <= localDate());
   // Include already-recorded progress even if an upstream date is temporarily missing.
-  const maxSeason = Math.max(show.watchedThrough, ...airedSeasons.map(s => s.number), 0);
+  const maxSeason = Math.min(show.seasonLimit ?? Infinity, Math.max(show.watchedThrough, ...airedSeasons.map(s => s.number), 0));
   const options = [new Option('None yet', '0')];
   for (let number = 1; number <= maxSeason; number++) options.push(new Option(`Season ${number}`, String(number)));
   $('#watched-through').replaceChildren(...options);
@@ -405,7 +393,6 @@ async function init() {
   $('#export').disabled = false;
   if (canEditProgress) {
     $('#local-tools').hidden = false;
-    $('#edit-heading').hidden = false;
     $('#import').disabled = false;
     $('#import-file').disabled = false;
     $('#save-repository').disabled = false;
