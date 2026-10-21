@@ -1,29 +1,176 @@
 {
   "version": 1,
   "shows": [
-    { "id": "the-wire", "title": "The Wire", "tvmazeId": 179, "watching": true, "watchedThrough": 0 },
-    { "id": "veep", "title": "Veep", "tvmazeId": 142, "watching": false, "watchedThrough": 0 },
-    { "id": "curb", "title": "Curb Your Enthusiasm", "tvmazeId": 551, "watching": false, "watchedThrough": 0 },
-    { "id": "star-trek-tng", "title": "Star Trek: The Next Generation", "tvmazeId": 491, "watching": false, "watchedThrough": 0 },
-    { "id": "doctor-who", "title": "Doctor Who", "tvmazeId": 210, "watching": false, "watchedThrough": 0, "note": "2005 series · Don't miss Blink (S3 E10)." },
-    { "id": "stranger-things", "title": "Stranger Things", "tvmazeId": 2993, "watching": false, "watchedThrough": 4 },
-    { "id": "the-altruists", "title": "The Altruists", "tvmazeId": 85058, "watching": false, "watchedThrough": 0 },
-    { "id": "dark-matter", "title": "Dark Matter", "tvmazeId": 61315, "watching": true, "watchedThrough": 1 },
-    { "id": "neuromancer", "title": "Neuromancer", "tvmazeId": 75029, "watching": false, "watchedThrough": 0 },
-    { "id": "the-traitors", "title": "The Traitors: New Blood", "tvmazeId": 58177, "watching": false, "watchedThrough": 4, "note": "New Blood is season 5 in TVmaze's US series listing." },
-    { "id": "blade-runner-2099", "title": "Blade Runner 2099", "tvmazeId": 60458, "watching": false, "watchedThrough": 0 },
-    { "id": "stick", "title": "Stick", "tvmazeId": 82227, "watching": false, "watchedThrough": 1 },
-    { "id": "visionquest", "title": "VisionQuest", "tvmazeId": 64950, "watching": true, "watchedThrough": 0 },
-    { "id": "love-is-blind", "title": "Love Is Blind", "tvmazeId": 46167, "watching": false, "watchedThrough": 10 },
-    { "id": "the-bear", "title": "The Bear", "tvmazeId": 54198, "watching": false, "watchedThrough": 2, "note": "To watch: seasons 3 and 4." },
-    { "id": "mad-men", "title": "Mad Men", "tvmazeId": 385, "watching": false, "watchedThrough": 0 },
-    { "id": "black-mirror", "title": "Black Mirror", "tvmazeId": 305, "watching": false, "watchedThrough": 7 },
-    { "id": "3-body-problem", "title": "3 Body Problem", "tvmazeId": 53277, "watching": false, "watchedThrough": 1 },
-    { "id": "silo", "title": "Silo", "tvmazeId": 38052, "watching": false, "watchedThrough": 3 },
-    { "id": "severance", "title": "Severance", "tvmazeId": 44933, "watching": false, "watchedThrough": 2 },
-    { "id": "million-dollar-secret", "title": "Million Dollar Secret", "tvmazeId": 82873, "watching": false, "watchedThrough": 2 },
-    { "id": "the-traitors-uk", "title": "The Traitors UK", "tvmazeId": 58174, "watching": false, "watchedThrough": 4 },
-    { "id": "ted-lasso", "title": "Ted Lasso", "tvmazeId": 44458, "watching": false, "watchedThrough": 4 },
-    { "id": "reacher", "title": "Reacher", "tvmazeId": 43031, "watching": false, "watchedThrough": 4 }
+    {
+      "id": "the-wire",
+      "title": "The Wire",
+      "tvmazeId": 179,
+      "watching": true,
+      "watchedThrough": 2
+    },
+    {
+      "id": "veep",
+      "title": "Veep",
+      "tvmazeId": 142,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "curb",
+      "title": "Curb Your Enthusiasm",
+      "tvmazeId": 551,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "star-trek-tng",
+      "title": "Star Trek: The Next Generation",
+      "tvmazeId": 491,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "doctor-who",
+      "title": "Doctor Who",
+      "tvmazeId": 210,
+      "watching": false,
+      "watchedThrough": 0,
+      "note": "2005 series · Don't miss Blink (S3 E10)."
+    },
+    {
+      "id": "stranger-things",
+      "title": "Stranger Things",
+      "tvmazeId": 2993,
+      "watching": false,
+      "watchedThrough": 4
+    },
+    {
+      "id": "the-altruists",
+      "title": "The Altruists",
+      "tvmazeId": 85058,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "dark-matter",
+      "title": "Dark Matter",
+      "tvmazeId": 61315,
+      "watching": true,
+      "watchedThrough": 1
+    },
+    {
+      "id": "neuromancer",
+      "title": "Neuromancer",
+      "tvmazeId": 75029,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "the-traitors",
+      "title": "The Traitors: New Blood",
+      "tvmazeId": 58177,
+      "watching": false,
+      "watchedThrough": 4,
+      "note": "New Blood is season 5 in TVmaze's US series listing."
+    },
+    {
+      "id": "blade-runner-2099",
+      "title": "Blade Runner 2099",
+      "tvmazeId": 60458,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "stick",
+      "title": "Stick",
+      "tvmazeId": 82227,
+      "watching": false,
+      "watchedThrough": 1
+    },
+    {
+      "id": "visionquest",
+      "title": "VisionQuest",
+      "tvmazeId": 64950,
+      "watching": true,
+      "watchedThrough": 0
+    },
+    {
+      "id": "love-is-blind",
+      "title": "Love Is Blind",
+      "tvmazeId": 46167,
+      "watching": true,
+      "watchedThrough": 10
+    },
+    {
+      "id": "the-bear",
+      "title": "The Bear",
+      "tvmazeId": 54198,
+      "watching": false,
+      "watchedThrough": 2,
+      "note": "To watch: seasons 3 and 4."
+    },
+    {
+      "id": "mad-men",
+      "title": "Mad Men",
+      "tvmazeId": 385,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "black-mirror",
+      "title": "Black Mirror",
+      "tvmazeId": 305,
+      "watching": false,
+      "watchedThrough": 7
+    },
+    {
+      "id": "3-body-problem",
+      "title": "3 Body Problem",
+      "tvmazeId": 53277,
+      "watching": false,
+      "watchedThrough": 1
+    },
+    {
+      "id": "silo",
+      "title": "Silo",
+      "tvmazeId": 38052,
+      "watching": false,
+      "watchedThrough": 3
+    },
+    {
+      "id": "severance",
+      "title": "Severance",
+      "tvmazeId": 44933,
+      "watching": false,
+      "watchedThrough": 2
+    },
+    {
+      "id": "million-dollar-secret",
+      "title": "Million Dollar Secret",
+      "tvmazeId": 82873,
+      "watching": false,
+      "watchedThrough": 2
+    },
+    {
+      "id": "the-traitors-uk",
+      "title": "The Traitors UK",
+      "tvmazeId": 58174,
+      "watching": false,
+      "watchedThrough": 4
+    },
+    {
+      "id": "ted-lasso",
+      "title": "Ted Lasso",
+      "tvmazeId": 44458,
+      "watching": false,
+      "watchedThrough": 4
+    },
+    {
+      "id": "reacher",
+      "title": "Reacher",
+      "tvmazeId": 43031,
+      "watching": false,
+      "watchedThrough": 4
+    }
   ]
 }

@@ -12,7 +12,7 @@ Open <http://localhost:8766/> (or <http://localhost:8766/tv/>). The server binds
 
 ## Save and publish progress
 
-1. Start the local server above and edit progress by clicking a title or pencil.
+1. Start the local server above and click season boxes to edit progress. The title or pencil opens the full progress editor.
 2. Click **Save to repository** in the footer. This writes your current progress directly to `tv/shows.json`, preserving show identities, TVmaze IDs, titles, and notes.
 3. Review `git diff -- tv/shows.json` from the repository root, then commit and push normally.
 
@@ -29,7 +29,7 @@ node scripts/import-progress.mjs ~/Downloads/shows.json
 
 The importer also accepts JSON on stdin with `-`. It validates the entire export before writing, merges only progress for known shows, and replaces the file atomically. `--check` validates without writing.
 
-On a published hostname, titles are plain text and the pencils, import, and repository-save controls are unavailable. The page always uses repository progress, ignores old browser overrides, and never writes progress to browser storage. Search, filters, tabs, the calendar, and JSON export still work. Publishing requires only the static files; the local server is never used in production.
+On a published hostname, season boxes and titles are read-only and the pencils, import, and repository-save controls are unavailable. The page always uses repository progress, ignores old browser overrides, and never writes progress to browser storage. Search, filters, tabs, the calendar, and JSON export still work. Publishing requires only the static files; the local server is never used in production.
 
 ## Progress and colors
 
@@ -39,6 +39,10 @@ On a published hostname, titles are plain text and the pencils, import, and repo
 - **Done:** TVmaze says the series has ended and every listed season is finished. An ended series with unwatched seasons stays Active.
 
 Active shows are grouped Watching, Ready, then Waiting. Waiting shows are sorted by premiere date, nearest first, with unannounced dates at the bottom.
+
+Each row has up to five season boxes, aligned to the right: **✓ green = done**, **▶ gold = watching**, **○ outlined = not watched**. Until a season is finished, the boxes start at S1–S5; afterward they show the latest five known seasons. Shows with fewer than five seasons display only those seasons. If season metadata is missing, the row falls back to S1–S5 and preserves any recorded progress.
+
+Locally, clicking a box cycles **not watched → watching → done → not watched**. Starting a later season marks all earlier seasons done. Clearing a completed season also clears later progress, so progress always follows watch order. Changes are saved in the browser immediately; use **Save to repository** to write them to disk. Use the title or pencil to adjust seasons outside the five visible boxes.
 
 Locally, click a show title or pencil to set the last season finished and whether you’re watching the next one. Changing the finished season clears the watching checkbox; check it again if you’ve already started the following season. State updates immediately and is saved in local storage. A season becomes Ready on its premiere date using the viewer’s local calendar, including between weekly updates. Release dates describe the original premiere, not availability on a particular Canadian streaming service.
 
@@ -80,6 +84,6 @@ node --test tv/tests/*.test.mjs
 node --check tv/app.mjs
 ```
 
-The checks cover status transitions, revival of ended shows, local-date boundaries, progress validation, atomic repository imports, local server saves and request restrictions, response normalization, rate-limit retries, partial failure recovery, and the initial snapshot. `.github/workflows/tv-checks.yml` runs them on tracker pull requests and pushes.
+The checks cover status transitions, season-box ranges and click cycles, revival of ended shows, local-date boundaries, progress validation, atomic repository imports, local server saves and request restrictions, response normalization, rate-limit retries, partial failure recovery, and the initial snapshot. `.github/workflows/tv-checks.yml` runs them on tracker pull requests and pushes.
 
 TVmaze-derived metadata in `releases.json` is attributed to [TVmaze](https://www.tvmaze.com/) and available under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The site links to the source and license in its footer.

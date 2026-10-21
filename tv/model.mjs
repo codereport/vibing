@@ -24,6 +24,30 @@ export function mergedShow(show, saved) {
   return validProgress(saved) ? { ...show, watching: saved.watching, watchedThrough: saved.watchedThrough } : { ...show };
 }
 
+export function seasonBoxes(show, release) {
+  const known = (release?.seasons ?? []).map(season => season.number).filter(number => Number.isSafeInteger(number) && number > 0 && number <= 1000);
+  const state = showState(show, release);
+  const watching = state.status === 'watching' ? state.season : null;
+  // Keep recorded progress visible even if a release check temporarily omits it.
+  const total = Math.max(...known, show.watchedThrough, watching ?? 0, known.length ? 0 : 5);
+  const first = show.watchedThrough > 0 ? Math.max(1, total - 4) : 1;
+  return Array.from({ length: Math.min(5, total - first + 1) }, (_, index) => {
+    const number = first + index;
+    const status = number <= show.watchedThrough ? 'done' : number === watching ? 'watching' : 'unwatched';
+    return { number, status };
+  });
+}
+
+export function cycleSeason(show, release, number) {
+  const season = seasonBoxes(show, release).find(season => season.number === number);
+  if (!season) throw new Error('Choose a visible season.');
+  // Progress is a completed prefix with at most one season being watched.
+  return {
+    watchedThrough: season.status === 'watching' ? number : number - 1,
+    watching: season.status === 'unwatched',
+  };
+}
+
 export function importedProgress(config, imported) {
   if (!imported || imported.version !== 1 || !Array.isArray(imported.shows) || !imported.shows.length) {
     throw new Error('Choose a watchlist JSON export.');

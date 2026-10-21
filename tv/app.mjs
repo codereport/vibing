@@ -1,10 +1,13 @@
-import { compareEntries, importedProgress, localDate, mergedShow, showState, validProgress } from './model.mjs';
+import { compareEntries, cycleSeason, importedProgress, localDate, mergedShow, seasonBoxes, showState, validProgress } from './model.mjs';
 
 const $ = selector => document.querySelector(selector);
 const STORAGE_KEY = 'vibing.tv.progress.v1';
 const editableHosts = new Set(['localhost', '127.0.0.1', '[::1]', '::1', '0.0.0.0']);
 const canEditProgress = editableHosts.has(location.hostname) || location.hostname.endsWith('.localhost');
 const statusNames = { watching: 'Watching', ready: 'Ready to watch', waiting: 'Waiting', done: 'Finished' };
+const seasonNames = { done: 'Done', watching: 'Watching', unwatched: 'Not watched' };
+const seasonIcons = { done: '✓', watching: '▶', unwatched: '○' };
+const nextSeasonStatus = { unwatched: 'watching', watching: 'done', done: 'unwatched' };
 let config;
 let releases = { shows: {} };
 let progress = {};
@@ -90,13 +93,30 @@ function makeRow({ show, release, state }) {
   series.append(title, element('span', 'show-network', [release?.network, release?.status === 'Ended' ? 'Series ended' : null].filter(Boolean).join(' · ') || 'Release details pending'));
 
   const season = element('div', 'season-cell');
-  let seasonText = `Season ${state.season}`;
+  const boxes = element('div', 'season-boxes');
+  boxes.setAttribute('role', 'group');
+  boxes.setAttribute('aria-label', `Seasons for ${show.title}`);
+  for (const { number, status } of seasonBoxes(show, release)) {
+    const box = element(canEditProgress ? 'button' : 'span', `season-box season-${status}`);
+    box.dataset.season = number;
+    box.dataset.state = status;
+    const label = `${show.title}, season ${number}: ${seasonNames[status]}`;
+    box.setAttribute('aria-label', canEditProgress ? `${label}. Mark ${seasonNames[nextSeasonStatus[status]].toLowerCase()}.` : label);
+    box.title = canEditProgress ? `${label}. Click to mark ${seasonNames[nextSeasonStatus[status]].toLowerCase()}.` : label;
+    const icon = element('span', 'season-icon', seasonIcons[status]);
+    icon.setAttribute('aria-hidden', 'true');
+    box.append(element('span', 'season-number', `S${number}`), icon);
+    if (canEditProgress) {
+      box.type = 'button';
+      box.addEventListener('click', () => toggleSeason(show.id, number));
+    }
+    boxes.append(box);
+  }
   let premiereText = state.premiere ? `${state.available ? 'Premiered' : 'Premieres'} ${dateLabel(state.premiere)}` : 'Date not announced';
   if (state.status === 'done') {
-    seasonText = `${state.latest} season${state.latest === 1 ? '' : 's'} finished`;
     premiereText = 'That’s a wrap.';
   } else if (!release) premiereText = 'Release check unavailable';
-  season.append(element('span', 'season-label', seasonText), element('span', 'premiere-label', premiereText));
+  season.append(boxes, element('span', 'premiere-label', premiereText));
 
   const status = element('div', 'status-cell');
   const pill = element('span', 'status-pill');
@@ -105,7 +125,7 @@ function makeRow({ show, release, state }) {
   pill.append(symbol, document.createTextNode(statusNames[state.status]));
   status.append(pill);
 
-  row.append(series, season, status);
+  row.append(series, status, season);
   if (canEditProgress) {
     const editButton = element('button', 'icon-button edit-button');
     editButton.type = 'button';
@@ -183,6 +203,29 @@ function setTab(value) {
   render();
 }
 
+function updateProgress(id, value) {
+  if (!canEditProgress || !config || !validProgress(value) || !config.shows.some(show => show.id === id)) return false;
+  progress[id] = value;
+  const saved = persist();
+  render();
+  $('#progress-status').textContent = 'Local changes · Save to repository to publish';
+  return saved;
+}
+
+function toggleSeason(id, number) {
+  if (!canEditProgress || !config) return;
+  const entry = entries().find(entry => entry.show.id === id);
+  if (!entry) return;
+  const value = cycleSeason(entry.show, entry.release, number);
+  const saved = updateProgress(id, value);
+  // Re-rendering may reorder the show or move it to Done. Keep keyboard focus useful.
+  const row = [...document.querySelectorAll('.show-row')].find(row => row.dataset.show === id);
+  const button = row && ([...row.querySelectorAll('.season-box')].find(box => Number(box.dataset.season) === number) ?? row.querySelector('.season-box'));
+  (button ?? $(`#${tab}-tab`)).focus({ preventScroll: true });
+  const status = value.watching ? 'watching' : value.watchedThrough >= number ? 'done' : 'unwatched';
+  notify(`${entry.show.title} · S${number}: ${seasonNames[status]}.${saved ? '' : ' Save to repository or Export to keep your progress.'}`);
+}
+
 function edit(id) {
   if (!canEditProgress || !config) return;
   editingId = id;
@@ -217,13 +260,12 @@ $('#watched-through').addEventListener('change', () => {
 $('#progress-form').addEventListener('submit', event => {
   event.preventDefault();
   if (!canEditProgress || !config || !editingId) return;
-  progress[editingId] = { watchedThrough: Number($('#watched-through').value), watching: $('#currently-watching').checked };
-  const saved = persist();
+  const value = { watchedThrough: Number($('#watched-through').value), watching: $('#currently-watching').checked };
+  if (!validProgress(value)) return;
+  const saved = updateProgress(editingId, value);
   const entry = config.shows.find(show => show.id === editingId);
   const state = showState(mergedShow(entry, progress[editingId]), releases.shows[editingId]);
   $('#progress-dialog').close();
-  render();
-  $('#progress-status').textContent = 'Local changes · Save to repository to publish';
   notify(saved ? (state.status === 'done' ? `${entry.title} moved to Done. That’s a wrap.` : 'Progress saved in this browser. Save to repository when ready.') : 'Progress updated for this visit. Save to repository or Export to keep it.');
 });
 $('#close-dialog').addEventListener('click', () => $('#progress-dialog').close());
