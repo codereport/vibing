@@ -74,15 +74,28 @@ test('waiting shows sort by the nearest premiere, with unknown dates last', () =
   assert.deepEqual(unsorted.toSorted(compareEntries).map(e => e.show.id), ['watching', 'ready', 'near', 'same-date', 'far', 'unknown-a', 'unknown-b']);
 });
 
-test('the catalog includes all 24 unique shows with valid editable progress', () => {
+test('the catalog includes all 25 unique shows with valid editable progress', () => {
   const config = JSON.parse(readFileSync(new URL('../shows.json', import.meta.url)));
-  assert.equal(config.shows.length, 24);
-  assert.equal(new Set(config.shows.map(show => show.id)).size, 24);
-  assert.equal(new Set(config.shows.map(show => show.tvmazeId)).size, 24);
+  assert.equal(config.shows.length, 25);
+  assert.equal(new Set(config.shows.map(show => show.id)).size, 25);
+  assert.equal(new Set(config.shows.map(show => show.tvmazeId)).size, 25);
   assert.ok(config.shows.every(validProgress));
   const bear = { ...config.shows.find(show => show.id === 'the-bear'), watchedThrough: 2, watching: false };
   const releases = JSON.parse(readFileSync(new URL('../releases.json', import.meta.url)));
   assert.equal(showState(bear, releases.shows[bear.id], today).status, 'ready');
   assert.equal(showState(bear, releases.shows[bear.id], today).season, 3);
   assert.equal(showState({ ...bear, watchedThrough: 3 }, releases.shows[bear.id], today).season, 4);
+});
+
+test('Extrapolations starts Ready and follows progress into Watching and Done', () => {
+  const config = JSON.parse(readFileSync(new URL('../shows.json', import.meta.url)));
+  const releases = JSON.parse(readFileSync(new URL('../releases.json', import.meta.url)));
+  const extrapolations = config.shows.find(show => show.id === 'extrapolations');
+  const metadata = releases.shows[extrapolations.id];
+  assert.equal(extrapolations.watchedThrough, 0);
+  assert.equal(metadata.tvmazeId, extrapolations.tvmazeId);
+  assert.equal(metadata.status, 'Ended');
+  assert.equal(showState(extrapolations, metadata, today).status, 'ready');
+  assert.equal(showState({ ...extrapolations, watching: true }, metadata, today).status, 'watching');
+  assert.equal(showState({ ...extrapolations, watchedThrough: 1 }, metadata, today).status, 'done');
 });

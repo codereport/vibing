@@ -939,6 +939,21 @@
           "episodeCount": null
         }
       ]
+    },
+    "extrapolations": {
+      "tvmazeId": 58431,
+      "status": "Ended",
+      "network": "Apple TV",
+      "url": "https://www.tvmaze.com/shows/58431/extrapolations",
+      "checkedAt": "2026-10-21T16:42:09+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2023-03-17",
+          "endDate": "2023-04-21",
+          "episodeCount": 8
+        }
+      ]
     }
   }
 }

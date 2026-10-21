@@ -56,6 +56,8 @@ Million Dollar Secret, The Traitors UK, and Ted Lasso start Waiting, caught up t
 
 Reacher starts Waiting for season 5, with seasons 1–4 marked finished. Reacher and The Traitors: New Blood have `seasonLimit: 5` to keep undated S6 placeholders out of their season lists, including after release refreshes. Adjust or remove this optional per-show limit to include later seasons.
 
+Extrapolations starts Ready with season 1 unwatched. Finishing its only season moves it to Done.
+
 On localhost, existing browser progress takes priority over repository defaults. Save it to the repository to share updated progress across devices; published pages always show that committed snapshot.
 
 ## Weekly release updates
