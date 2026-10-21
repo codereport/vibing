@@ -88,7 +88,7 @@ function makeRow({ show, release, state }) {
     titleButton.addEventListener('click', () => edit(show.id));
     title.append(titleButton);
   } else title.textContent = show.title;
-  series.append(title, element('span', 'show-network', [release?.network, release?.status === 'Ended' ? 'Series ended' : null].filter(Boolean).join(' · ') || 'Release details pending'));
+  series.append(title, element('span', 'show-network', [release?.network, release?.status === 'Ended' ? 'Series ended' : null].filter(Boolean).join(' · ') || 'Release details pending'), element('span', 'sr-only', statusNames[state.status]));
 
   const season = element('div', 'season-cell');
   const boxes = element('div', 'season-boxes');
@@ -110,20 +110,21 @@ function makeRow({ show, release, state }) {
     }
     boxes.append(box);
   }
-  let premiereText = state.premiere ? `${state.available ? 'Premiered' : 'Premieres'} ${dateLabel(state.premiere)}` : 'Date not announced';
-  if (state.status === 'done') {
-    premiereText = 'That’s a wrap.';
-  } else if (!release) premiereText = 'Release check unavailable';
-  season.append(boxes, element('span', 'premiere-label', premiereText));
+  season.append(boxes);
 
-  const status = element('div', 'status-cell');
-  const pill = element('span', 'status-pill');
-  const symbol = element('span', state.status === 'watching' ? 'play-icon' : `dot ${state.status === 'ready' ? 'ready' : 'waiting'}-dot`, state.status === 'watching' ? '▶' : '');
-  symbol.setAttribute('aria-hidden', 'true');
-  pill.append(symbol, document.createTextNode(statusNames[state.status]));
-  status.append(pill);
+  const date = element('div', 'date-cell');
+  if (state.premiere && state.status !== 'done') {
+    const value = element('time', '', dateLabel(state.premiere));
+    value.dateTime = state.premiere;
+    value.setAttribute('aria-label', `Season ${state.season} ${state.available ? 'premiered' : 'premieres'} ${dateLabel(state.premiere)}`);
+    date.title = value.getAttribute('aria-label');
+    date.append(value);
+  } else {
+    date.textContent = state.status === 'done' ? 'Finished' : release ? 'Not announced' : 'Unavailable';
+    date.title = state.status === 'done' ? 'Every season finished' : release ? `Season ${state.season}: date not announced` : 'Release check unavailable';
+  }
 
-  row.append(series, status, season);
+  row.append(series, date, season);
   return row;
 }
 

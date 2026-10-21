@@ -52,7 +52,7 @@ a { color: inherit; text-underline-offset: 3px; }
 .list-heading, .show-row { display: grid; grid-template-columns: minmax(0, 1fr) 115px 184px; gap: 10px; align-items: center; }
 .list-heading { padding: 0 12px 9px 15px; font-size: 8px; letter-spacing: 1.3px; color: var(--muted); }
 .show-list { display: flex; flex-direction: column; gap: 4px; }
-.show-row { padding: 9px 10px 9px 14px; min-height: 52px; border-radius: 5px; border: 1px solid var(--line); border-left: 3px solid var(--line); background: transparent; }
+.show-row { padding: 6px 10px 6px 14px; min-height: 48px; border-radius: 5px; border: 1px solid var(--line); border-left: 3px solid var(--line); background: transparent; }
 .show-row.watching { background: var(--green); border-color: #32462a; border-left-color: #9dbf75; }
 .show-row.ready { background: var(--yellow); border-color: #4b4024; border-left-color: #c9a74f; }
 .show-title { font-size: 12px; font-weight: 600; line-height: 1.35; margin: 0; overflow-wrap: anywhere; }
@@ -68,14 +68,10 @@ a { color: inherit; text-underline-offset: 3px; }
 .season-box.season-done { background: #2b4024; border-color: #607c47; color: #c6e7a5; }
 .season-box.season-watching { background: #4a3c1c; border-color: #a1843e; color: #f0d287; }
 button.season-box:hover { filter: brightness(1.25); border-color: currentColor; }
-.premiere-label { display: block; font-size: 9px; color: var(--muted); margin-top: 5px; line-height: 1.35; }
-.watching .premiere-label, .watching .show-network { color: #a1b08e; }
-.ready .premiere-label, .ready .show-network { color: #b9ac87; }
-.status-pill { display: inline-flex; width: fit-content; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 4px; font-size: 9px; white-space: nowrap; }
-.watching .status-pill { color: var(--green-ink); background: #2c3f22; }
-.ready .status-pill { color: var(--yellow-ink); background: #483c1b; }
-.waiting .status-pill, .done .status-pill { padding-left: 0; color: var(--muted); }
-.play-icon { font-size: 8px; }
+.date-cell { min-width: 0; font-size: 10px; color: var(--muted); line-height: 1.35; }
+.date-cell time { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.watching .date-cell, .watching .show-network { color: #a1b08e; }
+.ready .date-cell, .ready .show-network { color: #b9ac87; }
 .icon-button { border: 0; background: transparent; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 4px; color: var(--muted); font-size: 20px; line-height: 1; }
 .icon-button:hover { background: #ffffff0d; color: var(--ink); }
 .list-bottom { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 9px; color: var(--muted); }
@@ -161,18 +157,15 @@ select { width: 100%; padding: 10px; border: 1px solid #445037; border-radius: 5
   .filter { font-size: 9px; padding: 5px 7px; gap: 5px; }
   .filter span { font-size: 8px; margin-left: 0; }
   .list-heading { display: none; }
-  .show-row { grid-template-columns: minmax(0, 1fr) 152px; gap: 3px 6px; padding: 7px 6px 7px 10px; min-height: 66px; }
+  .show-row { grid-template-columns: minmax(0, 1fr) 152px; gap: 3px 6px; padding: 6px 6px 6px 10px; min-height: 52px; }
   .series-cell { grid-column: 1; grid-row: 1; }
   .season-cell { grid-column: 2; grid-row: 1 / span 2; }
-  .status-cell { grid-column: 1; grid-row: 2; }
+  .date-cell { grid-column: 1; grid-row: 2; font-size: 8px; }
   .show-title { font-size: 11px; }
   .show-network { font-size: 8px; margin-top: 1px; }
-  .status-pill { font-size: 8px; padding: 2px 5px; }
   .season-boxes { gap: 3px; }
   .season-box { width: 28px; height: 32px; }
   .season-number { font-size: 8px; }
-  .premiere-label { font-size: 8px; }
-  .waiting .status-pill, .done .status-pill { padding: 0; }
   .list-bottom { font-size: 8px; margin-top: 10px; }
   .sidebar { grid-template-columns: 1fr; gap: 18px; margin-top: 15px; }
   .upcoming-card { padding: 18px; }

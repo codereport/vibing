@@ -40,6 +40,8 @@ On a published hostname, season boxes and titles are read-only and the import an
 
 Active shows are grouped Watching, Ready, then Waiting. Waiting shows are sorted by premiere date, nearest first, with unannounced dates at the bottom.
 
+The list has Series, Date, and Seasons columns. Premiere dates sit beside the season boxes so rows stay compact; on narrow screens dates sit beneath the series details. Row colors and season icons show progress without a separate status column.
+
 Each row has up to five season boxes, aligned to the right: **✓ green = done**, **▶ gold = watching**, **○ outlined = not watched**. Until a season is finished, the boxes start at S1–S5; afterward they show the latest five known seasons. Shows with fewer than five seasons display only those seasons. If season metadata is missing, the row falls back to S1–S5 and preserves any recorded progress.
 
 Locally, clicking a box cycles **not watched → watching → done → not watched**. Starting a later season marks all earlier seasons done. Clearing a completed season also clears later progress, so progress always follows watch order. Changes are saved in the browser immediately; use **Save to repository** to write them to disk. Use the title to adjust seasons outside the five visible boxes.
