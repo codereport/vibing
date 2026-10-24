@@ -201,6 +201,20 @@
       "tvmazeId": 66840,
       "watching": false,
       "watchedThrough": 1
+    },
+    {
+      "id": "ahsoka",
+      "title": "Ahsoka",
+      "tvmazeId": 52343,
+      "watching": false,
+      "watchedThrough": 1
+    },
+    {
+      "id": "westworld",
+      "title": "Westworld",
+      "tvmazeId": 1371,
+      "watching": false,
+      "watchedThrough": 3
     }
   ]
 }

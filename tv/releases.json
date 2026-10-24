@@ -1023,6 +1023,60 @@
           "episodeCount": 10
         }
       ]
+    },
+    "ahsoka": {
+      "tvmazeId": 52343,
+      "status": "Running",
+      "network": "Disney+",
+      "url": "https://www.tvmaze.com/shows/52343/ahsoka",
+      "checkedAt": "2026-10-24T21:58:06+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2023-08-22",
+          "endDate": "2023-10-03",
+          "episodeCount": 8
+        },
+        {
+          "number": 2,
+          "premiereDate": "2027-01-20",
+          "endDate": "2027-01-20",
+          "episodeCount": 8
+        }
+      ]
+    },
+    "westworld": {
+      "tvmazeId": 1371,
+      "status": "Ended",
+      "network": "HBO",
+      "url": "https://www.tvmaze.com/shows/1371/westworld",
+      "checkedAt": "2026-10-24T21:58:06+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2016-10-02",
+          "endDate": "2016-12-04",
+          "episodeCount": 10
+        },
+        {
+          "number": 2,
+          "premiereDate": "2018-04-22",
+          "endDate": "2018-06-24",
+          "episodeCount": 10
+        },
+        {
+          "number": 3,
+          "premiereDate": "2020-03-15",
+          "endDate": "2020-05-03",
+          "episodeCount": 8
+        },
+        {
+          "number": 4,
+          "premiereDate": "2022-06-26",
+          "endDate": "2022-08-14",
+          "episodeCount": 8
+        }
+      ]
     }
   }
 }
