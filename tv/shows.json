@@ -180,6 +180,27 @@
       "tvmazeId": 58431,
       "watching": false,
       "watchedThrough": 0
+    },
+    {
+      "id": "the-capture",
+      "title": "The Capture",
+      "tvmazeId": 35512,
+      "watching": false,
+      "watchedThrough": 3
+    },
+    {
+      "id": "the-day-of-the-jackal",
+      "title": "The Day of the Jackal",
+      "tvmazeId": 64977,
+      "watching": false,
+      "watchedThrough": 1
+    },
+    {
+      "id": "the-agency",
+      "title": "The Agency",
+      "tvmazeId": 66840,
+      "watching": false,
+      "watchedThrough": 0
     }
   ]
 }
