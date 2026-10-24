@@ -9,6 +9,7 @@
   --line-strong: rgba(241, 238, 230, 0.28);
   --acid: #d8ff43;
   --acid-soft: #c3e83c;
+  --sci-fi-blue: #43b8ff;
   --orange: #ff6a3d;
   --mono: "DM Mono", monospace;
   --sans: "Manrope", sans-serif;
@@ -82,7 +83,11 @@ input:focus-visible {
   display: inline-flex;
   justify-self: start;
   align-items: center;
+  padding: 0;
+  border: 0;
   color: var(--paper);
+  background: transparent;
+  cursor: pointer;
   text-decoration: none;
   font-size: 25px;
   font-weight: 700;
@@ -95,11 +100,14 @@ input:focus-visible {
   justify-self: start;
   align-items: center;
   min-width: 0;
+  max-width: 100%;
 }
 
 .brand-view {
+  min-width: 0;
   margin-left: 18px;
   padding-left: 18px;
+  overflow: hidden;
   border-left: 1px solid var(--line-strong);
   color: var(--paper);
   font-family: var(--mono);
@@ -107,16 +115,20 @@ input:focus-visible {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .header-stats {
+  min-width: 0;
   margin-left: 19px;
+  overflow: hidden;
   color: #858985;
   font-family: var(--mono);
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -139,6 +151,22 @@ input:focus-visible {
   border-radius: 50%;
   background: var(--acid);
   box-shadow: 0 0 14px rgba(216, 255, 67, 0.8);
+}
+
+.brand[aria-pressed="true"] {
+  --acid: var(--sci-fi-blue);
+}
+
+.brand[aria-pressed="true"] i {
+  box-shadow: 0 0 14px rgb(67 184 255 / 0.8);
+}
+
+.brand:hover {
+  color: var(--acid);
+}
+
+#footerCollection {
+  font-weight: inherit;
 }
 
 .view-switcher {
@@ -454,6 +482,16 @@ main {
   min-width: 0;
   animation: rise-in 480ms both;
   animation-delay: calc(var(--index, 0) * 45ms);
+}
+
+.book-card.is-sci-fi {
+  --acid: var(--sci-fi-blue);
+}
+
+.book-card.is-sci-fi .todo-stamp,
+.book-card.is-sci-fi .year-marker {
+  border-color: var(--acid);
+  color: var(--acid);
 }
 
 @keyframes rise-in {
@@ -1384,7 +1422,7 @@ noscript {
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .header-stats {
     display: none;
   }

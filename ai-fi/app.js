@@ -471,6 +471,61 @@ const BOOKS = [
     work: "OL44660267W",
     accent: "#5b6578",
   },
+  {
+    id: "enders-game",
+    title: "Ender’s Game",
+    author: "Orson Scott Card",
+    readDate: "2026-10-23",
+    series: "ender-quintet",
+    seriesOrder: 1,
+    cover: "id:12996033",
+    work: "OL49488W",
+    accent: "#8c593b",
+  },
+  {
+    id: "speaker-for-the-dead",
+    title: "Speaker for the Dead",
+    author: "Orson Scott Card",
+    readDate: null,
+    series: "ender-quintet",
+    seriesOrder: 2,
+    cover: "id:9315123",
+    work: "OL49580W",
+    accent: "#4c6b83",
+  },
+  {
+    id: "xenocide",
+    title: "Xenocide",
+    author: "Orson Scott Card",
+    readDate: null,
+    series: "ender-quintet",
+    seriesOrder: 3,
+    cover: "id:10564838",
+    work: "OL49604W",
+    accent: "#71603e",
+  },
+  {
+    id: "children-of-the-mind",
+    title: "Children of the Mind",
+    author: "Orson Scott Card",
+    readDate: null,
+    series: "ender-quintet",
+    seriesOrder: 4,
+    cover: "id:9315107",
+    work: "OL49463W",
+    accent: "#5e507d",
+  },
+  {
+    id: "ender-in-exile",
+    title: "Ender in Exile",
+    author: "Orson Scott Card",
+    readDate: null,
+    series: "ender-quintet",
+    seriesOrder: 5,
+    cover: "id:9317131",
+    work: "OL49485W",
+    accent: "#49736a",
+  },
 ];
 
 const SERIES = {
@@ -544,12 +599,19 @@ const SERIES = {
     author: "Martha Wells",
     description: "A self-hacked security construct would rather watch serials than navigate humans, corporations and inconvenient feelings.",
   },
+  "ender-quintet": {
+    name: "The Ender Quintet",
+    author: "Orson Scott Card",
+    description: "Ender Wiggin’s journey from Battle School to the moral complexities of first contact and coexistence.",
+    collection: "sci-fi",
+  },
 };
 
 const DEFAULT_RATINGS = {
   "dark-forest": 10,
   "three-body-problem": 9.8,
   "ready-player-one": 9.6,
+  "enders-game": 9.5,
   "ready-player-two": 9.5,
   "permutation-city": 9.4,
   "deaths-end": 9.2,
@@ -599,6 +661,23 @@ const VIEW_META = {
   },
 };
 
+const COLLECTION_META = {
+  "ai-fi": {
+    name: "AI-FI",
+    prefix: "AI",
+    description: VIEW_META.ranking.description,
+    definition: "Fiction where computation changes the shape of being: artificial minds, uploaded people, simulated worlds, posthuman evolution, and civilizations rewritten by technology.",
+    scope: "This leaves the AI industry nonfiction on the other shelf. Space opera makes the cut when its ideas about intelligence, identity, or technology are doing real work.",
+  },
+  "sci-fi": {
+    name: "SCI-FI",
+    prefix: "SCI",
+    description: "The wider science-fiction shelf: every AI-FI book, plus first contact, space opera and imagined futures—ordered by impact.",
+    definition: "The wider science-fiction collection: first contact, space opera, alien civilizations and imagined futures, alongside every book in AI-FI.",
+    scope: "SCI-FI includes the full AI-FI collection and opens the shelf to stories beyond artificial intelligence. Click the logo or press T to switch between collections.",
+  },
+};
+
 const storageKey = "ai-fi-ratings-v2";
 const legacyStorageKey = "ai-fi-ratings-v1";
 const readDatesStorageKey = "ai-fi-read-dates-v1";
@@ -609,6 +688,8 @@ const pageTitle = document.querySelector("#pageTitle");
 const viewDescription = document.querySelector("#viewDescription");
 const collectionStats = document.querySelector("#collectionStats");
 const hero = document.querySelector(".hero");
+const collectionToggle = document.querySelector("#collectionToggle");
+const brandPrefix = document.querySelector("#brandPrefix");
 const brandView = document.querySelector("#brandView");
 const headerStats = document.querySelector("#headerStats");
 const ratingDialog = document.querySelector("#ratingDialog");
@@ -634,6 +715,7 @@ const canonicalReadDates = Object.fromEntries(
 let activeBookId = null;
 let activeBookWasUnread = false;
 let currentView = getInitialView();
+let currentCollection = getInitialCollection();
 let readDateOverrides = loadReadDates();
 applyReadDates(readDateOverrides);
 let ratings = loadRatings();
@@ -647,6 +729,28 @@ ratingTransferCopy.textContent = canEditRatings
 function getInitialView() {
   const hashView = window.location.hash.replace("#", "");
   return VIEW_META[hashView] ? hashView : "ranking";
+}
+
+function getInitialCollection() {
+  return new URLSearchParams(window.location.search).get("collection") === "sci-fi" ? "sci-fi" : "ai-fi";
+}
+
+function getVisibleSeries() {
+  return Object.entries(SERIES).filter(([, meta]) => currentCollection === "sci-fi" || meta.collection !== "sci-fi");
+}
+
+function getVisibleBooks() {
+  const seriesIds = new Set(getVisibleSeries().map(([id]) => id));
+  return BOOKS.filter((book) => seriesIds.has(book.series));
+}
+
+function toggleCollection() {
+  currentCollection = currentCollection === "ai-fi" ? "sci-fi" : "ai-fi";
+  const url = new URL(window.location.href);
+  if (currentCollection === "sci-fi") url.searchParams.set("collection", "sci-fi");
+  else url.searchParams.delete("collection");
+  history.replaceState(null, "", url);
+  render();
 }
 
 function normalizeDateValue(value) {
@@ -781,7 +885,7 @@ function bookCover(book, extraClass = "") {
   return `
     <div class="book-cover-wrap ${extraClass}" style="--fallback-accent:${book.accent}">
       <div class="cover-fallback" aria-hidden="true">
-        <span>AI—FI archive</span>
+        <span>${COLLECTION_META[currentCollection].name} archive</span>
         <strong>${escapeHtml(book.title)}</strong>
         <span>${escapeHtml(book.author)}</span>
       </div>
@@ -792,6 +896,7 @@ function bookCover(book, extraClass = "") {
 
 function bookCard(book, { rank = null, index = 0, todo = false, context = "default", yearMarker = null } = {}) {
   const rating = ratings[book.id];
+  const cardClass = `book-card${SERIES[book.series]?.collection === "sci-fi" ? " is-sci-fi" : ""}`;
   const meta = todo
     ? `Book ${book.orderLabel || book.seriesOrder} · To read`
     : book.status === "finishing"
@@ -814,11 +919,11 @@ function bookCard(book, { rank = null, index = 0, todo = false, context = "defau
 
   if (todo) {
     if (!canEditRatings) {
-      return `<article class="book-card is-todo is-readonly" style="--index:${index}">${inner}</article>`;
+      return `<article class="${cardClass} is-todo is-readonly" style="--index:${index}">${inner}</article>`;
     }
 
     return `
-      <article class="book-card is-todo" style="--index:${index}">
+      <article class="${cardClass} is-todo" style="--index:${index}">
         <button class="book-trigger" type="button" data-rate-book="${book.id}" aria-label="Mark ${escapeHtml(book.title)} finished and rate it">
           ${inner}
         </button>
@@ -826,11 +931,11 @@ function bookCard(book, { rank = null, index = 0, todo = false, context = "defau
   }
 
   if (!canEditRatings) {
-    return `<article class="book-card is-readonly" style="--index:${index}">${inner}</article>`;
+    return `<article class="${cardClass} is-readonly" style="--index:${index}">${inner}</article>`;
   }
 
   return `
-    <article class="book-card ${context === "current" ? "is-current" : ""}" style="--index:${index}">
+    <article class="${cardClass} ${context === "current" ? "is-current" : ""}" style="--index:${index}">
       <button class="book-trigger" type="button" data-rate-book="${book.id}" aria-label="Rate ${escapeHtml(book.title)}">
         ${inner}
       </button>
@@ -862,13 +967,14 @@ function seriesAverage(seriesId) {
 }
 
 function renderStats() {
-  const readCount = BOOKS.filter((book) => book.readDate && book.status !== "finishing").length;
-  const ratedCount = Object.keys(ratings).length;
-  const todoCount = BOOKS.filter((book) => !book.readDate).length;
+  const books = getVisibleBooks();
+  const readCount = books.filter((book) => book.readDate && book.status !== "finishing").length;
+  const ratedCount = books.filter((book) => ratings[book.id]).length;
+  const todoCount = books.filter((book) => !book.readDate).length;
   const stats =
     currentView === "series"
       ? [
-          [Object.keys(SERIES).length, "Series / signals"],
+          [getVisibleSeries().length, "Series / signals"],
           [todoCount, "To read"],
           [readCount, "Read"],
         ]
@@ -881,7 +987,7 @@ function renderStats() {
         : [
             [ratedCount, "Ranked"],
             [readCount, "Read"],
-            [readCount - ratedCount + 1, "Awaiting score"],
+            [books.filter((book) => book.readDate && !ratings[book.id]).length, "Awaiting score"],
           ];
 
   collectionStats.innerHTML = stats
@@ -890,11 +996,12 @@ function renderStats() {
 }
 
 function renderRanking() {
-  const ranked = BOOKS.filter((book) => ratings[book.id]).sort((a, b) => {
+  const books = getVisibleBooks();
+  const ranked = books.filter((book) => ratings[book.id]).sort((a, b) => {
     const byRating = ratings[b.id] - ratings[a.id];
     return byRating || a.title.localeCompare(b.title);
   });
-  const queue = BOOKS.filter((book) => book.readDate && !ratings[book.id]).sort((a, b) => {
+  const queue = books.filter((book) => book.readDate && !ratings[book.id]).sort((a, b) => {
     if (a.status === "finishing") return -1;
     if (b.status === "finishing") return 1;
     return new Date(b.readDate) - new Date(a.readDate);
@@ -926,7 +1033,7 @@ function renderRanking() {
 }
 
 function renderSeries() {
-  const groups = Object.entries(SERIES)
+  const groups = getVisibleSeries()
     .map(([id, meta]) => ({
       id,
       ...meta,
@@ -970,7 +1077,7 @@ function renderSeries() {
 }
 
 function renderDate() {
-  const dated = BOOKS.filter((book) => book.readDate).sort((a, b) => new Date(b.readDate) - new Date(a.readDate));
+  const dated = getVisibleBooks().filter((book) => book.readDate).sort((a, b) => new Date(b.readDate) - new Date(a.readDate));
 
   viewRoot.innerHTML = `
     <div class="view-heading-row">
@@ -1012,9 +1119,22 @@ function hydrateCoverImages(root = document) {
 }
 
 function render() {
-  const readCount = BOOKS.filter((book) => book.readDate && book.status !== "finishing").length;
-  const ratedCount = Object.keys(ratings).length;
-  const todoCount = BOOKS.filter((book) => !book.readDate).length;
+  const books = getVisibleBooks();
+  const readCount = books.filter((book) => book.readDate && book.status !== "finishing").length;
+  const ratedCount = books.filter((book) => ratings[book.id]).length;
+  const todoCount = books.filter((book) => !book.readDate).length;
+  const collection = COLLECTION_META[currentCollection];
+  const nextCollection = COLLECTION_META[currentCollection === "ai-fi" ? "sci-fi" : "ai-fi"];
+
+  brandPrefix.textContent = collection.prefix;
+  collectionToggle.setAttribute("aria-label", `${collection.name} collection. Switch to ${nextCollection.name} (T)`);
+  collectionToggle.setAttribute("aria-pressed", String(currentCollection === "sci-fi"));
+  collectionToggle.title = `Switch to ${nextCollection.name} (T)`;
+  document.title = `${collection.name} — A Personal Canon`;
+  document.querySelector("#footerCollection").textContent = collection.name;
+  document.querySelector("#aboutCollection").textContent = `${collection.name}?`;
+  document.querySelector("#aboutDefinition").textContent = collection.definition;
+  document.querySelector("#aboutScope").textContent = collection.scope;
 
   hero.classList.add("is-collapsed");
   viewRoot.classList.add("is-compact-view");
@@ -1023,7 +1143,7 @@ function render() {
   brandView.textContent = VIEW_META[currentView].title;
   headerStats.innerHTML =
     currentView === "series"
-      ? `<strong>${Object.keys(SERIES).length}</strong> series <i>·</i> <strong>${todoCount}</strong> to read <i>·</i> <strong>${readCount}</strong> read`
+      ? `<strong>${getVisibleSeries().length}</strong> series <i>·</i> <strong>${todoCount}</strong> to read <i>·</i> <strong>${readCount}</strong> read`
       : currentView === "date"
         ? `<strong>${readCount}</strong> finished <i>·</i> <strong>2.8</strong> yr span <i>·</i> <strong>1</strong> now`
         : `<strong>${ratedCount}</strong> ranked <i>·</i> <strong>${readCount}</strong> read`;
@@ -1035,7 +1155,7 @@ function render() {
   });
 
   pageTitle.innerHTML = VIEW_META[currentView].title;
-  viewDescription.textContent = VIEW_META[currentView].description;
+  viewDescription.textContent = currentView === "ranking" ? collection.description : VIEW_META[currentView].description;
   renderStats();
 
   if (currentView === "series") renderSeries();
@@ -1072,7 +1192,7 @@ function openRating(bookId) {
 
   dialogBook.innerHTML = `
     <div class="cover-fallback" style="--fallback-accent:${book.accent}" aria-hidden="true">
-      <span>AI—FI archive</span><strong>${escapeHtml(book.title)}</strong><span>${escapeHtml(book.author)}</span>
+      <span>${COLLECTION_META[currentCollection].name} archive</span><strong>${escapeHtml(book.title)}</strong><span>${escapeHtml(book.author)}</span>
     </div>
     <img data-cover src="${coverUrl(book)}" alt="Cover of ${escapeHtml(book.title)}" />
     <div class="dialog-book-copy">
@@ -1083,6 +1203,21 @@ function openRating(bookId) {
   hydrateCoverImages(dialogBook);
   ratingDialog.showModal();
 }
+
+collectionToggle.addEventListener("click", toggleCollection);
+
+document.addEventListener("keydown", (event) => {
+  if (
+    event.defaultPrevented || event.repeat || event.isComposing ||
+    event.ctrlKey || event.metaKey || event.altKey ||
+    event.key.toLowerCase() !== "t" ||
+    event.target.closest("input, textarea, select, [contenteditable]:not([contenteditable='false']), [role='textbox']") ||
+    document.querySelector("dialog[open]")
+  ) return;
+
+  event.preventDefault();
+  toggleCollection();
+});
 
 document.querySelectorAll(".view-button").forEach((button) => {
   button.addEventListener("click", () => {

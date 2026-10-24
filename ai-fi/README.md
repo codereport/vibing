@@ -2,6 +2,8 @@
 
 The site keeps edits in browser `localStorage` so ratings can be changed without a backend. Those local values are not part of the Git repository until they are exported and applied.
 
+Click the **AI-FI / SCI-FI** logo or press **T** to toggle collections while keeping the current view. SCI-FI includes every AI-FI book plus the wider science-fiction shelf, starting with **The Ender Quintet**. In **SCI-FI → By series**, click any of its five books to add a finish date and rating. The selected collection stays in the URL across reloads; ratings and exports always cover both collections.
+
 ## Save and commit ratings
 
 1. Start the local development server from this `ai-fi` directory:

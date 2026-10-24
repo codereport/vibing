@@ -22,9 +22,9 @@
 
     <header class="site-header">
       <div class="brand-lockup">
-        <a class="brand" href="#" aria-label="AI-FI home">
-          <span>AI</span><i></i><span>FI</span>
-        </a>
+        <button class="brand" id="collectionToggle" type="button" aria-label="AI-FI collection. Switch to SCI-FI (T)" aria-pressed="false" aria-keyshortcuts="t" title="Switch to SCI-FI (T)">
+          <span id="brandPrefix">AI</span><i aria-hidden="true"></i><span>FI</span>
+        </button>
         <span class="brand-view" id="brandView" hidden>The Ranking</span>
         <span class="header-stats" id="headerStats" hidden></span>
       </div>
@@ -70,7 +70,7 @@
     </main>
 
     <footer class="site-footer">
-      <p>AI-FI <span>© 2026</span></p>
+      <p><b id="footerCollection">AI-FI</b> <span>© 2026</span></p>
       <p>A reading record by a human, about what comes after.</p>
       <a href="https://openlibrary.org/dev/docs/api/covers" target="_blank" rel="noreferrer">
         Cover art via Open Library ↗
@@ -117,12 +117,12 @@
       <form method="dialog">
         <button class="dialog-close" value="close" aria-label="Close about panel" type="submit">×</button>
         <p class="eyebrow">A working definition</p>
-        <h2>What counts as<br /><em>AI-FI?</em></h2>
-        <p>
+        <h2>What counts as<br /><em id="aboutCollection">AI-FI?</em></h2>
+        <p id="aboutDefinition">
           Fiction where computation changes the shape of being: artificial minds, uploaded people,
           simulated worlds, posthuman evolution, and civilizations rewritten by technology.
         </p>
-        <p>
+        <p id="aboutScope">
           This leaves the AI industry nonfiction on the other shelf. Space opera makes the cut when
           its ideas about intelligence, identity, or technology are doing real work.
         </p>
