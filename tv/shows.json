@@ -6,7 +6,7 @@
       "title": "The Wire",
       "tvmazeId": 179,
       "watching": true,
-      "watchedThrough": 2
+      "watchedThrough": 3
     },
     {
       "id": "veep",
@@ -200,7 +200,7 @@
       "title": "The Agency",
       "tvmazeId": 66840,
       "watching": false,
-      "watchedThrough": 0
+      "watchedThrough": 1
     }
   ]
 }
