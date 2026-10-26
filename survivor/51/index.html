@@ -371,6 +371,7 @@
   <button class="ep-btn" data-ep="2">Episode 2</button>
   <button class="ep-btn" data-ep="3">Episode 3</button>
   <button class="ep-btn" data-ep="4">Episode 4</button>
+  <button class="ep-btn" data-ep="5">Episode 5</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -378,16 +379,16 @@
 <main class="tribes-container" id="tribes-container"></main>
 
 <footer class="legend">
-  Survivor 51: The Open Era &mdash; through Episode 4, October 14, 2026 &middot;
+  Survivor 51: The Open Era &mdash; through Episode 5, October 21, 2026 &middot;
   <a href="https://www.paramountpressexpress.com/cbs-entertainment/shows/survivor/releases/?view=113157-survivor-reveals-the-21-new-castaways-competing-on-the-51st-edition-the-first-in-the-series-new-open-era-with-a-two-hour-season-premiere-on-wednesday">Cast photos: Robert Voets/CBS</a> &middot;
-  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-4-recap/">Episode recap</a>
+  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-5-recap/">Episode recap</a>
 </footer>
 
 <script>
   // === PLAYER DATA ===
   const players = {
     aaliyah_puglia:      { name: 'Aaliyah Puglia',   season: 'Toka',          img: 'aaliyah_puglia.jpg',      elimTag: 'Voted Out — Ep. 1' },
-    alexis_levine:       { name: 'Alexis Levine',    season: 'Savu',          img: 'alexis_levine.jpg',       elimTag: '' },
+    alexis_levine:       { name: 'Alexis Levine',    season: 'Savu',          img: 'alexis_levine.jpg',       elimTag: 'Voted Out — Ep. 5' },
     an_nguyen:           { name: 'Thien An Nguyen',  season: 'Toka',          img: 'an_nguyen.jpg',           elimTag: '' },
     ana_sani:            { name: 'Ana Sani',         season: 'Savu',          img: 'ana_sani.jpg',            elimTag: 'Voted Out — Ep. 2' },
     angelica_loblack:    { name: 'Jelly Loblack',    season: 'Toka',          img: 'angelica_loblack.jpg',    elimTag: '' },
@@ -400,7 +401,7 @@
     jenna_doore:         { name: 'Jenna Doore',      season: 'Toka',          img: 'jenna_doore.jpg',         elimTag: 'Voted Out — Ep. 4' },
     kristin_flickinger:  { name: 'Kristin Flickinger',season: 'Savu',         img: 'kristin_flickinger.jpg',  elimTag: '' },
     lewis_kelly:         { name: 'Lewis Kelly',      season: 'Exile',         img: 'lewis_kelly.jpg',         elimTag: '' },
-    linnea_capobianco:   { name: 'Linnea Capobianco',season: 'Savu',          img: 'linnea_capobianco.jpg',   elimTag: '' },
+    linnea_capobianco:   { name: 'Linnea Capobianco',season: 'Savu',          img: 'linnea_capobianco.jpg',   elimTag: 'Voted Out — Ep. 5' },
     maggie_nestor:       { name: 'Maggie Nestor',    season: 'Toka',          img: 'maggie_nestor.jpg',       elimTag: '' },
     mike_pinsky:         { name: 'Mike Pinsky',      season: 'Toka',          img: 'mike_pinsky.jpg',         elimTag: '' },
     ori_jean_charles:    { name: 'Ori Jean-Charles', season: 'Savu',          img: 'ori_jean_charles.jpg',    elimTag: '' },
@@ -444,6 +445,7 @@
     2: ['ana_sani'],
     3: ['rob_antonson','patt_cannaday'],
     4: ['jenna_doore'],
+    5: ['alexis_levine','linnea_capobianco'],
   };
 
   // Add personal picks here as episodes air.
@@ -451,6 +453,7 @@
     2: 'linnea_capobianco',
     3: 'mike_pinsky',
     4: 'brady_booker',
+    5: 'carter_krull',
   };
 
   const advantages = {
@@ -470,6 +473,12 @@
       { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
       { player: 'devin_way', type: 'extra-vote', label: 'Extra Vote' },
       { player: 'maggie_nestor', type: 'extra-vote', label: 'Extra Vote' },
+    ],
+    5: [
+      // Maggie gave both extra votes to Kilby and Lewis, who used them on Dina.
+      { player: 'carter_krull', type: 'idol', label: 'Immunity Idol' },
+      { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
+      { player: 'devin_way', type: 'extra-vote', label: 'Extra Vote' },
     ],
   };
 
@@ -499,6 +508,14 @@
       { name: 'Helicopter Alliance', color: '#22d3ee', members: ['angelica_loblack','devin_way','ori_jean_charles','sharonda_cox'] },
       { name: 'The Loverboys', color: '#f59e0b', members: ['danny_kilby','eric_macksoud'] },
       { name: 'Linnea & Sharonda', color: '#34d399', members: ['linnea_capobianco','sharonda_cox'] },
+    ],
+    5: [
+      // https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-5-recap/
+      { name: 'Thien An / Carter / Maggie', color: '#f472b6', members: ['an_nguyen','carter_krull','maggie_nestor'] },
+      { name: 'Helicopter Alliance', color: '#22d3ee', members: ['angelica_loblack','devin_way','ori_jean_charles','sharonda_cox'] },
+      { name: 'Maggie / Kilby / Lewis', color: '#f59e0b', members: ['maggie_nestor','danny_kilby','lewis_kelly'] },
+      // The remaining OG Savu voting bloc on Dina after Linnea's elimination.
+      { name: 'Dina: OG Savu', color: '#34d399', members: ['cristian_chavez','eric_macksoud','sharonda_cox'] },
     ],
   };
 
