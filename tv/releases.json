@@ -1,7 +1,7 @@
 {
   "source": "TVmaze",
   "sourceUrl": "https://www.tvmaze.com/api",
-  "checkedAt": "2026-10-26T18:41:12+00:00",
+  "checkedAt": "2026-10-27T16:59:39+00:00",
   "errors": [],
   "shows": {
     "the-wire": {
@@ -9,7 +9,7 @@
       "status": "Ended",
       "network": "HBO",
       "url": "https://www.tvmaze.com/shows/179/the-wire",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -48,7 +48,7 @@
       "status": "Ended",
       "network": "HBO",
       "url": "https://www.tvmaze.com/shows/142/veep",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -99,7 +99,7 @@
       "status": "Ended",
       "network": "HBO",
       "url": "https://www.tvmaze.com/shows/551/curb-your-enthusiasm",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -180,7 +180,7 @@
       "status": "Ended",
       "network": "Syndication",
       "url": "https://www.tvmaze.com/shows/491/star-trek-the-next-generation",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -231,7 +231,7 @@
       "status": "Ended",
       "network": "BBC One",
       "url": "https://www.tvmaze.com/shows/210/doctor-who",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -318,7 +318,7 @@
       "status": "Ended",
       "network": "Netflix",
       "url": "https://www.tvmaze.com/shows/2993/stranger-things",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -357,7 +357,7 @@
       "status": "In Development",
       "network": "Netflix",
       "url": "https://www.tvmaze.com/shows/85058/the-altruists",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -372,7 +372,7 @@
       "status": "Running",
       "network": "Apple TV",
       "url": "https://www.tvmaze.com/shows/61315/dark-matter",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -393,7 +393,7 @@
       "status": "In Development",
       "network": "Apple TV",
       "url": "https://www.tvmaze.com/shows/75029/neuromancer",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -408,7 +408,7 @@
       "status": "Running",
       "network": "NBC",
       "url": "https://www.tvmaze.com/shows/58177/the-traitors",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -453,7 +453,7 @@
       "status": "In Development",
       "network": "Prime Video",
       "url": "https://www.tvmaze.com/shows/60458/blade-runner-2099",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -468,7 +468,7 @@
       "status": "Running",
       "network": "Apple TV",
       "url": "https://www.tvmaze.com/shows/82227/stick",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -489,7 +489,7 @@
       "status": "Running",
       "network": "Disney+",
       "url": "https://www.tvmaze.com/shows/64950/visionquest",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -504,7 +504,7 @@
       "status": "Running",
       "network": "Netflix",
       "url": "https://www.tvmaze.com/shows/46167/love-is-blind",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -579,7 +579,7 @@
       "status": "Ended",
       "network": "Hulu",
       "url": "https://www.tvmaze.com/shows/54198/the-bear",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -618,7 +618,7 @@
       "status": "Ended",
       "network": "AMC",
       "url": "https://www.tvmaze.com/shows/385/mad-men",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -669,7 +669,7 @@
       "status": "Running",
       "network": "Netflix",
       "url": "https://www.tvmaze.com/shows/305/black-mirror",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -726,7 +726,7 @@
       "status": "Running",
       "network": "Netflix",
       "url": "https://www.tvmaze.com/shows/53277/3-body-problem",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -747,7 +747,7 @@
       "status": "Running",
       "network": "Apple TV",
       "url": "https://www.tvmaze.com/shows/38052/silo",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -780,7 +780,7 @@
       "status": "Running",
       "network": "Apple TV",
       "url": "https://www.tvmaze.com/shows/44933/severance",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -807,7 +807,7 @@
       "status": "Running",
       "network": "Netflix",
       "url": "https://www.tvmaze.com/shows/82873/million-dollar-secret",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -828,7 +828,7 @@
       "status": "Running",
       "network": "BBC One",
       "url": "https://www.tvmaze.com/shows/58174/the-traitors",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -867,7 +867,7 @@
       "status": "To Be Determined",
       "network": "Apple TV",
       "url": "https://www.tvmaze.com/shows/44458/ted-lasso",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -900,7 +900,7 @@
       "status": "Running",
       "network": "Prime Video",
       "url": "https://www.tvmaze.com/shows/43031/reacher",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -945,7 +945,7 @@
       "status": "Ended",
       "network": "Apple TV",
       "url": "https://www.tvmaze.com/shows/58431/extrapolations",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -960,7 +960,7 @@
       "status": "To Be Determined",
       "network": "BBC iPlayer",
       "url": "https://www.tvmaze.com/shows/35512/the-capture",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -987,7 +987,7 @@
       "status": "Running",
       "network": "Now",
       "url": "https://www.tvmaze.com/shows/64977/the-day-of-the-jackal",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -1008,7 +1008,7 @@
       "status": "To Be Determined",
       "network": "Paramount+",
       "url": "https://www.tvmaze.com/shows/66840/the-agency",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -1029,7 +1029,7 @@
       "status": "Running",
       "network": "Disney+",
       "url": "https://www.tvmaze.com/shows/52343/ahsoka",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -1050,7 +1050,7 @@
       "status": "Ended",
       "network": "HBO",
       "url": "https://www.tvmaze.com/shows/1371/westworld",
-      "checkedAt": "2026-10-26T18:41:12+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -1083,7 +1083,7 @@
       "status": "Ended",
       "network": "NBC",
       "url": "https://www.tvmaze.com/shows/530/seinfeld",
-      "checkedAt": "2026-10-27T16:58:21+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
@@ -1146,7 +1146,7 @@
       "status": "Running",
       "network": "Netflix",
       "url": "https://www.tvmaze.com/shows/74979/tires",
-      "checkedAt": "2026-10-27T16:58:21+00:00",
+      "checkedAt": "2026-10-27T16:59:39+00:00",
       "seasons": [
         {
           "number": 1,
