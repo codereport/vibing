@@ -215,6 +215,20 @@
       "tvmazeId": 1371,
       "watching": false,
       "watchedThrough": 3
+    },
+    {
+      "id": "seinfeld",
+      "title": "Seinfeld",
+      "tvmazeId": 530,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "tires",
+      "title": "Tires",
+      "tvmazeId": 74979,
+      "watching": false,
+      "watchedThrough": 0
     }
   ]
 }

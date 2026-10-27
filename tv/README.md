@@ -62,6 +62,8 @@ The Capture and The Day of the Jackal start Waiting, caught up through seasons 3
 
 Ahsoka starts Waiting for season 2, with season 1 marked finished. Westworld starts Ready for season 4, with seasons 1–3 marked finished.
 
+Seinfeld and Tires start Ready at season 1 with nothing watched.
+
 On localhost, existing browser progress takes priority over repository defaults. Save it to the repository to share updated progress across devices; published pages always show that committed snapshot.
 
 ## Weekly release updates

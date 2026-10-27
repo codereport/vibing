@@ -1077,6 +1077,96 @@
           "episodeCount": 8
         }
       ]
+    },
+    "seinfeld": {
+      "tvmazeId": 530,
+      "status": "Ended",
+      "network": "NBC",
+      "url": "https://www.tvmaze.com/shows/530/seinfeld",
+      "checkedAt": "2026-10-27T16:58:21+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "1989-07-05",
+          "endDate": "1990-06-21",
+          "episodeCount": 5
+        },
+        {
+          "number": 2,
+          "premiereDate": "1991-01-23",
+          "endDate": "1991-06-26",
+          "episodeCount": 12
+        },
+        {
+          "number": 3,
+          "premiereDate": "1991-09-18",
+          "endDate": "1992-05-06",
+          "episodeCount": 23
+        },
+        {
+          "number": 4,
+          "premiereDate": "1992-08-12",
+          "endDate": "1993-05-20",
+          "episodeCount": 24
+        },
+        {
+          "number": 5,
+          "premiereDate": "1993-09-16",
+          "endDate": "1994-05-19",
+          "episodeCount": 22
+        },
+        {
+          "number": 6,
+          "premiereDate": "1994-09-22",
+          "endDate": "1995-05-18",
+          "episodeCount": 24
+        },
+        {
+          "number": 7,
+          "premiereDate": "1995-09-21",
+          "endDate": "1996-05-16",
+          "episodeCount": 24
+        },
+        {
+          "number": 8,
+          "premiereDate": "1996-09-19",
+          "endDate": "1997-05-15",
+          "episodeCount": 22
+        },
+        {
+          "number": 9,
+          "premiereDate": "1997-09-25",
+          "endDate": "1998-05-14",
+          "episodeCount": 24
+        }
+      ]
+    },
+    "tires": {
+      "tvmazeId": 74979,
+      "status": "Running",
+      "network": "Netflix",
+      "url": "https://www.tvmaze.com/shows/74979/tires",
+      "checkedAt": "2026-10-27T16:58:21+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2024-05-23",
+          "endDate": "2024-05-23",
+          "episodeCount": 6
+        },
+        {
+          "number": 2,
+          "premiereDate": "2025-06-05",
+          "endDate": "2025-06-05",
+          "episodeCount": 12
+        },
+        {
+          "number": 3,
+          "premiereDate": "2026-08-13",
+          "endDate": "2026-08-13",
+          "episodeCount": 12
+        }
+      ]
     }
   }
 }
