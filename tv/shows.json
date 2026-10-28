@@ -229,6 +229,20 @@
       "tvmazeId": 74979,
       "watching": false,
       "watchedThrough": 0
+    },
+    {
+      "id": "nathan-for-you",
+      "title": "Nathan for You",
+      "tvmazeId": 3136,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "the-rehearsal",
+      "title": "The Rehearsal",
+      "tvmazeId": 56116,
+      "watching": false,
+      "watchedThrough": 0
     }
   ]
 }

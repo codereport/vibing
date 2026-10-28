@@ -64,6 +64,8 @@ Ahsoka starts Waiting for season 2, with season 1 marked finished. Westworld sta
 
 Seinfeld and Tires start Ready at season 1 with nothing watched.
 
+Nathan for You and The Rehearsal start Ready at season 1 with nothing watched.
+
 On localhost, existing browser progress takes priority over repository defaults. Save it to the repository to share updated progress across devices; published pages always show that committed snapshot.
 
 ## Weekly release updates

@@ -1167,6 +1167,60 @@
           "episodeCount": 12
         }
       ]
+    },
+    "nathan-for-you": {
+      "tvmazeId": 3136,
+      "status": "Ended",
+      "network": "Comedy Central",
+      "url": "https://www.tvmaze.com/shows/3136/nathan-for-you",
+      "checkedAt": "2026-10-28T14:50:57+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2013-02-28",
+          "endDate": "2013-04-18",
+          "episodeCount": 8
+        },
+        {
+          "number": 2,
+          "premiereDate": "2014-07-01",
+          "endDate": "2014-08-19",
+          "episodeCount": 8
+        },
+        {
+          "number": 3,
+          "premiereDate": "2015-10-15",
+          "endDate": "2015-12-10",
+          "episodeCount": 8
+        },
+        {
+          "number": 4,
+          "premiereDate": "2017-09-28",
+          "endDate": "2017-11-09",
+          "episodeCount": 7
+        }
+      ]
+    },
+    "the-rehearsal": {
+      "tvmazeId": 56116,
+      "status": "To Be Determined",
+      "network": "HBO",
+      "url": "https://www.tvmaze.com/shows/56116/the-rehearsal",
+      "checkedAt": "2026-10-28T14:50:57+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2022-07-15",
+          "endDate": "2022-08-19",
+          "episodeCount": 6
+        },
+        {
+          "number": 2,
+          "premiereDate": "2025-04-20",
+          "endDate": "2025-05-25",
+          "episodeCount": 6
+        }
+      ]
     }
   }
 }

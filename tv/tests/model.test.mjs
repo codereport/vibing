@@ -74,11 +74,11 @@ test('waiting shows sort by the nearest premiere, with unknown dates last', () =
   assert.deepEqual(unsorted.toSorted(compareEntries).map(e => e.show.id), ['watching', 'ready', 'near', 'same-date', 'far', 'unknown-a', 'unknown-b']);
 });
 
-test('the catalog includes all 32 unique shows with valid editable progress', () => {
+test('the catalog includes all 34 unique shows with valid editable progress', () => {
   const config = JSON.parse(readFileSync(new URL('../shows.json', import.meta.url)));
-  assert.equal(config.shows.length, 32);
-  assert.equal(new Set(config.shows.map(show => show.id)).size, 32);
-  assert.equal(new Set(config.shows.map(show => show.tvmazeId)).size, 32);
+  assert.equal(config.shows.length, 34);
+  assert.equal(new Set(config.shows.map(show => show.id)).size, 34);
+  assert.equal(new Set(config.shows.map(show => show.tvmazeId)).size, 34);
   assert.ok(config.shows.every(validProgress));
   const bear = { ...config.shows.find(show => show.id === 'the-bear'), watchedThrough: 2, watching: false };
   const releases = JSON.parse(readFileSync(new URL('../releases.json', import.meta.url)));
