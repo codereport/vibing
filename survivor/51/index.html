@@ -278,7 +278,8 @@
     }
 
     .badge.visible { display: inline-block; }
-    .badge-idol { background: #854d0e; color: #fbbf24; border: 1px solid #a16207; }
+    .badge-idol, .badge-tethered-idol { background: #854d0e; color: #fbbf24; border: 1px solid #a16207; }
+    .badge-tethered-idol { white-space: normal; text-align: center; line-height: 1.3; }
     .badge-extra-vote { background: #1e3a5f; color: #60a5fa; border: 1px solid #2563eb; }
     .badge-lost-vote { background: #3f0f0f; color: #f87171; border: 1px solid #991b1b; }
     .badge-boomerang { background: #4a1d6a; color: #c084fc; border: 1px solid #7c3aed; }
@@ -372,6 +373,7 @@
   <button class="ep-btn" data-ep="3">Episode 3</button>
   <button class="ep-btn" data-ep="4">Episode 4</button>
   <button class="ep-btn" data-ep="5">Episode 5</button>
+  <button class="ep-btn" data-ep="6">Episode 6</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -379,9 +381,9 @@
 <main class="tribes-container" id="tribes-container"></main>
 
 <footer class="legend">
-  Survivor 51: The Open Era &mdash; through Episode 5, October 21, 2026 &middot;
+  Survivor 51: The Open Era &mdash; through Episode 6, October 28, 2026 &middot;
   <a href="https://www.paramountpressexpress.com/cbs-entertainment/shows/survivor/releases/?view=113157-survivor-reveals-the-21-new-castaways-competing-on-the-51st-edition-the-first-in-the-series-new-open-era-with-a-two-hour-season-premiere-on-wednesday">Cast photos: Robert Voets/CBS</a> &middot;
-  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-5-recap/">Episode recap</a>
+  <a href="https://www.tvline.com/2300559/survivor-51-recap-episode-6-ori-voted-out/">Episode recap</a>
 </footer>
 
 <script>
@@ -404,7 +406,7 @@
     linnea_capobianco:   { name: 'Linnea Capobianco',season: 'Savu',          img: 'linnea_capobianco.jpg',   elimTag: 'Voted Out — Ep. 5' },
     maggie_nestor:       { name: 'Maggie Nestor',    season: 'Toka',          img: 'maggie_nestor.jpg',       elimTag: '' },
     mike_pinsky:         { name: 'Mike Pinsky',      season: 'Toka',          img: 'mike_pinsky.jpg',         elimTag: '' },
-    ori_jean_charles:    { name: 'Ori Jean-Charles', season: 'Savu',          img: 'ori_jean_charles.jpg',    elimTag: '' },
+    ori_jean_charles:    { name: 'Ori Jean-Charles', season: 'Savu',          img: 'ori_jean_charles.jpg',    elimTag: 'Voted Out — Ep. 6' },
     patt_cannaday:       { name: 'Patt Cannaday',    season: 'Toka',          img: 'patt_cannaday.jpg',       elimTag: 'Voted Out — Ep. 3' },
     rob_antonson:        { name: 'Rob Antonson',     season: 'Savu',          img: 'rob_antonson.jpg',        elimTag: 'Quit — Ep. 3' },
     sharonda_cox:        { name: 'Sharonda Cox',     season: 'Savu',          img: 'sharonda_cox.jpg',        elimTag: '' },
@@ -446,6 +448,7 @@
     3: ['rob_antonson','patt_cannaday'],
     4: ['jenna_doore'],
     5: ['alexis_levine','linnea_capobianco'],
+    6: ['ori_jean_charles'],
   };
 
   // Add personal picks here as episodes air.
@@ -454,6 +457,7 @@
     3: 'mike_pinsky',
     4: 'brady_booker',
     5: 'carter_krull',
+    6: 'an_nguyen',
   };
 
   const advantages = {
@@ -479,6 +483,14 @@
       { player: 'carter_krull', type: 'idol', label: 'Immunity Idol' },
       { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
       { player: 'devin_way', type: 'extra-vote', label: 'Extra Vote' },
+    ],
+    6: [
+      // https://www.tvline.com/2300559/survivor-51-recap-episode-6-ori-voted-out/
+      { player: 'carter_krull', type: 'idol', label: 'Immunity Idol' },
+      { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
+      { player: 'devin_way', type: 'extra-vote', label: 'Extra Vote' },
+      // Ori's exit leaves Sharonda as Kristin's only remaining tether.
+      { player: 'kristin_flickinger', type: 'tethered-idol', label: 'Tethered Idol — Sharonda only', title: 'Can only be played on Sharonda. If Sharonda is voted out, it becomes a regular immunity idol.' },
     ],
   };
 
@@ -516,6 +528,13 @@
       { name: 'Maggie / Kilby / Lewis', color: '#f59e0b', members: ['maggie_nestor','danny_kilby','lewis_kelly'] },
       // The remaining OG Savu voting bloc on Dina after Linnea's elimination.
       { name: 'Dina: OG Savu', color: '#34d399', members: ['cristian_chavez','eric_macksoud','sharonda_cox'] },
+    ],
+    6: [
+      // https://dknetwork.draftkings.com/2026/10/28/who-was-voted-out-on-survivor-tonight-episode-6-recap/
+      { name: 'Thien An / Carter / Maggie', color: '#f472b6', members: ['an_nguyen','carter_krull','maggie_nestor'] },
+      { name: 'Helicopter Alliance', color: '#22d3ee', members: ['angelica_loblack','devin_way','sharonda_cox'] },
+      { name: 'Maggie / Kilby / Lewis', color: '#f59e0b', members: ['maggie_nestor','danny_kilby','lewis_kelly'] },
+      // Dina's OG Savu bloc is fractured: Cristian is open to Kilby and Lewis.
     ],
   };
 
@@ -659,6 +678,7 @@
           const badge = document.createElement('span');
           badge.className = `badge badge-${adv.type} visible`;
           badge.textContent = adv.label;
+          if (adv.title) badge.title = adv.title;
           badgesEl.appendChild(badge);
         });
       }
