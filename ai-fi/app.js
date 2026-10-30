@@ -472,6 +472,17 @@ const BOOKS = [
     accent: "#5b6578",
   },
   {
+    id: "moon-is-a-harsh-mistress",
+    title: "The Moon Is a Harsh Mistress",
+    author: "Robert A. Heinlein",
+    readDate: "2026-10-30",
+    series: "moon-is-a-harsh-mistress",
+    seriesOrder: 1,
+    cover: "id:14631258",
+    work: "OL59704W",
+    accent: "#806447",
+  },
+  {
     id: "enders-game",
     title: "Ender’s Game",
     author: "Orson Scott Card",
@@ -599,6 +610,11 @@ const SERIES = {
     author: "Martha Wells",
     description: "A self-hacked security construct would rather watch serials than navigate humans, corporations and inconvenient feelings.",
   },
+  "moon-is-a-harsh-mistress": {
+    name: "The Moon Is a Harsh Mistress",
+    author: "Robert A. Heinlein · Standalone",
+    description: "A self-aware supercomputer helps a lunar colony fight for independence from Earth.",
+  },
   "ender-quintet": {
     name: "The Ender Quintet",
     author: "Orson Scott Card",
@@ -629,6 +645,7 @@ const DEFAULT_RATINGS = {
   "exit-strategy": 8.3,
   "rogue-protocol": 7.9,
   "altered-carbon": 7.8,
+  "moon-is-a-harsh-mistress": 7.5,
   "network-effect": 7.3,
   "redemption-of-time": 7.2,
   "diaspora": 7,
