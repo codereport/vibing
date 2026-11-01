@@ -55,8 +55,8 @@
       "id": "dark-matter",
       "title": "Dark Matter",
       "tvmazeId": 61315,
-      "watching": true,
-      "watchedThrough": 1
+      "watching": false,
+      "watchedThrough": 2
     },
     {
       "id": "neuromancer",
