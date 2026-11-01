@@ -1221,6 +1221,27 @@
           "episodeCount": 6
         }
       ]
+    },
+    "raised-by-wolves": {
+      "tvmazeId": 39013,
+      "status": "Ended",
+      "network": "HBO Max",
+      "url": "https://www.tvmaze.com/shows/39013/raised-by-wolves",
+      "checkedAt": "2026-11-01T02:55:53+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "2020-09-03",
+          "endDate": "2020-10-01",
+          "episodeCount": 10
+        },
+        {
+          "number": 2,
+          "premiereDate": "2022-02-03",
+          "endDate": "2022-03-17",
+          "episodeCount": 8
+        }
+      ]
     }
   }
 }

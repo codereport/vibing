@@ -66,6 +66,8 @@ Seinfeld and Tires start Ready at season 1 with nothing watched.
 
 Nathan for You and The Rehearsal start Ready at season 1 with nothing watched.
 
+Raised by Wolves uses the 2020 HBO Max sci-fi series and starts Ready at season 1 with nothing watched.
+
 On localhost, existing browser progress takes priority over repository defaults. Save it to the repository to share updated progress across devices; published pages always show that committed snapshot.
 
 ## Weekly release updates
