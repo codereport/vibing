@@ -483,6 +483,17 @@ const BOOKS = [
     accent: "#806447",
   },
   {
+    id: "a-scanner-darkly",
+    title: "A Scanner Darkly",
+    author: "Philip K. Dick",
+    readDate: "2026-11-03",
+    series: "a-scanner-darkly",
+    seriesOrder: 1,
+    cover: "id:911131",
+    work: "OL2172433W",
+    accent: "#7d6745",
+  },
+  {
     id: "enders-game",
     title: "Ender’s Game",
     author: "Orson Scott Card",
@@ -1033,6 +1044,12 @@ const SERIES = {
     author: "Robert A. Heinlein · Standalone",
     description: "A self-aware supercomputer helps a lunar colony fight for independence from Earth.",
   },
+  "a-scanner-darkly": {
+    name: "A Scanner Darkly",
+    author: "Philip K. Dick · Standalone",
+    description: "An undercover narcotics agent loses his grip on identity and reality while investigating a destructive drug.",
+    collection: "sci-fi",
+  },
   "ender-quintet": {
     name: "The Ender Quintet",
     author: "Orson Scott Card",
@@ -1095,6 +1112,7 @@ const DEFAULT_RATINGS = {
   "exit-strategy": 8.3,
   "rogue-protocol": 7.9,
   "altered-carbon": 7.8,
+  "a-scanner-darkly": 7.6,
   "moon-is-a-harsh-mistress": 7.5,
   "network-effect": 7.3,
   "redemption-of-time": 7.2,
