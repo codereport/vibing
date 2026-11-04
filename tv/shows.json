@@ -6,7 +6,7 @@
       "title": "The Wire",
       "tvmazeId": 179,
       "watching": true,
-      "watchedThrough": 3
+      "watchedThrough": 4
     },
     {
       "id": "veep",
@@ -85,7 +85,7 @@
       "id": "stick",
       "title": "Stick",
       "tvmazeId": 82227,
-      "watching": false,
+      "watching": true,
       "watchedThrough": 1
     },
     {
