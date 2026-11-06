@@ -374,6 +374,7 @@
   <button class="ep-btn" data-ep="4">Episode 4</button>
   <button class="ep-btn" data-ep="5">Episode 5</button>
   <button class="ep-btn" data-ep="6">Episode 6</button>
+  <button class="ep-btn" data-ep="7">Episode 7</button>
 </nav>
 
 <div class="alliances-legend" id="alliances-legend"></div>
@@ -381,9 +382,9 @@
 <main class="tribes-container" id="tribes-container"></main>
 
 <footer class="legend">
-  Survivor 51: The Open Era &mdash; through Episode 6, October 28, 2026 &middot;
+  Survivor 51: The Open Era &mdash; through Episode 7, November 4, 2026 &middot;
   <a href="https://www.paramountpressexpress.com/cbs-entertainment/shows/survivor/releases/?view=113157-survivor-reveals-the-21-new-castaways-competing-on-the-51st-edition-the-first-in-the-series-new-open-era-with-a-two-hour-season-premiere-on-wednesday">Cast photos: Robert Voets/CBS</a> &middot;
-  <a href="https://www.tvline.com/2300559/survivor-51-recap-episode-6-ori-voted-out/">Episode recap</a>
+  <a href="https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-7-recap/">Episode recap</a>
 </footer>
 
 <script>
@@ -394,7 +395,7 @@
     an_nguyen:           { name: 'Thien An Nguyen',  season: 'Toka',          img: 'an_nguyen.jpg',           elimTag: '' },
     ana_sani:            { name: 'Ana Sani',         season: 'Savu',          img: 'ana_sani.jpg',            elimTag: 'Voted Out — Ep. 2' },
     angelica_loblack:    { name: 'Jelly Loblack',    season: 'Toka',          img: 'angelica_loblack.jpg',    elimTag: '' },
-    brady_booker:        { name: 'Brady Booker',     season: 'Toka',          img: 'brady_booker.jpg',        elimTag: '' },
+    brady_booker:        { name: 'Brady Booker',     season: 'Toka',          img: 'brady_booker.jpg',        elimTag: 'Voted Out — Ep. 7 · First Juror' },
     carter_krull:        { name: 'Carter Krull',     season: 'Savu',          img: 'carter_krull.jpg',        elimTag: '' },
     cristian_chavez:     { name: 'Cristian Chavez',  season: 'Savu',          img: 'cristian_chavez.jpg',     elimTag: '' },
     danny_kilby:         { name: 'Danny Kilby',      season: 'Toka',          img: 'danny_kilby.jpg',         elimTag: '' },
@@ -418,6 +419,7 @@
     Savu:  { color: '#a855f7', label: 'Purple Tribe' },
     Dina:  { color: '#ef4444', label: 'Red Tribe' },
     Exile: { color: '#64748b', label: 'No Starting Tribe' },
+    Tovuto: { color: '#3b82f6', label: 'Merged Tribe' },
   };
 
   const tribesByEpisode = {
@@ -439,6 +441,10 @@
       Savu: ['alexis_levine','angelica_loblack','devin_way','jenna_doore','ori_jean_charles'],
       Dina: ['cristian_chavez','danny_kilby','eric_macksoud','linnea_capobianco','lewis_kelly','sharonda_cox'],
     },
+    7: {
+      // https://survivortribes.com/season/episode/s51-7
+      Tovuto: ['an_nguyen','angelica_loblack','brady_booker','carter_krull','cristian_chavez','danny_kilby','devin_way','eric_macksoud','kristin_flickinger','lewis_kelly','maggie_nestor','mike_pinsky','sharonda_cox'],
+    },
   };
 
   // === GAME DATA ===
@@ -449,6 +455,7 @@
     4: ['jenna_doore'],
     5: ['alexis_levine','linnea_capobianco'],
     6: ['ori_jean_charles'],
+    7: ['brady_booker'],
   };
 
   // Add personal picks here as episodes air.
@@ -458,6 +465,7 @@
     4: 'brady_booker',
     5: 'carter_krull',
     6: 'an_nguyen',
+    7: 'angelica_loblack',
   };
 
   const advantages = {
@@ -491,6 +499,14 @@
       { player: 'devin_way', type: 'extra-vote', label: 'Extra Vote' },
       // Ori's exit leaves Sharonda as Kristin's only remaining tether.
       { player: 'kristin_flickinger', type: 'tethered-idol', label: 'Tethered Idol — Sharonda only', title: 'Can only be played on Sharonda. If Sharonda is voted out, it becomes a regular immunity idol.' },
+    ],
+    7: [
+      // https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-7-recap/
+      { player: 'carter_krull', type: 'idol', label: 'Immunity Idol' },
+      { player: 'angelica_loblack', type: 'idol', label: 'Immunity Idol' },
+      { player: 'devin_way', type: 'extra-vote', label: 'Extra Vote' },
+      // Kristin hands the tethered idol to Sharonda and gives her control of its use.
+      { player: 'sharonda_cox', type: 'tethered-idol', label: 'Tethered Idol — Sharonda only', title: 'Given to Sharonda by Kristin. Can only be played on Sharonda. If Sharonda is voted out, it becomes a regular immunity idol.' },
     ],
   };
 
@@ -535,6 +551,15 @@
       { name: 'Helicopter Alliance', color: '#22d3ee', members: ['angelica_loblack','devin_way','sharonda_cox'] },
       { name: 'Maggie / Kilby / Lewis', color: '#f59e0b', members: ['maggie_nestor','danny_kilby','lewis_kelly'] },
       // Dina's OG Savu bloc is fractured: Cristian is open to Kilby and Lewis.
+    ],
+    7: [
+      // https://www.paramountplus.com/sneak-peak/survivor-season-51-episode-7-recap/
+      // The merge vote splits the Toka bonds; these relationships are not a fixed voting bloc.
+      { name: 'Thien An / Carter / Maggie', color: '#f472b6', members: ['an_nguyen','carter_krull','maggie_nestor'] },
+      { name: 'Helicopter Alliance', color: '#22d3ee', members: ['angelica_loblack','devin_way','sharonda_cox'] },
+      { name: 'Maggie / Kilby / Lewis', color: '#f59e0b', members: ['maggie_nestor','danny_kilby','lewis_kelly'] },
+      { name: 'Kristin & Sharonda', color: '#34d399', members: ['kristin_flickinger','sharonda_cox'] },
+      { name: 'Jelly & Mike', color: '#60a5fa', members: ['angelica_loblack','mike_pinsky'] },
     ],
   };
 
