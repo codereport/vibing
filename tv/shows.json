@@ -106,7 +106,7 @@
       "id": "the-bear",
       "title": "The Bear",
       "tvmazeId": 54198,
-      "watching": false,
+      "watching": true,
       "watchedThrough": 2,
       "note": "To watch: seasons 3 and 4."
     },
@@ -178,7 +178,7 @@
       "id": "extrapolations",
       "title": "Extrapolations",
       "tvmazeId": 58431,
-      "watching": false,
+      "watching": true,
       "watchedThrough": 0
     },
     {
