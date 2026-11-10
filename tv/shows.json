@@ -99,15 +99,15 @@
       "id": "love-is-blind",
       "title": "Love Is Blind",
       "tvmazeId": 46167,
-      "watching": true,
-      "watchedThrough": 10
+      "watching": false,
+      "watchedThrough": 11
     },
     {
       "id": "the-bear",
       "title": "The Bear",
       "tvmazeId": 54198,
       "watching": true,
-      "watchedThrough": 2,
+      "watchedThrough": 3,
       "note": "To watch: seasons 3 and 4."
     },
     {
