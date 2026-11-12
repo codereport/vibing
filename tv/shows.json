@@ -92,8 +92,8 @@
       "id": "visionquest",
       "title": "VisionQuest",
       "tvmazeId": 64950,
-      "watching": true,
-      "watchedThrough": 0
+      "watching": false,
+      "watchedThrough": 1
     },
     {
       "id": "love-is-blind",
@@ -107,7 +107,7 @@
       "title": "The Bear",
       "tvmazeId": 54198,
       "watching": true,
-      "watchedThrough": 3,
+      "watchedThrough": 4,
       "note": "To watch: seasons 3 and 4."
     },
     {
