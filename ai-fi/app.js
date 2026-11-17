@@ -494,6 +494,17 @@ const BOOKS = [
     accent: "#7d6745",
   },
   {
+    id: "flowers-for-algernon",
+    title: "Flowers for Algernon",
+    author: "Daniel Keyes",
+    readDate: "2026-11-17",
+    series: "flowers-for-algernon",
+    seriesOrder: 1,
+    cover: "id:12947700",
+    work: "OL515754W",
+    accent: "#80619a",
+  },
+  {
     id: "enders-game",
     title: "Ender’s Game",
     author: "Orson Scott Card",
@@ -1171,6 +1182,12 @@ const SERIES = {
     description: "An undercover narcotics agent loses his grip on identity and reality while investigating a destructive drug.",
     collection: "sci-fi",
   },
+  "flowers-for-algernon": {
+    name: "Flowers for Algernon",
+    author: "Daniel Keyes · Standalone",
+    description: "An experimental operation transforms Charlie Gordon’s intelligence and his understanding of himself and others.",
+    collection: "sci-fi",
+  },
   "ender-quintet": {
     name: "The Ender Quintet",
     author: "Orson Scott Card",
@@ -1233,6 +1250,7 @@ const DEFAULT_RATINGS = {
   "permutation-city": 9.4,
   "deaths-end": 9.2,
   "prime-intellect": 9.2,
+  "flowers-for-algernon": 9.1,
   "all-these-worlds": 9,
   "daemon": 9,
   "freedom-tm": 9,
