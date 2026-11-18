@@ -90,7 +90,7 @@ test('the catalog includes all 35 unique shows with valid editable progress', ()
 test('Extrapolations starts Ready and follows progress into Watching and Done', () => {
   const config = JSON.parse(readFileSync(new URL('../shows.json', import.meta.url)));
   const releases = JSON.parse(readFileSync(new URL('../releases.json', import.meta.url)));
-  const extrapolations = config.shows.find(show => show.id === 'extrapolations');
+  const extrapolations = { ...config.shows.find(show => show.id === 'extrapolations'), watching: false, watchedThrough: 0 };
   const metadata = releases.shows[extrapolations.id];
   assert.equal(extrapolations.watchedThrough, 0);
   assert.equal(metadata.tvmazeId, extrapolations.tvmazeId);
