@@ -12,7 +12,7 @@
       "id": "veep",
       "title": "Veep",
       "tvmazeId": 142,
-      "watching": false,
+      "watching": true,
       "watchedThrough": 0
     },
     {
@@ -106,8 +106,8 @@
       "id": "the-bear",
       "title": "The Bear",
       "tvmazeId": 54198,
-      "watching": true,
-      "watchedThrough": 4,
+      "watching": false,
+      "watchedThrough": 5,
       "note": "To watch: seasons 3 and 4."
     },
     {
