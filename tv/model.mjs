@@ -21,11 +21,11 @@ export function showState(show, release, today = localDate()) {
 }
 
 export function validProgress(value) {
-  return value && typeof value.watching === 'boolean' && Number.isSafeInteger(value.watchedThrough) && value.watchedThrough >= 0 && value.watchedThrough <= 1000;
+  return value && typeof value.watching === 'boolean' && Number.isSafeInteger(value.watchedThrough) && value.watchedThrough >= 0 && value.watchedThrough <= 1000 && (value.solo === undefined || typeof value.solo === 'boolean');
 }
 
 export function mergedShow(show, saved) {
-  return validProgress(saved) ? { ...show, watching: saved.watching, watchedThrough: saved.watchedThrough } : { ...show };
+  return validProgress(saved) ? { ...show, watching: saved.watching, watchedThrough: saved.watchedThrough, ...(saved.solo === undefined ? {} : { solo: saved.solo }) } : { ...show };
 }
 
 export function seasonBoxes(show, release) {
@@ -64,7 +64,7 @@ export function importedProgress(config, imported) {
       throw new Error('The file contains invalid progress.');
     }
     seen.add(show.id);
-    if (known.has(show.id)) updates[show.id] = { watching: show.watching, watchedThrough: show.watchedThrough };
+    if (known.has(show.id)) updates[show.id] = { watching: show.watching, watchedThrough: show.watchedThrough, ...(show.solo === undefined ? {} : { solo: show.solo }) };
   }
   if (!Object.keys(updates).length) throw new Error('This file has no shows from your watchlist.');
   return updates;

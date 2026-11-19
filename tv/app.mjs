@@ -78,9 +78,19 @@ function entries() {
 }
 
 function makeRow({ show, release, state }) {
-  const row = element('article', `show-row ${state.status}`);
+  const row = element('article', `show-row ${state.status}${show.solo ? ' solo' : ''}`);
   row.dataset.show = show.id;
   const series = element('div', 'series-cell');
+  const titleLine = element('div', 'show-title-line');
+  const soloToggle = element('label', 'solo-toggle');
+  soloToggle.title = `${show.solo ? 'Watching solo' : 'Not marked solo'}${canEditProgress ? ' · Click to toggle' : ''}`;
+  const soloCheckbox = element('input', 'solo-checkbox');
+  soloCheckbox.type = 'checkbox';
+  soloCheckbox.checked = Boolean(show.solo);
+  soloCheckbox.disabled = !canEditProgress;
+  soloCheckbox.setAttribute('aria-label', `Watching solo: ${show.title}`);
+  soloCheckbox.addEventListener('change', () => toggleSolo(show.id));
+  soloToggle.append(soloCheckbox);
   const title = element('h3', 'show-title');
   if (canEditProgress) {
     const titleButton = element('button', 'show-title-button', show.title);
@@ -88,7 +98,9 @@ function makeRow({ show, release, state }) {
     titleButton.addEventListener('click', () => edit(show.id));
     title.append(titleButton);
   } else title.textContent = show.title;
-  series.append(title, element('span', 'show-network', [release?.network, release?.status === 'Ended' ? 'Series ended' : null].filter(Boolean).join(' · ') || 'Release details pending'), element('span', 'sr-only', statusNames[state.status]));
+  titleLine.append(soloToggle, title);
+  if (show.solo) titleLine.append(element('span', 'solo-label', 'Solo'));
+  series.append(titleLine, element('span', 'show-network', [release?.network, release?.status === 'Ended' ? 'Series ended' : null].filter(Boolean).join(' · ') || 'Release details pending'), element('span', 'sr-only', statusNames[state.status]));
 
   const season = element('div', 'season-cell');
   const boxes = element('div', 'season-boxes');
@@ -194,11 +206,22 @@ function setTab(value) {
 
 function updateProgress(id, value) {
   if (!canEditProgress || !config || !validProgress(value) || !config.shows.some(show => show.id === id)) return false;
-  progress[id] = value;
+  progress[id] = { ...progress[id], ...value };
   const saved = persist();
   render();
   $('#progress-status').textContent = 'Local changes · Save to repository to publish';
   return saved;
+}
+
+function toggleSolo(id) {
+  if (!canEditProgress || !config) return;
+  const entry = entries().find(entry => entry.show.id === id);
+  if (!entry) return;
+  const solo = !entry.show.solo;
+  const saved = updateProgress(id, { watching: entry.show.watching, watchedThrough: entry.show.watchedThrough, solo });
+  const row = [...document.querySelectorAll('.show-row')].find(row => row.dataset.show === id);
+  row?.querySelector('.solo-checkbox').focus({ preventScroll: true });
+  notify(`${entry.show.title} · ${solo ? 'Watching solo' : 'Solo cleared'}.${saved ? '' : ' Save to repository or Export to keep your changes.'}`);
 }
 
 function toggleSeason(id, number) {
@@ -341,7 +364,7 @@ $('#import-file').addEventListener('change', async event => {
     if (file.size > 1_000_000) throw new Error('File is too large.');
     const imported = JSON.parse(await file.text());
     const updates = importedProgress(config, imported);
-    progress = { ...progress, ...updates };
+    for (const [id, value] of Object.entries(updates)) progress[id] = { ...progress[id], ...value };
     const saved = persist();
     render();
     $('#progress-status').textContent = 'Local changes · Save to repository to publish';

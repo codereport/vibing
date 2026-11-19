@@ -12,7 +12,7 @@ Open <http://localhost:8766/> (or <http://localhost:8766/tv/>). The server binds
 
 ## Save and publish progress
 
-1. Start the local server above and click season boxes to edit progress. The title opens the full progress editor.
+1. Start the local server above and click season boxes to edit progress. The title opens the full progress editor. Check the circle beside a title to mark it as a solo show.
 2. Click **Save to repository** in the footer. This writes your current progress directly to `tv/shows.json`, preserving show identities, TVmaze IDs, titles, and notes.
 3. Review `git diff -- tv/shows.json` from the repository root, then commit and push normally.
 
@@ -36,6 +36,7 @@ On a published hostname, season boxes and titles are read-only and the import an
 - **Green — Watching:** actively watching the first season after `watchedThrough`.
 - **Yellow — Ready:** the next unwatched season has premiered.
 - **No highlight — Waiting:** caught up, a future premiere, or no date announced yet.
+- **Purple checked circle — Solo:** marked for watching on your own. The title turns purple and shows a **Solo** label; season progress and row status colors still work independently.
 - **Done:** TVmaze says the series has ended and every listed season is finished. An ended series with unwatched seasons stays Active.
 
 Active shows are grouped Watching, Ready, then Waiting. Waiting shows are sorted by premiere date, nearest first, with unannounced dates at the bottom.
@@ -45,6 +46,8 @@ The list has Series, Date, and Seasons columns. Premiere dates sit beside the se
 Each row has up to five season boxes, aligned to the right: **✓ green = done**, **▶ gold = watching**, **○ outlined = not watched**. Until a season is finished, the boxes start at S1–S5; afterward they show the latest five known seasons. Shows with fewer than five seasons display only those seasons. If season metadata is missing, the row falls back to S1–S5 and preserves any recorded progress.
 
 Locally, clicking a box cycles **not watched → watching → done → not watched**. Starting a later season marks all earlier seasons done. Clearing a completed season also clears later progress, so progress always follows watch order. Changes are saved in the browser immediately; use **Save to repository** to write them to disk. Use the title to adjust seasons outside the five visible boxes.
+
+The circle next to each title toggles solo watching on localhost. Solo selections are saved with progress in the browser, JSON exports, imports, and **Save to repository**, and remain visible on the published watchlist. Changing seasons leaves the solo selection in place. Older progress exports without a `solo` field still import and preserve existing solo selections.
 
 Locally, click a show title to set the last season finished and whether you’re watching the next one. Changing the finished season clears the watching checkbox; check it again if you’ve already started the following season. State updates immediately and is saved in local storage. A season becomes Ready on its premiere date using the viewer’s local calendar, including between weekly updates. Release dates describe the original premiere, not availability on a particular Canadian streaming service.
 
@@ -68,6 +71,8 @@ Nathan for You and The Rehearsal start Ready at season 1 with nothing watched.
 
 Raised by Wolves uses the 2020 HBO Max sci-fi series and starts Ready at season 1 with nothing watched.
 
+Cowboy Bebop (1998) uses the [original Japanese anime listing](https://www.tvmaze.com/shows/1121/cowboy-bebop) and starts Ready with its single season unwatched.
+
 On localhost, existing browser progress takes priority over repository defaults. Save it to the repository to share updated progress across devices; published pages always show that committed snapshot.
 
 ## Weekly release updates
@@ -86,7 +91,7 @@ To refresh locally:
 python tv/scripts/update_releases.py
 ```
 
-To add a show, add a unique `id`, `title`, verified `tvmazeId`, `watching`, and `watchedThrough` to `tv/shows.json`, then refresh. `note` is optional and appears in the progress editor. To verify an ID, search `https://api.tvmaze.com/search/shows?q=TITLE` and check the network and original premiere. This avoids confusing remakes and international editions.
+To add a show, add a unique `id`, `title`, verified `tvmazeId`, `watching`, and `watchedThrough` to `tv/shows.json`, then refresh. Optional `solo` is a boolean, defaulting to false; `note` appears in the progress editor. To verify an ID, search `https://api.tvmaze.com/search/shows?q=TITLE` and check the network and original premiere. This avoids confusing remakes and international editions.
 
 ## Checks
 

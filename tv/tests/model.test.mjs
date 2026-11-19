@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { compareEntries, localDate, mergedShow, showState, validProgress } from '../model.mjs';
+import { compareEntries, importedProgress, localDate, mergedShow, showState, validProgress } from '../model.mjs';
 
 const today = '2026-10-19';
 const show = { id: 'example', watching: false, watchedThrough: 1 };
@@ -74,17 +74,59 @@ test('waiting shows sort by the nearest premiere, with unknown dates last', () =
   assert.deepEqual(unsorted.toSorted(compareEntries).map(e => e.show.id), ['watching', 'ready', 'near', 'same-date', 'far', 'unknown-a', 'unknown-b']);
 });
 
-test('the catalog includes all 35 unique shows with valid editable progress', () => {
+test('the catalog includes all 36 unique shows with valid editable progress', () => {
   const config = JSON.parse(readFileSync(new URL('../shows.json', import.meta.url)));
-  assert.equal(config.shows.length, 35);
-  assert.equal(new Set(config.shows.map(show => show.id)).size, 35);
-  assert.equal(new Set(config.shows.map(show => show.tvmazeId)).size, 35);
+  assert.equal(config.shows.length, 36);
+  assert.equal(new Set(config.shows.map(show => show.id)).size, 36);
+  assert.equal(new Set(config.shows.map(show => show.tvmazeId)).size, 36);
   assert.ok(config.shows.every(validProgress));
   const bear = { ...config.shows.find(show => show.id === 'the-bear'), watchedThrough: 2, watching: false };
   const releases = JSON.parse(readFileSync(new URL('../releases.json', import.meta.url)));
   assert.equal(showState(bear, releases.shows[bear.id], today).status, 'ready');
   assert.equal(showState(bear, releases.shows[bear.id], today).season, 3);
   assert.equal(showState({ ...bear, watchedThrough: 3 }, releases.shows[bear.id], today).season, 4);
+});
+
+test('solo selections merge independently of season progress and accept legacy progress', () => {
+  const solo = { ...show, solo: true };
+  const legacy = { watching: true, watchedThrough: 2 };
+  assert.deepEqual(mergedShow(solo, legacy), { ...solo, ...legacy });
+  assert.deepEqual(mergedShow(solo, { ...legacy, solo: false }), { ...solo, ...legacy, solo: false });
+  for (const solo of [true, false]) {
+    const progress = { ...legacy, solo };
+    assert.ok(validProgress(progress));
+    assert.equal(mergedShow(show, progress).solo, solo);
+    assert.deepEqual(showState({ ...show, solo }, release, today), showState(show, release, today));
+  }
+  for (const solo of ['true', null, 0, {}]) {
+    const invalid = { ...legacy, solo };
+    assert.ok(!validProgress(invalid));
+    assert.deepEqual(mergedShow(show, invalid), show);
+  }
+});
+
+test('imports accept solo and legacy progress while ignoring catalog metadata', () => {
+  const config = { version: 1, shows: [show] };
+  for (const fields of [{}, { solo: true }, { solo: false }]) {
+    const imported = { ...show, ...fields, title: 'Forged', tvmazeId: 99 };
+    assert.deepEqual(importedProgress(config, { version: 1, shows: [imported] }), {
+      [show.id]: { watching: show.watching, watchedThrough: show.watchedThrough, ...fields },
+    });
+  }
+  assert.throws(() => importedProgress(config, { version: 1, shows: [{ ...show, solo: 'yes' }] }), /invalid progress/);
+});
+
+test('Cowboy Bebop uses the original 1998 anime and follows its single season into Done', () => {
+  const config = JSON.parse(readFileSync(new URL('../shows.json', import.meta.url)));
+  const releases = JSON.parse(readFileSync(new URL('../releases.json', import.meta.url)));
+  const bebop = config.shows.find(show => show.id === 'cowboy-bebop');
+  const metadata = releases.shows[bebop.id];
+  assert.equal(bebop.tvmazeId, 1121);
+  assert.equal(metadata.tvmazeId, bebop.tvmazeId);
+  assert.equal(metadata.seasons.length, 1);
+  assert.match(metadata.seasons[0].premiereDate, /^1998-/);
+  assert.equal(showState(bebop, metadata, today).status, 'ready');
+  assert.equal(showState({ ...bebop, watchedThrough: 1 }, metadata, today).status, 'done');
 });
 
 test('Extrapolations starts Ready and follows progress into Watching and Done', () => {

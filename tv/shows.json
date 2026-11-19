@@ -86,14 +86,16 @@
       "title": "Stick",
       "tvmazeId": 82227,
       "watching": true,
-      "watchedThrough": 1
+      "watchedThrough": 1,
+      "solo": true
     },
     {
       "id": "visionquest",
       "title": "VisionQuest",
       "tvmazeId": 64950,
       "watching": false,
-      "watchedThrough": 1
+      "watchedThrough": 1,
+      "solo": true
     },
     {
       "id": "love-is-blind",
@@ -172,14 +174,16 @@
       "tvmazeId": 43031,
       "seasonLimit": 5,
       "watching": false,
-      "watchedThrough": 4
+      "watchedThrough": 4,
+      "solo": true
     },
     {
       "id": "extrapolations",
       "title": "Extrapolations",
       "tvmazeId": 58431,
       "watching": true,
-      "watchedThrough": 0
+      "watchedThrough": 0,
+      "solo": true
     },
     {
       "id": "the-capture",
@@ -193,14 +197,16 @@
       "title": "The Day of the Jackal",
       "tvmazeId": 64977,
       "watching": false,
-      "watchedThrough": 1
+      "watchedThrough": 1,
+      "solo": true
     },
     {
       "id": "the-agency",
       "title": "The Agency",
       "tvmazeId": 66840,
       "watching": false,
-      "watchedThrough": 1
+      "watchedThrough": 1,
+      "solo": true
     },
     {
       "id": "ahsoka",
@@ -214,7 +220,8 @@
       "title": "Westworld",
       "tvmazeId": 1371,
       "watching": false,
-      "watchedThrough": 3
+      "watchedThrough": 3,
+      "solo": true
     },
     {
       "id": "seinfeld",
@@ -235,19 +242,28 @@
       "title": "Nathan for You",
       "tvmazeId": 3136,
       "watching": false,
-      "watchedThrough": 0
+      "watchedThrough": 0,
+      "solo": true
     },
     {
       "id": "the-rehearsal",
       "title": "The Rehearsal",
       "tvmazeId": 56116,
       "watching": false,
-      "watchedThrough": 0
+      "watchedThrough": 0,
+      "solo": true
     },
     {
       "id": "raised-by-wolves",
       "title": "Raised by Wolves",
       "tvmazeId": 39013,
+      "watching": false,
+      "watchedThrough": 0
+    },
+    {
+      "id": "cowboy-bebop",
+      "title": "Cowboy Bebop (1998)",
+      "tvmazeId": 1121,
       "watching": false,
       "watchedThrough": 0
     }

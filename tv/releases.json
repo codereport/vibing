@@ -1242,6 +1242,21 @@
           "episodeCount": 8
         }
       ]
+    },
+    "cowboy-bebop": {
+      "tvmazeId": 1121,
+      "status": "Ended",
+      "network": "WOWOW",
+      "url": "https://www.tvmaze.com/shows/1121/cowboy-bebop",
+      "checkedAt": "2026-11-19T12:53:35+00:00",
+      "seasons": [
+        {
+          "number": 1,
+          "premiereDate": "1998-10-24",
+          "endDate": "2001-09-01",
+          "episodeCount": 26
+        }
+      ]
     }
   }
 }

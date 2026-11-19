@@ -12,6 +12,7 @@
   --green-ink: #b5d691;
   --yellow: #302a19;
   --yellow-ink: #e6ca7c;
+  --solo-ink: #c9b5f3;
   font-family: 'DM Sans', sans-serif;
   color: var(--ink);
   background: var(--paper);
@@ -49,16 +50,27 @@ a { color: inherit; text-underline-offset: 3px; }
 .watching-dot { background: #a4c97c; }
 .ready-dot { background: #dcbb65; }
 .waiting-dot { background: transparent; border: 1px solid #a0aa96; }
+.solo-dot { display: inline-grid; place-items: center; width: 12px; height: 12px; background: var(--solo-ink); color: #241738; font-size: 8px; font-style: normal; line-height: 1; }
 .list-heading, .show-row { display: grid; grid-template-columns: minmax(0, 1fr) 115px 184px; gap: 10px; align-items: center; }
 .list-heading { padding: 0 12px 9px 15px; font-size: 8px; letter-spacing: 1.3px; color: var(--muted); }
 .show-list { display: flex; flex-direction: column; gap: 4px; }
 .show-row { padding: 6px 10px 6px 14px; min-height: 48px; border-radius: 5px; border: 1px solid var(--line); border-left: 3px solid var(--line); background: transparent; }
 .show-row.watching { background: var(--green); border-color: #32462a; border-left-color: #9dbf75; }
 .show-row.ready { background: var(--yellow); border-color: #4b4024; border-left-color: #c9a74f; }
+.series-cell { min-width: 0; }
+.show-title-line { display: flex; align-items: center; gap: 6px; }
+.solo-toggle { display: grid; place-items: center; flex-shrink: 0; width: 24px; height: 24px; margin: -4px 0 -4px -4px; cursor: pointer; }
+.solo-checkbox { appearance: none; display: grid; place-items: center; width: 16px; height: 16px; margin: 0; border: 1px solid #87947a; border-radius: 50%; background: var(--paper); color: #241738; cursor: inherit; }
+.solo-checkbox:checked { border-color: var(--solo-ink); background: var(--solo-ink); }
+.solo-checkbox:checked::after { content: ''; width: 4px; height: 7px; margin-top: -2px; border: solid currentColor; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.solo-toggle:has(:disabled) { cursor: default; }
+.solo-checkbox:not(:disabled):hover { border-color: var(--solo-ink); box-shadow: 0 0 0 3px #c9b5f319; }
+.show-row.solo .show-title { color: var(--solo-ink); }
+.solo-label { flex-shrink: 0; border: 1px solid #c9b5f345; border-radius: 4px; padding: 1px 4px; color: var(--solo-ink); background: #c9b5f312; font-size: 8px; line-height: 1.5; }
 .show-title { font-size: 12px; font-weight: 600; line-height: 1.35; margin: 0; overflow-wrap: anywhere; }
 .show-title-button { text-align: left; background: transparent; border: 0; padding: 0; font-weight: inherit; }
 .show-title-button:hover { text-decoration: underline; text-underline-offset: 3px; }
-.show-network { display: block; color: var(--muted); font-size: 9px; margin-top: 2px; line-height: 1.3; }
+.show-network { display: block; color: var(--muted); font-size: 9px; margin-top: 2px; margin-left: 26px; line-height: 1.3; }
 .season-cell { min-width: 0; text-align: right; }
 .season-heading { text-align: right; }
 .season-boxes { display: flex; justify-content: flex-end; gap: 4px; }

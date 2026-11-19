@@ -62,6 +62,24 @@ test('repository imports change only progress for matching shows and preserve ca
   });
 });
 
+test('repository saves detect solo-only changes, preserve solo on legacy imports, and allow clearing it', async t => {
+  const { configPath } = await fixture(t);
+  const soloOnly = { version: 1, shows: [{ ...config.shows[0], solo: true }] };
+  assert.deepEqual(await applyProgress(soloOnly, { configPath }), { count: 1, changed: true });
+  assert.deepEqual(JSON.parse(await readFile(configPath, 'utf8')), {
+    ...config, shows: [{ ...config.shows[0], solo: true }, config.shows[1]],
+  });
+  await applyProgress(payload(), { configPath });
+  const legacyResult = JSON.parse(await readFile(configPath, 'utf8')).shows[0];
+  assert.equal(legacyResult.solo, true);
+  assert.equal(legacyResult.watchedThrough, 3);
+  const clearSolo = payload();
+  clearSolo.shows[0].solo = false;
+  assert.deepEqual(await applyProgress(clearSolo, { configPath }), { count: 1, changed: true });
+  assert.equal(JSON.parse(await readFile(configPath, 'utf8')).shows[0].solo, false);
+  assert.deepEqual(await applyProgress(clearSolo, { configPath }), { count: 1, changed: false });
+});
+
 test('validation rejects invalid exports atomically and leaves no temporary files', async t => {
   const { root, configPath, source } = await fixture(t);
   for (const imported of [
@@ -69,6 +87,7 @@ test('validation rejects invalid exports atomically and leaves no temporary file
     payload('unknown'), payload('first', -1), payload('first', 1.5), payload('first', 1001),
     { version: 1, shows: [...payload().shows, ...payload().shows] },
     { version: 1, shows: [{ id: 'first', watching: 'yes', watchedThrough: 2 }] },
+    { version: 1, shows: [{ id: 'first', watching: false, watchedThrough: 2, solo: 'yes' }] },
     { version: 1, shows: [...payload().shows, null] },
   ]) {
     await assert.rejects(applyProgress(imported, { configPath }));
@@ -120,7 +139,9 @@ test('the local server serves static JSON and modules at / and /tv/ without expo
 test('the local save API persists progress, accepts /tv/, and recovers after invalid imports', async t => {
   const { configPath, post, call } = await localServer(t);
   assert.equal((await post(null)).status, 400);
-  const saved = await post(payload());
+  const soloProgress = payload();
+  soloProgress.shows[0].solo = true;
+  const saved = await post(soloProgress);
   assert.equal(saved.status, 200);
   assert.match(JSON.parse(saved.body).message, /Saved progress/);
   const second = await call('/tv/api/progress', {
@@ -129,6 +150,7 @@ test('the local save API persists progress, accepts /tv/, and recovers after inv
   assert.equal(second.status, 200);
   const updated = JSON.parse(await readFile(configPath, 'utf8'));
   assert.equal(updated.shows[0].watchedThrough, 3);
+  assert.equal(updated.shows[0].solo, true);
   assert.equal(updated.shows[1].watchedThrough, 4);
   assert.equal(updated.shows[0].title, config.shows[0].title);
 });

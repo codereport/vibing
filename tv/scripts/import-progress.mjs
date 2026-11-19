@@ -12,7 +12,7 @@ export async function applyProgress(payload, { configPath = defaultConfigPath, c
   const updates = importedProgress(config, payload);
   const shows = config.shows.map(show => mergedShow(show, updates[show.id]));
   const count = Object.keys(updates).length;
-  const changed = shows.some((show, index) => show.watching !== config.shows[index].watching || show.watchedThrough !== config.shows[index].watchedThrough);
+  const changed = shows.some((show, index) => show.watching !== config.shows[index].watching || show.watchedThrough !== config.shows[index].watchedThrough || show.solo !== config.shows[index].solo);
   if (changed && !checkOnly) {
     const temporary = `${configPath}.${randomUUID()}.tmp`;
     try {
