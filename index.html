@@ -35,7 +35,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -55,8 +55,9 @@
             font-size: 1.2em;
             color: #00cc00;
         }
-
-
+        .projects-scroll {
+            overflow-x: auto;
+        }
 
         .projects-table {
             width: 100%;
@@ -76,18 +77,36 @@
 
         .projects-table td {
             padding: 15px 20px;
+            vertical-align: middle;
         }
 
         .project-name {
             font-size: 1.2em;
             color: #00ff00;
             font-weight: bold;
-            min-width: 250px;
+            width: 1%;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5em;
+            color: inherit;
+            text-decoration: none;
+            line-height: 1.4;
+        }
+
+        .project-icon {
+            flex: 0 0 1.5em;
+            text-align: center;
         }
 
         .project-desc {
             color: #00cc00;
             line-height: 1.4;
+            white-space: nowrap;
         }
 
         .footer {
@@ -104,16 +123,16 @@
             }
 
             .projects-table td {
-                padding: 10px 15px;
+                padding: 10px 8px;
             }
 
             .project-name {
-                font-size: 1.1em;
-                min-width: 200px;
+                font-size: clamp(1rem, 5vw, 1.1rem);
+                min-width: 0;
             }
 
             .project-desc {
-                font-size: 0.9em;
+                display: none;
             }
         }
     </style>
@@ -127,101 +146,94 @@
             <h1>VIBING PROJECTS</h1>
         </div>
 
+        <div class="projects-scroll">
         <table class="projects-table">
-            <tr onclick="window.location.href='pathanrahan/'">
-                <td class="project-name"><a href="pathanrahan/" style="color: inherit; text-decoration: none;">∑ ON_NOTATION</a></td>
-                <td class="project-desc">Pat Hanrahan’s talk, Stanford DSL courses, lecture slides, and readings</td>
-            </tr>
-            <tr onclick="window.location.href='ai-fi/index.html'">
-                <td class="project-name">📚 AI_FI_CANON</td>
+            <tr data-updated="2026-11-17T18:22:58Z" data-project-path="ai-fi" onclick="window.location.href='ai-fi/index.html'">
+                <td class="project-name"><a class="project-link" href="ai-fi/index.html"><span class="project-icon" aria-hidden="true">📚</span><span class="project-title">AI_FI_CANON</span></a></td>
                 <td class="project-desc">Personal ranking of artificial minds, virtual worlds, and posthuman futures</td>
             </tr>
-
-            <tr onclick="window.location.href='ai_polls/poll_results_visualization.html'">
-                <td class="project-name">📊 AI_POLLS_ANALYZER</td>
-                <td class="project-desc">Interactive AI polling data visualization</td>
-            </tr>
-
-            <tr onclick="window.location.href='wigglypaint/wigglypaint_top10.html'">
-                <td class="project-name">🎨 WIGGLYPAINT_SCRAPER</td>
-                <td class="project-desc">Community GIF analysis and top posts aggregator</td>
-            </tr>
-
-            <tr onclick="window.location.href='https://codereport.github.io/cuda-x-docs/'">
-                <td class="project-name">⚡️ CUDA_ECOSYSTEM_DOCS</td>
-                <td class="project-desc">Interactive CUDA library grid and ecosystem documentation</td>
-            </tr>
-
-            
-            <tr onclick="window.location.href='ohip_billing/ohip_lookup.html'">
-                <td class="project-name">🩺 OHIP_BILLING_LOOKUP</td>
-                <td class="project-desc">Medical billing code lookup</td>
-            </tr>
-
-            <tr onclick="window.location.href='leetgpu_stats/stats.html'">
-                <td class="project-name">🚀 LEETGPU_STATS</td>
-                <td class="project-desc">GPU performance benchmarking and statistics analysis</td>
-            </tr>
-
-            <tr onclick="window.location.href='github_search/index.html'">
-                <td class="project-name">🔍 GITHUB_SEARCH</td>
-                <td class="project-desc">NVIDIA Thrust repository analysis and exploration hub</td>
-            </tr>
-
-            
-            <tr onclick="window.location.href='adsp_rankings/index.html'">
-                <td class="project-name">📈 ADSP_RANKINGS</td>
-                <td class="project-desc">ADSP rankings dashboard</td>
-            </tr>
-            <tr onclick="window.location.href='mkwii_random/index.html'">
-                <td class="project-name">🏁 MKWII_RANDOM</td>
-                <td class="project-desc">Mario Kart Wii Grand Prix randomizer for best-of-3 series</td>
-            </tr>
-            <tr onclick="window.location.href='https://codereport.github.io/cs50/'">
-                <td class="project-name">🏃 CITYSTRIDES_LEADERBOARD</td>
+            <tr data-updated="2026-11-17T18:02:05Z" data-project-repo="codereport/cs50" onclick="window.location.href='https://codereport.github.io/cs50/'">
+                <td class="project-name"><a class="project-link" href="https://codereport.github.io/cs50/"><span class="project-icon" aria-hidden="true">🏃</span><span class="project-title">CITYSTRIDES_LEADERBOARD</span></a></td>
                 <td class="project-desc">Top 50 CityStrides runners with historical progress tracking</td>
             </tr>
-            <tr onclick="window.location.href='ndc_ac/title3.html'">
-                <td class="project-name">🧩 ALGORITHMS_&amp;_COMBINATORS</td>
-                <td class="project-desc">NDC presentation on algorithms and combinators</td>
-            </tr>
-            <tr onclick="window.location.href='enter_the_matrix_yow/index.html'">
-                <td class="project-name">🕶️ ENTER_THE_MATRIX</td>
-                <td class="project-desc">YOW 2025 presentation title page with matrix rain effect</td>
-            </tr>
-            <tr onclick="window.location.href='https://conorshakory.com'">
-                <td class="project-name">🔗 LINKTREE_PROFILE</td>
+            <tr data-updated="2026-11-16T15:46:37Z" data-project-repo="codereport/bio" onclick="window.location.href='https://conorshakory.com'">
+                <td class="project-name"><a class="project-link" href="https://conorshakory.com"><span class="project-icon" aria-hidden="true">🔗</span><span class="project-title">LINKTREE_PROFILE</span></a></td>
                 <td class="project-desc">Personal profile and social links hub</td>
             </tr>
-            <tr onclick="window.location.href='dyalog20_behind/starwars.html'">
-                <td class="project-name">⍛ DYALOG_20_CRAWL</td>
-                <td class="project-desc">Star Wars style opening crawl for Dyalog 20.0 announcement</td>
-            </tr>
-            <tr onclick="window.location.href='https://htmlpreview.github.io/?https://github.com/codereport/scrabble/blob/main/scrabble/dictionary/one_hooks/one_hook_words.html'">
-                <td class="project-name">🔤 SCRABBLE_ONE_HOOKS</td>
-                <td class="project-desc">Dictionary of one-hook Scrabble words</td>
-            </tr>
-            <tr onclick="window.location.href='https://combinatorylogic.com/graphic.html'">
-                <td class="project-name">⚙️ COMBINATOR_GRAPHIC</td>
-                <td class="project-desc">Combinators as operators comparison across array languages</td>
-            </tr>
-            <tr onclick="window.location.href='https://codereport.github.io/array-language-timeline/'">
-                <td class="project-name">📅 ARRAY_LANGUAGE_TIMELINE</td>
-                <td class="project-desc">Timeline of array language releases and podcast appearances</td>
-            </tr>
-            <tr onclick="window.location.href='survivor/50/index.html'">
-                <td class="project-name">🏝️ SURVIVOR_50</td>
-                <td class="project-desc">Survivor season 50 pool tracker and rankings</td>
-            </tr>
-            <tr onclick="window.location.href='survivor/51/index.html'">
-                <td class="project-name">🏝️ SURVIVOR_51</td>
+            <tr data-updated="2026-11-12T21:47:11Z" data-project-path="survivor/51" onclick="window.location.href='survivor/51/index.html'">
+                <td class="project-name"><a class="project-link" href="survivor/51/index.html"><span class="project-icon" aria-hidden="true">🏝️</span><span class="project-title">SURVIVOR_51</span></a></td>
                 <td class="project-desc">Survivor season 51 episode tracker</td>
             </tr>
-            <tr onclick="window.location.href='apl_dojo/index.html'">
-                <td class="project-name">⍋ APL_DOJO</td>
+            <tr data-updated="2026-10-25T12:18:28Z" data-project-repo="codereport/cl" data-project-path="graphic.html" onclick="window.location.href='https://combinatorylogic.com/graphic.html'">
+                <td class="project-name"><a class="project-link" href="https://combinatorylogic.com/graphic.html"><span class="project-icon" aria-hidden="true">⚙️</span><span class="project-title">COMBINATOR_GRAPHIC</span></a></td>
+                <td class="project-desc">Combinators as operators comparison across array languages</td>
+            </tr>
+            <tr data-updated="2026-10-20T13:36:26Z" data-project-path="pathanrahan" onclick="window.location.href='pathanrahan/'">
+                <td class="project-name"><a class="project-link" href="pathanrahan/"><span class="project-icon" aria-hidden="true">∑</span><span class="project-title">ON_NOTATION</span></a></td>
+                <td class="project-desc">Pat Hanrahan’s talk, Stanford DSL courses, lecture slides, and readings</td>
+            </tr>
+            <tr data-updated="2026-09-29T00:16:08Z" data-project-path="survivor/50" onclick="window.location.href='survivor/50/index.html'">
+                <td class="project-name"><a class="project-link" href="survivor/50/index.html"><span class="project-icon" aria-hidden="true">🏝️</span><span class="project-title">SURVIVOR_50</span></a></td>
+                <td class="project-desc">Survivor season 50 pool tracker and rankings</td>
+            </tr>
+            <tr data-updated="2026-08-26T16:53:27Z" data-project-path="github_search" onclick="window.location.href='github_search/index.html'">
+                <td class="project-name"><a class="project-link" href="github_search/index.html"><span class="project-icon" aria-hidden="true">🔍</span><span class="project-title">GITHUB_SEARCH</span></a></td>
+                <td class="project-desc">NVIDIA Thrust repository analysis and exploration hub</td>
+            </tr>
+            <tr data-updated="2026-05-09T21:50:39Z" data-project-path="ndc_ac" onclick="window.location.href='ndc_ac/title3.html'">
+                <td class="project-name"><a class="project-link" href="ndc_ac/title3.html"><span class="project-icon" aria-hidden="true">🧩</span><span class="project-title">ALGORITHMS_&amp;_COMBINATORS</span></a></td>
+                <td class="project-desc">NDC presentation on algorithms and combinators</td>
+            </tr>
+            <tr data-updated="2026-04-06T17:08:31Z" data-project-path="apl_dojo" onclick="window.location.href='apl_dojo/index.html'">
+                <td class="project-name"><a class="project-link" href="apl_dojo/index.html"><span class="project-icon" aria-hidden="true">⍋</span><span class="project-title">APL_DOJO</span></a></td>
                 <td class="project-desc">Interactive array language playground and learning environment</td>
             </tr>
+            <tr data-updated="2026-02-17T12:19:08Z" data-project-path="mkwii_random" onclick="window.location.href='mkwii_random/index.html'">
+                <td class="project-name"><a class="project-link" href="mkwii_random/index.html"><span class="project-icon" aria-hidden="true">🏁</span><span class="project-title">MKWII_RANDOM</span></a></td>
+                <td class="project-desc">Mario Kart Wii Grand Prix randomizer for best-of-3 series</td>
+            </tr>
+            <tr data-updated="2026-01-25T22:56:09Z" data-project-repo="codereport/array-language-timeline" onclick="window.location.href='https://codereport.github.io/array-language-timeline/'">
+                <td class="project-name"><a class="project-link" href="https://codereport.github.io/array-language-timeline/"><span class="project-icon" aria-hidden="true">📅</span><span class="project-title">ARRAY_LANGUAGE_TIMELINE</span></a></td>
+                <td class="project-desc">Timeline of array language releases and podcast appearances</td>
+            </tr>
+            <tr data-updated="2025-12-30T15:27:14Z" data-project-repo="codereport/scrabble" data-project-path="scrabble/dictionary/one_hooks/one_hook_words.html" onclick="window.location.href='https://htmlpreview.github.io/?https://github.com/codereport/scrabble/blob/main/scrabble/dictionary/one_hooks/one_hook_words.html'">
+                <td class="project-name"><a class="project-link" href="https://htmlpreview.github.io/?https://github.com/codereport/scrabble/blob/main/scrabble/dictionary/one_hooks/one_hook_words.html"><span class="project-icon" aria-hidden="true">🔤</span><span class="project-title">SCRABBLE_ONE_HOOKS</span></a></td>
+                <td class="project-desc">Dictionary of one-hook Scrabble words</td>
+            </tr>
+            <tr data-updated="2025-12-19T12:40:52Z" data-project-path="enter_the_matrix_yow" onclick="window.location.href='enter_the_matrix_yow/index.html'">
+                <td class="project-name"><a class="project-link" href="enter_the_matrix_yow/index.html"><span class="project-icon" aria-hidden="true">🕶️</span><span class="project-title">ENTER_THE_MATRIX</span></a></td>
+                <td class="project-desc">YOW 2025 presentation title page with matrix rain effect</td>
+            </tr>
+            <tr data-updated="2025-12-19T12:13:49Z" data-project-path="dyalog20_behind" onclick="window.location.href='dyalog20_behind/starwars.html'">
+                <td class="project-name"><a class="project-link" href="dyalog20_behind/starwars.html"><span class="project-icon" aria-hidden="true">⍛</span><span class="project-title">DYALOG_20_CRAWL</span></a></td>
+                <td class="project-desc">Star Wars style opening crawl for Dyalog 20.0 announcement</td>
+            </tr>
+            <tr data-updated="2025-09-19T21:35:12Z" data-project-path="adsp_rankings" onclick="window.location.href='adsp_rankings/index.html'">
+                <td class="project-name"><a class="project-link" href="adsp_rankings/index.html"><span class="project-icon" aria-hidden="true">📈</span><span class="project-title">ADSP_RANKINGS</span></a></td>
+                <td class="project-desc">ADSP rankings dashboard</td>
+            </tr>
+            <tr data-updated="2025-07-23T20:56:39Z" data-project-repo="codereport/cuda-x-docs" onclick="window.location.href='https://codereport.github.io/cuda-x-docs/'">
+                <td class="project-name"><a class="project-link" href="https://codereport.github.io/cuda-x-docs/"><span class="project-icon" aria-hidden="true">⚡️</span><span class="project-title">CUDA_ECOSYSTEM_DOCS</span></a></td>
+                <td class="project-desc">Interactive CUDA library grid and ecosystem documentation</td>
+            </tr>
+            <tr data-updated="2025-07-07T20:01:49Z" data-project-path="leetgpu_stats" onclick="window.location.href='leetgpu_stats/stats.html'">
+                <td class="project-name"><a class="project-link" href="leetgpu_stats/stats.html"><span class="project-icon" aria-hidden="true">🚀</span><span class="project-title">LEETGPU_STATS</span></a></td>
+                <td class="project-desc">GPU performance benchmarking and statistics analysis</td>
+            </tr>
+            <tr data-updated="2025-07-02T03:31:49Z" data-project-path="ohip_billing" onclick="window.location.href='ohip_billing/ohip_lookup.html'">
+                <td class="project-name"><a class="project-link" href="ohip_billing/ohip_lookup.html"><span class="project-icon" aria-hidden="true">🩺</span><span class="project-title">OHIP_BILLING_LOOKUP</span></a></td>
+                <td class="project-desc">Medical billing code lookup</td>
+            </tr>
+            <tr data-updated="2025-07-01T16:24:39Z" data-project-path="ai_polls" onclick="window.location.href='ai_polls/poll_results_visualization.html'">
+                <td class="project-name"><a class="project-link" href="ai_polls/poll_results_visualization.html"><span class="project-icon" aria-hidden="true">📊</span><span class="project-title">AI_POLLS_ANALYZER</span></a></td>
+                <td class="project-desc">Interactive AI polling data visualization</td>
+            </tr>
+            <tr data-updated="2025-07-01T16:23:56Z" data-project-path="wigglypaint" onclick="window.location.href='wigglypaint/wigglypaint_top10.html'">
+                <td class="project-name"><a class="project-link" href="wigglypaint/wigglypaint_top10.html"><span class="project-icon" aria-hidden="true">🎨</span><span class="project-title">WIGGLYPAINT_SCRAPER</span></a></td>
+                <td class="project-desc">Community GIF analysis and top posts aggregator</td>
+            </tr>
         </table>
+        </div>
 
         <div class="footer">
             <div>VIBING PROJECTS v2.1.0 | ACCESS GRANTED</div>
