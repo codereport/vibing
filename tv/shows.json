@@ -42,7 +42,8 @@
       "title": "Stranger Things",
       "tvmazeId": 2993,
       "watching": false,
-      "watchedThrough": 4
+      "watchedThrough": 4,
+      "solo": true
     },
     {
       "id": "the-altruists",
