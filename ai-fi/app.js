@@ -505,6 +505,17 @@ const BOOKS = [
     accent: "#80619a",
   },
   {
+    id: "dark-matter",
+    title: "Dark Matter",
+    author: "Blake Crouch",
+    readDate: "2026-11-20",
+    series: "dark-matter",
+    seriesOrder: 1,
+    cover: "id:7436634",
+    work: "OL17358795W",
+    accent: "#b34b3f",
+  },
+  {
     id: "enders-game",
     title: "Ender’s Game",
     author: "Orson Scott Card",
@@ -1188,6 +1199,12 @@ const SERIES = {
     description: "An experimental operation transforms Charlie Gordon’s intelligence and his understanding of himself and others.",
     collection: "sci-fi",
   },
+  "dark-matter": {
+    name: "Dark Matter",
+    author: "Blake Crouch · Standalone",
+    description: "A physicist is torn from the life he knows and searches alternate realities for a way back to his family.",
+    collection: "sci-fi",
+  },
   "ender-quintet": {
     name: "The Ender Quintet",
     author: "Orson Scott Card",
@@ -1260,6 +1277,7 @@ const DEFAULT_RATINGS = {
   "not-till-lost": 8.8,
   "memory-called-empire": 8.6,
   "all-systems-red": 8.5,
+  "dark-matter": 8.5,
   "artificial-condition": 8.4,
   "exit-strategy": 8.3,
   "rogue-protocol": 7.9,
