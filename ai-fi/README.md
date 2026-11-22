@@ -2,7 +2,9 @@
 
 The site keeps edits in browser `localStorage` so ratings can be changed without a backend. Those local values are not part of the Git repository until they are exported and applied.
 
-Click the **AI-FI / SCI-FI** logo or press **T** to toggle collections while keeping the current view. SCI-FI includes every AI-FI book plus the wider science-fiction shelf: **The Ender Quintet**, **The Shadow Quintet**, **Red Rising**, **Mars Trilogy**, **The Hainish Cycle** and the standalones **A Scanner Darkly**, **Flowers for Algernon** and **Dark Matter**. **Revelation Space**, **Imperial Radch Trilogy**, **Hyperion Cantos** and **The Culture Series** appear in both collections. In **By series**, click an unread book to add a finish date and rating. The selected collection stays in the URL across reloads; ratings and exports always cover both collections.
+On reload, saved repository scores fill gaps in older browser snapshots. Local scores take precedence, and explicitly cleared ratings stay cleared.
+
+Click the **AI-FI / SCI-FI** logo or press **T** to toggle collections while keeping the current view. SCI-FI includes every AI-FI book plus the wider science-fiction shelf: **The Ender Quintet**, **The Shadow Quintet**, **Red Rising**, **Mars Trilogy**, **The Hainish Cycle** and the standalones **A Scanner Darkly**, **Flowers for Algernon**, **Dark Matter**, **The Time Machine**, **The War of the Worlds** and **The War in the Air**. **Revelation Space**, **Imperial Radch Trilogy**, **Hyperion Cantos** and **The Culture Series** appear in both collections. In **By series**, click an unread book to add a finish date and rating. The selected collection stays in the URL across reloads; ratings and exports always cover both collections.
 
 The six new series add 38 unread books in book publication order. Revelation Space includes its eight novels and two story collections, with *The Prefect* also known as *Aurora Rising*. Hainish includes the seven novels and *Four Ways to Forgiveness*; the Culture includes its nine novels and *The State of the Art*. Imperial Radch and Mars contain their three trilogy volumes, and Hyperion contains all four novels.
 

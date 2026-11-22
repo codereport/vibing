@@ -516,6 +516,39 @@ const BOOKS = [
     accent: "#b34b3f",
   },
   {
+    id: "time-machine",
+    title: "The Time Machine",
+    author: "H. G. Wells",
+    readDate: "2026-11-22",
+    series: "time-machine",
+    seriesOrder: 1,
+    cover: "id:9009316",
+    work: "OL52267W",
+    accent: "#77735b",
+  },
+  {
+    id: "war-of-the-worlds",
+    title: "The War of the Worlds",
+    author: "H. G. Wells",
+    readDate: null,
+    series: "war-of-the-worlds",
+    seriesOrder: 1,
+    cover: "olid:OL28341651M",
+    work: "OL52114W",
+    accent: "#b9783e",
+  },
+  {
+    id: "war-in-the-air",
+    title: "The War in the Air",
+    author: "H. G. Wells",
+    readDate: null,
+    series: "war-in-the-air",
+    seriesOrder: 1,
+    cover: "id:574890",
+    work: "OL52253W",
+    accent: "#a4433d",
+  },
+  {
     id: "enders-game",
     title: "Ender’s Game",
     author: "Orson Scott Card",
@@ -1205,6 +1238,24 @@ const SERIES = {
     description: "A physicist is torn from the life he knows and searches alternate realities for a way back to his family.",
     collection: "sci-fi",
   },
+  "time-machine": {
+    name: "The Time Machine",
+    author: "H. G. Wells · Standalone",
+    description: "A Victorian inventor travels into the distant future and uncovers the divided world of the Eloi and Morlocks.",
+    collection: "sci-fi",
+  },
+  "war-of-the-worlds": {
+    name: "The War of the Worlds",
+    author: "H. G. Wells · Standalone",
+    description: "A Martian invasion of England confronts humanity with an overwhelming technological power.",
+    collection: "sci-fi",
+  },
+  "war-in-the-air": {
+    name: "The War in the Air",
+    author: "H. G. Wells · Standalone",
+    description: "Bert Smallways is swept into a global conflict as airships and aerial bombardment bring civilization to collapse.",
+    collection: "sci-fi",
+  },
   "ender-quintet": {
     name: "The Ender Quintet",
     author: "Orson Scott Card",
@@ -1280,6 +1331,7 @@ const DEFAULT_RATINGS = {
   "dark-matter": 8.5,
   "artificial-condition": 8.4,
   "exit-strategy": 8.3,
+  "time-machine": 8,
   "rogue-protocol": 7.9,
   "altered-carbon": 7.8,
   "a-scanner-darkly": 7.6,
@@ -1481,18 +1533,24 @@ function loadRatings() {
 
   try {
     const stored = JSON.parse(localStorage.getItem(storageKey));
-    if (stored && typeof stored === "object") return normalizeRatings(stored);
+    if (stored && typeof stored === "object") return mergeSavedRatings(stored);
 
     const legacy = JSON.parse(localStorage.getItem(legacyStorageKey));
-    const migrated = {
-      ...DEFAULT_RATINGS,
-      ...(legacy && typeof legacy === "object" ? normalizeRatings(legacy) : {}),
-    };
+    const migrated = mergeSavedRatings(legacy && typeof legacy === "object" ? legacy : {});
     localStorage.setItem(storageKey, JSON.stringify(migrated));
     return migrated;
   } catch {
-    return { ...DEFAULT_RATINGS };
+    return mergeSavedRatings({});
   }
+}
+
+function mergeSavedRatings(saved) {
+  // Older snapshots can lack newer repository scores; null records an explicit clear.
+  const merged = normalizeRatings({ ...DEFAULT_RATINGS, ...saved });
+  for (const [id, date] of Object.entries(readDateOverrides)) {
+    if (date === null) delete merged[id];
+  }
+  return merged;
 }
 
 function normalizeRatings(candidate) {
@@ -1507,7 +1565,11 @@ function saveRatings() {
   if (!canEditRatings) return;
 
   try {
-    localStorage.setItem(storageKey, JSON.stringify(ratings));
+    const saved = {
+      ...Object.fromEntries(Object.keys(DEFAULT_RATINGS).map((id) => [id, null])),
+      ...ratings,
+    };
+    localStorage.setItem(storageKey, JSON.stringify(saved));
   } catch {
     // The shelf still works for the current session when storage is unavailable.
   }
