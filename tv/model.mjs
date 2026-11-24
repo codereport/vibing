@@ -34,7 +34,8 @@ export function seasonBoxes(show, release) {
   const watching = state.status === 'watching' ? state.season : null;
   // Keep recorded progress visible even if a release check temporarily omits it.
   const total = Math.min(show.seasonLimit ?? Infinity, Math.max(...known, show.watchedThrough, watching ?? 0, known.length ? 0 : 5));
-  const first = show.watchedThrough > 0 ? Math.max(1, total - 4) : 1;
+  // Center the window on the next season, keeping recent progress in reach.
+  const first = Math.max(1, Math.min(show.watchedThrough - 1, total - 4));
   return Array.from({ length: Math.min(5, total - first + 1) }, (_, index) => {
     const number = first + index;
     const status = number <= show.watchedThrough ? 'done' : number === watching ? 'watching' : 'unwatched';

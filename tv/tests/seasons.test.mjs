@@ -28,11 +28,53 @@ test('unstarted shows show S1–S5, including while watching the first season', 
   assert.equal(boxes[0].status, 'watching');
 });
 
-test('after a season is finished, the boxes show the latest five known seasons', () => {
-  assert.deepEqual(numbers(seasonBoxes({ ...show, watchedThrough: 1 }, release(8))), [4, 5, 6, 7, 8]);
+test('the season window follows progress and shows the latest five near the end', () => {
+  assert.deepEqual(numbers(seasonBoxes({ ...show, watchedThrough: 1 }, release(8))), [1, 2, 3, 4, 5]);
+  const middle = seasonBoxes({ ...show, watchedThrough: 4, watching: true }, release(12));
+  assert.deepEqual(numbers(middle), [3, 4, 5, 6, 7]);
+  assert.deepEqual(middle.map(box => box.status), ['done', 'done', 'watching', 'unwatched', 'unwatched']);
   const boxes = seasonBoxes({ ...show, watchedThrough: 10, watching: true }, release(11));
   assert.deepEqual(numbers(boxes), [7, 8, 9, 10, 11]);
   assert.deepEqual(boxes.map(box => box.status), ['done', 'done', 'done', 'done', 'watching']);
+});
+
+test('Veep S2 remains visible throughout its click cycle', () => {
+  const config = JSON.parse(readFileSync(new URL('../shows.json', import.meta.url)));
+  const snapshot = JSON.parse(readFileSync(new URL('../releases.json', import.meta.url)));
+  const metadata = snapshot.shows.veep;
+  let veep = { ...config.shows.find(show => show.id === 'veep'), watchedThrough: 0, watching: true };
+  for (const [status, watchedThrough, watching] of [
+    ['watching', 1, true],
+    ['done', 2, false],
+    ['unwatched', 1, false],
+  ]) {
+    veep = { ...veep, ...cycleSeason(veep, metadata, 2) };
+    const boxes = seasonBoxes(veep, metadata);
+    assert.deepEqual(numbers(boxes), [1, 2, 3, 4, 5]);
+    assert.equal(boxes[1].status, status);
+    assert.equal(veep.watchedThrough, watchedThrough);
+    assert.equal(veep.watching, watching);
+  }
+});
+
+test('long shows keep the next season and each clicked season visible as progress changes', () => {
+  for (const count of [7, 12]) {
+    const metadata = release(count);
+    for (let watchedThrough = 0; watchedThrough <= count; watchedThrough++) {
+      for (const watching of [false, true]) {
+        const current = { ...show, watchedThrough, watching };
+        const boxes = seasonBoxes(current, metadata);
+        assert.equal(boxes.length, 5);
+        if (watchedThrough < count || watching) {
+          assert.ok(numbers(boxes).includes(watchedThrough + 1), `Next season missing after S${watchedThrough}`);
+        }
+        for (const { number } of boxes) {
+          const updated = { ...current, ...cycleSeason(current, metadata, number) };
+          assert.ok(numbers(seasonBoxes(updated, metadata)).includes(number), `Clicked S${number} disappeared`);
+        }
+      }
+    }
+  }
 });
 
 test('short shows display only their known season count and ignore specials', () => {
@@ -77,9 +119,9 @@ test('season clicks cycle unwatched → watching → done → unwatched and comp
 test('clicking a later empty season fills all earlier seasons, including hidden ones', () => {
   const initial = { ...show, watchedThrough: 6, watching: true };
   const metadata = release(10);
-  const progress = cycleSeason(initial, metadata, 10);
-  assert.deepEqual(progress, { watchedThrough: 9, watching: true });
-  assert.deepEqual(seasonBoxes({ ...initial, ...progress }, metadata).map(box => box.status), ['done', 'done', 'done', 'done', 'watching']);
+  const progress = cycleSeason(initial, metadata, 9);
+  assert.deepEqual(progress, { watchedThrough: 8, watching: true });
+  assert.deepEqual(seasonBoxes({ ...initial, ...progress }, metadata).map(box => box.status), ['done', 'done', 'done', 'watching', 'unwatched']);
 });
 
 test('clearing an earlier completed season clears it and all later progress', () => {

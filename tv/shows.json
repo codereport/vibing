@@ -13,7 +13,7 @@
       "title": "Veep",
       "tvmazeId": 142,
       "watching": true,
-      "watchedThrough": 0
+      "watchedThrough": 1
     },
     {
       "id": "curb",
@@ -49,7 +49,7 @@
       "id": "the-altruists",
       "title": "The Altruists",
       "tvmazeId": 85058,
-      "watching": false,
+      "watching": true,
       "watchedThrough": 0
     },
     {
