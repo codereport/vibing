@@ -49,8 +49,8 @@
       "id": "the-altruists",
       "title": "The Altruists",
       "tvmazeId": 85058,
-      "watching": true,
-      "watchedThrough": 0
+      "watching": false,
+      "watchedThrough": 1
     },
     {
       "id": "dark-matter",
@@ -79,8 +79,9 @@
       "id": "blade-runner-2099",
       "title": "Blade Runner 2099",
       "tvmazeId": 60458,
-      "watching": false,
-      "watchedThrough": 0
+      "watching": true,
+      "watchedThrough": 0,
+      "solo": true
     },
     {
       "id": "stick",
